@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 
-public class playerMovementTest {
+public class TestLoadDungeon {
 
     @ParameterizedTest
     @ValueSource(strings={"Peaceful", "Standard", "Hard"}) // test for all modes
@@ -43,4 +43,5 @@ public class playerMovementTest {
         // cat src/test/resources/dungeons/maze.json | grep wall | wc -l
         assertEquals(204, numWalls);
     }
+
 }
