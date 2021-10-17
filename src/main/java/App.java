@@ -61,15 +61,6 @@ public class App {
         }
     }
 
-    private static String requestInfoToString(Request request) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(request.requestMethod());
-        sb.append(" " + request.url());
-        sb.append(" " + request.body());
-        return sb.toString();
-    }
-    
-
     public static void main(String[] args) throws Exception {
 
         Scintilla.initialize(); 
@@ -131,9 +122,10 @@ public class App {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.interact(request.queryParams("entityId")));
         }, gson::toJson);
 
-        Spark.before((request, response) -> {
-            System.out.println(requestInfoToString(request));
-        });
+        // if you want to log requests being send to the server, uncomment this
+        // Spark.before((request, response) -> {
+        //     System.out.println(request.requestMethod() + " " + request.url() + " " + request.body());
+        // });
 
         Scintilla.start();
     }
