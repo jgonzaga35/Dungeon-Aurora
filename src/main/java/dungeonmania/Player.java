@@ -2,9 +2,10 @@ package dungeonmania;
 
 import java.util.List;
 
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.util.Direction;
 
-public class Player {
+public class Player extends MovingEntity {
 
     private int x;
     private int y;
@@ -43,14 +44,19 @@ public class Player {
             if (map.get(this.y+1).get(this.x).isBlocking()) return;
 
             this.y += 1;
-        } else {
-            assert false;
         }
 
+        map.get(fromY).get(fromX).removeOccupant(this);
+        map.get(this.y).get(this.x).addOccupant(this);
         map.get(this.y).get(this.x).onWalked(new Pos2d(fromX, fromY), new Pos2d(this.x, this.y));
     }
 
     public Pos2d getPos() {
         return new Pos2d(this.x, this.y);
+    }
+
+    @Override
+    public String getTypeAsString() {
+        return "player";
     }
 }

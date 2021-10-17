@@ -19,6 +19,10 @@ public class Cell {
         return occupants;
     }
 
+    public boolean removeOccupant(Entity e) {
+        return this.occupants.remove(e);
+    }
+
     /**
      * @return true if there is a static element on the cell that is blocking
      */

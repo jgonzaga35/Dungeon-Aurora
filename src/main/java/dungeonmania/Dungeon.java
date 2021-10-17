@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.exceptions.InvalidActionException;
@@ -23,12 +22,12 @@ public class Dungeon {
     private Player player;
     private String name;
 
-    public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals, Pos2d playerPosition) {
+    public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals, Player player) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
         this.goals = goals;
-        this.player = new Player(playerPosition);
+        this.player = player;
     }
 
     /**
@@ -52,7 +51,7 @@ public class Dungeon {
         }
 
         JSONArray entities = obj.getJSONArray("entities");
-        Pos2d playerPosition = null;
+        Player player = null;
 
         for (int i = 0; i < entities.length(); i++) {
             JSONObject entity = entities.getJSONObject(i);
@@ -67,17 +66,18 @@ public class Dungeon {
             } else if (Objects.equals(type, "exit")) {
                 dungeonMap.get(y).get(x).addOccupant(new Exit());
             } else if (Objects.equals(type, "player")) {
-                playerPosition = new Pos2d(x, y);
+                player = new Player(new Pos2d(x, y));
+                dungeonMap.get(y).get(x).addOccupant(player);
             } else {
                 throw new Error("unhandled entity type: " + type);
             }
         }
 
-        if (playerPosition == null) {
+        if (player == null) {
             throw new Error("the player's position wasn't specified");
         }
 
-        return new Dungeon(name, mode, dungeonMap, goals, playerPosition);
+        return new Dungeon(name, mode, dungeonMap, goals, player);
     }
 
     public void tick(String itemUsed, Direction movementDirection)
@@ -111,17 +111,6 @@ public class Dungeon {
 
     public List<EntityResponse> getEntitiesResponse() {
         ArrayList<EntityResponse> entities = new ArrayList<>();
-        Pos2d pos = this.player.getPos();
-        entities.add(new EntityResponse(
-            "player",
-            "player",
-            new Position(
-                pos.getX(),
-                pos.getY(),
-                LayerLevel.PLAYER.getValue()
-            ),
-            true
-        ));
 
         int y = 0;
         for (List<Cell> row : this.dungeonMap) {
