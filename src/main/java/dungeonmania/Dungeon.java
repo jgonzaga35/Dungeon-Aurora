@@ -1,7 +1,6 @@
 package dungeonmania;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,13 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.Wall;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class Dungeon {
     private List<List<Cell>> dungeonMap;
     private GameMode mode;
     private Goals goals;
-    private Pos2d playerPosition;
+    private Player player;
     private String name;
 
     public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals, Pos2d playerPosition) {
@@ -23,7 +28,7 @@ public class Dungeon {
         this.mode = mode;
         this.dungeonMap = dungeonMap;
         this.goals = goals;
-        this.playerPosition = playerPosition;
+        this.player = new Player(playerPosition);
     }
 
     /**
@@ -57,8 +62,10 @@ public class Dungeon {
 
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
-            if (Arrays.asList("wall", "exit").contains(type)) {
-                dungeonMap.get(y).get(x).setStaticEntityType(type);
+            if (Objects.equals(type, "wall")) {
+                dungeonMap.get(y).get(x).addOccupant(new Wall());
+            } else if (Objects.equals(type, "exit")) {
+                dungeonMap.get(y).get(x).addOccupant(new Exit());
             } else if (Objects.equals(type, "player")) {
                 playerPosition = new Pos2d(x, y);
             } else {
@@ -73,8 +80,25 @@ public class Dungeon {
         return new Dungeon(name, mode, dungeonMap, goals, playerPosition);
     }
 
+    public void tick(String itemUsed, Direction movementDirection)
+            throws IllegalArgumentException, InvalidActionException {
+        // for now, ignore item used
+        // update every entity
+
+        for (int y = 0; y < this.dungeonMap.size(); y++) {
+            for (int x = 0; x < this.dungeonMap.get(0).size(); x++) {
+                Cell cell = this.dungeonMap.get(y).get(x);
+                for (Entity e: cell.getOccupants()) {
+                    // e.tick();
+                }
+            }
+        }
+
+        this.player.move(this.dungeonMap, movementDirection);
+    }
+
     public String getId() {
-        return "not specified";
+        return "not implemented";
     }
 
     public String getName() {
@@ -87,7 +111,34 @@ public class Dungeon {
 
     public List<EntityResponse> getEntitiesResponse() {
         ArrayList<EntityResponse> entities = new ArrayList<>();
+        Pos2d pos = this.player.getPos();
+        entities.add(new EntityResponse(
+            "player",
+            "player",
+            new Position(
+                pos.getX(),
+                pos.getY(),
+                LayerLevel.PLAYER.getValue()
+            ),
+            true
+        ));
+
+        int y = 0;
+        for (List<Cell> row : this.dungeonMap) {
+            int x = 0;
+            for (Cell cell: row) {
+                for (Entity entity : cell.getOccupants()) {
+                    entities.add(new EntityResponse(
+                        entity.getId(),
+                        entity.getTypeAsString(),
+                        new Position(x, y, entity.getLayerLevel().getValue()),
+                        entity.isInteractable()
+                    ));
+                }
+                x++;
+            }
+            y++;
+        }
         return entities;
     }
-
 }

@@ -28,12 +28,12 @@ public class DungeonManiaController {
      * 
      * https://stackoverflow.com/a/3990421/6164984
      */
-    public enum Layers {
+    public enum LayerLevel {
         STATIC(1), PLAYER(100);
 
         private final int value;
 
-        Layers(final int newValue) {
+        LayerLevel(final int newValue) {
             value = newValue;
         }
 
@@ -109,7 +109,8 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
-        return null;
+        this.dungeon.tick(itemUsed, movementDirection);
+        return this.makeDungeonResponse();
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
