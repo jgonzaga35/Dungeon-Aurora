@@ -2,9 +2,13 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -28,7 +32,13 @@ public class TestLoadDungeon {
         int numExit = 0;
         int numWalls = 0;
 
+        Set<String> ids = new HashSet<>();
         for (EntityResponse er : resp.getEntities()) {
+
+            // make sure we don't have duplicate entities ids
+            assertTrue(!ids.contains(er.getId()));
+            ids.add(er.getId());
+
             if (Objects.equals(er.getType(), "wall")) {
                 numWalls++;
             } else if (Objects.equals(er.getType(), "player")) {
@@ -42,6 +52,21 @@ public class TestLoadDungeon {
         assertEquals(1, numPlayers);
         // cat src/test/resources/dungeons/maze.json | grep wall | wc -l
         assertEquals(204, numWalls);
+    }
+
+    @Test
+    public void testUniqueDungeonId() {
+        DungeonManiaController ctr = new DungeonManiaController();
+
+        DungeonResponse resp;
+        Set<String> ids = new HashSet<>();
+        for (int i = 0; i < 10; i++) {
+            resp = assertDoesNotThrow(() -> {
+                return ctr.newGame("maze", "Peaceful");
+            });
+            assertTrue(!ids.contains(resp.getDungeonId()), "duplicate dungeon id: " + resp.getDungeonId());
+            ids.add(resp.getDungeonId());
+        }
     }
 
 }
