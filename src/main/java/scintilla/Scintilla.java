@@ -73,13 +73,13 @@ public class Scintilla {
     public static void start() {
         // try to update frontend
         // (bit of a hard coded url but who cares)
-        try {
-            downloadAndUnZip("https://project21t3comp2511.blob.core.windows.net/frontend/frontend.zip", "app/");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println(
-                    "ERROR: Failed to download and/or unzip (possibly updated) frontend, just using current cached version... this is probably okay, since it's probably just because you aren't connected to the internet.");
-        }
+        // try {
+        //     downloadAndUnZip("https://project21t3comp2511.blob.core.windows.net/frontend/frontend.zip", "app/");
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     System.err.println(
+        //             "ERROR: Failed to download and/or unzip (possibly updated) frontend, just using current cached version... this is probably okay, since it's probably just because you aren't connected to the internet.");
+        // }
 
         INSTANCE.finalizeWebServer();
         System.err.println("Opening browser to url " + INSTANCE.getHostUrl() + "/app/");
