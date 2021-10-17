@@ -16,11 +16,14 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Dungeon {
+    private String id;
     private List<List<Cell>> dungeonMap;
     private GameMode mode;
     private Goals goals;
     private Player player;
     private String name;
+
+    public static int nextDungeonId = 1;
 
     public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals, Player player) {
         this.name = name;
@@ -28,6 +31,8 @@ public class Dungeon {
         this.dungeonMap = dungeonMap;
         this.goals = goals;
         this.player = player;
+        this.id = "dungeon-" + Dungeon.nextDungeonId;
+        Dungeon.nextDungeonId++;
     }
 
     /**
@@ -89,7 +94,7 @@ public class Dungeon {
     }
 
     public String getId() {
-        return "not implemented";
+        return this.id;
     }
 
     public String getName() {
