@@ -85,15 +85,6 @@ public class Dungeon {
         // for now, ignore item used
         // update every entity
 
-        for (int y = 0; y < this.dungeonMap.size(); y++) {
-            for (int x = 0; x < this.dungeonMap.get(0).size(); x++) {
-                Cell cell = this.dungeonMap.get(y).get(x);
-                for (Entity e: cell.getOccupants()) {
-                    // e.tick();
-                }
-            }
-        }
-
         this.player.move(this.dungeonMap, movementDirection);
     }
 
@@ -112,10 +103,9 @@ public class Dungeon {
     public List<EntityResponse> getEntitiesResponse() {
         ArrayList<EntityResponse> entities = new ArrayList<>();
 
-        int y = 0;
-        for (List<Cell> row : this.dungeonMap) {
-            int x = 0;
-            for (Cell cell: row) {
+        for (int y = 0; y < this.dungeonMap.size(); y++) {
+            for (int x = 0; x < this.dungeonMap.get(0).size(); x++) {
+                Cell cell = this.dungeonMap.get(y).get(x);
                 for (Entity entity : cell.getOccupants()) {
                     entities.add(new EntityResponse(
                         entity.getId(),
@@ -124,9 +114,7 @@ public class Dungeon {
                         entity.isInteractable()
                     ));
                 }
-                x++;
             }
-            y++;
         }
         return entities;
     }
