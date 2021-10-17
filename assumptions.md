@@ -1,0 +1,1 @@
+- player cannot move outside the map
