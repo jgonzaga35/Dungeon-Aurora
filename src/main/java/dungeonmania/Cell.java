@@ -3,15 +3,36 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.Direction;
 
 public class Cell {
     private List<Entity> occupants = new ArrayList<>();
+    private Pos2d position;
+    private Dungeon dungeon;
+
+    public Cell(Dungeon dungeon, Pos2d position) {
+        this.position = position;
+        this.dungeon = dungeon;
+    }
+
+    public Dungeon getDungeon() {
+        return this.dungeon;
+    }
+
+    public Pos2d getPosition() {
+        return this.position;
+    }
 
     public void addOccupant(Entity e) {
         this.occupants.add(e);
     }
-
+    
+    public GameMode getGameMode() {
+        return this.dungeon.getGameMode();
+    }
+    
     /**
      * @return the entities on that cell
      */
@@ -40,4 +61,12 @@ public class Cell {
         }
     }
 
+    /**
+     * returns the cell above, below, left or right (depending on the direction)
+     * @param d direction (shouldn't be NONE)
+     * @return Cell
+     */
+    public Cell getCellAround(Direction d) {
+        return this.dungeon.getCellAround(this, d);
+    }
 }
