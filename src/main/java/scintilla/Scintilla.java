@@ -4,12 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -70,16 +67,30 @@ public class Scintilla {
         fos.close();
     }
 
+    // if the file /please-dont-break-my-frontend-again exists on your computer,
+    // the latest frontend won't be downloaded, you'll keep using the one on your computer
+    private static boolean shouldDownloadFrontEnd() {
+        return !(new File("/please-dont-break-my-frontend-again").isFile());
+    }
+
     public static void start() {
         // try to update frontend
         // (bit of a hard coded url but who cares)
-        try {
-            downloadAndUnZip("https://project21t3comp2511.blob.core.windows.net/frontend/frontend.zip", "app/");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println(
-                    "ERROR: Failed to download and/or unzip (possibly updated) frontend, just using current cached version... this is probably okay, since it's probably just because you aren't connected to the internet.");
+
+        // big man's gonna be breaking the frontend every second day
+        // and the latest version is potato slow, it makes my computer go crazy,
+        // i'd rather use the origial version
+
+        if (Scintilla.shouldDownloadFrontEnd()) {
+            try {
+                downloadAndUnZip("https://project21t3comp2511.blob.core.windows.net/frontend/frontend.zip", "app/");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println(
+                        "ERROR: Failed to download and/or unzip (possibly updated) frontend, just using current cached version... this is probably okay, since it's probably just because you aren't connected to the internet.");
+            }
         }
+
 
         INSTANCE.finalizeWebServer();
         System.err.println("Opening browser to url " + INSTANCE.getHostUrl() + "/app/");

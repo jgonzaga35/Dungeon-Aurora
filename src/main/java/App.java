@@ -1,18 +1,17 @@
-import spark.Request;
-import spark.Spark;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import dungeonmania.DungeonManiaController;
 import dungeonmania.response.models.GenericResponseWrapper;
 import dungeonmania.util.Direction;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import scintilla.Scintilla;
+import spark.Request;
+import spark.Spark;
 
 /**
  * A threadsafe wrapper around your DungeonManiaController.
@@ -63,6 +62,7 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
+
         Scintilla.initialize(); 
         GsonBuilder gsonBuilder = new GsonBuilder();
 
@@ -121,6 +121,11 @@ public class App {
         Spark.post("/api/game/interact/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.interact(request.queryParams("entityId")));
         }, gson::toJson);
+
+        // if you want to log requests being send to the server, uncomment this
+        // Spark.before((request, response) -> {
+        //     System.out.println(request.requestMethod() + " " + request.url() + " " + request.body());
+        // });
 
         Scintilla.start();
     }
