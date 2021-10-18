@@ -37,7 +37,7 @@ public class Dungeon {
     }
 
     /**
-     * Creates a Dungeon instance from a file the json files in resources
+     * Creates a Dungeon instance from the JSON file's content
      */
     public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
         Goals goals = Goals.fromJSONObject(obj);
@@ -109,10 +109,22 @@ public class Dungeon {
         return this.goals.asString();
     }
 
-    public void setPlayer(Player player) {
+    /**
+     * this should only be called exactly once, after the dungeon has been
+     * constructed.
+     * 
+     * This method is just there so the Dungeon constructor doesn't have to look
+     * for the player in the entire map
+     * @param player
+     */
+    private void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Create an entity response object for each entity in the dungeon
+     * @return list of entity responses
+     */
     public List<EntityResponse> getEntitiesResponse() {
         ArrayList<EntityResponse> entities = new ArrayList<>();
 
@@ -130,10 +142,6 @@ public class Dungeon {
             }
         }
         return entities;
-    }
-
-    public List<List<Cell>> getDungeonMap() {
-        return this.dungeonMap;
     }
 
     public GameMode getGameMode() {

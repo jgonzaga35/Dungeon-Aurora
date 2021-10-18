@@ -8,6 +8,9 @@ import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.Direction;
 
 public class Cell {
+    /**
+     * all the entities on that cell
+     */
     private List<Entity> occupants = new ArrayList<>();
     private Pos2d position;
     private Dungeon dungeon;

@@ -70,6 +70,13 @@ public class DungeonManiaController {
         }
     }
 
+    /**
+     * Creates a new game
+     * @param dungeonName
+     * @param gameModeString
+     * @return
+     * @throws IllegalArgumentException
+     */
     public DungeonResponse newGame(String dungeonName, String gameModeString) throws IllegalArgumentException {
         GameMode gameMode = this.parseGameMode(gameModeString);
         String content;
@@ -85,6 +92,12 @@ public class DungeonManiaController {
         return this.makeDungeonResponse();
     }
 
+    /**
+     * Convert string mode to enum modes so we don't make typos
+     * @param gameMode
+     * @return
+     * @throws IllegalArgumentException
+     */
     private GameMode parseGameMode(String gameMode) throws IllegalArgumentException {
         if (Objects.equals(gameMode, "Standard"))
             return GameMode.STANDARD;
@@ -121,6 +134,11 @@ public class DungeonManiaController {
         return null;
     }
 
+    /**
+     * Every endpoint has to return a DungeonResponse, so we just use this
+     * helper function
+     * @return
+     */
     private DungeonResponse makeDungeonResponse() {
         return new DungeonResponse(
             this.dungeon.getId(),
