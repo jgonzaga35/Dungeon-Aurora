@@ -5,6 +5,8 @@ import dungeonmania.util.Direction;
 
 public class Player extends MovingEntity {
 
+    public static String STRING_TYPE = "player";
+    
     public Player(Cell cell) {
         super(cell);
     }
@@ -26,7 +28,7 @@ public class Player extends MovingEntity {
 
     @Override
     public String getTypeAsString() {
-        return "player";
+        return Player.STRING_TYPE;
     }
 
     @Override

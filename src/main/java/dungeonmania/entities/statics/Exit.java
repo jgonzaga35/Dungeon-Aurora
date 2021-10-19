@@ -6,6 +6,8 @@ import dungeonmania.entities.StaticEntity;
 
 public class Exit extends StaticEntity {
 
+    public static String STRING_TYPE = "exit";
+
     public Exit(Cell cell) {
         super(cell);
     }
@@ -17,7 +19,7 @@ public class Exit extends StaticEntity {
 
     @Override
     public String getTypeAsString() {
-        return "exit";
+        return Exit.STRING_TYPE;
     }
 
     @Override

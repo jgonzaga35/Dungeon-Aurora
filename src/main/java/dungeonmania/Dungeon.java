@@ -69,11 +69,11 @@ public class Dungeon {
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
             Cell cell = dungeonMap.get(y).get(x);
-            if (Objects.equals(type, "wall")) {
+            if (Objects.equals(type, Wall.STRING_TYPE)) {
                 cell.addOccupant(new Wall(cell));
-            } else if (Objects.equals(type, "exit")) {
+            } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(cell));
-            } else if (Objects.equals(type, "player")) {
+            } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(cell);
                 cell.addOccupant(player);
             } else {

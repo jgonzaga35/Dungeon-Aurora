@@ -6,6 +6,8 @@ import dungeonmania.entities.StaticEntity;
 
 public class Wall extends StaticEntity {
 
+    public static String STRING_TYPE = "wall";
+
     public Wall(Cell cell) {
         super(cell);
     }
@@ -17,7 +19,7 @@ public class Wall extends StaticEntity {
 
     @Override
     public String getTypeAsString() {
-        return "wall";
+        return Wall.STRING_TYPE;
     }
 
     @Override
