@@ -2,9 +2,10 @@ package dungeonmania;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -17,10 +18,6 @@ import dungeonmania.util.FileLoader;
 
 public class DungeonManiaController {
     private Dungeon dungeon;
-
-    public enum GameMode {
-        STANDARD, PEACEFUL, HARD
-    }
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
@@ -42,6 +39,20 @@ public class DungeonManiaController {
         }
     }
 
+    public enum GameMode {
+        STANDARD("Standard"), PEACEFUL("Peaceful"), HARD("Hard");
+
+        private final String value;
+
+        GameMode(final String newValue) {
+            value = newValue;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     public DungeonManiaController() {
     }
 
@@ -54,7 +65,7 @@ public class DungeonManiaController {
     }
 
     public List<String> getGameModes() {
-        return Arrays.asList("Standard", "Peaceful", "Hard");
+        return Stream.of(GameMode.values()).map(mode -> mode.getValue()).collect(Collectors.toList());
     }
 
     /**
@@ -70,6 +81,13 @@ public class DungeonManiaController {
         }
     }
 
+    /**
+     * Creates a new game
+     * @param dungeonName
+     * @param gameModeString
+     * @return
+     * @throws IllegalArgumentException
+     */
     public DungeonResponse newGame(String dungeonName, String gameModeString) throws IllegalArgumentException {
         GameMode gameMode = this.parseGameMode(gameModeString);
         String content;
@@ -85,6 +103,12 @@ public class DungeonManiaController {
         return this.makeDungeonResponse();
     }
 
+    /**
+     * Convert string mode to enum modes so we don't make typos
+     * @param gameMode
+     * @return
+     * @throws IllegalArgumentException
+     */
     private GameMode parseGameMode(String gameMode) throws IllegalArgumentException {
         if (Objects.equals(gameMode, "Standard"))
             return GameMode.STANDARD;
@@ -121,6 +145,11 @@ public class DungeonManiaController {
         return null;
     }
 
+    /**
+     * Every endpoint has to return a DungeonResponse, so we just use this
+     * helper function
+     * @return
+     */
     private DungeonResponse makeDungeonResponse() {
         return new DungeonResponse(
             this.dungeon.getId(),

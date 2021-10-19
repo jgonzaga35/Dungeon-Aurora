@@ -1,9 +1,14 @@
 package dungeonmania.entities;
 
+import dungeonmania.Cell;
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.Entity;
 
 public abstract class MovingEntity extends Entity {
+
+    public MovingEntity(Cell cell) {
+        super(cell);
+    }
 
     @Override
     public boolean isInteractable() {
