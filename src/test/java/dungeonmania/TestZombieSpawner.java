@@ -2,9 +2,6 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +10,7 @@ import dungeonmania.entities.movings.Zombie;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.util.Counter;
 import dungeonmania.util.Direction;
 
 public class TestZombieSpawner {
@@ -37,22 +35,15 @@ public class TestZombieSpawner {
             assertEquals(5 + Math.floorDiv(i, 20), resp.getEntities().size());
         }
         // make sure we have the right count of zombies, wall and so on
-        TestUtils.assertEqualsUnordered(
-            Stream.of(
-                Player.STRING_TYPE,
-                ZombieToastSpawner.STRING_TYPE,
-                Wall.STRING_TYPE,
-                Wall.STRING_TYPE,
-                Wall.STRING_TYPE,
-                Zombie.STRING_TYPE,
-                Zombie.STRING_TYPE,
-                Zombie.STRING_TYPE,
-                Zombie.STRING_TYPE,
-                Zombie.STRING_TYPE
-            ).collect(Collectors.toList()),
-            resp.getEntities().stream()
-                .map(e -> e.getType())
-                .collect(Collectors.toList())
+        Counter<String> typeCounts = new Counter<>();
+        typeCounts.add(Player.STRING_TYPE, 1);
+        typeCounts.add(ZombieToastSpawner.STRING_TYPE, 1);
+        typeCounts.add(Wall.STRING_TYPE, 3);
+        typeCounts.add(Zombie.STRING_TYPE, 5);
+
+        assertEquals(typeCounts,
+            Counter.from(resp.getEntities().stream()
+                .map(e -> e.getType()).iterator())
         );
     }
 
@@ -67,5 +58,15 @@ public class TestZombieSpawner {
             resp = ctr.tick("", Direction.NONE);
             assertEquals(4, resp.getEntities().size()); // there isn't anywhere for zombies to spawn
         }
+
+        Counter<String> typeCounts = new Counter<>();
+        typeCounts.add(Player.STRING_TYPE, 1);
+        typeCounts.add(ZombieToastSpawner.STRING_TYPE, 1);
+        typeCounts.add(Wall.STRING_TYPE, 2);
+
+        assertEquals(typeCounts,
+            Counter.from(resp.getEntities().stream()
+                .map(e -> e.getType()).iterator())
+        );
     }
 }
