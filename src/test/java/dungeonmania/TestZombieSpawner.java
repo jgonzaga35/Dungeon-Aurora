@@ -22,7 +22,7 @@ public class TestZombieSpawner {
         // 3 walls + 1 player + 1 spawner 
         assertEquals(5, resp.getEntities().size());
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 1; i < 100; i++) {
             resp = ctr.tick("", Direction.NONE);
             // a zombie should spawn every 20 seconds
             assertEquals(5 + Math.floorDiv(i, 20), resp.getEntities().size());
