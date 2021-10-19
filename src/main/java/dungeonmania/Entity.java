@@ -25,7 +25,7 @@ public abstract class Entity {
      * Moves an entity from the current cell to the target cell
      * @param target
      */
-    public void move(Cell target) {
+    public void moveTo(Cell target) {
         Cell from = this.cell;
         from.removeOccupant(this);
         target.addOccupant(this);

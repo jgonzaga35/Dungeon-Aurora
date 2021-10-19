@@ -23,7 +23,7 @@ public class Player extends MovingEntity {
         if (target == null || target.isBlocking())
             return;
 
-        this.move(target);
+        this.moveTo(target);
     }
 
     @Override
