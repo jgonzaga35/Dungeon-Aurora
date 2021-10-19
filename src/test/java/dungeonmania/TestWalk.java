@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -17,7 +18,7 @@ public class TestWalk {
         DungeonResponse resp;
         Position p;
         assertDoesNotThrow(() -> {
-            ctr.newGame("_simple", "Peaceful");
+            ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
         });
 
         // don't move

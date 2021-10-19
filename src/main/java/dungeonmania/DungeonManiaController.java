@@ -2,9 +2,10 @@ package dungeonmania;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -17,10 +18,6 @@ import dungeonmania.util.FileLoader;
 
 public class DungeonManiaController {
     private Dungeon dungeon;
-
-    public enum GameMode {
-        STANDARD, PEACEFUL, HARD
-    }
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
@@ -42,6 +39,20 @@ public class DungeonManiaController {
         }
     }
 
+    public enum GameMode {
+        STANDARD("Standard"), PEACEFUL("Peaceful"), HARD("Hard");
+
+        private final String value;
+
+        GameMode(final String newValue) {
+            value = newValue;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
     public DungeonManiaController() {
     }
 
@@ -54,7 +65,7 @@ public class DungeonManiaController {
     }
 
     public List<String> getGameModes() {
-        return Arrays.asList("Standard", "Peaceful", "Hard");
+        return Stream.of(GameMode.values()).map(mode -> mode.getValue()).collect(Collectors.toList());
     }
 
     /**

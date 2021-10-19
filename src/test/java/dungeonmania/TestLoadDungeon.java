@@ -7,18 +7,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 
 public class TestLoadDungeon {
 
+    private static Stream<Arguments> testLoadingMaze() {
+        // returns every available mode
+        return Stream.of(GameMode.values())
+            .map(mode -> mode.getValue())
+            .map(Arguments::of);
+    }
+
     @ParameterizedTest
-    @ValueSource(strings={"Peaceful", "Standard", "Hard"}) // test for all modes
+    @MethodSource
     public void testLoadingMaze(String mode) {
         DungeonManiaController ctr = new DungeonManiaController();
 
@@ -62,7 +72,7 @@ public class TestLoadDungeon {
         Set<String> ids = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             resp = assertDoesNotThrow(() -> {
-                return ctr.newGame("maze", "Peaceful");
+                return ctr.newGame("maze", GameMode.PEACEFUL.getValue());
             });
             assertTrue(!ids.contains(resp.getDungeonId()), "duplicate dungeon id: " + resp.getDungeonId());
             ids.add(resp.getDungeonId());
