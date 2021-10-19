@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import java.util.stream.Stream;
+
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.util.Direction;
 
@@ -48,6 +50,24 @@ public abstract class Entity {
      */
     public Cell getCellAround(Direction d) {
         return this.cell.getCellAround(d);
+    }
+
+    public Pos2d getCellPosition() {
+        return this.cell.getPosition();
+    }
+
+    /**
+     * Note that it doesn't always return 4 cells. If you are on a top-most
+     * cell, it will only return (left, bottom, right)
+     * @return cells around the current cell
+     */
+    public Stream<Cell> getCellsAround() {
+        return Stream.of(
+            this.getCellAround(Direction.UP),
+            this.getCellAround(Direction.DOWN),
+            this.getCellAround(Direction.LEFT),
+            this.getCellAround(Direction.RIGHT)
+        ).filter(cell -> cell != null);
     }
 
     public abstract boolean isInteractable();

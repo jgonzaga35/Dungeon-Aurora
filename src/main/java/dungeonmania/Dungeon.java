@@ -1,8 +1,10 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
@@ -73,6 +76,8 @@ public class Dungeon {
                 cell.addOccupant(new Wall(cell));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(cell));
+            } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
+                cell.addOccupant(new ZombieToastSpawner(cell));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(cell);
                 cell.addOccupant(player);
@@ -93,6 +98,18 @@ public class Dungeon {
             throws IllegalArgumentException, InvalidActionException {
         // for now, ignore item used
         // update every entity
+
+        // PROBLEM: if we call tick as we iterate through the cells' entities
+        // certain entities could get updated twice if they move down or left
+        // SOLUTION: make a list of all the entities on the dungeonMap
+        //           and *only* then call tick on them all
+        List<Entity> entities = this.dungeonMap.stream()
+            .flatMap(Collection::stream)
+            .map(cell -> cell.getOccupants())
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+
+        entities.forEach(e -> e.tick());
 
         this.player.handleMoveOrder(movementDirection);
     }

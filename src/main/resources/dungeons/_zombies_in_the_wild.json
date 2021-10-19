@@ -1,0 +1,8 @@
+{
+    "width": 11,
+    "height": 11,
+    "entities": [
+        {"x": 5, "y": 5, "type": "zombie toast spawner"},
+        {"x": 0, "y": 0, "type": "player"},
+    ]
+}
