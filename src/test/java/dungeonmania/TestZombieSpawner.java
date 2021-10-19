@@ -47,6 +47,10 @@ public class TestZombieSpawner {
         );
     }
 
+    /**
+     * makes sure that if there is no unblocked cell around the spawner, no
+     * zombies are spawned
+     */
     @Test
     public void testSpawnZombiesBlocked() {
         DungeonManiaController ctr = new DungeonManiaController();

@@ -3,11 +3,11 @@ package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
+import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
@@ -34,5 +34,9 @@ public class TestUtils {
         assertEquals(as, bs);
     }
 
+
+    public static boolean isBlocking(EntityResponse resp) {
+        return List.of(Wall.STRING_TYPE, ZombieToastSpawner.STRING_TYPE).contains(resp.getType());
+    }
 
 }
