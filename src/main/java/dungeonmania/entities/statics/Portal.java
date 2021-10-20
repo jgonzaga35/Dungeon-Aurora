@@ -6,9 +6,15 @@ import dungeonmania.entities.StaticEntity;
 public class Portal extends StaticEntity {
 
     public static String STRING_TYPE = "portal";
+    public Portal correspondingPortal;
 
     public Portal(Cell cell) {
         super(cell);
+        
+    }
+
+    public void setCorrespondingPortal(Portal portal) {
+        this.correspondingPortal = portal;
     }
 
     @Override
