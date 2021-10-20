@@ -11,6 +11,7 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -19,17 +20,17 @@ public class Dungeon {
     private String id;
     private List<List<Cell>> dungeonMap;
     private GameMode mode;
-    private Goals goals;
+    private Goal goal;
     private Player player;
     private String name;
 
     public static int nextDungeonId = 1;
 
-    public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals) {
+    public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
-        this.goals = goals;
+        this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
 
@@ -40,10 +41,11 @@ public class Dungeon {
      * Creates a Dungeon instance from the JSON file's content
      */
     public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
-        Goals goals = Goals.fromJSONObject(obj);
+        
+        Goal goal = Goal.fromJSONObject(obj);
 
         List<List<Cell>> dungeonMap = new ArrayList<>(); // a list of rows
-        Dungeon dungeon = new Dungeon(name, mode, dungeonMap, goals);
+        Dungeon dungeon = new Dungeon(name, mode, dungeonMap, goal);
 
         int width = obj.getInt("width");
         int height = obj.getInt("height");
@@ -105,8 +107,8 @@ public class Dungeon {
         return this.name;
     }
 
-    public String getGoalsAsString() {
-        return this.goals.asString();
+    public String getGoalAsString() {
+        return this.goal.asString();
     }
 
     /**
