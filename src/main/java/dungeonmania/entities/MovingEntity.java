@@ -27,7 +27,7 @@ public abstract class MovingEntity extends Entity {
     }
 
     public Cell inspectCell(Direction d) {
-        return dungeon.getCellAround(dungeon.getCell(position), d);
+        return dungeon.getCellAround(dungeon.getMap().getCell(position), d);
     }
 
     @Override
