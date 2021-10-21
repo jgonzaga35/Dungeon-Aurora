@@ -42,7 +42,7 @@ public class DungeonMap {
     /**
      * Sets all player distances to the maximum and sets the cell with the player to 0.
      */
-    private void setDistances() {
+    private void resetDistances() {
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
                 if (cell.getOccupants().stream().anyMatch(e -> e instanceof Player)) {
@@ -75,7 +75,7 @@ public class DungeonMap {
      * setDistances() initially to reset values.
      */
     public void flood() {
-        setDistances();
+        resetDistances();
 
         int explorationLevel = 0;
         int valuesChanged = 1;
