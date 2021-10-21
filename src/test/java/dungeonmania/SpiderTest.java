@@ -41,8 +41,7 @@ public class SpiderTest {
                 if (er.getType() != Spider.STRING_TYPE) {
                     continue;
                 }
-                
-                // make sure it only moved on cell, horizontally or vertically
+                // make sure it only moved one cell, horizontally or vertically
                 Pos2d prev = positions.get(er.getId());
                 Pos2d curr = Pos2d.from(er.getPosition());
                 if (prev != null)
