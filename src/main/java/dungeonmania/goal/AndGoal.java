@@ -17,6 +17,11 @@ public class AndGoal extends Goal {
     }
 
     @Override
+    public List<Goal> getSubgoals() {
+        return this.subgoals;
+    }
+
+    @Override
     public String asString() {
         String goals = "";
         

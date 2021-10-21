@@ -107,6 +107,10 @@ public class Dungeon {
         return this.name;
     }
 
+    public Goal getGoal() {
+        return this.goal;
+    }
+
     public String getGoalAsString() {
         return this.goal.asString();
     }

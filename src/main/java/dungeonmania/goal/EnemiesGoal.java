@@ -1,14 +1,15 @@
 package dungeonmania.goal;
 
+import dungeonmania.Dungeon;
+
 public class EnemiesGoal extends Goal {
     public EnemiesGoal() {
         super();
     }
 
-    @Override
-    public void addSubGoal(Goal goal) {
-        // TODO Auto-generated method stub
-        
+    public boolean isCompleted(Dungeon dungeon) {
+        // Count all survivng enemies
+        return false;
     }
 
     @Override

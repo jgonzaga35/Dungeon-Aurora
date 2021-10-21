@@ -1,8 +1,12 @@
 package dungeonmania.goal;
 
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import dungeonmania.Dungeon;
 
 public abstract class Goal {
 
@@ -14,6 +18,14 @@ public abstract class Goal {
 
     public void addSubGoal(Goal goal) {
         
+    }
+
+    public List<Goal> getSubgoals() {
+        return null;
+    }
+
+    public boolean isCompleted(Dungeon dungeon) {
+        return false;
     }
 
     /**
