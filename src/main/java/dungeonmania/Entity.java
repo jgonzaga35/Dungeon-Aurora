@@ -14,11 +14,13 @@ public abstract class Entity {
         this.id = "Entity-" + Entity.nextEntityId;
         this.dungeon = dungeon;
         this.position = position;
-
+        
         Entity.nextEntityId++;
     }
 
     public Entity(Cell cell) {
+        this.id = "Entity-" + Entity.nextEntityId;
+        Entity.nextEntityId++;
     }
 
     public String getId() {

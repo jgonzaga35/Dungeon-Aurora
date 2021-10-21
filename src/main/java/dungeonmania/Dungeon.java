@@ -98,6 +98,9 @@ public class Dungeon {
         // update every entity
 
         this.player.handleMoveOrder(movementDirection);
+        
+        
+        
         //Spawn spider
         Pos2d spiderPos = randomSpiderSpawn();
         Spider spider = new Spider(this, spiderPos);

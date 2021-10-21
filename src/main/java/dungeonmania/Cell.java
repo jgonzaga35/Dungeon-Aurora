@@ -33,6 +33,12 @@ public class Cell {
     public void addOccupant(Entity e) {
         this.occupants.add(e);
     }
+
+    public void tickOccupants() {
+        for (Entity entity : occupants) {
+            entity.tick();
+        }
+    }
     
     /**
      * @return the entities on that cell

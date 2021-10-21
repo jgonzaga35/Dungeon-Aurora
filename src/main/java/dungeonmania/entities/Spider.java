@@ -21,7 +21,7 @@ public class Spider extends MovingEntity {
     public Spider(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         moveUp(dungeon);
-
+        makeSpiderMap();
     }
 
     private void moveUp(Dungeon dungeon) {
@@ -53,7 +53,9 @@ public class Spider extends MovingEntity {
         // move in a random direction
         currentMovementStage += direction;
         stayInBound();
+        System.out.println("Spider is moving to position " + currentMovementStage);
         super.moveTo(movementMap.get(currentMovementStage));
+        System.out.println("successfully moved");
     }
 
     private void stayInBound() {

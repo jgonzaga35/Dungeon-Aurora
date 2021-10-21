@@ -3,7 +3,11 @@ package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,11 +49,34 @@ public class SpiderTest {
                 Pos2d prev = positions.get(er.getId());
                 Pos2d curr = Pos2d.from(er.getPosition());
                 if (prev != null)
-                    assertTrue(prev.squareDistance(curr) <= 1);
+                    assertTrue(prev.squareDistance(curr) == 1);
                 positions.put(er.getId(), curr);
                 
             }
         }
+    }
+
+    @Test
+    public void testSpiderId() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        List<String> idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
+        Set<String> idSet = new HashSet<String>(idList);
+
+        assertTrue(idList.size() == idSet.size());
+        
+
+        resp = ctr.tick("", Direction.NONE);
+
+        idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
+        idSet = new HashSet<String>(idList);
+
+        assertTrue(idList.size() == idSet.size());
+
+        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
+        resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
+        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
 }
