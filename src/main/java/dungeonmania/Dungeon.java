@@ -70,11 +70,11 @@ public class Dungeon {
             // for now, i just handle walls and player
             Cell cell = dungeonMap.get(y).get(x);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
-                cell.addOccupant(new Wall(cell));
+                cell.addOccupant(new Wall(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
-                cell.addOccupant(new Exit(cell));
+                cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
-                player = new Player(cell);
+                player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
             } else {
                 throw new Error("unhandled entity type: " + type);
@@ -179,5 +179,9 @@ public class Dungeon {
         } else {
             throw new Error("unexpected direction: " + d);
         }
+    }
+
+    public Cell getCell(Pos2d pos) {
+        return dungeonMap.get(pos.getY()).get(pos.getX());
     }
 }

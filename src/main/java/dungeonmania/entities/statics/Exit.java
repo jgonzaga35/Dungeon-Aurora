@@ -1,15 +1,16 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
 package dungeonmania.entities.statics;
 
-import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 
 public class Exit extends StaticEntity {
 
     public static String STRING_TYPE = "exit";
 
-    public Exit(Cell cell) {
-        super(cell);
+    public Exit(Dungeon dungeon, Pos2d position) {
+        super(dungeon, position);
     }
 
     @Override
