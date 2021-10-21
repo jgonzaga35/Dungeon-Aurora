@@ -25,19 +25,6 @@ public abstract class Entity {
         return this.id;
     }
 
-    // /**
-    //  * Moves an entity from the current cell to the target cell
-    //  * @param target
-    //  */
-    // public void moveTo(Cell target) {
-    //     Cell from = this.getCell();
-    //     from.removeOccupant(this);
-    //     target.addOccupant(this);
-
-    //     this.cell = target;
-    //     this.cell.onWalked(from.getPosition(), this.cell.getPosition());
-    // }
-
     /**
      * @return the cell this entity is on
      */
