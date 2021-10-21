@@ -32,6 +32,10 @@ public abstract class Entity {
         return dungeon.getCell(position);
     }
 
+    public Pos2d getPosition() {
+        return position;
+    }
+
     public abstract boolean isInteractable();
 
     public abstract LayerLevel getLayerLevel();

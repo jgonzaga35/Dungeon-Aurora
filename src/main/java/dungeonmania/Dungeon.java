@@ -3,11 +3,13 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.Spider;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.exceptions.InvalidActionException;
@@ -86,6 +88,7 @@ public class Dungeon {
         }
 
         dungeon.setPlayer(player);
+
         return dungeon;
     }
 
@@ -95,6 +98,10 @@ public class Dungeon {
         // update every entity
 
         this.player.handleMoveOrder(movementDirection);
+        //Spawn spider
+        Pos2d spiderPos = randomSpiderSpawn();
+        Spider spider = new Spider(this, spiderPos);
+        spider.getCell().addOccupant(spider);
     }
 
     public String getId() {
@@ -149,6 +156,16 @@ public class Dungeon {
     }
 
     /**
+     * 
+     * @return the position of the bottom right cell (largest possible Pos2d)
+     */
+    public Pos2d getDungeonSize() {
+        int x = dungeonMap.size() - 1;
+        int y = dungeonMap.get(0).size() - 1;
+        return new Pos2d(x, y);
+    }
+
+    /**
      * Direction shouldn't Direction.NONE
      * @param cell
      * @param d
@@ -183,5 +200,17 @@ public class Dungeon {
 
     public Cell getCell(Pos2d pos) {
         return dungeonMap.get(pos.getY()).get(pos.getX());
+    }
+
+    public Pos2d randomSpiderSpawn() {
+        Pos2d position = getDungeonSize();
+        Random rand = new Random();
+        Pos2d spawn = new Pos2d(0, 0);
+        while (true) {
+            spawn.setX(rand.nextInt(position.getX() - 2) + 1);
+            spawn.setY(rand.nextInt(position.getY() - 2) + 1);
+            break;
+        }
+        return spawn;
     }
 }
