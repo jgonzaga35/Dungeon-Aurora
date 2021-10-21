@@ -44,7 +44,6 @@ public class Dungeon {
 
         DungeonMap map = new DungeonMap(obj);
 
-        List<List<Cell>> dungeonMap = new ArrayList<>(); // a list of rows
         Dungeon dungeon = new Dungeon(name, mode, map, goals);
 
         JSONArray entities = obj.getJSONArray("entities");
@@ -58,7 +57,7 @@ public class Dungeon {
 
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
-            Cell cell = dungeonMap.get(y).get(x);
+            Cell cell = map.getCell(x, y);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
                 cell.addOccupant(new Wall(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
@@ -136,39 +135,6 @@ public class Dungeon {
 
     public GameMode getGameMode() {
         return this.mode;
-    }
-
-    /**
-     * Direction shouldn't Direction.NONE
-     * @param cell
-     * @param d
-     * @return the cell above, below, left or right of cell, depending on direction
-     */
-    public Cell getCellAround(Cell cell, Direction d) {
-        Pos2d pos = cell.getPosition();
-        if (d == Direction.UP) {
-            if (pos.getY() == 0) {
-                return null;
-            }
-            return this.dungeonMap.getCell(pos.getX(), pos.getY() - 1);
-        } else if (d == Direction.DOWN) {
-            if (pos.getY() == this.dungeonMap.getHeight() - 1) {
-                return null;
-            }
-            return this.dungeonMap.getCell(pos.getX(), pos.getY() + 1);
-        } else if (d == Direction.LEFT) {
-            if (pos.getX() == 0) {
-                return null;
-            }
-            return this.dungeonMap.getCell(pos.getX() - 1, pos.getY());
-        } else if (d == Direction.RIGHT) {
-            if (pos.getX() == this.dungeonMap.getWidth() - 1) {
-                return null;
-            }
-            return this.dungeonMap.getCell(pos.getX() + 1, pos.getY());
-        } else {
-            throw new Error("unexpected direction: " + d);
-        }
     }
 
     public DungeonMap getMap() {
