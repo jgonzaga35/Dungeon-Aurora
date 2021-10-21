@@ -31,12 +31,11 @@ public class DungeonMap {
         for (int y = 0; y < height; y++) {
             ArrayList<Cell> row = new ArrayList<>();
             for (int x = 0; x < width; x++) {
-                Cell newCell = new Cell(new Pos2d(x, y));
-                newCell.setPlayerDistance(width * height);
-                row.add(newCell);
+                row.add(new Cell(new Pos2d(x, y)));
             }
             dungeonMap.add(row);
         }
+        resetDistances();
     }
 
     /**
@@ -97,7 +96,8 @@ public class DungeonMap {
     }
 
     /**
-     * Direction.NONE returns null
+     * Direction.NONE returns the given cell
+     * 
      * @param cell
      * @param d
      * @return the cell above, below, left or right of cell, depending on direction
@@ -125,7 +125,7 @@ public class DungeonMap {
             }
             return getCell(pos.getX() + 1, pos.getY());
         } else {
-            return null;
+            return cell;
         }
     }
 
@@ -135,7 +135,7 @@ public class DungeonMap {
         Arrays.stream(Direction.values()).forEach(d -> {
             Cell neighbor = getCellAround(cell, d);
             if (neighbor != null) {
-                if (!neighbor.isBlocking() & neighbor.getPlayerDistance() == width * height) {
+                if (!neighbor.isBlocking() && neighbor.getPlayerDistance() == width * height) {
                     changesMade.incrementAndGet();
                     neighbor.setPlayerDistance(cell.getPlayerDistance() + 1);
                 }
