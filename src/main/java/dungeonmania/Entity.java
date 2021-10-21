@@ -1,20 +1,24 @@
 package dungeonmania;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.util.Direction;
 
 public abstract class Entity {
     private String id;
 
     private static int nextEntityId = 1;
 
-    private Cell cell;
+    protected Dungeon dungeon;
+    protected Pos2d position;
 
-    public Entity(Cell cell) {
+    public Entity(Dungeon dungeon, Pos2d position) {
         this.id = "Entity-" + Entity.nextEntityId;
-        this.cell = cell;
+        this.dungeon = dungeon;
+        this.position = position;
 
         Entity.nextEntityId++;
+    }
+
+    public Entity(Cell cell) {
     }
 
     public String getId() {
@@ -22,32 +26,10 @@ public abstract class Entity {
     }
 
     /**
-     * Moves an entity from the current cell to the target cell
-     * @param target
-     */
-    public void moveTo(Cell target) {
-        Cell from = this.cell;
-        from.removeOccupant(this);
-        target.addOccupant(this);
-
-        this.cell = target;
-        this.cell.onWalked(from.getPosition(), this.cell.getPosition());
-    }
-
-    /**
      * @return the cell this entity is on
      */
     public Cell getCell() {
-        return this.cell;
-    }
-
-    /**
-     * returns the cell above, below, left or right (depending on the direction)
-     * @param d the direction (shouldn't be NONE)
-     * @return Cell
-     */
-    public Cell getCellAround(Direction d) {
-        return this.cell.getCellAround(d);
+        return dungeon.getCell(position);
     }
 
     public abstract boolean isInteractable();
