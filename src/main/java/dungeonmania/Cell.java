@@ -14,7 +14,7 @@ public class Cell {
     private Integer playerDistance;
 
     
-    public Cell(Dungeon dungeon, Pos2d position) {
+    public Cell(Pos2d position) {
         this.position = position;
     }
 
