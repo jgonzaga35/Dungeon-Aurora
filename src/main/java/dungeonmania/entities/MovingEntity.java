@@ -23,7 +23,7 @@ public abstract class MovingEntity extends Entity {
         target.addOccupant(this);
 
         this.position = target.getPosition();
-        this.getCell().onWalked(from.getPosition(), this.position);
+        //this.getCell().onWalked(from.getPosition(), this.position);
     }
 
     public Cell inspectCell(Direction d) {

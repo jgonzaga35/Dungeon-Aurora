@@ -99,7 +99,7 @@ public class Dungeon {
 
         this.player.handleMoveOrder(movementDirection);
         
-        
+
         
         //Spawn spider
         Pos2d spiderPos = randomSpiderSpawn();
@@ -163,8 +163,10 @@ public class Dungeon {
      * @return the position of the bottom right cell (largest possible Pos2d)
      */
     public Pos2d getDungeonSize() {
-        int x = dungeonMap.size() - 1;
-        int y = dungeonMap.get(0).size() - 1;
+        int y = dungeonMap.size() - 1;
+        int x = dungeonMap.get(0).size() - 1;
+        //System.out.println("x is " + x);
+        //System.out.println("y is " + y);
         return new Pos2d(x, y);
     }
 
@@ -209,11 +211,10 @@ public class Dungeon {
         Pos2d position = getDungeonSize();
         Random rand = new Random();
         Pos2d spawn = new Pos2d(0, 0);
-        while (true) {
-            spawn.setX(rand.nextInt(position.getX() - 2) + 1);
-            spawn.setY(rand.nextInt(position.getY() - 2) + 1);
-            break;
-        }
+
+        spawn.setX(rand.nextInt(position.getX() - 1) + 1);
+        spawn.setY(rand.nextInt(position.getY() - 1) + 1);
+
         return spawn;
     }
 }

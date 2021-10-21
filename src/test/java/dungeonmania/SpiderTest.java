@@ -79,4 +79,16 @@ public class SpiderTest {
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
+
+    @Test
+    public void testNull() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+    
+        for (int i = 0; i < 5000; i++) {
+            resp = ctr.tick("", Direction.NONE);
+
+        }
+    }
+
 }
