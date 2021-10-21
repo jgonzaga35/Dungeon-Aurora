@@ -28,7 +28,6 @@ public class TestMap {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
         Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
 
-        dungeon.getMap().setDistances();
         dungeon.getMap().flood();
 
         System.out.println(dungeon.getMap().toString());

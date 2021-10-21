@@ -42,7 +42,7 @@ public class DungeonMap {
     /**
      * Sets all player distances to the maximum and sets the cell with the player to 0.
      */
-    public void setDistances() {
+    private void setDistances() {
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
                 if (cell.getOccupants().stream().anyMatch(e -> e instanceof Player)) {
@@ -70,18 +70,22 @@ public class DungeonMap {
         return this.height;
     }
     
+    /**
+     * Fills in all the distances from the player for all the cells. Calls 
+     * setDistances() initially to reset values.
+     */
     public void flood() {
+        setDistances();
+
         int explorationLevel = 0;
         int valuesChanged = 1;
 
         while (valuesChanged != 0) {
             valuesChanged = 0;
-            System.out.println("enter loop");
 
             // Look for cells with the current explorationLevel
             for (List<Cell> row : dungeonMap) {
                 for (Cell cell : row) {
-                    System.out.println("check");
                     if (cell.getPlayerDistance() == explorationLevel) {
                         valuesChanged += this.propagateFrom(cell);
                     }
@@ -127,13 +131,11 @@ public class DungeonMap {
 
     private int propagateFrom(Cell cell) {
         AtomicInteger changesMade = new AtomicInteger(0);
-        System.out.println("here");
 
         Arrays.stream(Direction.values()).forEach(d -> {
             Cell neighbor = getCellAround(cell, d);
             if (neighbor != null) {
                 if (!neighbor.isBlocking() & neighbor.getPlayerDistance() == width * height) {
-                    System.out.println("prop");
                     changesMade.incrementAndGet();
                     neighbor.setPlayerDistance(cell.getPlayerDistance() + 1);
                 }
