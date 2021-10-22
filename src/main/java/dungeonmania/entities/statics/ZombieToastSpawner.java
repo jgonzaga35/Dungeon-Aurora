@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Zombie;
@@ -16,8 +18,8 @@ public class ZombieToastSpawner extends StaticEntity {
     public static String STRING_TYPE = "zombie toast spawner";
     private int tickCount = 0;
 
-    public ZombieToastSpawner(Cell cell) {
-        super(cell);
+    public ZombieToastSpawner(Dungeon dungeon, Pos2d position) {
+        super(dungeon, position);
     }
 
     private static EnumMap<GameMode, Integer> spawnEveryNTicks = new EnumMap<>(Map.of(
@@ -44,7 +46,7 @@ public class ZombieToastSpawner extends StaticEntity {
     @Override
     public void tick() {
         this.tickCount++;
-        if (this.tickCount % spawnEveryNTicks.get(this.getCell().getGameMode()) != 0)
+        if (this.tickCount % spawnEveryNTicks.get(this.dungeon.getGameMode()) != 0)
             return;
 
         // check cells where can spawn a zombie
@@ -57,7 +59,7 @@ public class ZombieToastSpawner extends StaticEntity {
 
         // choose a random cell
         Cell cell = Utils.choose(availableCells);
-        cell.addOccupant(new Zombie(cell));
-        cell.onWalked(this.getCellPosition(), cell.getPosition());
+        cell.addOccupant(new Zombie(this.dungeon, cell.getPosition()));
+        cell.onWalked(this.position, cell.getPosition());
     }
 }

@@ -66,7 +66,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
-                cell.addOccupant(new ZombieToastSpawner(cell));
+                cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -86,8 +86,6 @@ public class Dungeon {
 
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
-        // for now, ignore item used
-        // update every entity
 
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left

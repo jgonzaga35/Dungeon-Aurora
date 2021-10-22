@@ -3,9 +3,9 @@ package dungeonmania.entities;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.util.Direction;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.util.Direction;
 
 public abstract class MovingEntity extends Entity {
 
@@ -23,7 +23,7 @@ public abstract class MovingEntity extends Entity {
         target.addOccupant(this);
 
         this.position = target.getPosition();
-        this.getCell().onWalked(from.getPosition(), this.position);
+        // this.getCell().onWalked(from.getPosition(), this.position);
     }
 
     public Cell inspectCell(Direction d) {
