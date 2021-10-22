@@ -21,11 +21,6 @@ public abstract class Entity {
         Entity.nextEntityId++;
     }
 
-    public Entity(Cell cell) {
-        this.id = "Entity-" + Entity.nextEntityId;
-        Entity.nextEntityId++;
-    }
-
     public String getId() {
         return this.id;
     }
@@ -40,7 +35,7 @@ public abstract class Entity {
     public Pos2d getPosition() {
         return position;
     }
-    
+
     /**
      * Note that it doesn't always return 4 cells. If you are on a top-most
      * cell, it will only return (left, bottom, right)
