@@ -17,7 +17,7 @@ import dungeonmania.util.Position;
 
 public class Dungeon {
     private String id;
-    private List<List<Cell>> dungeonMap;
+    private DungeonMap dungeonMap;
     private GameMode mode;
     private Goals goals;
     private Player player;
@@ -25,7 +25,7 @@ public class Dungeon {
 
     public static int nextDungeonId = 1;
 
-    public Dungeon(String name, GameMode mode, List<List<Cell>> dungeonMap, Goals goals) {
+    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goals goals) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
@@ -42,20 +42,9 @@ public class Dungeon {
     public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
         Goals goals = Goals.fromJSONObject(obj);
 
-        List<List<Cell>> dungeonMap = new ArrayList<>(); // a list of rows
-        Dungeon dungeon = new Dungeon(name, mode, dungeonMap, goals);
+        DungeonMap map = new DungeonMap(obj);
 
-        int width = obj.getInt("width");
-        int height = obj.getInt("height");
-
-        // a grid of empty cells
-        for (int y = 0; y < height; y++) {
-            ArrayList<Cell> row = new ArrayList<>();
-            for (int x = 0; x < width; x++) {
-                row.add(new Cell(dungeon, new Pos2d(x, y)));
-            }
-            dungeonMap.add(row);
-        }
+        Dungeon dungeon = new Dungeon(name, mode, map, goals);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -68,7 +57,7 @@ public class Dungeon {
 
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
-            Cell cell = dungeonMap.get(y).get(x);
+            Cell cell = map.getCell(x, y);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
                 cell.addOccupant(new Wall(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
@@ -128,9 +117,9 @@ public class Dungeon {
     public List<EntityResponse> getEntitiesResponse() {
         ArrayList<EntityResponse> entities = new ArrayList<>();
 
-        for (int y = 0; y < this.dungeonMap.size(); y++) {
-            for (int x = 0; x < this.dungeonMap.get(0).size(); x++) {
-                Cell cell = this.dungeonMap.get(y).get(x);
+        for (int y = 0; y < this.dungeonMap.getHeight(); y++) {
+            for (int x = 0; x < this.dungeonMap.getWidth(); x++) {
+                Cell cell = this.dungeonMap.getCell(x, y);
                 for (Entity entity : cell.getOccupants()) {
                     entities.add(new EntityResponse(
                         entity.getId(),
@@ -148,40 +137,7 @@ public class Dungeon {
         return this.mode;
     }
 
-    /**
-     * Direction shouldn't Direction.NONE
-     * @param cell
-     * @param d
-     * @return the cell above, below, left or right of cell, depending on direction
-     */
-    public Cell getCellAround(Cell cell, Direction d) {
-        Pos2d pos = cell.getPosition();
-        if (d == Direction.UP) {
-            if (pos.getY() == 0) {
-                return null;
-            }
-            return this.dungeonMap.get(pos.getY() - 1).get(pos.getX());
-        } else if (d == Direction.DOWN) {
-            if (pos.getY() == this.dungeonMap.size() - 1) {
-                return null;
-            }
-            return this.dungeonMap.get(pos.getY() + 1).get(pos.getX());
-        } else if (d == Direction.LEFT) {
-            if (pos.getX() == 0) {
-                return null;
-            }
-            return this.dungeonMap.get(pos.getY()).get(pos.getX() - 1);
-        } else if (d == Direction.RIGHT) {
-            if (pos.getX() == this.dungeonMap.get(0).size() - 1) {
-                return null;
-            }
-            return this.dungeonMap.get(pos.getY()).get(pos.getX() + 1);
-        } else {
-            throw new Error("unexpected direction: " + d);
-        }
-    }
-
-    public Cell getCell(Pos2d pos) {
-        return dungeonMap.get(pos.getY()).get(pos.getX());
+    public DungeonMap getMap() {
+        return dungeonMap;
     }
 }
