@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.Spider;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;

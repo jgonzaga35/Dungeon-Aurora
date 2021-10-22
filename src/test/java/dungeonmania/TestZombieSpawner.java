@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Zombie;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
