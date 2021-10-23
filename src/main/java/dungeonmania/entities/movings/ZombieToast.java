@@ -9,17 +9,17 @@ import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.MovingEntity;
 
-public class Zombie extends MovingEntity {
+public class ZombieToast extends MovingEntity {
 
     public static final String STRING_TYPE = "zombie";
 
-    public Zombie(Dungeon dungeon, Pos2d position) {
+    public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
     }
 
     @Override
     public String getTypeAsString() {
-        return Zombie.STRING_TYPE;
+        return ZombieToast.STRING_TYPE;
     }
 
     @Override

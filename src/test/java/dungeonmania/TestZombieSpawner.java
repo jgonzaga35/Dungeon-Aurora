@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.movings.Player;
-import dungeonmania.entities.movings.Zombie;
+import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
@@ -40,7 +40,7 @@ public class TestZombieSpawner {
         typeCounts.add(Player.STRING_TYPE, 1);
         typeCounts.add(ZombieToastSpawner.STRING_TYPE, 1);
         typeCounts.add(Wall.STRING_TYPE, 3);
-        typeCounts.add(Zombie.STRING_TYPE, 5);
+        typeCounts.add(ZombieToast.STRING_TYPE, 5);
 
         assertEquals(typeCounts,
             Counter.from(resp.getEntities().stream()

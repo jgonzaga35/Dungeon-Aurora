@@ -11,7 +11,7 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.StaticEntity;
-import dungeonmania.entities.movings.Zombie;
+import dungeonmania.entities.movings.ZombieToast;
 
 public class ZombieToastSpawner extends StaticEntity {
 
@@ -59,7 +59,7 @@ public class ZombieToastSpawner extends StaticEntity {
 
         // choose a random cell
         Cell cell = Utils.choose(availableCells);
-        cell.addOccupant(new Zombie(this.dungeon, cell.getPosition()));
+        cell.addOccupant(new ZombieToast(this.dungeon, cell.getPosition()));
         cell.onWalked(this.position, cell.getPosition());
     }
 }

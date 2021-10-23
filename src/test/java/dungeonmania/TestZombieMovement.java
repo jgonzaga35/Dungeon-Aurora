@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.movings.Zombie;
+import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
@@ -50,7 +50,7 @@ public class TestZombieMovement {
         for (int i = 1; i < 200; i++) {
             resp = ctr.tick("", Direction.NONE);
             for (EntityResponse er : resp.getEntities()) {
-                if (er.getType() != Zombie.STRING_TYPE) 
+                if (er.getType() != ZombieToast.STRING_TYPE) 
                     continue;
                 
                 // make sure it only moved on cell, horizontally or vertically
