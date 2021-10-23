@@ -10,11 +10,21 @@ public class Portal extends StaticEntity {
 
     public Portal(Cell cell) {
         super(cell);
-        
     }
 
     public void setCorrespondingPortal(Portal portal) {
         this.correspondingPortal = portal;
+    }
+
+    // Returns the cell of the corresponding Portal
+    public Cell teleport() {
+        // If the portal does not yet have a corresponding portal, return the current cell only
+        if (correspondingPortal == null) {
+            return getCell();
+        }
+
+        Cell target = correspondingPortal.getCell();
+        return target;
     }
 
     @Override

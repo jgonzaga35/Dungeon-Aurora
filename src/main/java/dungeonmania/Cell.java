@@ -5,6 +5,7 @@ import java.util.List;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public class Cell {
@@ -72,4 +73,18 @@ public class Cell {
     public Cell getCellAround(Direction d) {
         return this.dungeon.getCellAround(this, d);
     }
+
+    /**
+     * Returns the portal on the cell if the cell has a portal.
+     * @return
+     */
+    public Portal hasPortal() {
+        for (Entity occupant: getOccupants()) {
+            if (occupant instanceof Portal) {
+                return (Portal) occupant;
+            }
+        }
+        return null;
+    }
+
 }

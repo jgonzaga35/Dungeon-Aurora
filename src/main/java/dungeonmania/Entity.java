@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public abstract class Entity {
@@ -28,6 +29,11 @@ public abstract class Entity {
     public void moveTo(Cell target) {
         Cell from = this.cell;
         from.removeOccupant(this);
+
+        Portal portal = target.hasPortal();
+        if (portal != null) {
+            target = portal.teleport();
+        }
         target.addOccupant(this);
 
         this.cell = target;
