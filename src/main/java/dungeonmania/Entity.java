@@ -31,7 +31,7 @@ public abstract class Entity {
      * @return the cell this entity is on
      */
     public Cell getCell() {
-        return dungeon.getCell(position);
+        return dungeon.getMap().getCell(position);
     }
 
     public Pos2d getPosition() {
