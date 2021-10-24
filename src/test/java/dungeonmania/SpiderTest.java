@@ -33,24 +33,27 @@ public class SpiderTest {
     @Test
     public void testSpiderMovment() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
         Map<String, Pos2d> positions = new HashMap<>();
 
-        for (int i = 1; i < 200; i++) {
+        for (int i = 1; i < 50; i++) {
             resp = ctr.tick("", Direction.NONE);
-            for (EntityResponse er : resp.getEntities()) {
-                if (er.getType() != Spider.STRING_TYPE) {
+            for (EntityResponse spider : resp.getEntities()) {
+                if (spider.getType() != Spider.STRING_TYPE) {
                     continue;
                 }
                 // make sure it only moved one cell, horizontally or vertically
-                Pos2d prev = positions.get(er.getId());
-                Pos2d curr = Pos2d.from(er.getPosition());
-                if (prev != null)
-                    assertTrue(prev.squareDistance(curr) == 1);
-                positions.put(er.getId(), curr);
+                Pos2d prev = positions.get(spider.getId());
+                Pos2d curr = Pos2d.from(spider.getPosition());
+                if (prev != null) {
+                    int distance = prev.squareDistance(curr);
+                    assertTrue(distance == 1);
+                }
+                    
+                positions.put(spider.getId(), curr);
                 
             }
         }
@@ -65,7 +68,6 @@ public class SpiderTest {
 
         assertTrue(idList.size() == idSet.size());
         
-
         resp = ctr.tick("", Direction.NONE);
 
         idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
@@ -81,13 +83,12 @@ public class SpiderTest {
 
 
     @Test
-    public void testNull() {
+    public void testNullPointerErrror() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
     
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 50; i++) {
             resp = ctr.tick("", Direction.NONE);
-
         }
     }
 

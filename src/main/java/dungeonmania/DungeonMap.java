@@ -57,6 +57,16 @@ public class DungeonMap {
         return dungeonMap.get(pos.getY()).get(pos.getX());
     }
 
+    public List<Entity> allEntities() {
+        List<Entity> all = new ArrayList<Entity>();
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                all.addAll(cell.getOccupants());
+            }
+        }
+        return all;
+    }
+
     public Cell getCell(int x, int y) {
         return dungeonMap.get(y).get(x);
     }
@@ -127,6 +137,11 @@ public class DungeonMap {
         } else {
             return cell;
         }
+    }
+
+    public Cell getCellAround(Pos2d position, Direction d) {
+        Cell cell = getCell(position);
+        return getCellAround(cell, d);
     }
 
     private int propagateFrom(Cell cell) {

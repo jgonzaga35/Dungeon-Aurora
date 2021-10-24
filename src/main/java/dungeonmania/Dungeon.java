@@ -88,12 +88,9 @@ public class Dungeon {
 
         this.player.handleMoveOrder(movementDirection);
         
+        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
 
-        
-        //Spawn spider
-        Pos2d spiderPos = randomSpiderSpawn();
-        Spider spider = new Spider(this, spiderPos);
-        spider.getCell().addOccupant(spider);
+        spiderSpawn();
     }
 
     public String getId() {
@@ -151,14 +148,24 @@ public class Dungeon {
         return dungeonMap;
     }
 
-    public Pos2d randomSpiderSpawn() {
-        Pos2d position = getDungeonSize();
-        Random rand = new Random();
-        Pos2d spawn = new Pos2d(0, 0);
+    private void spiderSpawn() {
+        int width = dungeonMap.getWidth();
+        int height = dungeonMap.getHeight();
 
-        spawn.setX(rand.nextInt(position.getX() - 1) + 1);
-        spawn.setY(rand.nextInt(position.getY() - 1) + 1);
+        for (int i = 0; i < width * height; i++) {
+            Random random = new Random();
+            int x = random.nextInt(width - 2) + 1;
+            int y = random.nextInt(height - 2) + 1;
+            Pos2d spawn = new Pos2d(x, y);
 
-        return spawn;
+            if (!dungeonMap.getCellAround(spawn, Direction.UP).hasBoulder()
+                && !dungeonMap.getCell(spawn).hasBoulder()) {
+                Spider spider = new Spider(this, spawn);
+                dungeonMap.getCell(spawn).addOccupant(spider);
+                return;
+            }
+        }
+
+        throw new RuntimeException(String.format("cannot spawn spider"));
     }
 }

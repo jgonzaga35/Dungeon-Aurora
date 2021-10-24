@@ -35,4 +35,10 @@ public class Pos2d {
         return new Pos2d(pos.getX(), pos.getY());
     }
 
+
+    @Override
+    public String toString() {
+        return "(" + getX() + ", " + getY() + ")";
+    }
+
 }

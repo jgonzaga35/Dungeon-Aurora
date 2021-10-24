@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
 
 public class Cell {
@@ -31,13 +32,12 @@ public class Cell {
     }
 
     public void addOccupant(Entity e) {
+        System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
         this.occupants.add(e);
     }
 
-    public void tickOccupants() {
-        for (Entity entity : occupants) {
-            entity.tick();
-        }
+    public boolean hasBoulder() {
+        return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
     
     /**
@@ -48,6 +48,7 @@ public class Cell {
     }
 
     public boolean removeOccupant(Entity e) {
+        System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
         return this.occupants.remove(e);
     }
 
