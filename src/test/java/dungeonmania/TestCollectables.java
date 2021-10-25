@@ -18,45 +18,33 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 
-public class TestLoadCollectables {
+public class TestCollectables {
     /** 
-     * Testing Making the Treasure Entity
+     * TEST: Ensure Treasure is Collected by 
      */
+    
     @Test
     public void testLoadingTreasure() {
-        //Creating Treasure
-        Treasure treasure = new Treasure();
+        //Loading New Map (Treasure is at Coords (7, 10))
+        String content = FileLoader.loadResourceFile("/dungeons/advanced.json");
+        Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
 
-        //
-        DungeonResponse resp = assertDoesNotThrow(() -> {
-            return ctr.newGame("maze", mode);
-        });
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
 
-        assertEquals("maze", resp.getDungeonName());
-        assertEquals(0, resp.getInventory().size());
-        int numPlayers = 0;
-        int numExit = 0;
-        int numWalls = 0;
+        //Checking if Character Has Any Treasure (Should be None)
 
-        Set<String> ids = new HashSet<>();
-        for (EntityResponse er : resp.getEntities()) {
 
-            // make sure we don't have duplicate entities ids
-            assertTrue(!ids.contains(er.getId()));
-            ids.add(er.getId());
+        //Moving to the Treasure
 
-            if (Objects.equals(er.getType(), "wall")) {
-                numWalls++;
-            } else if (Objects.equals(er.getType(), "player")) {
-                numPlayers++;
-            } else if (Objects.equals(er.getType(), "exit")) {
-                numExit++;
-            }
-        }
+        // TODO
+        resp  = ctr.tick("", Direction.DOWN);
+        
+        //Checking If Goal is Reached (No Treasure Left on Map)
 
-        assertEquals(1, numExit);
-        assertEquals(1, numPlayers);
-        // cat src/test/resources/dungeons/maze.json | grep wall | wc -l
-        assertEquals(204, numWalls);
+        //TODO
     }
+
 }
