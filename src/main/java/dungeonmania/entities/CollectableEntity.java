@@ -13,28 +13,6 @@ public abstract class CollectableEntity extends Entity {
         super(dungeon, position);
     }
 
-    /**
-     * Moves an entity from the current cell to the target cell
-     * @param target
-     */
-    public void moveTo(Cell target) {
-        Cell from = this.getCell();
-        from.removeOccupant(this);
-        target.addOccupant(this);
-
-        this.position = target.getPosition();
-        this.getCell().onWalked(from.getPosition(), this.position);
-    }
-
-    public Cell inspectCell(Direction d) {
-        return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
-    }
-
-    @Override
-    public boolean isInteractable() {
-        return false; // i think at least
-    }
-
     @Override
     public LayerLevel getLayerLevel() {
         return LayerLevel.MOVING_ENTITY;
