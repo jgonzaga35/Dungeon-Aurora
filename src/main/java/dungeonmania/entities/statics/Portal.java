@@ -16,7 +16,7 @@ public class Portal extends StaticEntity {
         this.correspondingPortal = portal;
     }
 
-    // Returns the cell of the corresponding Portal
+    // Returns cell of the corresponding Portal
     public Cell teleport() {
         // If the portal does not yet have a corresponding portal, return the current cell only
         if (correspondingPortal == null) {
