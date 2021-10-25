@@ -11,7 +11,7 @@ import dungeonmania.Dungeon;
 public abstract class Goal {
 
     private Boolean hasSubGoal;
-
+    
     public Goal() {
         this.hasSubGoal = false;
     }
