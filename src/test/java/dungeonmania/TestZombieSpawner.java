@@ -24,12 +24,13 @@ public class TestZombieSpawner {
     @Test
     public void testSpawnZombies() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_zombies_park", GameMode.STANDARD.getValue());
+        DungeonResponse resp = ctr.newGame("_zombies_in_the_wild", GameMode.PEACEFUL.getValue());
 
         for (int i = 1; i < 101; i++) {
             resp = ctr.tick("", Direction.NONE);
-            // a zombie should spawn every 20 seconds
-            assertEquals(Math.floorDiv(i, 20), resp.getEntities().stream()
+            // a zombie should spawn every 20 ticks, and there is already one
+            // zombie on the map
+            assertEquals(1+Math.floorDiv(i, 20), resp.getEntities().stream()
                 .filter(e -> Objects.equals(ZombieToast.STRING_TYPE, e.getType())).count());
         }
     }

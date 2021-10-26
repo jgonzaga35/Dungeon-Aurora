@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -68,6 +69,8 @@ public class Dungeon {
                 cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
+                cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);

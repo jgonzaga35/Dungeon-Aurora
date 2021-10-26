@@ -4,5 +4,6 @@
     "entities": [
         {"x": 5, "y": 5, "type": "zombie toast spawner"},
         {"x": 0, "y": 0, "type": "player"},
+        {"x": 10, "y": 10, "type": "zombie"}
     ]
 }
