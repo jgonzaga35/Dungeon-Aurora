@@ -32,7 +32,7 @@ public class Cell {
     }
 
     public void addOccupant(Entity e) {
-        System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
+        //System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
         this.occupants.add(e);
     }
 
@@ -48,7 +48,7 @@ public class Cell {
     }
 
     public boolean removeOccupant(Entity e) {
-        System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
+        //System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
         return this.occupants.remove(e);
     }
 
