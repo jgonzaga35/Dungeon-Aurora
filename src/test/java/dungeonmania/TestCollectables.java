@@ -150,4 +150,102 @@ public class TestCollectables {
         //Checking If Arrow was Collected
         
     }
+
+
+    /** 
+     * TEST: Ensure Key is Collected  
+     */
+    
+    @Test
+    public void testLoadingKey() {
+        assertDoesNotThrow(() -> {
+            //Loading New Map (Key is at Coords (7, 10) and Player is at Coords (1, 1))
+            String content = FileLoader.loadResourceFile("/dungeons/keyExample.json");
+            Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        });
+
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
+
+        //Moving to the Key
+
+        // Down 6 Units to Coord (7, 1)
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+
+        // Right 9 Units to Coord (7, 1)
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        
+        //Then Entering the Linked Door
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+
+        //Checking that the Key has Then Been Removed by Opening Same Door Again
+
+
+
+        
+    }
+    /** 
+     * TEST: Ensure Sword is Collected  
+     */
+    
+    @Test
+    public void testLoadingSword() {
+        assertDoesNotThrow(() -> {
+            //Loading New Map (Key is at Coords (7, 10) and Player is at Coords (1, 1))
+            String content = FileLoader.loadResourceFile("/dungeons/swordExample.json");
+            Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        });
+
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
+
+        //Moving to the Sword
+
+        // Down 6 Units to Coord (7, 1)
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+
+        // Right 9 Units to Coord (7, 1)
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        
+        //Then Entering the Linked Door
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+
+        //Initiating Fight with Sword
+
+        
+
+        
+    }
 }
