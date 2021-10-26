@@ -15,7 +15,7 @@ public class Wood extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return Treasure.STRING_TYPE;
+        return Wood.STRING_TYPE;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class Sword extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return Treasure.STRING_TYPE;
+        return Sword.STRING_TYPE;
     }
 
     @Override

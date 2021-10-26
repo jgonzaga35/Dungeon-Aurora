@@ -26,7 +26,7 @@ public class Key extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return Treasure.STRING_TYPE;
+        return Key.STRING_TYPE;
     }
 
     @Override

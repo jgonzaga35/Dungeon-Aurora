@@ -15,7 +15,7 @@ public class Arrow extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return Treasure.STRING_TYPE;
+        return Arrow.STRING_TYPE;
     }
 
     @Override
