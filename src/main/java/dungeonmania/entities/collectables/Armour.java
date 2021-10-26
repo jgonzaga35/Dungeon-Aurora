@@ -5,15 +5,15 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
-public class Sword extends CollectableEntity {
+public class Armour extends CollectableEntity {
 
-    public static String STRING_TYPE = "sword";
+    public static String STRING_TYPE = "armour";
 
     public static int INITIAL_DURABILITY = 10;
 
     public int durabilityLeft;
 
-    public Sword(Dungeon dungeon, Pos2d position) {
+    public Armour(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durabilityLeft = INITIAL_DURABILITY;
     }

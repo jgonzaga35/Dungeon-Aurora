@@ -20,7 +20,7 @@ public class Key extends CollectableEntity {
      * 
      * @return keyId : int
      */
-    public int getKeyId() {
+    public String getKeyId() {
         return keyId;
     }
 
