@@ -248,4 +248,53 @@ public class TestCollectables {
 
         
     }
+
+    /** 
+     * TEST: Ensure Armour is Collected  
+     */
+    
+    @Test
+    public void testLoadingArmour() {
+        assertDoesNotThrow(() -> {
+            //Loading New Map (Armour is at Coords (7, 10) and Player is at Coords (1, 1))
+            String content = FileLoader.loadResourceFile("/dungeons/armourExample.json");
+            Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        });
+
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
+
+        //Moving to the Armour
+
+        // Down 6 Units to Coord (7, 1)
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+        ctr.tick("", Direction.DOWN);
+
+        // Right 9 Units to Coord (7, 1)
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+
+        //Initiating Fight with Zombie
+
+        //Move 10 Times
+
+        //Check that Player has Lost Battle
+
+        
+
+        
+    }
 }
