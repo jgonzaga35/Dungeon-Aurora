@@ -1,5 +1,8 @@
-package dungeonmania;
+package dungeonmania.entities.movings;
 
+import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.Pos2d;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.util.Direction;
 

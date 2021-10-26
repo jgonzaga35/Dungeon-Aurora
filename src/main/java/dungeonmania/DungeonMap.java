@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 
