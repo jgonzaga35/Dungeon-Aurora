@@ -2,10 +2,8 @@ package dungeonmania;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
@@ -80,17 +78,6 @@ public class DungeonMap {
 
     public int getHeight() {
         return this.height;
-    }
-
-    /**
-     * @return list of entities in the map
-     */
-    public List<Entity> allEntities() {
-        return dungeonMap.stream()
-            .flatMap(Collection::stream)
-            .map(cell -> cell.getOccupants())
-            .flatMap(Collection::stream)
-            .collect(Collectors.toList());
     }
     
     /**
