@@ -14,11 +14,13 @@ public abstract class Entity {
         this.id = "Entity-" + Entity.nextEntityId;
         this.dungeon = dungeon;
         this.position = position;
-
+        
         Entity.nextEntityId++;
     }
 
     public Entity(Cell cell) {
+        this.id = "Entity-" + Entity.nextEntityId;
+        Entity.nextEntityId++;
     }
 
     public String getId() {
@@ -30,6 +32,10 @@ public abstract class Entity {
      */
     public Cell getCell() {
         return dungeon.getMap().getCell(position);
+    }
+
+    public Pos2d getPosition() {
+        return position;
     }
 
     public abstract boolean isInteractable();
