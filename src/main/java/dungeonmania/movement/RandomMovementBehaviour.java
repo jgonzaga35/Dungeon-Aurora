@@ -1,4 +1,4 @@
-package main.java.dungeonmania.movement;
+package dungeonmania.movement;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,7 +6,6 @@ import java.util.Random;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
 import dungeonmania.util.Direction;
 
 public class RandomMovementBehaviour implements Movement {
@@ -15,7 +14,7 @@ public class RandomMovementBehaviour implements Movement {
     private DungeonMap map;
     private Cell currentCell;
 
-    RandomMovementBehaviour(DungeonMap map, Cell initialCell)
+    public RandomMovementBehaviour(DungeonMap map, Cell initialCell)
     {
         this.map = map;
         this.currentCell = initialCell;
@@ -29,7 +28,7 @@ public class RandomMovementBehaviour implements Movement {
     {
         int direction = rng.nextInt(4);
 
-        currentCell = map.getCellAround(currentCell, direction);
+        currentCell = map.getCellAround(currentCell, directionMap.get(direction));
 
         return currentCell;
     }

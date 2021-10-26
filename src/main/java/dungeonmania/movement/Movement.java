@@ -1,4 +1,4 @@
-package main.java.dungeonmania.movement;
+package dungeonmania.movement;
 
 import dungeonmania.Cell;
 

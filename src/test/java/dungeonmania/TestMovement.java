@@ -1,16 +1,26 @@
-package test.java.dungeonmania;
+package dungeonmania;
 
-import dungeonmania.Cell;
-import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
-import main.java.dungeonmania.movement.Movement;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestZombieMovement {
+import java.io.IOException;
+
+import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import dungeonmania.movement.CircleMovementBehaviour;
+import dungeonmania.movement.FleeMovementBehaviour;
+import dungeonmania.movement.FollowMovementBehaviour;
+import dungeonmania.movement.Movement;
+import dungeonmania.movement.RandomMovementBehaviour;
+import dungeonmania.util.FileLoader;
+
+public class TestMovement {
     DungeonMap map;
     Cell startingCell;
 
     @BeforeEach
-    public void setSeed() {
+    public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
         map = new DungeonMap(new JSONObject(content));
         startingCell = map.getCell(new Pos2d(3, 6));
