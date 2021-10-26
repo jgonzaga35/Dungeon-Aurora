@@ -62,13 +62,14 @@ public class SpiderTest {
     @Test
     public void testSpiderId() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        DungeonResponse resp = ctr.newGame("maze", GameMode.STANDARD.getValue());
+
         List<String> idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
         Set<String> idSet = new HashSet<String>(idList);
 
         assertTrue(idList.size() == idSet.size());
         
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick("", Direction.DOWN);
 
         idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
         idSet = new HashSet<String>(idList);
@@ -76,9 +77,13 @@ public class SpiderTest {
         assertTrue(idList.size() == idSet.size());
 
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
-        resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+
+        resp = ctr.tick("", Direction.DOWN);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
+        idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
+        idSet = new HashSet<String>(idList);
+
+        assertTrue(idList.size() == idSet.size());
     }
 
 

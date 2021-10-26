@@ -19,7 +19,7 @@ public abstract class MovingEntity extends Entity {
      */
     public void moveTo(Cell target) {
         Cell from = this.getCell();
-        assert from.removeOccupant(this);
+        from.removeOccupant(this);
         target.addOccupant(this);
 
         this.position = target.getPosition();

@@ -47,35 +47,36 @@ public class Spider extends MovingEntity {
             currentMovementStage += direction;
             stayInBound();
             if (movementMap.get(currentMovementStage).hasBoulder()) {
-                System.out.println("boulder, change direciton");
+                //System.out.println("boulder, change direciton");
                 direction = direction * -1;
                 currentMovementStage += direction;
                 stayInBound();
             } else {
                 super.moveTo(movementMap.get(currentMovementStage));
-                System.out.println("successfully moved");
+                //System.out.println("successfully moved");
                 return;
             }
         }
         
-        System.out.println("trapped between two boulders, no movement");
+        //System.out.println("trapped between two boulders, no movement");
     }
 
     @Override
     public void tick() {
         // move in a random direction
         
-        System.out.println("ticking the spider");
-
+        //System.out.println("ticking the spider");
+        
         if (hasMoved) {
             spiderMove();
         } else {
             if (!movementMap.get(0).hasBoulder()) {
-                System.out.println("spider has moved up");
+                //System.out.println("spider has moved up");
                 super.moveTo(movementMap.get(0));
                 hasMoved = true;
             }
         }
+        
         
 
     }
