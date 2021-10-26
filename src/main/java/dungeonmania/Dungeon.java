@@ -25,6 +25,8 @@ public class Dungeon {
     private Player player;
     private String name;
 
+    private int spiderPopulation;
+
     public static int nextDungeonId = 1;
 
     public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goals goals) {
@@ -89,8 +91,12 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
-
-        spiderSpawn();
+        
+        if (spiderPopulation < Spider.MAX_SPIDERS) {
+            spiderPopulation++;
+            Spider.spawnSpider(this);
+        }
+        
     }
 
     public String getId() {
@@ -146,26 +152,5 @@ public class Dungeon {
 
     public DungeonMap getMap() {
         return dungeonMap;
-    }
-
-    private void spiderSpawn() {
-        int width = dungeonMap.getWidth();
-        int height = dungeonMap.getHeight();
-
-        for (int i = 0; i < width * height; i++) {
-            Random random = new Random();
-            int x = random.nextInt(width - 2) + 1;
-            int y = random.nextInt(height - 2) + 1;
-            Pos2d spawn = new Pos2d(x, y);
-
-            if (!dungeonMap.getCellAround(spawn, Direction.UP).hasBoulder()
-                && !dungeonMap.getCell(spawn).hasBoulder()) {
-                Spider spider = new Spider(this, spawn);
-                dungeonMap.getCell(spawn).addOccupant(spider);
-                return;
-            }
-        }
-
-        throw new RuntimeException(String.format("cannot spawn spider"));
     }
 }

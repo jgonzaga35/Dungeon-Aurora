@@ -97,4 +97,16 @@ public class SpiderTest {
         }
     }
 
+    @Test
+    public void testSpiderSpawnLimit() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+
+        for (int i = 0; i < 10; i ++) {
+            resp = ctr.tick("", Direction.NONE);
+        }
+        long numSpiders = resp.getEntities().stream().filter(x -> x.getType().equals(Spider.STRING_TYPE)).count();
+        assertTrue(numSpiders <= 5);
+    }
+
 }

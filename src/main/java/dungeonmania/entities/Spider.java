@@ -17,6 +17,36 @@ public class Spider extends MovingEntity {
     private int currentMovementStage = 0;
     private int direction = 1;
     private boolean hasMoved = false;
+    
+    public static final int MAX_SPIDERS = 5;
+
+    public static void spawnSpider(Dungeon dungeon) {
+        Cell cell = randomPosition(dungeon);
+        if (cell != null) {
+            System.out.println("spawning a spider");
+            cell.addOccupant(new Spider(dungeon, cell.getPosition()));
+            return;
+        }
+        System.out.println("failed to spawn a spider");
+    }
+
+    private static Cell randomPosition(Dungeon dungeon) {
+        DungeonMap dungeonMap = dungeon.getMap();
+        int width = dungeonMap.getWidth();
+        int height = dungeonMap.getHeight();
+
+        for (int i = 0; i < width * height; i++) {
+            Random random = new Random();
+            int x = random.nextInt(width - 2) + 1;
+            int y = random.nextInt(height - 2) + 1;
+            Pos2d spawn = new Pos2d(x, y);
+
+            if (!dungeonMap.getCell(spawn).hasBoulder()) {
+                return dungeonMap.getCell(spawn);
+            }
+        }
+        return null;
+    }
 
     public Spider(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
