@@ -24,8 +24,7 @@ public class Boulder extends StaticEntity {
 
     @Override
     public String getTypeAsString() {
-        // TODO Auto-generated method stub
-        return null;
+        return Boulder.STRING_TYPE;
     }
 
     @Override
