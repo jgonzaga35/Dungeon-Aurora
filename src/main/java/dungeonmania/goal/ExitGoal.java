@@ -5,6 +5,8 @@ import java.util.List;
 import dungeonmania.Dungeon;
 
 public class ExitGoal extends Goal {
+   
+    public static String STRING_TYPE = "EXIT";
     public ExitGoal() {
         super();
     }

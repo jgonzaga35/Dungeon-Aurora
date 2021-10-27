@@ -4,6 +4,7 @@ import dungeonmania.Dungeon;
 
 public class TreasureGoal extends Goal {
     
+    public static String STRING_TYPE = "TREASURE";
     public TreasureGoal() {
         super();
     }

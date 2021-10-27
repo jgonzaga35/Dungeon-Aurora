@@ -5,6 +5,7 @@ import java.util.List;
 
 public class AndGoal extends Goal {
 
+    public static String STRING_TYPE = "AND";
     private List<Goal> subgoals = new ArrayList<Goal>();
 
     public AndGoal() {

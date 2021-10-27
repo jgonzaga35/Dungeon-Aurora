@@ -2,7 +2,7 @@ package dungeonmania.goal;
 
 
 import java.util.List;
-
+import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -64,8 +64,8 @@ public abstract class Goal {
     public static Goal getGoalFromGoalType(String goalType) {
 
         // Cannot instantiate an abstract class, so default create AndGoal
-        Goal goal = new AndGoal();
-        
+        Goal goal = null;
+
         switch (goalType) {
             case "AND": 
                 goal = new AndGoal();

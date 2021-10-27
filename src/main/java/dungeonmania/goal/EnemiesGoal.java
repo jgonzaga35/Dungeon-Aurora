@@ -3,6 +3,8 @@ package dungeonmania.goal;
 import dungeonmania.Dungeon;
 
 public class EnemiesGoal extends Goal {
+
+    public static String STRING_TYPE = "ENEMIES";
     public EnemiesGoal() {
         super();
     }

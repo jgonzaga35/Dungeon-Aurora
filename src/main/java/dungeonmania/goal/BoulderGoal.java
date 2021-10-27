@@ -3,6 +3,8 @@ package dungeonmania.goal;
 import dungeonmania.Dungeon;
 
 public class BoulderGoal extends Goal {
+
+    public static String STRING_TYPE = "BOULDER";
     public BoulderGoal() {
         super();
     }

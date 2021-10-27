@@ -6,6 +6,7 @@ import java.util.List;
 
 public class OrGoal extends Goal {
 
+    public static String STRING_TYPE = "OR";
     private List<Goal> subgoals = new ArrayList<Goal>();
     
     public OrGoal() {

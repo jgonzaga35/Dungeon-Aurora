@@ -1,1 +1,2 @@
 - player cannot move outside the map
+- goals cannot be recursive
