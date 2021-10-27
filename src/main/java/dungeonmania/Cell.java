@@ -3,9 +3,8 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
-import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
-import dungeonmania.util.Direction;
 
 public class Cell {
     /**
@@ -13,15 +12,19 @@ public class Cell {
      */
     private List<Entity> occupants = new ArrayList<>();
     private Pos2d position;
-    private Dungeon dungeon;
+    private Integer playerDistance;
 
-    public Cell(Dungeon dungeon, Pos2d position) {
+    
+    public Cell(Pos2d position) {
         this.position = position;
-        this.dungeon = dungeon;
     }
 
-    public Dungeon getDungeon() {
-        return this.dungeon;
+    public Integer getPlayerDistance() {
+        return this.playerDistance;
+    }
+
+    public void setPlayerDistance(Integer playerDistance) {
+        this.playerDistance = playerDistance;
     }
 
     public Pos2d getPosition() {
@@ -29,11 +32,12 @@ public class Cell {
     }
 
     public void addOccupant(Entity e) {
+        //System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
         this.occupants.add(e);
     }
-    
-    public GameMode getGameMode() {
-        return this.dungeon.getGameMode();
+
+    public boolean hasBoulder() {
+        return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
     
     /**
@@ -44,6 +48,7 @@ public class Cell {
     }
 
     public boolean removeOccupant(Entity e) {
+        //System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
         return this.occupants.remove(e);
     }
 
@@ -62,14 +67,5 @@ public class Cell {
         for (Entity e: this.occupants) {
             // e.onWalked(from, to);
         }
-    }
-
-    /**
-     * returns the cell above, below, left or right (depending on the direction)
-     * @param d direction (shouldn't be NONE)
-     * @return Cell
-     */
-    public Cell getCellAround(Direction d) {
-        return this.dungeon.getCellAround(this, d);
     }
 }
