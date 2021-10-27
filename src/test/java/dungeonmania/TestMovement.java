@@ -31,56 +31,56 @@ public class TestMovement {
         startingCell = dungeon.getMap().getCell(new Pos2d(2, 2));
     }
 
-    @Test
-    public void testCircleMovement() {
-        DungeonMap map = dungeon.getMap();
-        Movement spider = new CircleMovementBehaviour(map, startingCell);
+    // @Test
+    // public void testCircleMovement() {
+    //     DungeonMap map = dungeon.getMap();
+    //     Movement spider = new CircleMovementBehaviour(map, startingCell);
         
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 3));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 3));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
 
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
-    }
+    //     spider.move();
+    //     assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+    // }
 
-    @Test
-    public void testFollowMovement() {
-        DungeonMap map = dungeon.getMap();
-        Movement merc = new FollowMovementBehaviour(map, startingCell);
+    // @Test
+    // public void testFollowMovement() {
+    //     DungeonMap map = dungeon.getMap();
+    //     Movement merc = new FollowMovementBehaviour(map, startingCell);
 
-        merc.move();
-        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(3, 2));
+    //     merc.move();
+    //     assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(3, 2));
         
-        merc.move();
-        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 2));
+    //     merc.move();
+    //     assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 2));
         
-        merc.move();
-        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 1));
+    //     merc.move();
+    //     assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 1));
         
-        merc.move();
-        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 0));
-    }
+    //     merc.move();
+    //     assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 0));
+    // }
 
     @Test
     public void testRandomMovement() {
@@ -101,37 +101,37 @@ public class TestMovement {
         }
     }
 
-    @Test
-    public void testFleeMovement() {
-        DungeonMap map = dungeon.getMap();
-        Movement scaredZombie = new FleeMovementBehaviour(map, startingCell);
+    // @Test
+    // public void testFleeMovement() {
+    //     DungeonMap map = dungeon.getMap();
+    //     Movement scaredZombie = new FleeMovementBehaviour(map, startingCell);
 
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 3))
-        );
+    //     scaredZombie.move();
+    //     assertTrue(
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 2)) |
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 3))
+    //     );
         
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 4))
-        );
+    //     scaredZombie.move();
+    //     assertTrue(
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 2)) |
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 3)) |
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 4))
+    //     );
         
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 4))
-        );
+    //     scaredZombie.move();
+    //     assertTrue(
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 3)) |
+    //         scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 4))
+    //     );
         
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+    //     scaredZombie.move();
+    //     assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
         
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+    //     scaredZombie.move();
+    //     assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
         
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
-    }
+    //     scaredZombie.move();
+    //     assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+    // }
 }
