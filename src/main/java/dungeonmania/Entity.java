@@ -51,6 +51,12 @@ public abstract class Entity {
         ).filter(cell -> cell != null);
     }
 
+    @Override
+    public String toString()
+    {
+        return getTypeAsString();
+    }
+
     public abstract boolean isInteractable();
 
     public abstract LayerLevel getLayerLevel();
