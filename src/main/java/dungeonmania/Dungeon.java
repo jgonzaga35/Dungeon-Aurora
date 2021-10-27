@@ -105,8 +105,14 @@ public class Dungeon {
     private void pickupCollectableEntities() {
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
+        if (playerCell == null) {
+            return;
+        }
 
         //Check if Collectibles in the Player's Cell
+        if (playerCell.getOccupants() == null) {
+            return;
+        }
         List<Entity> playerCellOccupants = playerCell.getOccupants();
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
