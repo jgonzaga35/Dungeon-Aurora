@@ -70,10 +70,14 @@ public class TestMovement {
     public void testCircleBoulderInteraction() throws IOException
     {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(2, 2));
 
-        DungeonMap map = dungeon.getMap();
-        Movement spider = new CircleMovementBehaviour(map, startingCell);
+        DungeonMap map = boulderDungeon.getMap();
+        Movement spider = new CircleMovementBehaviour(map, spiderStart);
+
+        System.out.println(map.toString());
+        System.out.println(map.getCell(3, 3).getOccupants().toString());
 
         spider.move();
         assertEquals(new Pos2d(2, 1), spider.getCurrentPosition().getPosition());
