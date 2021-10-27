@@ -35,21 +35,10 @@ public class Pos2d {
         return new Pos2d(pos.getX(), pos.getY());
     }
 
+
     @Override
     public String toString() {
         return "(" + getX() + ", " + getY() + ")";
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this) return true;
-        if (obj == null) return false;
-        if (this.getClass() != obj.getClass()) return false;
-
-        Pos2d checkPos = (Pos2d) obj;
-
-        return x == checkPos.getX() && y == checkPos.getY();
     }
 
 }
