@@ -57,11 +57,21 @@ public class CircleMovementBehaviour implements Movement {
 
     public Cell move()
     {
+        System.out.println("Step: " + step);
+        System.out.println("Direction: " + direction);
+        
         Cell nextCell = map.getCell(movementCycle.get(step));
         if (nextCell.hasBoulder())
         {
             direction *= -1;
             step += direction;
+
+            // Checking this here covers edge cases.
+            if (step > 7) step = 0;
+            if (step < 0) step = 7;
+
+            System.out.println("Step2: " + step);
+            System.out.println("Direction2: " + direction);
             nextCell = map.getCell(movementCycle.get(step));
         }
         step += direction;
