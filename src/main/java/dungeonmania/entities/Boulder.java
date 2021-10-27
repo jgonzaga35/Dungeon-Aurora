@@ -30,7 +30,6 @@ public class Boulder extends StaticEntity {
     @Override
     public void tick() {
         // TODO Auto-generated method stub
-        
     }
     
 }
