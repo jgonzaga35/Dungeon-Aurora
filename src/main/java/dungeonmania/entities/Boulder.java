@@ -4,6 +4,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 
 public class Boulder extends StaticEntity {
+    public static String STRING_TYPE = "boulder";
 
     public Boulder(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
