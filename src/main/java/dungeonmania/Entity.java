@@ -30,10 +30,6 @@ public abstract class Entity {
         Cell from = this.cell;
         from.removeOccupant(this);
 
-        Portal portal = target.hasPortal();
-        if (portal != null) {
-            target = portal.teleport();
-        }
         target.addOccupant(this);
 
         this.cell = target;

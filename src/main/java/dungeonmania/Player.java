@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public class Player extends MovingEntity {
@@ -22,6 +23,11 @@ public class Player extends MovingEntity {
         Cell target = this.getCellAround(d);
         if (target == null || target.isBlocking())
             return;
+
+        Portal portal = target.hasPortal();
+        if (portal != null) {
+            target = portal.teleport();
+        }
 
         this.moveTo(target);
     }

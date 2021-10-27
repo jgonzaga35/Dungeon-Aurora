@@ -7,9 +7,18 @@ public class Portal extends StaticEntity {
 
     public static String STRING_TYPE = "portal";
     public Portal correspondingPortal;
+    private String colour;
 
-    public Portal(Cell cell) {
+    public Portal(Cell cell, String colour) {
         super(cell);
+    }
+
+    private void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public String getColour() {
+        return this.colour;
     }
 
     public void setCorrespondingPortal(Portal portal) {
