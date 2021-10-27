@@ -1,8 +1,11 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-/*
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+
+/*
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
@@ -14,6 +17,8 @@ import org.json.JSONObject;
 
 import org.junit.jupiter.api.Test;
 
+
+
 /*
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -23,6 +28,10 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 
 public class TestCollectables {
     /** 
@@ -40,6 +49,7 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        Boolean found = false;
         resp = ctr.tick("", Direction.NONE);
 
         //Moving to the Treasure
@@ -52,7 +62,7 @@ public class TestCollectables {
         ctr.tick("", Direction.DOWN);
         ctr.tick("", Direction.DOWN);
 
-        // Right 9 Units to Coord (7, 1)
+        // Right 9 Units to Coord (7, 10)
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
@@ -61,7 +71,19 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick("", Direction.RIGHT);
+
+        //Checking that the Item has Been Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "treasure") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
         
         //Checking If Goal is Reached (No Treasure Left on Map)
         //TODO
@@ -83,6 +105,7 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
 
         //Moving to the Wood
 
@@ -106,7 +129,16 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         
         //Checking If Wood was Collected
-
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "wood") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
     }
 
     /** 
@@ -125,6 +157,7 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
 
         //Moving to the Arrow
 
@@ -148,6 +181,16 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         
         //Checking If Arrow was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "wood") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
         
     }
 
@@ -168,6 +211,7 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
 
         //Moving to the Key
 
@@ -189,6 +233,18 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
+
+        //Checking If Key was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "key") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
         
         //Then Entering the Linked Door
         ctr.tick("", Direction.RIGHT);
@@ -216,6 +272,7 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
 
         //Moving to the Sword
 
@@ -238,6 +295,18 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         
+        //Checking If Sword was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "sword") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
+
         //Then Entering the Linked Door
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
@@ -265,6 +334,7 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
 
         //Moving to the Armour
 
@@ -286,6 +356,18 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
+
+        //Checking If Armour was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "armour") {
+                found = true;
+            }
+        }
+        assertEquals(found, true);
 
         //Initiating Fight with Zombie
 
