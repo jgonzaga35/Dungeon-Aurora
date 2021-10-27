@@ -4,7 +4,7 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.MovingEntity;
-import dungeonmania.util.Direction;
+import dungeonmania.util.*;
 
 public class Player extends MovingEntity {
 
@@ -19,14 +19,26 @@ public class Player extends MovingEntity {
      * @param d direction
      */
     public void handleMoveOrder(Direction d) {
-        if (d == Direction.NONE)
+        if (d == Direction.NONE) 
+            //do nothing if no direcition
             return;
 
         Cell target = this.inspectCell(d);
-        if (target == null || target.isBlocking())
+        if (target == null) 
+            //do nothing if target cell is null
             return;
 
-        this.moveTo(target);
+        BlockingReason blockingReason = target.getBlocking();
+        switch (blockingReason) {
+            case NOT:
+                this.moveTo(target);
+            case BOULDER:
+                return;
+            default:
+                return;
+        }
+
+        
     }
 
     @Override

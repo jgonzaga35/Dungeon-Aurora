@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.util.BlockingReason;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 
@@ -11,7 +12,9 @@ public abstract class StaticEntity extends Entity {
         super(dungeon, position);
     }
 
-    public abstract boolean isBlocking();
+    public BlockingReason isBlocking() {
+        return BlockingReason.NOT;
+    }
 
     @Override
     public LayerLevel getLayerLevel() {

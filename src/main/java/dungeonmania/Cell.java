@@ -5,6 +5,7 @@ import java.util.List;
 
 import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.BlockingReason;
 
 public class Cell {
     /**
@@ -13,8 +14,8 @@ public class Cell {
     private List<Entity> occupants = new ArrayList<>();
     private Pos2d position;
     private Integer playerDistance;
+    private BlockingReason blockingReason = BlockingReason.NOT;
 
-    
     public Cell(Pos2d position) {
         this.position = position;
     }
@@ -55,12 +56,27 @@ public class Cell {
     /**
      * @return true if there is a static element on the cell that is blocking
      */
-    public boolean isBlocking() {
+    public BlockingReason getBlocking() {
         for (Entity e: this.occupants) {
-            if (e instanceof StaticEntity && ((StaticEntity) e).isBlocking())
-                return true;
+            if (e instanceof StaticEntity && 
+                !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
+                    this.blockingReason = ((StaticEntity)e).isBlocking();
+                    return this.blockingReason;
+                }
         }
-        return false;
+        this.blockingReason = BlockingReason.NOT;
+        return this.blockingReason;
+    }
+
+    /**
+     * @return true if there is a static element on the cell that is blocking
+     */
+    public boolean isBlocking() {
+        if (this.getBlocking().equals(BlockingReason.NOT)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void onWalked(Pos2d from, Pos2d to) {

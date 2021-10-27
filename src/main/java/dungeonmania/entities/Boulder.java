@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.util.BlockingReason;
 
 public class Boulder extends StaticEntity {
 
@@ -9,10 +10,12 @@ public class Boulder extends StaticEntity {
         super(dungeon, position);
     }
 
+    
+
     @Override
-    public boolean isBlocking() {
+    public BlockingReason isBlocking() {
         // TODO Auto-generated method stub
-        return false;
+        return BlockingReason.BOULDER;
     }
 
     @Override
