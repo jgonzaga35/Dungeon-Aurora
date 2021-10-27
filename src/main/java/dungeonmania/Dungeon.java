@@ -15,6 +15,7 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
+import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Arrow;
@@ -30,6 +31,7 @@ public class Dungeon {
     private Goals goals;
     private Player player;
     private String name;
+    private List<CollectableEntity> collectables;
 
     private int spiderPopulation;
 
@@ -100,6 +102,20 @@ public class Dungeon {
         return dungeon;
     }
 
+    private void pickupCollectableEntities() {
+        //Retreiving Player's Cell
+        Cell playerCell = dungeonMap.getPlayerCell();
+
+        //Check if Collectibles in the Player's Cell
+        List<Entity> playerCellOccupants = playerCell.getOccupants();
+        for (Entity occupant : playerCellOccupants) {
+            if (occupant instanceof CollectableEntity) {
+                CollectableEntity collectableOccupant = (CollectableEntity) occupant;
+                collectables.add(collectableOccupant);
+            }
+        }
+    }
+
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
@@ -111,6 +127,8 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+
+        pickupCollectableEntities();
         
         if (spiderPopulation < Spider.MAX_SPIDERS) {
             spiderPopulation++;
