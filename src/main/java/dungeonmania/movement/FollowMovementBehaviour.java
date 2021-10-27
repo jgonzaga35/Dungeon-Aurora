@@ -2,7 +2,6 @@ package dungeonmania.movement;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
 
 public class FollowMovementBehaviour implements Movement {
     private DungeonMap map;
@@ -16,7 +15,13 @@ public class FollowMovementBehaviour implements Movement {
 
     public Cell move()
     {
-        return new Cell(new Pos2d(0, 0));
+        currentCell = map.getNeighbors(currentCell).stream()
+            .min(
+                (c1, c2) -> 
+                Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
+            ).get();
+        
+        return currentCell;
     }
 
     public Cell getCurrentPosition()
