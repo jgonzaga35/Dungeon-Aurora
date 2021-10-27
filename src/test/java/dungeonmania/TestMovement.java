@@ -25,14 +25,16 @@ public class TestMovement {
     Cell startingCell;
 
     @BeforeEach
-    public void setStartingPostition() throws IOException {
+    public void setStartingPostition() throws IOException 
+    {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
         dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
         startingCell = dungeon.getMap().getCell(new Pos2d(2, 2));
     }
 
     @Test
-    public void testCircleMovement() {
+    public void testCircleMovement() 
+    {
         DungeonMap map = dungeon.getMap();
         Movement spider = new CircleMovementBehaviour(map, startingCell);
         
@@ -62,5 +64,48 @@ public class TestMovement {
 
         spider.move();
         assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+    }
+
+    @Test
+    public void testCircleBoulderInteraction() throws IOException
+    {
+        String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder.json");
+        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+
+        DungeonMap map = dungeon.getMap();
+        Movement spider = new CircleMovementBehaviour(map, startingCell);
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+
+        spider.move();
+        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
     }
 }
