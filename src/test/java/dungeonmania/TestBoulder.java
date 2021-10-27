@@ -17,7 +17,7 @@ public class TestBoulder {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp;
         Position p;
-        ctr.newGame("_simple_boulder", GameMode.PEACEFUL.getValue());
+        ctr.newGame("_boulder_simple", GameMode.PEACEFUL.getValue());
 
         // move the boulder to a free spot
         resp = ctr.tick("", Direction.RIGHT);
