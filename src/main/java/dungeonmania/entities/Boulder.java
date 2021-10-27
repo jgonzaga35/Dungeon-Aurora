@@ -5,12 +5,13 @@ import dungeonmania.Pos2d;
 import dungeonmania.util.BlockingReason;
 
 public class Boulder extends StaticEntity {
+    public static final String STRING_TYPE = "boulder";
 
     public Boulder(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
     }
 
-    
+
 
     @Override
     public BlockingReason isBlocking() {
@@ -25,14 +26,13 @@ public class Boulder extends StaticEntity {
     }
 
     @Override
-    public String getTypeAsString() {
+    public void tick() {
         // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
-    public void tick() {
-        // TODO Auto-generated method stub
+    public String getTypeAsString() {
+        return STRING_TYPE;
     }
     
 }

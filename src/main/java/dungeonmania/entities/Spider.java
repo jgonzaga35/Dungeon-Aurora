@@ -20,14 +20,16 @@ public class Spider extends MovingEntity {
     
     public static final int MAX_SPIDERS = 5;
 
-    public static void spawnSpider(Dungeon dungeon) {
+    public static Spider spawnSpider(Dungeon dungeon) {
         Cell cell = randomPosition(dungeon);
         if (cell != null) {
             System.out.println("spawning a spider");
-            cell.addOccupant(new Spider(dungeon, cell.getPosition()));
-            return;
+            Spider spider = new Spider(dungeon, cell.getPosition());
+            cell.addOccupant(spider);
+            return spider;
         }
         System.out.println("failed to spawn a spider");
+        return null;
     }
 
     private static Cell randomPosition(Dungeon dungeon) {

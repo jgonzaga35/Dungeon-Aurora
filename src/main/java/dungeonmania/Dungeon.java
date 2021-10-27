@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.Boulder;
 import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.ZombieToast;
@@ -76,6 +77,10 @@ public class Dungeon {
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
+            } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
+                cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Spider.STRING_TYPE)) {
+                cell.addOccupant(Spider.spawnSpider(dungeon));
             } else {
                 throw new Error("unhandled entity type: " + type);
             }
