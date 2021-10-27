@@ -15,6 +15,9 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
@@ -73,7 +76,14 @@ public class Dungeon {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
-            } else if (Objects.equals(type, Player.STRING_TYPE)) {
+            } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
+                cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
+                cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Sword.STRING_TYPE)) {
+                cell.addOccupant(new Sword(dungeon, cell.getPosition()));
+            } 
+             else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
             } else {
