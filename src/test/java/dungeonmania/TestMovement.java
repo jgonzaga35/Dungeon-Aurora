@@ -39,31 +39,31 @@ public class TestMovement {
         Movement spider = new CircleMovementBehaviour(map, startingCell);
         
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+        assertEquals(new Pos2d(2, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+        assertEquals(new Pos2d(3, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
+        assertEquals(new Pos2d(3, 2), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 3));
+        assertEquals(new Pos2d(3, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
+        assertEquals(new Pos2d(2, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+        assertEquals(new Pos2d(1, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
+        assertEquals(new Pos2d(1, 2), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
+        assertEquals(new Pos2d(1, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+        assertEquals(new Pos2d(2, 1), spider.getCurrentPosition().getPosition());
     }
 
     @Test
@@ -76,36 +76,36 @@ public class TestMovement {
         Movement spider = new CircleMovementBehaviour(map, startingCell);
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+        assertEquals(new Pos2d(2, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+        assertEquals(new Pos2d(3, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
+        assertEquals(new Pos2d(3, 2), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
+        assertEquals(new Pos2d(3, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
+        assertEquals(new Pos2d(2, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
+        assertEquals(new Pos2d(1, 1), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
+        assertEquals(new Pos2d(1, 2), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+        assertEquals(new Pos2d(1, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
+        assertEquals(new Pos2d(2, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
+        assertEquals(new Pos2d(1, 3), spider.getCurrentPosition().getPosition());
 
         spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
+        assertEquals(new Pos2d(1, 2), spider.getCurrentPosition().getPosition());
     }
 }
