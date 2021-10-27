@@ -33,6 +33,9 @@ public class Player extends MovingEntity {
             case NOT:
                 this.moveTo(target);
             case BOULDER:
+                if (target.pushBoulder(d)) {
+                    this.moveTo(target);
+                }
                 return;
             default:
                 return;

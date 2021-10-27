@@ -9,10 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.Boulder;
-import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;

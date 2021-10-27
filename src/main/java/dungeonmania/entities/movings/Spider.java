@@ -1,4 +1,4 @@
-package dungeonmania.entities;
+package dungeonmania.entities.movings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.util.Direction;
 
 public class Spider extends MovingEntity {

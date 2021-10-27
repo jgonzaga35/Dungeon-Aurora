@@ -3,9 +3,10 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
-import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.BlockingReason;
+import dungeonmania.util.Direction;
 
 public class Cell {
     /**
@@ -39,6 +40,21 @@ public class Cell {
 
     public boolean hasBoulder() {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
+    }
+
+    public boolean pushBoulder(Direction d) {
+        Boulder boulder = null;
+        for (Entity e : occupants) {
+            if (e instanceof Boulder) {
+                boulder = (Boulder) e;
+            }
+        }
+
+        if (boulder == null) {
+            return false;
+        }
+
+        return boulder.roll(d);
     }
     
     /**
