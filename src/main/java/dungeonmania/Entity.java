@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import java.util.stream.Stream;
+
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -9,12 +11,14 @@ public abstract class Entity {
 
     private static int nextEntityId = 1;
 
-    private Cell cell;
+    protected Dungeon dungeon;
+    protected Pos2d position;
 
-    public Entity(Cell cell) {
+    public Entity(Dungeon dungeon, Pos2d position) {
         this.id = "Entity-" + Entity.nextEntityId;
-        this.cell = cell;
-
+        this.dungeon = dungeon;
+        this.position = position;
+        
         Entity.nextEntityId++;
     }
 
@@ -23,33 +27,29 @@ public abstract class Entity {
     }
 
     /**
-     * Moves an entity from the current cell to the target cell
-     * @param target
-     */
-    public void moveTo(Cell target) {
-        Cell from = this.cell;
-        from.removeOccupant(this);
-
-        target.addOccupant(this);
-
-        this.cell = target;
-        this.cell.onWalked(from.getPosition(), this.cell.getPosition());
-    }
-
-    /**
      * @return the cell this entity is on
      */
     public Cell getCell() {
-        return this.cell;
+        return dungeon.getMap().getCell(position);
+    }
+
+    public Pos2d getPosition() {
+        return position;
     }
 
     /**
-     * returns the cell above, below, left or right (depending on the direction)
-     * @param d the direction (shouldn't be NONE)
-     * @return Cell
+     * Note that it doesn't always return 4 cells. If you are on a top-most
+     * cell, it will only return (left, bottom, right)
+     * @return cells around the current cell
      */
-    public Cell getCellAround(Direction d) {
-        return this.cell.getCellAround(d);
+    public Stream<Cell> getCellsAround() {
+        // this will be easier once we get DungeonMap
+        return Stream.of(
+            this.dungeon.getMap().getCellAround(this.getCell(), Direction.UP),
+            this.dungeon.getMap().getCellAround(this.getCell(), Direction.DOWN),
+            this.dungeon.getMap().getCellAround(this.getCell(), Direction.LEFT),
+            this.dungeon.getMap().getCellAround(this.getCell(), Direction.RIGHT)
+        ).filter(cell -> cell != null);
     }
 
     public abstract boolean isInteractable();

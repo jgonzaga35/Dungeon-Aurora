@@ -1,0 +1,82 @@
+{
+  "comment": "This file was automatically generated. Edit the _zombies_maze.txt file instead",
+  "width": 6,
+  "height": 4,
+  "entities": [
+    {
+      "x": 0,
+      "y": 0,
+      "type": "wall"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "type": "player"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "type": "wall"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "type": "wall"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "type": "wall"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "type": "wall"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "type": "wall"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "type": "wall"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "type": "wall"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "type": "wall"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "type": "wall"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "type": "wall"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "type": "zombie toast spawner"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "type": "wall"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "type": "wall"
+    }
+  ]
+}
