@@ -17,7 +17,7 @@ import dungeonmania.util.Direction;
 public class DungeonMap {
 
     final private String PLAYER = " P ";
-    final private String WALL = " # ";
+    final private String WALL = "###";
     final private String STATIC = " S ";
     final private String ENEMY = " E ";
 
@@ -190,7 +190,9 @@ public class DungeonMap {
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    result += " " + cell.getPlayerDistance() + " ";
+                    int num = cell.getPlayerDistance();
+                    if (num < 10) result += " " + num + " ";
+                    else result += " " + num;
                 }
             }
             result += "\n";
