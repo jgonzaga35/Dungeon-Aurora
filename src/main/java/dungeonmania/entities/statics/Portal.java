@@ -11,9 +11,6 @@ public class Portal extends StaticEntity {
 
     public Portal(Cell cell, String colour) {
         super(cell);
-    }
-
-    private void setColour(String colour) {
         this.colour = colour;
     }
 

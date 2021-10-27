@@ -80,9 +80,9 @@ public class Dungeon {
             } else if (Objects.equals(type, Portal.STRING_TYPE)) {
                 String colour = entity.getString("colour");
                 Portal portal = new Portal(cell, colour);
-
                 // Check if there is another portal of the same colour
                 Portal correspondingPortal = existsPortal(colour, dungeonMap);
+
                 if (correspondingPortal != null) {
                     portal.setCorrespondingPortal(correspondingPortal);
                     correspondingPortal.setCorrespondingPortal(portal);
@@ -163,7 +163,7 @@ public class Dungeon {
             for (int x = 0; x < dungeonMap.get(0).size(); x++) {
                 Cell cell = dungeonMap.get(y).get(x);
                 Portal portal = cell.hasPortal();
-                if (portal.getColour().equals(colour)) {
+                if (portal != null && portal.getColour().equals(colour)) {
                     return portal;
                 }
             }

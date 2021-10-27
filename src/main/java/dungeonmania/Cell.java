@@ -79,7 +79,7 @@ public class Cell {
      * @return
      */
     public Portal hasPortal() {
-        for (Entity occupant: getOccupants()) {
+        for (Entity occupant: this.occupants) {
             if (occupant instanceof Portal) {
                 return (Portal) occupant;
             }
