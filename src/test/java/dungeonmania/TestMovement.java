@@ -28,40 +28,8 @@ public class TestMovement {
     public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
         dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon.getMap().flood();
         startingCell = dungeon.getMap().getCell(new Pos2d(2, 2));
-    }
-
-    @Test
-    public void testCircleMovement() {
-        DungeonMap map = dungeon.getMap();
-        Movement spider = new CircleMovementBehaviour(map, startingCell);
-        
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 1));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 2));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(3, 3));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 3));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 3));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 2));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(1, 1));
-
-        spider.move();
-        assertEquals(spider.getCurrentPosition().getPosition(), new Pos2d(2, 1));
     }
 
     @Test
@@ -80,58 +48,58 @@ public class TestMovement {
         
         merc.move();
         assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 0));
+
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(3, 0));
+
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(2, 0));
+
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(1, 0));
+
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(0, 0));
     }
 
     @Test
-    public void testRandomMovement() {
+    public void testFollowMovementInMaze() throws IOException {
+        String content = FileLoader.loadResourceFile("/dungeons/maze.json");
+        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon.getMap().flood();
+        startingCell = dungeon.getMap().getCell(new Pos2d(8, 15));
+
         DungeonMap map = dungeon.getMap();
-        Movement zombie = new RandomMovementBehaviour(map, startingCell);
+        Movement merc = new FollowMovementBehaviour(map, startingCell);
+
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(7, 15));
         
-        // Test that the zombie doesn't go onto walls.
-        for (int i = 0; i < 1000; i++)
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(6, 15));
+        
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(5, 15));
+        
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(5, 14));
+
+        for (int i = 0; i < 12; i++)
         {
-            Pos2d prevPos = zombie.getCurrentPosition().getPosition();
-            
-            zombie.move();
-            assertFalse(prevPos.equals(zombie.getCurrentPosition().getPosition()));
-            assertFalse(new Pos2d(0, 1).equals(zombie.getCurrentPosition().getPosition()));
-            assertFalse(new Pos2d(1, 1).equals(zombie.getCurrentPosition().getPosition()));
-            assertFalse(new Pos2d(2, 1).equals(zombie.getCurrentPosition().getPosition()));
-            assertFalse(new Pos2d(3, 1).equals(zombie.getCurrentPosition().getPosition()));
+            merc.move();
+            assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(4, 14 - i));
         }
-    }
+        
+        for (int i = 0; i < 3; i++)
+        {
+            merc.move();
+            assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(3 - i, 3));
+        }
 
-    @Test
-    public void testFleeMovement() {
-        DungeonMap map = dungeon.getMap();
-        Movement scaredZombie = new FleeMovementBehaviour(map, startingCell);
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(1, 2));
 
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 3))
-        );
-        
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 4))
-        );
-        
-        scaredZombie.move();
-        assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 4))
-        );
-        
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
-        
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
-        
-        scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+        merc.move();
+        assertEquals(merc.getCurrentPosition().getPosition(), new Pos2d(1, 1));
     }
 }
