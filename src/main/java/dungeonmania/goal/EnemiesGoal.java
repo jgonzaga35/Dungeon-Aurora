@@ -4,7 +4,7 @@ import dungeonmania.Dungeon;
 
 public class EnemiesGoal extends Goal {
 
-    public static String STRING_TYPE = "ENEMIES";
+    public static String STRING_TYPE = "enemies";
     public EnemiesGoal() {
         super();
     }

@@ -4,7 +4,7 @@ import dungeonmania.Dungeon;
 
 public class BoulderGoal extends Goal {
 
-    public static String STRING_TYPE = "BOULDER";
+    public static String STRING_TYPE = "boulder";
     public BoulderGoal() {
         super();
     }

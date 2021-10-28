@@ -6,7 +6,7 @@ import dungeonmania.Dungeon;
 
 public class ExitGoal extends Goal {
    
-    public static String STRING_TYPE = "EXIT";
+    public static String STRING_TYPE = "exit";
     public ExitGoal() {
         super();
     }

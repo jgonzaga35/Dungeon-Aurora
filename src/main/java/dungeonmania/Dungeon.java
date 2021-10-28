@@ -3,7 +3,6 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,7 +32,7 @@ public class Dungeon {
 
     public static int nextDungeonId = 1;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goals goals) {
+    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
@@ -53,7 +52,7 @@ public class Dungeon {
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goals);
+        Dungeon dungeon = new Dungeon(name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;

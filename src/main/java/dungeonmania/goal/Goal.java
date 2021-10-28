@@ -2,7 +2,6 @@ package dungeonmania.goal;
 
 
 import java.util.List;
-import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,25 +65,18 @@ public abstract class Goal {
         // Cannot instantiate an abstract class, so default create AndGoal
         Goal goal = null;
 
-        switch (goalType) {
-            case "AND": 
-                goal = new AndGoal();
-                break;
-            case "OR":
-                goal = new OrGoal();
-                break;
-            case "exit":
-                goal = new ExitGoal();
-                break;
-            case "treasure":
-                goal = new TreasureGoal();
-                break;
-            case "boulder":
-                goal = new BoulderGoal();
-                break;
-            case "enemies":
-                goal = new EnemiesGoal();
-                break;
+        if (goalType.equals(AndGoal.STRING_TYPE)) {
+            goal = new AndGoal();
+        } else if (goalType.equals(OrGoal.STRING_TYPE)) {
+            goal = new OrGoal();
+        } else if (goalType.equals(ExitGoal.STRING_TYPE)) {
+            goal = new ExitGoal();
+        } else if (goalType.equals(TreasureGoal.STRING_TYPE)) {
+            goal = new TreasureGoal();
+        } else if (goalType.equals(BoulderGoal.STRING_TYPE)) {
+            goal = new BoulderGoal();
+        } else if (goalType.equals(EnemiesGoal.STRING_TYPE)) {
+            goal = new EnemiesGoal();
         }
 
         return goal;
