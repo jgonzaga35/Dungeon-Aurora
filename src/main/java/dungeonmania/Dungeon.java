@@ -19,6 +19,7 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -27,7 +28,7 @@ public class Dungeon {
     private String id;
     private DungeonMap dungeonMap;
     private GameMode mode;
-    private Goals goals;
+    private Goal goal;
     private Player player;
     private String name;
 
@@ -35,11 +36,11 @@ public class Dungeon {
 
     public static int nextDungeonId = 1;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goals goals) {
+    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
-        this.goals = goals;
+        this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
 
@@ -53,11 +54,12 @@ public class Dungeon {
      * Creates a Dungeon instance from the JSON file's content
      */
     public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
-        Goals goals = Goals.fromJSONObject(obj);
+        
+        Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goals);
+        Dungeon dungeon = new Dungeon(name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -140,8 +142,12 @@ public class Dungeon {
         return this.name;
     }
 
-    public String getGoalsAsString() {
-        return this.goals.asString();
+    public Goal getGoal() {
+        return this.goal;
+    }
+
+    public String getGoalAsString() {
+        return this.goal.asString();
     }
 
     /**
