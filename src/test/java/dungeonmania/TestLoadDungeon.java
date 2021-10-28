@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -77,6 +78,16 @@ public class TestLoadDungeon {
             assertTrue(!ids.contains(resp.getDungeonId()), "duplicate dungeon id: " + resp.getDungeonId());
             ids.add(resp.getDungeonId());
         }
+    }
+
+    @Test
+    public void testDungeonModes() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        TestUtils.assertEqualsUnordered(Arrays.asList(
+            GameMode.HARD.getValue(),
+            GameMode.STANDARD.getValue(),
+            GameMode.PEACEFUL.getValue()
+        ), ctr.getGameModes());
     }
 
 }

@@ -1,5 +1,8 @@
-package dungeonmania;
+package dungeonmania.entities.movings;
 
+import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.Pos2d;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -8,8 +11,8 @@ public class Player extends MovingEntity {
 
     public static String STRING_TYPE = "player";
     
-    public Player(Cell cell) {
-        super(cell);
+    public Player(Dungeon dungeon, Pos2d position) {
+        super(dungeon, position);
     }
 
     /**
@@ -20,7 +23,7 @@ public class Player extends MovingEntity {
         if (d == Direction.NONE)
             return;
 
-        Cell target = this.getCellAround(d);
+        Cell target = this.inspectCell(d);
         if (target == null || target.isBlocking())
             return;
 
