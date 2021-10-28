@@ -13,6 +13,7 @@ import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
@@ -76,7 +77,19 @@ public class Dungeon {
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
-            } else {
+            } else if (Objects.equals(type, Portal.STRING_TYPE)) {
+                String colour = entity.getString("colour");
+                Portal portal = new Portal(cell, colour);
+                // Check if there is another portal of the same colour
+                Portal correspondingPortal = existsPortal(colour, dungeonMap);
+
+                if (correspondingPortal != null) {
+                    portal.setCorrespondingPortal(correspondingPortal);
+                    correspondingPortal.setCorrespondingPortal(portal);
+                }
+                cell.addOccupant(portal);
+            } 
+            else {
                 throw new Error("unhandled entity type: " + type);
             }
         }
@@ -154,6 +167,20 @@ public class Dungeon {
             }
         }
         return entities;
+    }
+
+    // Check if a portal exists on the map with a specified colour
+    public static Portal existsPortal(String colour, List<List<Cell>> dungeonMap) {
+        for (int y = 0; y < dungeonMap.size(); y++) {
+            for (int x = 0; x < dungeonMap.get(0).size(); x++) {
+                Cell cell = dungeonMap.get(y).get(x);
+                Portal portal = cell.hasPortal();
+                if (portal != null && portal.getColour().equals(colour)) {
+                    return portal;
+                }
+            }
+        }
+        return null;
     }
 
     public GameMode getGameMode() {
