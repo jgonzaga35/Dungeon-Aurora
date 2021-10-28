@@ -39,4 +39,7 @@ public class TestUtils {
         return List.of(Wall.STRING_TYPE, ZombieToastSpawner.STRING_TYPE).contains(resp.getType());
     }
 
+    public static long countEntitiesOfType(DungeonResponse resp, String type) {
+        return resp.getEntities().stream().filter(e -> Objects.equals(e.getType(), type)).count();
+    }
 }
