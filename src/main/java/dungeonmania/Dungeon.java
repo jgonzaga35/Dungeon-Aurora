@@ -3,12 +3,14 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
+import java.util.PriorityQueue;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.battlestrategies.BattleStrategy;
+import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.ZombieToast;
@@ -30,6 +32,7 @@ public class Dungeon {
     private String name;
 
     private int spiderPopulation;
+    private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
 
@@ -40,6 +43,9 @@ public class Dungeon {
         this.goals = goals;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
+
+        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecendence() - b.getPrecendence());
+        this.battleStrategies.add(new NormalBattleStrategy(0));
 
         Dungeon.nextDungeonId++;
     }
@@ -107,6 +113,8 @@ public class Dungeon {
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
+        assert this.battleStrategies.size() > 0;
+
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
@@ -115,6 +123,8 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+
+        this.battleStrategies.peek().findAndPerformBattles(this);
         
         if (spiderPopulation < Spider.MAX_SPIDERS) {
             spiderPopulation++;

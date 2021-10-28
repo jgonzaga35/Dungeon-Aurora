@@ -18,8 +18,13 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        for (int j = 0; j < 1; j++) { // a player can sustain 10 zombie attacks before dying
-            for (int i = 0; i < 20; i++) {
+        ctr.tick("", Direction.NONE);
+
+        // doing the maths to compute that number is a pain because of the damage formula
+        int player_kills_n_zombies = 7;
+        
+        for (int j = 0; j < player_kills_n_zombies; j++) { // a player can sustain 10 zombie attacks before dying
+            for (int i = 0; i < 19; i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
                 resp = ctr.tick("", Direction.NONE);
             }
@@ -28,10 +33,15 @@ public class TestBattle {
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
             resp = ctr.tick("", Direction.NONE);
-            assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+
+            if (j == player_kills_n_zombies - 1) {
+                // the player has been killed
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+            } else {
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+            }
         }
-        // assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
-        // then the player is dead, the game is finished
-        assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
     }
 }
