@@ -1,6 +1,8 @@
 package dungeonmania.entities.statics;
 
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 
 public class Portal extends StaticEntity {
@@ -9,8 +11,8 @@ public class Portal extends StaticEntity {
     public Portal correspondingPortal;
     private String colour;
 
-    public Portal(Cell cell, String colour) {
-        super(cell);
+    public Portal(Dungeon dungeon, Pos2d pos, String colour) {
+        super(dungeon, pos);
         this.colour = colour;
     }
 
