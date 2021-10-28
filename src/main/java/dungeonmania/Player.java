@@ -26,7 +26,7 @@ public class Player extends MovingEntity {
 
         Portal portal = target.hasPortal();
         if (portal != null) {
-            target = portal.teleport();
+            target = portal.getTeleportDestination();
         }
 
         this.moveTo(target);

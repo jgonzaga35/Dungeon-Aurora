@@ -23,7 +23,7 @@ public class Portal extends StaticEntity {
     }
 
     // Returns cell of the corresponding Portal
-    public Cell teleport() {
+    public Cell getTeleportDestination() {
         // If the portal does not yet have a corresponding portal, return the current cell only
         if (correspondingPortal == null) {
             return getCell();
