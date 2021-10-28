@@ -5,6 +5,8 @@ import java.util.List;
 
 import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.statics.Portal;
+import dungeonmania.util.Direction;
 
 public class Cell {
     /**
@@ -38,6 +40,16 @@ public class Cell {
 
     public boolean hasBoulder() {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
+    }
+
+
+    public Portal hasPortal() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof Portal) {
+                return (Portal) occupant;
+            }
+        }
+        return null;
     }
     
     /**

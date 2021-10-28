@@ -3,20 +3,25 @@ package dungeonmania.entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
+import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.util.Direction;
 
-public class Spider extends MovingEntity {
+public class Spider extends MovingEntity implements Fighter {
+
     public static final String STRING_TYPE = "spider";
-    private List<Cell> movementMap = new ArrayList();
+
+    private List<Cell> movementMap = new ArrayList<>();
     private int currentMovementStage = 0;
     private int direction = 1;
     private boolean hasMoved = false;
+
+    private float health = 1;
     
     public static final int MAX_SPIDERS = 5;
 
@@ -34,6 +39,11 @@ public class Spider extends MovingEntity {
         DungeonMap dungeonMap = dungeon.getMap();
         int width = dungeonMap.getWidth();
         int height = dungeonMap.getHeight();
+
+        if (width <= 2 || height <= 2) {
+            // don't spawn anything if the spiders don't have the space to move around
+            return null;
+        }
 
         for (int i = 0; i < width * height; i++) {
             Random random = new Random();
@@ -123,5 +133,40 @@ public class Spider extends MovingEntity {
     @Override
     public String getTypeAsString() {
         return STRING_TYPE;
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float h) {
+        this.health = h;
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return 5;
+    }
+
+    @Override
+    public float getDefenceCoef() {
+        return 1;
+    }
+
+    @Override
+    public void usedItemFor(BattleDirection d) {
+        // does nothing since spiders cannot have/use items
+    }
+
+    @Override
+    public FighterRelation getFighterRelation() {
+        return FighterRelation.ENEMY;
+    }
+
+    @Override
+    public Entity getEntity() {
+        return this;
     }
 }

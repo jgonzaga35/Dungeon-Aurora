@@ -24,7 +24,7 @@ public class TestZombieSpawner {
     @Test
     public void testSpawnZombies() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_zombies_in_the_wild", GameMode.PEACEFUL.getValue());
+        DungeonResponse resp = ctr.newGame("_zombies_park", GameMode.PEACEFUL.getValue());
 
         for (int i = 1; i < 101; i++) {
             resp = ctr.tick("", Direction.NONE);
