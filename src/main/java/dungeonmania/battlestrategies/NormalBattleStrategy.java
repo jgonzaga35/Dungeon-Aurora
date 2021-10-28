@@ -141,10 +141,11 @@ public class NormalBattleStrategy implements BattleStrategy {
      *    get idea. If you're having trouble understanding it, call me (Mathieu
      *    Paturel) i'll show you a picture (i'm too lazy to draw ascii art)
      * 
-     *    Basic idea: strong people against strong people (we pick this rule to
+     *    Basic idea: strong people against strong people (we pick a rule to
      *    have reproducible battles)
      * 
      * 2. perform duels
+     *    no ambiguity here, just do what the spec says
      * 
      * @param allies
      * @param enemies
@@ -163,12 +164,12 @@ public class NormalBattleStrategy implements BattleStrategy {
 
         // assign the remaining allies
         for (int i = baseSize; i < allies.size(); i++) {
-            duels.add(List.of(allies.get(i), enemies.get(i % enemies.size())));
+            duels.add(List.of(allies.get(i), enemies.get(enemies.size() - 1 - i % enemies.size())));
         }
 
         // assign the remaining enemies
         for (int i = baseSize; i < enemies.size(); i++) {
-            duels.add(List.of(allies.get(i % allies.size()), enemies.get(i)));
+            duels.add(List.of(allies.get(allies.size() - 1 - i % allies.size()), enemies.get(i)));
         }
 
         // perform the duels
