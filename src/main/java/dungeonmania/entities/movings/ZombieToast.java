@@ -15,7 +15,7 @@ import dungeonmania.entities.MovingEntity;
 public class ZombieToast extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "zombie";
-    private float health = 5;
+    private float health = 4;
 
     public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);

@@ -147,7 +147,7 @@ public class Spider extends MovingEntity implements Fighter {
 
     @Override
     public float getAttackDamage() {
-        return 2;
+        return 5;
     }
 
     @Override

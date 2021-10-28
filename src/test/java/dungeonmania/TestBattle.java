@@ -22,7 +22,7 @@ public class TestBattle {
         ctr.tick("", Direction.NONE);
 
         // doing the maths to compute that number is a pain because of the damage formula
-        int player_kills_n_zombies = 7;
+        int player_kills_n_zombies = 10;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19; i++) {
@@ -40,8 +40,8 @@ public class TestBattle {
                 assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
             } else {
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " zombies");
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
             }
         }
     }
@@ -56,7 +56,7 @@ public class TestBattle {
 
         ctr.tick("", Direction.NONE);
 
-        int player_kills_n_spiders = 39;
+        int player_kills_n_spiders = 15;
         
         for (int j = 0; j < player_kills_n_spiders; j++) {
             resp = ctr.tick("", Direction.NONE);
@@ -67,8 +67,8 @@ public class TestBattle {
                 assertEquals(1, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
             } else {
-                assertEquals(0, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE), "player is still alive after " + j + " spiders");
-                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " spiders");
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
             }
         }
     }
