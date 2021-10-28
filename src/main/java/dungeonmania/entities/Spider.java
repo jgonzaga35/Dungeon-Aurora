@@ -3,7 +3,6 @@ package dungeonmania.entities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
@@ -34,6 +33,11 @@ public class Spider extends MovingEntity {
         DungeonMap dungeonMap = dungeon.getMap();
         int width = dungeonMap.getWidth();
         int height = dungeonMap.getHeight();
+
+        if (width <= 2 || height <= 2) {
+            // don't spawn anything if the spiders don't have the space to move around
+            return null;
+        }
 
         for (int i = 0; i < width * height; i++) {
             Random random = new Random();
