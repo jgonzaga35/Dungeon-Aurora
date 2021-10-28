@@ -41,6 +41,16 @@ public class Cell {
     public boolean hasBoulder() {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
+
+
+    public Portal hasPortal() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof Portal) {
+                return (Portal) occupant;
+            }
+        }
+        return null;
+    }
     
     /**
      * @return the entities on that cell
