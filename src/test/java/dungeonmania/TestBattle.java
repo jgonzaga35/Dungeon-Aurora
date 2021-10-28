@@ -56,7 +56,7 @@ public class TestBattle {
 
         ctr.tick("", Direction.NONE);
 
-        int player_kills_n_spiders = 100;
+        int player_kills_n_spiders = 39;
         
         for (int j = 0; j < player_kills_n_spiders; j++) {
             resp = ctr.tick("", Direction.NONE);

@@ -7,15 +7,21 @@ import java.util.Random;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
+import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.util.Direction;
 
-public class Spider extends MovingEntity {
+public class Spider extends MovingEntity implements Fighter {
+
     public static final String STRING_TYPE = "spider";
-    private List<Cell> movementMap = new ArrayList();
+
+    private List<Cell> movementMap = new ArrayList<>();
     private int currentMovementStage = 0;
     private int direction = 1;
     private boolean hasMoved = false;
+
+    private float health = 1;
     
     public static final int MAX_SPIDERS = 5;
 
@@ -127,5 +133,40 @@ public class Spider extends MovingEntity {
     @Override
     public String getTypeAsString() {
         return STRING_TYPE;
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float h) {
+        this.health = h;
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return 2;
+    }
+
+    @Override
+    public float getDefenceCoef() {
+        return 1;
+    }
+
+    @Override
+    public void usedItemFor(BattleDirection d) {
+        // does nothing since spiders cannot have/use items
+    }
+
+    @Override
+    public FighterRelation getFighterRelation() {
+        return FighterRelation.ENEMY;
+    }
+
+    @Override
+    public Entity getEntity() {
+        return this;
     }
 }
