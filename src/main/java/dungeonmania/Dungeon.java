@@ -31,7 +31,6 @@ public class Dungeon {
     private Player player;
     private String name;
 
-    private int spiderPopulation;
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
@@ -124,13 +123,13 @@ public class Dungeon {
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
 
-        this.battleStrategies.peek().findAndPerformBattles(this);
-        
+        long spiderPopulation = this.dungeonMap.allEntities().stream()
+            .filter(e -> e instanceof Spider).count();
         if (spiderPopulation < Spider.MAX_SPIDERS) {
-            spiderPopulation++;
             Spider.spawnSpider(this);
         }
-        
+
+        this.battleStrategies.peek().findAndPerformBattles(this);
     }
 
     public String getId() {
