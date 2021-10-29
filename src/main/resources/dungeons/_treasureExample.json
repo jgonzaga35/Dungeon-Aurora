@@ -17,5 +17,8 @@
       "y": 4,
       "type": "treasure"
     }
-  ]
+  ],
+  "goal-condition": {
+    "goal": "exit"
+  }
 }

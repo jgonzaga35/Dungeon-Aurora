@@ -12,5 +12,8 @@
       "y": 3,
       "type": "armour"
     }
-  ]
+  ],
+  "goal-condition": {
+    "goal": "exit"
+  }
 }

@@ -12,5 +12,8 @@
       "y": 3,
       "type": "arrow"
     }
-  ]
+  ],
+  "goal-condition": {
+    "goal": "exit"
+  }
 }

@@ -12,5 +12,8 @@
       "y": 3,
       "type": "wood"
     }
-  ]
+  ],
+  "goal-condition": {
+    "goal": "exit"
+  }
 }
