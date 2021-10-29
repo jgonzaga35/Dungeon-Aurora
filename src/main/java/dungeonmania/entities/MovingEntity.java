@@ -26,10 +26,6 @@ public abstract class MovingEntity extends Entity {
         this.getCell().onWalked(from.getPosition(), this.position);
     }
 
-    public Cell inspectCell(Direction d) {
-        return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
-    }
-
     @Override
     public boolean isInteractable() {
         return false; // i think at least

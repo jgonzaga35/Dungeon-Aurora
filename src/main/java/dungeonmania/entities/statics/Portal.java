@@ -4,6 +4,7 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.BlockingReason;
 
 public class Portal extends StaticEntity {
 
@@ -36,8 +37,8 @@ public class Portal extends StaticEntity {
     }
 
     @Override
-    public boolean isBlocking() {
-        return false;
+    public BlockingReason isBlocking() {
+        return BlockingReason.NOT;
     }
 
     @Override
