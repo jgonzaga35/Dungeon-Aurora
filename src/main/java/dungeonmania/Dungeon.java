@@ -96,10 +96,7 @@ public class Dungeon {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
-            } /*else if (Objects.equals(type, Door.STRING_TYPE)) {
-                cell.addOccupant(new Door(dungeon, cell.getPosition()));
-            } */
-             else if (Objects.equals(type, Player.STRING_TYPE)) {
+            } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
             } else {
@@ -119,34 +116,23 @@ public class Dungeon {
     private void pickupCollectableEntities() {
         dungeonMap.flood();
 
-        System.out.println("Ran pickup function");
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
-            System.out.println("Nothing in Player Cell");
             return;
         }
 
         //Check if Collectibles in the Player's Cell
         if (playerCell.getOccupants() == null) {
-            System.out.println("No Occupants in Cell");
             return;
         }
         List<Entity> playerCellOccupants = playerCell.getOccupants();
-        System.out.println("Some Occupants");
-        System.out.println("Occupants in Cell:");
-        System.out.println(playerCellOccupants.toString());
-        System.out.println(dungeonMap.toString());
         for (Entity occupant : playerCellOccupants) {
-            System.out.println("Ran pickup for loop");
-            System.out.println(occupant.toString());
             if (occupant instanceof CollectableEntity) {
-                System.out.println("Attempted to Add to Add Collectable v2");
-                //CollectableEntity collectableOccupant = new CollectableEntity();
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                System.out.println(collectableOccupant);
                 this.collectables.add(collectableOccupant);
-                System.out.println("Added to Collectables");
+                playerCell.removeOccupant(occupant);
+
             }
         }
     }

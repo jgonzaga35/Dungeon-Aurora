@@ -80,11 +80,8 @@ public class DungeonMap {
      */
     public Cell getPlayerCell() {
         for (List<Cell> row : dungeonMap) {
-            System.out.println("Check that rows working");
             for (Cell cell : row) {
-                System.out.println("Check that cells working");
                 //Checks Where Cell is 0 blocks from player
-                System.out.println(cell.getPlayerDistance());
                 if (cell.getPlayerDistance() == 0) {
                     return cell;
                 }

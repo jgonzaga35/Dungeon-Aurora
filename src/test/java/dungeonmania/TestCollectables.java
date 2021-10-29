@@ -11,6 +11,7 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -45,12 +46,19 @@ public class TestCollectables {
         assertEquals(true, found);
 
         //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
         boolean itemRemoved = true;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "treasure") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "treasure" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
+                break;
             }
         }
         assertEquals(true, itemRemoved);
@@ -88,11 +96,17 @@ public class TestCollectables {
         assertEquals(true, found);
 
         //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
         boolean itemRemoved = true;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "wood") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "wood" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
@@ -128,11 +142,17 @@ public class TestCollectables {
         assertEquals(true, found);
 
         //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
         boolean itemRemoved = true;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "arrow") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "arrow" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
@@ -169,11 +189,17 @@ public class TestCollectables {
         assertEquals(true, found);
 
         //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
         boolean itemRemoved = true;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "key") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "key" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
@@ -216,10 +242,16 @@ public class TestCollectables {
 
         //Check that the Item Was Removed from the Cell
         boolean itemRemoved = true;
+        int currPositionX = 0;
+        int currPositionY = 0;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "sword") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "sword" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
@@ -258,11 +290,17 @@ public class TestCollectables {
         assertEquals(true, found);
 
         //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
         boolean itemRemoved = true;
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
-            if (curr_type == "armour") {
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "armour" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
