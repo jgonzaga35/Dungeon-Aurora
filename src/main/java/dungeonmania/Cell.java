@@ -6,6 +6,7 @@ import java.util.List;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.BlockingReason;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public class Cell {
@@ -56,6 +57,15 @@ public class Cell {
         if (boulder == null) return false;
         else return boulder.roll(d);
     }
+
+    public Portal hasPortal() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof Portal) {
+                return (Portal) occupant;
+            }
+        }
+        return null;
+    }
     
     /**
      * @return the entities on that cell
@@ -93,8 +103,8 @@ public class Cell {
     }
 
     public void onWalked(Pos2d from, Pos2d to) {
-        for (Entity e: this.occupants) {
-            // e.onWalked(from, to);
-        }
+        // for (Entity e: this.occupants) {
+        //     // e.onWalked(from, to);
+        // }
     }
 }

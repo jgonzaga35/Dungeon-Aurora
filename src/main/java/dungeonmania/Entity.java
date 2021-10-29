@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.stream.Stream;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public abstract class Entity {
