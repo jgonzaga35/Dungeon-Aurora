@@ -9,9 +9,9 @@ public class Key extends CollectableEntity {
 
     public static String STRING_TYPE = "key";
 
-    public String keyId;
+    public int keyId;
 
-    public Key(Dungeon dungeon, Pos2d position, String keyId) {
+    public Key(Dungeon dungeon, Pos2d position, int keyId) {
         super(dungeon, position);
         this.keyId = keyId;
     }
@@ -20,7 +20,7 @@ public class Key extends CollectableEntity {
      * 
      * @return keyId : int
      */
-    public String getKeyId() {
+    public int getKeyId() {
         return keyId;
     }
 

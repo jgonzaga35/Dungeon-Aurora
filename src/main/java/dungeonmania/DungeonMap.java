@@ -13,6 +13,8 @@ import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 
+import java.lang.System;
+
 public class DungeonMap {
 
     final private String PLAYER = " P ";
@@ -78,8 +80,11 @@ public class DungeonMap {
      */
     public Cell getPlayerCell() {
         for (List<Cell> row : dungeonMap) {
+            System.out.println("Check that rows working");
             for (Cell cell : row) {
+                System.out.println("Check that cells working");
                 //Checks Where Cell is 0 blocks from player
+                System.out.println(cell.getPlayerDistance());
                 if (cell.getPlayerDistance() == 0) {
                     return cell;
                 }

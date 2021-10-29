@@ -155,7 +155,7 @@ public class DungeonManiaController {
             this.dungeon.getId(),
             this.dungeon.getName(),
             this.dungeon.getEntitiesResponse(),
-            new ArrayList<ItemResponse>(),
+            this.dungeon.getInventoryAsItemResponse(),
             new ArrayList<String>(),
             this.dungeon.getGoalsAsString(),
             new ArrayList<AnimationQueue>()
