@@ -19,7 +19,7 @@ public class CircleMovementBehaviour implements Movement {
         return new Cell(new Pos2d(0, 0));
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }

@@ -24,7 +24,7 @@ public class FollowMovementBehaviour implements Movement {
         return currentCell;
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }

@@ -81,7 +81,7 @@ public class RandomMovementBehaviour implements Movement {
         return currentCell;
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }

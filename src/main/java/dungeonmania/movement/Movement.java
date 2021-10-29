@@ -10,5 +10,5 @@ public interface Movement {
      * @return the next Cell that the entity should move to.
      */
     public Cell move();
-    public Cell getCurrentPosition();
+    public Cell getCurrentCell();
 }
