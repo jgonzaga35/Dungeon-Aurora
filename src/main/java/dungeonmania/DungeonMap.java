@@ -14,6 +14,8 @@ import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 
+import java.lang.System;
+
 public class DungeonMap {
 
     final private String PLAYER = " P ";
@@ -71,6 +73,22 @@ public class DungeonMap {
 
     public Cell getCell(int x, int y) {
         return dungeonMap.get(y).get(x);
+    }
+
+    /**
+     * Retreives Cell Player is Currently In
+     * @return Cell
+     */
+    public Cell getPlayerCell() {
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                //Checks Where Cell is 0 blocks from player
+                if (cell.getPlayerDistance() == 0) {
+                    return cell;
+                }
+            }
+        }
+        return null;
     }
 
     public int getWidth() {

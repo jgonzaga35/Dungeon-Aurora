@@ -19,11 +19,21 @@ import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
+
+import java.lang.System;
 
 public class Dungeon {
     private String id;
@@ -32,6 +42,7 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
+    private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -82,6 +93,18 @@ public class Dungeon {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
+                cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
+                cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Wood.STRING_TYPE)) {
+                cell.addOccupant(new Wood(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Sword.STRING_TYPE)) {
+                cell.addOccupant(new Sword(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Armour.STRING_TYPE)) {
+                cell.addOccupant(new Armour(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Key.STRING_TYPE)) {
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
@@ -116,6 +139,38 @@ public class Dungeon {
         return dungeon;
     }
 
+    /**
+     * Picks Up the Collectable Entities that Are in the Player's Square
+     * Runs Every Tick, After the Player Has Moved
+     * If any collectables are in the player's square this function will remove
+     * the collectable item from the cell and add it to the player's inventory.
+     */
+    private void pickupCollectableEntities() {
+        dungeonMap.flood();
+
+        //Retreiving Player's Cell
+        Cell playerCell = dungeonMap.getPlayerCell();
+        if (playerCell == null) {
+            return;
+        }
+
+        //Check if Collectibles in the Player's Cell
+        if (playerCell.getOccupants() == null) {
+            return;
+        }
+        List<Entity> playerCellOccupants = playerCell.getOccupants();
+        for (Entity occupant : playerCellOccupants) {
+            if (occupant instanceof CollectableEntity) {
+                CollectableEntity collectableOccupant = (CollectableEntity)occupant;
+                //Add To Collectables Inventory
+                this.collectables.add(collectableOccupant);
+                //Remove the Collectable From the Current Cell
+                playerCell.removeOccupant(occupant);
+
+            }
+        }
+    }
+
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
@@ -129,6 +184,10 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        
+
+        pickupCollectableEntities();
+        
 
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
@@ -210,5 +269,20 @@ public class Dungeon {
 
     public DungeonMap getMap() {
         return dungeonMap;
+    }
+
+    /**
+     * Returns the Inventory in the form of a list of
+     * ItemResponse instances. 
+     */
+    public List<ItemResponse> getInventoryAsItemResponse() {
+        List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
+        for (CollectableEntity item : collectables) {
+            String id = item.getId();
+            String type = item.getTypeAsString();
+            ItemResponse currItemResponse = new ItemResponse(id, type);
+            outputListItemResponses.add(currItemResponse);
+        }
+        return outputListItemResponses;
     }
 }
