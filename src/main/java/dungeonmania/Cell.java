@@ -15,7 +15,6 @@ public class Cell {
     private List<Entity> occupants = new ArrayList<>();
     private Pos2d position;
     private Integer playerDistance;
-    private BlockingReason blockingReason = BlockingReason.NOT;
 
     public Cell(Pos2d position) {
         this.position = position;
@@ -34,7 +33,6 @@ public class Cell {
     }
 
     public void addOccupant(Entity e) {
-        //System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
         this.occupants.add(e);
     }
 
@@ -42,6 +40,11 @@ public class Cell {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
 
+    /**
+     * 
+     * @param d
+     * @return true if boulder is successfully pushed
+     */
     public boolean pushBoulder(Direction d) {
         Boulder boulder = null;
         for (Entity e : occupants) {
@@ -50,11 +53,8 @@ public class Cell {
             }
         }
 
-        if (boulder == null) {
-            return false;
-        }
-
-        return boulder.roll(d);
+        if (boulder == null) return false;
+        else return boulder.roll(d);
     }
     
     /**
@@ -65,23 +65,20 @@ public class Cell {
     }
 
     public boolean removeOccupant(Entity e) {
-        //System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
         return this.occupants.remove(e);
     }
 
     /**
-     * @return true if there is a static element on the cell that is blocking
+     * @return the blocking reason of this cell
      */
     public BlockingReason getBlocking() {
         for (Entity e: this.occupants) {
             if (e instanceof StaticEntity && 
                 !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
-                    this.blockingReason = ((StaticEntity)e).isBlocking();
-                    return this.blockingReason;
+                    return ((StaticEntity)e).isBlocking();
                 }
         }
-        this.blockingReason = BlockingReason.NOT;
-        return this.blockingReason;
+        return BlockingReason.NOT;
     }
 
     /**

@@ -14,14 +14,17 @@ public class Boulder extends StaticEntity {
         super(dungeon, position);
     }
 
+    /**
+     * A method that attempts to "roll" the boulder to another cell
+     * @param d
+     * @return true if the boulder is successfully moved
+     */
     public boolean roll(Direction d) {
         Cell target = this.inspectCell(d);
-        if (target == null) 
-            //do nothing if target cell is null
-            return false;
+        
+        if (target == null) return false;
 
-        BlockingReason blockingReason = target.getBlocking();
-        switch (blockingReason) {
+        switch (target.getBlocking()) {
             case NOT:
                 this.moveTo(target);
                 return true;
@@ -30,8 +33,13 @@ public class Boulder extends StaticEntity {
         }
     }
 
+    /**
+     * A moveTo method, same as the one from moving entity
+     * @param target
+     */
     public void moveTo(Cell target) {
         Cell from = this.getCell();
+        
         from.removeOccupant(this);
         target.addOccupant(this);
 
@@ -41,19 +49,16 @@ public class Boulder extends StaticEntity {
 
     @Override
     public BlockingReason isBlocking() {
-        // TODO Auto-generated method stub
         return BlockingReason.BOULDER;
     }
 
     @Override
     public boolean isInteractable() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void tick() {
-        // TODO Auto-generated method stub
     }
 
     @Override

@@ -20,7 +20,7 @@ public class Player extends MovingEntity {
      */
     public void handleMoveOrder(Direction d) {
         if (d == Direction.NONE) 
-            //do nothing if no direcition
+            //do nothing if no direction
             return;
 
         Cell target = this.inspectCell(d);
@@ -28,20 +28,14 @@ public class Player extends MovingEntity {
             //do nothing if target cell is null
             return;
 
-        BlockingReason blockingReason = target.getBlocking();
-        switch (blockingReason) {
+        switch (target.getBlocking()) {
             case NOT:
+                //move if target is unblocked
                 this.moveTo(target);
             case BOULDER:
-                if (target.pushBoulder(d)) {
-                    this.moveTo(target);
-                }
-                return;
-            default:
-                return;
+                //try to push boulder
+                if (target.pushBoulder(d)) this.moveTo(target);
         }
-
-        
     }
 
     @Override
