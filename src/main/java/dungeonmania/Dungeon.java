@@ -3,16 +3,19 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
+import java.util.PriorityQueue;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.battlestrategies.BattleStrategy;
+import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.CollectableEntity;
@@ -23,6 +26,7 @@ import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
@@ -34,22 +38,25 @@ public class Dungeon {
     private String id;
     private DungeonMap dungeonMap;
     private GameMode mode;
-    private Goals goals;
+    private Goal goal;
     private Player player;
     private String name;
     private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
 
-    private int spiderPopulation;
+    private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goals goals) {
+    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
-        this.goals = goals;
+        this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
+
+        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecendence() - b.getPrecendence());
+        this.battleStrategies.add(new NormalBattleStrategy(0));
 
         Dungeon.nextDungeonId++;
     }
@@ -58,11 +65,12 @@ public class Dungeon {
      * Creates a Dungeon instance from the JSON file's content
      */
     public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
-        Goals goals = Goals.fromJSONObject(obj);
+        
+        Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goals);
+        Dungeon dungeon = new Dungeon(name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -99,7 +107,20 @@ public class Dungeon {
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
-            } else {
+            } else if (Objects.equals(type, Portal.STRING_TYPE)) {
+                String colour = entity.getString("colour");
+
+                Portal portal = new Portal(dungeon, cell.getPosition(), colour);
+                // Check if there is another portal of the same colour
+                Portal correspondingPortal = existsPortal(colour, map);
+
+                if (correspondingPortal != null) {
+                    portal.setCorrespondingPortal(correspondingPortal);
+                    correspondingPortal.setCorrespondingPortal(portal);
+                }
+                cell.addOccupant(portal);
+            } 
+            else {
                 throw new Error("unhandled entity type: " + type);
             }
         }
@@ -140,6 +161,8 @@ public class Dungeon {
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
+        assert this.battleStrategies.size() > 0;
+
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
@@ -152,11 +175,14 @@ public class Dungeon {
 
         pickupCollectableEntities();
         
+
+        long spiderPopulation = this.dungeonMap.allEntities().stream()
+            .filter(e -> e instanceof Spider).count();
         if (spiderPopulation < Spider.MAX_SPIDERS) {
-            spiderPopulation++;
             Spider.spawnSpider(this);
         }
-        
+
+        this.battleStrategies.peek().findAndPerformBattles(this);
     }
 
     public String getId() {
@@ -167,8 +193,12 @@ public class Dungeon {
         return this.name;
     }
 
-    public String getGoalsAsString() {
-        return this.goals.asString();
+    public Goal getGoal() {
+        return this.goal;
+    }
+
+    public String getGoalAsString() {
+        return this.goal.asString();
     }
 
     /**
@@ -204,6 +234,20 @@ public class Dungeon {
             }
         }
         return entities;
+    }
+
+    // Check if a portal exists on the map with a specified colour
+    public static Portal existsPortal(String colour, DungeonMap map) {
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                Cell cell = map.getCell(x,y);
+                Portal portal = cell.hasPortal();
+                if (portal != null && portal.getColour().equals(colour)) {
+                    return portal;
+                }
+            }
+        }
+        return null;
     }
 
     public GameMode getGameMode() {

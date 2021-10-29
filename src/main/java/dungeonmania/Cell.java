@@ -5,6 +5,8 @@ import java.util.List;
 
 import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.statics.Portal;
+import dungeonmania.util.Direction;
 
 public class Cell {
     /**
@@ -39,6 +41,16 @@ public class Cell {
     public boolean hasBoulder() {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
+
+
+    public Portal hasPortal() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof Portal) {
+                return (Portal) occupant;
+            }
+        }
+        return null;
+    }
     
     /**
      * @return the entities on that cell
@@ -64,8 +76,8 @@ public class Cell {
     }
 
     public void onWalked(Pos2d from, Pos2d to) {
-        for (Entity e: this.occupants) {
-            // e.onWalked(from, to);
-        }
+        // for (Entity e: this.occupants) {
+        //     // e.onWalked(from, to);
+        // }
     }
 }

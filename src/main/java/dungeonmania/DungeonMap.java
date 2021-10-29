@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
@@ -18,7 +19,7 @@ import java.lang.System;
 public class DungeonMap {
 
     final private String PLAYER = " P ";
-    final private String WALL = " # ";
+    final private String WALL = "###";
     final private String STATIC = " S ";
     final private String ENEMY = " E ";
 
@@ -179,6 +180,20 @@ public class DungeonMap {
         return changesMade.get();
     }
 
+    /**
+     * Returns the neighbors of cell Ignores blocks off the map.
+     * 
+     * @param cell
+     * @return List of cells neigboring the given cell.
+     */
+    public List<Cell> getNeighbors(Cell cell)
+    {
+        return Arrays.stream(Direction.values())
+            .filter(d -> getCellAround(cell, d) != null)
+            .map(d -> getCellAround(cell, d))
+            .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         String result = "";
@@ -193,7 +208,9 @@ public class DungeonMap {
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    result += " " + cell.getPlayerDistance() + " ";
+                    int num = cell.getPlayerDistance();
+                    if (num < 10) result += " " + num + " ";
+                    else result += " " + num;
                 }
             }
             result += "\n";
