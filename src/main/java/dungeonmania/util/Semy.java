@@ -5,6 +5,30 @@ import java.util.List;
 
 /**
  * Single event manager yikes
+ * 
+ * Usage:
+ * <pre>
+ * class MySubject {
+ *   private Semy<String> myEventSemy = new Semy<>();
+ * 
+ *   public void myFunctionThatDoesSomething() {
+ *     this.myEventSemy.emit("event happens!");
+ *   }
+ * 
+ *   public onMyEvent(Observer<String> o) {
+ *     this.myEventSemy.bind(o);
+ *   }
+ * }
+ * 
+ * class MyObserver {
+ *   public MyObserver(Subject s) {
+ *     s.onMyEvent(this::onMyEvent);
+ *   }
+ *   public onMyEvent(String message) {
+ *     System.out.println("Event was triggered! Message=" + message);
+ *   }
+ * }
+ * </pre>
  */
 public class Semy<T> {
     private List<Observer<T>> observers = new ArrayList<>();
