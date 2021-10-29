@@ -8,6 +8,7 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.movings.*;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class TestBattle {
     @Test
@@ -69,5 +70,42 @@ public class TestBattle {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
             }
         }
+    }
+
+    /**
+     * case when the zombie does onto the player's cell, and the player onto the
+     * zombie's
+     */
+    @Test
+    public void testBattleSwapCase() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_force_zombie_attack", GameMode.STANDARD.getValue());
+
+        // there are no spiders because the map is too small
+
+        ctr.tick("", Direction.NONE);
+
+        for (int i = 0; i < 19; i++) {
+            assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            resp = ctr.tick("", Direction.NONE);
+        }
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+        resp = ctr.tick("", Direction.UP);
+
+        // the zombie no *has* to move on the player's cell (ie. down)
+        // BUT, the player moves up
+        // visually:
+        //
+        // time=1   time=2       expected result
+        // z        p            p // zombie is killed
+        // p        z            
+
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player should still be alive");
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "zombie should have been killed");
+        Position p = TestUtils.getPlayerPosition(resp);
+        assertEquals(0, p.getX());
+        assertEquals(1, p.getY());
     }
 }
