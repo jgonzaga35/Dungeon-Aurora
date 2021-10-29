@@ -32,7 +32,7 @@ public class TestCollectables {
         ctr.tick("", Direction.DOWN);
         resp = ctr.tick("", Direction.DOWN);
 
-        //Checking that the Item has Been Collected
+        //Checking that the Item has Been Added to Inventory
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -43,6 +43,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "treasure") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
         
         //Checking If Goal is Reached (No Treasure Left on Map)
         //TODO
@@ -75,6 +86,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "wood") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
     }
     
     /** 
@@ -104,6 +126,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "arrow") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
     }
 
     
@@ -134,6 +167,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "key") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
         
         //Then Entering the Linked Door
         ctr.tick("", Direction.RIGHT);
@@ -170,6 +214,17 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "sword") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
+
         //Initiating Fight with Sword
         //TODO
     }
@@ -201,6 +256,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+            if (curr_type == "armour") {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
 
         //Initiating Fight with Zombie
         //TODO
