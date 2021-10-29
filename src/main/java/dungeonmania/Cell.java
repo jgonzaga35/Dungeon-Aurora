@@ -3,8 +3,9 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
-import dungeonmania.entities.Boulder;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.statics.Boulder;
+import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -16,7 +17,6 @@ public class Cell {
     private Pos2d position;
     private Integer playerDistance;
 
-    
     public Cell(Pos2d position) {
         this.position = position;
     }
@@ -34,7 +34,6 @@ public class Cell {
     }
 
     public void addOccupant(Entity e) {
-        //System.out.println(position + " adding occupant " + e.getId() + " " + e.getTypeAsString());
         this.occupants.add(e);
     }
 
@@ -42,6 +41,22 @@ public class Cell {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
 
+    /**
+     * 
+     * @param d
+     * @return true if boulder is successfully pushed
+     */
+    public boolean pushBoulder(Direction d) {
+        Boulder boulder = null;
+        for (Entity e : occupants) {
+            if (e instanceof Boulder) {
+                boulder = (Boulder) e;
+            }
+        }
+
+        if (boulder == null) return false;
+        else return boulder.roll(d);
+    }
 
     public Portal hasPortal() {
         for (Entity occupant: this.occupants) {
@@ -60,19 +75,31 @@ public class Cell {
     }
 
     public boolean removeOccupant(Entity e) {
-        //System.out.println(position + " removing occupant " + e.getId() + " " + e.getTypeAsString());
         return this.occupants.remove(e);
+    }
+
+    /**
+     * @return the blocking reason of this cell
+     */
+    public BlockingReason getBlocking() {
+        for (Entity e: this.occupants) {
+            if (e instanceof StaticEntity && 
+                !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
+                    return ((StaticEntity)e).isBlocking();
+                }
+        }
+        return BlockingReason.NOT;
     }
 
     /**
      * @return true if there is a static element on the cell that is blocking
      */
     public boolean isBlocking() {
-        for (Entity e: this.occupants) {
-            if (e instanceof StaticEntity && ((StaticEntity) e).isBlocking())
-                return true;
+        if (this.getBlocking().equals(BlockingReason.NOT)) {
+            return false;
+        } else {
+            return true;
         }
-        return false;
     }
 
     public void onWalked(Pos2d from, Pos2d to) {

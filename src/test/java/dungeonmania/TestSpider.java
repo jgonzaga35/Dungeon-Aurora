@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.Spider;
+import dungeonmania.entities.movings.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 
-public class SpiderTest {
+public class TestSpider {
     @Test
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();

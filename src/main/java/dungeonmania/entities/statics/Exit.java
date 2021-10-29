@@ -4,6 +4,7 @@ package dungeonmania.entities.statics;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.BlockingReason;
 
 public class Exit extends StaticEntity {
 
@@ -14,8 +15,8 @@ public class Exit extends StaticEntity {
     }
 
     @Override
-    public boolean isBlocking() {
-        return false;
+    public BlockingReason isBlocking() {
+        return BlockingReason.NOT;
     }
 
     @Override

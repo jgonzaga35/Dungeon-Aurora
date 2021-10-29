@@ -11,9 +11,10 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
-import dungeonmania.entities.Spider;
 import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
@@ -104,6 +105,10 @@ public class Dungeon {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
+            } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
+                cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Spider.STRING_TYPE)) {
+                cell.addOccupant(Spider.spawnSpider(dungeon));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);

@@ -7,6 +7,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.util.*;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -25,19 +26,35 @@ public class Player extends MovingEntity implements Fighter {
      * @param d direction
      */
     public void handleMoveOrder(Direction d) {
-        if (d == Direction.NONE)
+        if (d == Direction.NONE) 
+            //do nothing if no direction
             return;
 
         Cell target = this.inspectCell(d);
-        if (target == null || target.isBlocking())
+        if (target == null) 
+            //do nothing if target cell is null
             return;
 
         Portal portal = target.hasPortal();
         if (portal != null) {
             target = portal.getTeleportDestination();
+            this.moveTo(target);
+            return;
         }
 
-        this.moveTo(target);
+        switch (target.getBlocking()) {
+            case NOT:
+                //move if target is unblocked
+                this.moveTo(target);
+                return;
+            case BOULDER:
+                //try to push boulder
+                if (target.pushBoulder(d)) this.moveTo(target);
+                return;
+            default:
+                return;
+        }
+
     }
 
     @Override

@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.Spider;
-import dungeonmania.entities.movings.Player;
-import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.entities.movings.*;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 

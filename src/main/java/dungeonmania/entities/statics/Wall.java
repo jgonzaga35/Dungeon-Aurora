@@ -4,6 +4,7 @@ package dungeonmania.entities.statics;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.util.BlockingReason;
 
 public class Wall extends StaticEntity {
 
@@ -14,8 +15,8 @@ public class Wall extends StaticEntity {
     }
 
     @Override
-    public boolean isBlocking() {
-        return true;
+    public BlockingReason isBlocking() {
+        return BlockingReason.WALL;
     }
 
     @Override

@@ -12,6 +12,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.util.BlockingReason;
 
 public class ZombieToastSpawner extends StaticEntity {
 
@@ -29,8 +30,8 @@ public class ZombieToastSpawner extends StaticEntity {
     ));
 
     @Override
-    public boolean isBlocking() {
-        return true;
+    public BlockingReason isBlocking() {
+        return BlockingReason.SPAWNER;
     }
 
     @Override

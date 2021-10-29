@@ -37,6 +37,10 @@ public abstract class Entity {
         return position;
     }
 
+    public Cell inspectCell(Direction d) {
+        return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
+    }
+
     /**
      * Note that it doesn't always return 4 cells. If you are on a top-most
      * cell, it will only return (left, bottom, right)
