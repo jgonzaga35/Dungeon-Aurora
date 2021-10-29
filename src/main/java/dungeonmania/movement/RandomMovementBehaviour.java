@@ -7,12 +7,13 @@ import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 import dungeonmania.Utils;
 
-public class RandomMovementBehaviour implements Movement {
+public class RandomMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
 
-    public RandomMovementBehaviour(DungeonMap map, Cell initialCell)
+    public RandomMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
     }

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.movement.FleeMovementBehaviour;
-import dungeonmania.movement.Movement;
+import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.util.FileLoader;
 
 public class TestMovement {
@@ -28,7 +28,7 @@ public class TestMovement {
     @Test
     public void testFleeMovement() {
         DungeonMap map = dungeon.getMap();
-        Movement scaredZombie = new FleeMovementBehaviour(map, startingCell);
+        MovementBehaviour scaredZombie = new FleeMovementBehaviour(0, map, startingCell);
 
         scaredZombie.move();
         assertTrue(

@@ -4,12 +4,13 @@ import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 
-public class CircleMovementBehaviour implements Movement {
+public class CircleMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
 
-    public CircleMovementBehaviour(DungeonMap map, Cell initialCell)
+    public CircleMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
     }

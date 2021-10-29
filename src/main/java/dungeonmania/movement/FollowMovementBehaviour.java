@@ -3,12 +3,13 @@ package dungeonmania.movement;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 
-public class FollowMovementBehaviour implements Movement {
+public class FollowMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
 
-    public FollowMovementBehaviour(DungeonMap map, Cell initialCell)
+    public FollowMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
     }
