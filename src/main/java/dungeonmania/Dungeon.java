@@ -134,6 +134,12 @@ public class Dungeon {
         return dungeon;
     }
 
+    /**
+     * Picks Up the Collectable Entities that Are in the Player's Square
+     * Runs Every Tick, After the Player Has Moved
+     * If any collectables are in the player's square this function will remove
+     * the collectable item from the cell and add it to the player's inventory.
+     */
     private void pickupCollectableEntities() {
         dungeonMap.flood();
 
@@ -151,7 +157,9 @@ public class Dungeon {
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
+                //Add To Collectables Inventory
                 this.collectables.add(collectableOccupant);
+                //Remove the Collectable From the Current Cell
                 playerCell.removeOccupant(occupant);
 
             }
@@ -258,6 +266,10 @@ public class Dungeon {
         return dungeonMap;
     }
 
+    /**
+     * Returns the Inventory in the form of a list of
+     * ItemResponse instances. 
+     */
     public List<ItemResponse> getInventoryAsItemResponse() {
         List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
         for (CollectableEntity item : collectables) {
