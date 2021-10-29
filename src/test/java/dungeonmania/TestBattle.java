@@ -75,8 +75,8 @@ public class TestBattle {
     }
 
     /**
-     * case when the zombie does onto the player's cell, and the player onto the
-     * zombie's
+     * case when the zombie goes onto the player's cell, and the player onto the
+     * zombie's (they swap). There is no battle.
      */
     @Test
     public void testBattleSwapCase() {
@@ -100,14 +100,18 @@ public class TestBattle {
         // BUT, the player moves up
         // visually:
         //
-        // time=1   time=2       expected result
-        // z        p            p // zombie is killed
-        // p        z            
+        // time=1   time=2
+        // z        p
+        // p        z
 
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player should still be alive");
-        assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "zombie should have been killed");
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "zombie should still be alive");
         Position p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(1, p.getY());
+
+        p = resp.getEntities().stream().filter(er -> er.getType().equals(ZombieToast.STRING_TYPE)).findFirst().get().getPosition();
+        assertEquals(0, p.getX());
+        assertEquals(2, p.getY());
     }
 }
