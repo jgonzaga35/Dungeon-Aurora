@@ -168,6 +168,10 @@ public class Dungeon {
             }
         }
     }
+    
+    public Pos2d getPlayerPosition() {
+        return this.player.getPosition();
+    }
 
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
