@@ -13,6 +13,7 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -59,8 +60,36 @@ public class DungeonMap {
         return count;
     }
 
+
+    public boolean allFloorSwitchesTriggered()  {
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                if (cell.hasUntriggeredFloorSwitch()) {
+                    return false;
+                } 
+            }
+        }
+        return true;
+    }
+
     /**
-     * Counts all cells with enemies remaining on the map
+     * Counts all cells with spiders remaining on the map
+     */
+    public Integer countCellsWithSpiders() {
+        int count = 0;
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
+                    count++;
+                } 
+            }
+        }
+        return count;
+    }
+
+
+    /**
+     * Counts all cells with zombie toasts remaining on the map
      */
     public Integer countCellsWithZombieToast() {
         int count = 0;

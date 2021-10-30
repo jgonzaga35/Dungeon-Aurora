@@ -7,6 +7,7 @@ import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -72,6 +73,15 @@ public class Cell {
         }
         return null;
     }
+
+    public FloorSwitch getFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch) {
+                return (FloorSwitch) occupant;
+            }
+        }
+        return null;
+    }
     
     public boolean hasPlayer() {
         return this.occupants.stream().anyMatch(e -> e instanceof Player);
@@ -120,5 +130,14 @@ public class Cell {
         // for (Entity e: this.occupants) {
         //     // e.onWalked(from, to);
         // }
+    }
+
+    public boolean hasUntriggeredFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

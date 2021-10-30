@@ -16,6 +16,7 @@ import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -32,8 +33,6 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
-
-import java.lang.System;
 
 public class Dungeon {
     private String id;
@@ -89,6 +88,8 @@ public class Dungeon {
                 cell.addOccupant(new Wall(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, FloorSwitch.STRING_TYPE)) {
+                cell.addOccupant(new FloorSwitch(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {

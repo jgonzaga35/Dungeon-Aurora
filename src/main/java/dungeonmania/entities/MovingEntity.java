@@ -8,7 +8,6 @@ import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.movement.MovementBehaviour;
-import dungeonmania.util.Direction;
 
 public abstract class MovingEntity extends Entity {
 

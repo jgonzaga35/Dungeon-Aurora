@@ -23,7 +23,6 @@ public class Boulder extends StaticEntity {
         Cell target = this.inspectCell(d);
         
         if (target == null) return false;
-
         switch (target.getBlocking()) {
             case NOT:
                 this.moveTo(target);
@@ -38,10 +37,19 @@ public class Boulder extends StaticEntity {
      * @param target
      */
     public void moveTo(Cell target) {
-        Cell from = this.getCell();
         
+        Cell from = this.getCell();
+        FloorSwitch sourceSwitch = from.getFloorSwitch();
+        if (sourceSwitch != null) {
+            sourceSwitch.setTriggered(false);            
+        }
         from.removeOccupant(this);
         target.addOccupant(this);
+
+        FloorSwitch targetSwitch = target.getFloorSwitch();
+        if (targetSwitch != null) {
+            targetSwitch.setTriggered(true);
+        }
 
         this.position = target.getPosition();
         this.getCell().onWalked(from.getPosition(), this.position);
