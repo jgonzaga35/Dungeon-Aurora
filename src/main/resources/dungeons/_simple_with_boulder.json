@@ -10,5 +10,8 @@
         { "x": 3, "y": 3, "type": "boulder" },
         { "x": 0, "y": 0, "type": "player" },
         { "x": 4, "y": 4, "type": "exit" }
-    ]
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
 }
