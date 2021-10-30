@@ -1,8 +1,5 @@
 package dungeonmania;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,14 +7,10 @@ import java.io.IOException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.EnumSource.Mode;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.FleeMovementBehaviour;
-import dungeonmania.movement.FollowMovementBehaviour;
-import dungeonmania.movement.Movement;
-import dungeonmania.movement.RandomMovementBehaviour;
+import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.util.FileLoader;
 
 public class TestMovement {
@@ -35,34 +28,34 @@ public class TestMovement {
     @Test
     public void testFleeMovement() {
         DungeonMap map = dungeon.getMap();
-        Movement scaredZombie = new FleeMovementBehaviour(map, startingCell);
+        MovementBehaviour scaredZombie = new FleeMovementBehaviour(0, map, startingCell);
 
         scaredZombie.move();
         assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 3))
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(1, 2)) |
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(2, 3))
         );
         
         scaredZombie.move();
         assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 2)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(2, 4))
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(0, 2)) |
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(1, 3)) |
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(2, 4))
         );
         
         scaredZombie.move();
         assertTrue(
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 3)) |
-            scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(1, 4))
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(0, 3)) |
+            scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(1, 4))
         );
         
         scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+        assertTrue(scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(0, 4)));
         
         scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+        assertTrue(scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(0, 4)));
         
         scaredZombie.move();
-        assertTrue(scaredZombie.getCurrentPosition().getPosition().equals(new Pos2d(0, 4)));
+        assertTrue(scaredZombie.getCurrentCell().getPosition().equals(new Pos2d(0, 4)));
     }
 }

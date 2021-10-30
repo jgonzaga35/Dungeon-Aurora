@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -162,6 +163,18 @@ public class DungeonMap {
     public Cell getCellAround(Pos2d position, Direction d) {
         Cell cell = getCell(position);
         return getCellAround(cell, d);
+    }
+
+
+    /**
+     * Note that it doesn't always return 4 cells. If you are on a top-most
+     * cell, it will only return (left, bottom, right)
+     * @return cells around the current cell
+     */
+    public Stream<Cell> getCellsAround(Cell base) {
+        return Arrays.stream(Direction.values())
+            .map(direction -> this.getCellAround(base, direction))
+            .filter(cell -> cell != null);
     }
 
     private int propagateFrom(Cell cell) {
