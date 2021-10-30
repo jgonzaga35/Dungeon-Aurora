@@ -20,11 +20,12 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.UsableEntity;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.ConsumableEntity;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.exceptions.InvalidActionException;
@@ -110,6 +111,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
+            } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
+                cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -197,11 +200,13 @@ public class Dungeon {
 
             // Error checking
             if (item == null) throw new InvalidActionException("Item can't be found");
-            if (!(item instanceof UsableEntity)) throw new IllegalArgumentException("Item not usable");
-
-            UsableEntity useable = (UsableEntity) item;
-            useable.use();
-            collectables.remove(useable);
+            if (item instanceof ConsumableEntity) {
+                ConsumableEntity useable = (ConsumableEntity) item;
+                useable.use();
+                collectables.remove(useable);
+            } else {
+                throw new IllegalArgumentException("Item not usable");
+            }
         }
         
 
