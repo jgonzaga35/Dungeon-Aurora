@@ -315,4 +315,96 @@ public class TestCollectables {
         //Check that Player has Lost Battle
         //TODO
     }
+
+    /** 
+     * TEST: Ensure Bomb is Collected  
+     */
+    
+    @Test
+    public void testLoadingBomb() {
+        //Item Coords: Player(1,1), Bomb(1,3), Switch(7,3)
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_bombExample", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick("", Direction.NONE);
+        Boolean found = false;
+
+        // Down 2 Units to the Armour at Coord (1, 3)
+        ctr.tick("", Direction.DOWN);
+        resp = ctr.tick("", Direction.DOWN);
+
+        //Checking If Armour was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "bomb") {
+                found = true;
+            }
+        }
+        assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "bomb" && currPositionX == 1 && currPositionY == 3) {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
+        
+        //Testing Bomb Does Not Explode if Not Cardinal to Floor Switch
+        // Right 2 Units to the Coord (3, 3)
+        ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick("", Direction.RIGHT);
+
+        //Placing Bomb Back on Ground
+
+        //Collect Bomb Again
+        //Checking If Bomb was Collected
+        found = false;
+        curr_type = "";
+        curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == "bomb") {
+                found = true;
+            }
+        }
+        assertEquals(true, found);
+
+        //Check that the Bomb Was Removed from the Cell
+        currPositionX = 0;
+        currPositionY = 0;
+        itemRemoved = true;
+        cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type == "bomb" && currPositionX == 3 && currPositionY == 3) {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
+
+        //Place Bomb on Ground Cardinally Adjacent to Switch
+        // Right 2 Units to the Coord (5, 3)
+        ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick("", Direction.RIGHT);
+
+        //Check Entities in Blast Radius Destroyed
+
+    }
 }
