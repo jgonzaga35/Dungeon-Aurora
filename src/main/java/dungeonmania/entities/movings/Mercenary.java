@@ -6,6 +6,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.movement.FollowMovementBehaviour;
 
 public class Mercenary extends MovingEntity implements Fighter {
 
@@ -13,6 +14,13 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        this.addMovementBehaviour(
+            new FollowMovementBehaviour(
+                3, 
+                dungeon.getMap(), 
+                dungeon.getMap().getCell(position)
+            )
+        );
     }
 
     @Override
