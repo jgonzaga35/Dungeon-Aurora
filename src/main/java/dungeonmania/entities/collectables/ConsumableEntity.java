@@ -1,7 +1,6 @@
 package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.util.Semy;
@@ -9,7 +8,7 @@ import dungeonmania.util.Semy.Observer;
 
 public abstract class ConsumableEntity extends CollectableEntity {
 
-    private Semy<Entity> onItemUseSemy = new Semy<>();
+    private Semy<ConsumableEntity> onItemUseSemy = new Semy<>();
 
     public ConsumableEntity(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -29,7 +28,7 @@ public abstract class ConsumableEntity extends CollectableEntity {
      * Adds something that happens on the use of this item.
      * @param observer
      */
-    public void onItemUse(Observer<Entity> observer) {
+    public void onItemUse(Observer<ConsumableEntity> observer) {
         this.onItemUseSemy.bind(observer);
     }
 }
