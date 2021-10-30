@@ -13,6 +13,26 @@
       "type": "bomb"
     },
     {
+      "x": 6,
+      "y": 2,
+      "type": "wall"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "type": "wall"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "type": "wall"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "type": "wall"
+    },
+    {
       "x": 7,
       "y": 3,
       "type": "switch"

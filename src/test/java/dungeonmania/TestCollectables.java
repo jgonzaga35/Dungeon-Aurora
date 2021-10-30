@@ -363,7 +363,9 @@ public class TestCollectables {
         assertEquals(true, itemRemoved);
 
         //Place Bomb on Ground Cardinally Adjacent to Switch
-        // Right 3 Units to the Coord (6, 3)
+        // Right 5 Units to the Coord (6, 3)
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
