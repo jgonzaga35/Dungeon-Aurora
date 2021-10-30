@@ -206,11 +206,23 @@ public class Dungeon {
         return this.name;
     }
 
+    /**
+     * Check if the dungeon has been cleared
+     */
+    public boolean isCleared() {
+        Goal goal = getGoal();
+        return goal.isCompleted(this);
+    }
+
     public Goal getGoal() {
         return this.goal;
     }
 
     public String getGoalAsString() {
+        // Return a success message (empty goal string) if dungeon cleared
+        if (isCleared()) {
+            return "";
+        }
         return this.goal.asString();
     }
 
