@@ -20,6 +20,7 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.UsableEntity;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Arrow;
@@ -193,7 +194,14 @@ public class Dungeon {
             CollectableEntity item = collectables.stream()
                 .filter(e -> e.getId().equals(itemUsed))
                 .findFirst().orElse(null);
+
+            // Error checking
             if (item == null) throw new InvalidActionException("Item can't be found");
+            if (!(item instanceof UsableEntity)) throw new IllegalArgumentException("Item not usable");
+
+            UsableEntity useable = (UsableEntity) item;
+            useable.use();
+            collectables.remove(useable);
         }
         
 
