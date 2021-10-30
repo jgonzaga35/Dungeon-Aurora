@@ -7,15 +7,16 @@ import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 
-public class CircleMovementBehaviour implements Movement {
+public class CircleMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
     private List<Pos2d> movementCycle = new ArrayList<>();
     private int step = 0;
     private int direction = 1;
 
-    public CircleMovementBehaviour(DungeonMap map, Cell initialCell)
+    public CircleMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
         int initialX = initialCell.getPosition().getX();
@@ -84,7 +85,7 @@ public class CircleMovementBehaviour implements Movement {
         return currentCell;
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }

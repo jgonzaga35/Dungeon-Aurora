@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -13,10 +15,12 @@ import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 
+import java.lang.System;
+
 public class DungeonMap {
 
     final private String PLAYER = " P ";
-    final private String WALL = " # ";
+    final private String WALL = "###";
     final private String STATIC = " S ";
     final private String ENEMY = " E ";
 
@@ -70,6 +74,22 @@ public class DungeonMap {
 
     public Cell getCell(int x, int y) {
         return dungeonMap.get(y).get(x);
+    }
+
+    /**
+     * Retreives Cell Player is Currently In
+     * @return Cell
+     */
+    public Cell getPlayerCell() {
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                //Checks Where Cell is 0 blocks from player
+                if (cell.getPlayerDistance() == 0) {
+                    return cell;
+                }
+            }
+        }
+        return null;
     }
 
     public int getWidth() {
@@ -145,6 +165,18 @@ public class DungeonMap {
         return getCellAround(cell, d);
     }
 
+
+    /**
+     * Note that it doesn't always return 4 cells. If you are on a top-most
+     * cell, it will only return (left, bottom, right)
+     * @return cells around the current cell
+     */
+    public Stream<Cell> getCellsAround(Cell base) {
+        return Arrays.stream(Direction.values())
+            .map(direction -> this.getCellAround(base, direction))
+            .filter(cell -> cell != null);
+    }
+
     private int propagateFrom(Cell cell) {
         AtomicInteger changesMade = new AtomicInteger(0);
 
@@ -161,6 +193,20 @@ public class DungeonMap {
         return changesMade.get();
     }
 
+    /**
+     * Returns the neighbors of cell Ignores blocks off the map.
+     * 
+     * @param cell
+     * @return List of cells neigboring the given cell.
+     */
+    public List<Cell> getNeighbors(Cell cell)
+    {
+        return Arrays.stream(Direction.values())
+            .filter(d -> getCellAround(cell, d) != null)
+            .map(d -> getCellAround(cell, d))
+            .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         String result = "";
@@ -175,7 +221,9 @@ public class DungeonMap {
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    result += " " + cell.getPlayerDistance() + " ";
+                    int num = cell.getPlayerDistance();
+                    if (num < 10) result += " " + num + " ";
+                    else result += " " + num;
                 }
             }
             result += "\n";

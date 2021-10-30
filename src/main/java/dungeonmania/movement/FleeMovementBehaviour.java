@@ -2,24 +2,31 @@ package dungeonmania.movement;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
 
-public class FleeMovementBehaviour implements Movement {
+public class FleeMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
 
-    public FleeMovementBehaviour(DungeonMap map, Cell initialCell)
+    public FleeMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
     }
 
     public Cell move()
     {
-        return new Cell(new Pos2d(0, 0));
+        currentCell = map.getNeighbors(currentCell).stream()
+            .filter(c -> !c.isBlocking())
+            .max(
+                (c1, c2) -> 
+                Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
+            ).get();
+        
+        return currentCell;
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }
