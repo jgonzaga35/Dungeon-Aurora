@@ -1,6 +1,7 @@
 package dungeonmania.goal;
 
 import dungeonmania.Dungeon;
+import dungeonmania.DungeonMap;
 
 public class TreasureGoal extends Goal {
     
@@ -9,8 +10,14 @@ public class TreasureGoal extends Goal {
         super();
     }
 
+    @Override
     public boolean isCompleted(Dungeon dungeon) {
         // Count all treasure remaining uncollected in the dungeon.
+        DungeonMap map = dungeon.getMap();
+        if (map.countTreasure() == 0) {
+            return true;
+        }
+        
         return false;
     }
 
