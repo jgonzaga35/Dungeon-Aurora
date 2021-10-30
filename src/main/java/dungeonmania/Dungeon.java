@@ -45,6 +45,7 @@ public class Dungeon {
     private Player player;
     private String name;
     private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
+    private List<Entity> occupants = new ArrayList<Entity>();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -86,36 +87,37 @@ public class Dungeon {
 
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
+            Entity occupant;
             Cell cell = map.getCell(x, y);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
-                cell.addOccupant(new Wall(dungeon, cell.getPosition()));
+                occupant = new Wall(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
-                cell.addOccupant(new Exit(dungeon, cell.getPosition()));
+                occupant = new Exit(dungeon, cell.getPosition());
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
-                cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
+                occupant = new ZombieToastSpawner(dungeon, cell.getPosition());
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
-                cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
+                occupant = new ZombieToast(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
-                cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+                occupant = new Treasure(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
-                cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
+                occupant = new Arrow(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
-                cell.addOccupant(new Wood(dungeon, cell.getPosition()));
+                occupant = new Wood(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Sword.STRING_TYPE)) {
-                cell.addOccupant(new Sword(dungeon, cell.getPosition()));
+                occupant = new Sword(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
-                cell.addOccupant(new Armour(dungeon, cell.getPosition()));
+                occupant = new Armour(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
+                occupant = new Key(dungeon, cell.getPosition(), entity.getInt("key"));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
-                cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
+                occupant = new Boulder(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
-                cell.addOccupant(Spider.spawnSpider(dungeon));
+                occupant = Spider.spawnSpider(dungeon);
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
-                cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
+                occupant = new InvincibilityPotion(dungeon, cell.getPosition());
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
-                cell.addOccupant(player);
+                occupant = player;
             } else if (Objects.equals(type, Portal.STRING_TYPE)) {
                 String colour = entity.getString("colour");
 
@@ -127,11 +129,13 @@ public class Dungeon {
                     portal.setCorrespondingPortal(correspondingPortal);
                     correspondingPortal.setCorrespondingPortal(portal);
                 }
-                cell.addOccupant(portal);
+                occupant = portal;
             } 
             else {
                 throw new Error("unhandled entity type: " + type);
             }
+            dungeon.addOccupant(occupant);
+            cell.addOccupant(occupant);
         }
 
         if (player == null) {
@@ -141,6 +145,10 @@ public class Dungeon {
         dungeon.setPlayer(player);
 
         return dungeon;
+    }
+
+    private void addOccupant(Entity occupant) {
+        this.occupants.add(occupant);
     }
 
     /**
@@ -305,5 +313,9 @@ public class Dungeon {
             outputListItemResponses.add(currItemResponse);
         }
         return outputListItemResponses;
+    }
+
+    public List<Entity> getOccupants() {
+        return this.occupants;
     }
 }
