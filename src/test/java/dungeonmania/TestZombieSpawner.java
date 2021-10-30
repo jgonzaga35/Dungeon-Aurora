@@ -27,7 +27,7 @@ public class TestZombieSpawner {
         DungeonResponse resp = ctr.newGame("_zombies_park", GameMode.PEACEFUL.getValue());
 
         for (int i = 1; i < 101; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             // a zombie should spawn every 20 ticks, and there is already one
             // zombie on the map
             assertEquals(1+Math.floorDiv(i, 20), resp.getEntities().stream()
@@ -45,7 +45,7 @@ public class TestZombieSpawner {
         DungeonResponse resp = ctr.newGame("_zombies_spawner_blocked", GameMode.STANDARD.getValue());
 
         for (int i = 1; i < 101; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             // there isn't anywhere for zombies to spawn
             assertEquals(0, resp.getEntities().stream()
                 .filter(e -> Objects.equals(ZombieToast.STRING_TYPE, e.getType())).count());

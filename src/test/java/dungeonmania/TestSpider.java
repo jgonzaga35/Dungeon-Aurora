@@ -22,11 +22,11 @@ public class TestSpider {
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
 
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
         resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
@@ -34,13 +34,13 @@ public class TestSpider {
     public void testSpiderMovment() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
         Map<String, Pos2d> positions = new HashMap<>();
 
         for (int i = 1; i < 50; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             for (EntityResponse spider : resp.getEntities()) {
                 if (spider.getType() != Spider.STRING_TYPE) {
                     continue;
@@ -69,7 +69,7 @@ public class TestSpider {
 
         assertTrue(idList.size() == idSet.size());
         
-        resp = ctr.tick("", Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
         idSet = new HashSet<String>(idList);
@@ -78,7 +78,7 @@ public class TestSpider {
 
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
-        resp = ctr.tick("", Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
         idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
         idSet = new HashSet<String>(idList);
@@ -93,7 +93,7 @@ public class TestSpider {
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
     
         for (int i = 0; i < 50; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
         }
     }
 
@@ -103,7 +103,7 @@ public class TestSpider {
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
 
         for (int i = 0; i < 10; i ++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
         }
         long numSpiders = resp.getEntities().stream().filter(x -> x.getType().equals(Spider.STRING_TYPE)).count();
         assertTrue(numSpiders <= 5);
