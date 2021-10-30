@@ -329,11 +329,11 @@ public class TestCollectables {
         resp = ctr.tick("", Direction.NONE);
         Boolean found = false;
 
-        // Down 2 Units to the Armour at Coord (1, 3)
+        // Down 2 Units to the Bomb at Coord (1, 3)
         ctr.tick("", Direction.DOWN);
         resp = ctr.tick("", Direction.DOWN);
 
-        //Checking If Armour was Collected
+        //Checking If Bomb was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -361,50 +361,210 @@ public class TestCollectables {
             }
         }
         assertEquals(true, itemRemoved);
-        
-        //Testing Bomb Does Not Explode if Not Cardinal to Floor Switch
-        // Right 2 Units to the Coord (3, 3)
+
+        //Place Bomb on Ground Cardinally Adjacent to Switch
+        // Right 3 Units to the Coord (6, 3)
         ctr.tick("", Direction.RIGHT);
-        resp = ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        //Place bomb at (6,3)
 
-        //Placing Bomb Back on Ground
-
-        //Collect Bomb Again
-        //Checking If Bomb was Collected
-        found = false;
+        //Get ID for Bomb
         curr_type = "";
+        String bombId = "";
         curr_inventory = resp.getInventory();
         for (ItemResponse item : curr_inventory) {
             curr_type = item.getType();
             if (curr_type == "bomb") {
-                found = true;
+                bombId = item.getId();
             }
         }
-        assertEquals(true, found);
+        //Place bomb onto (6,3)
+        resp = ctr.tick(bombId, Direction.NONE);
 
-        //Check that the Bomb Was Removed from the Cell
-        currPositionX = 0;
-        currPositionY = 0;
-        itemRemoved = true;
-        cellEntities = resp.getEntities();
-        for (EntityResponse currEntity : cellEntities) {
-            curr_type = currEntity.getType();
-
-            Position currPosition = currEntity.getPosition();
-            currPositionX = currPosition.getX();
-            currPositionY = currPosition.getY();
-            if (curr_type == "bomb" && currPositionX == 3 && currPositionY == 3) {
-                itemRemoved = false;
-            }
-        }
-        assertEquals(true, itemRemoved);
-
-        //Place Bomb on Ground Cardinally Adjacent to Switch
-        // Right 2 Units to the Coord (5, 3)
-        ctr.tick("", Direction.RIGHT);
-        resp = ctr.tick("", Direction.RIGHT);
+        
 
         //Check Entities in Blast Radius Destroyed
+        //Blast Radius is 1, therefore if bomb exploads it destroys
+        //all entities in cells (6,3), (5,3), (5,4), (6,4), (7,4), (7,3), (7,2), (6,2), (5,2)
+        //other than player itself
+
+        //Make Player walk through all cells in blast radius and check no entities other
+        //than player
+
+        //Player is at Cell (6,3) check no entities here
+        resp = ctr.tick("", Direction.NONE);
+
+        boolean entityFound = false;
+        boolean playerFound = false;
+        curr_type = "";
+        List<EntityResponse> currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (5,3) check no entities here
+        resp = ctr.tick("", Direction.LEFT);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (5,4) check no entities here
+        resp = ctr.tick("", Direction.DOWN);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (6,4) check no entities here
+        resp = ctr.tick("", Direction.RIGHT);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (7,4) check no entities here
+        resp = ctr.tick("", Direction.RIGHT);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (7,3) check no entities here
+        resp = ctr.tick("", Direction.UP);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (7,2) check no entities here
+        resp = ctr.tick("", Direction.UP);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (6,2) check no entities here
+        resp = ctr.tick("", Direction.LEFT);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        //Move Player to Cell (5,2) check no entities here
+        resp = ctr.tick("", Direction.LEFT);
+
+        entityFound = false;
+        playerFound = false;
+        curr_type = "";
+        currEntities = resp.getEntities();
+        for (EntityResponse item : currEntities) {
+            curr_type = item.getType();
+            if (curr_type == "player") {
+                playerFound = true;
+            }
+            if (curr_type != "player") {
+                entityFound = true;
+            }
+        }
+        assertEquals(true, playerFound);
+        assertEquals(false, entityFound);
+
+        
+        
 
     }
 }
