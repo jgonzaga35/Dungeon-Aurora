@@ -187,6 +187,14 @@ public class Dungeon {
         
 
         pickupCollectableEntities();
+
+        // TODO: figure out order
+        if (itemUsed != null) {
+            CollectableEntity item = collectables.stream()
+                .filter(e -> e.getId().equals(itemUsed))
+                .findFirst().orElse(null);
+            if (item == null) throw new InvalidActionException("Item can't be found");
+        }
         
 
         long spiderPopulation = this.dungeonMap.allEntities().stream()
