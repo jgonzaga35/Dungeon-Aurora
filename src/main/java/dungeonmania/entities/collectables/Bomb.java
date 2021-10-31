@@ -166,18 +166,34 @@ public class Bomb extends CollectableEntity {
         List<Cell> adjacentCells = new ArrayList<Cell>();
 
         //Get All Cells Cardinally Adjacent
-        adjacentCells.add(map.getCellAround(bombCell, Direction.UP));
-        adjacentCells.add(map.getCellAround(bombCell, Direction.DOWN));
-        adjacentCells.add(map.getCellAround(bombCell, Direction.LEFT));
-        adjacentCells.add(map.getCellAround(bombCell, Direction.RIGHT));
+        if (map.getCellAround(bombCell, Direction.UP) != null ) {
+            adjacentCells.add(map.getCellAround(bombCell, Direction.UP));
+        }
+        if (map.getCellAround(bombCell, Direction.DOWN) != null) {
+            adjacentCells.add(map.getCellAround(bombCell, Direction.DOWN));
+        }
+        if (map.getCellAround(bombCell, Direction.LEFT) != null) {
+            adjacentCells.add(map.getCellAround(bombCell, Direction.LEFT));
+        }
+        if (map.getCellAround(bombCell, Direction.RIGHT) != null) {
+            adjacentCells.add(map.getCellAround(bombCell, Direction.RIGHT));
+        }
 
         //Iterate Through These Cardinally Adjacent Cells and Check if Any
         //Contain a Floor Switch
+        if (adjacentCells == null) {
+            return false;
+        }
+
         for (Cell currentCell : adjacentCells) {
-            List<Entity> occupants = currentCell.getOccupants();
-            for (Entity currOccupant: occupants) {
-                if (currOccupant.getTypeAsString() == "floor switch") {
-                    return true;
+            if (currentCell.getOccupants() != null) {
+                List<Entity> occupants = currentCell.getOccupants();
+                for (Entity currOccupant: occupants) {
+                    if (currOccupant != null) {
+                        if (currOccupant.getTypeAsString() == "floor switch") {
+                            return true;
+                        }
+                    }
                 }
             }
         }
