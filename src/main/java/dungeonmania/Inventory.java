@@ -2,6 +2,8 @@ package dungeonmania;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.consumables.Potion;
@@ -76,6 +78,45 @@ public class Inventory {
         collectables.remove(itemUsed);
         
         return itemUsed;
+    }
+
+
+    /**
+     * if all the entities (items) are in the inventory, it uses them all
+     * (removes from the inventory). Otherwise it just returns false;
+     * @param entities
+     * @return true if all the items were in the inventory, and they were
+     * succesfully removed
+     */
+    public boolean useItems(List<String> itemsStringType) {
+
+        List<CollectableEntity> toRemove = new ArrayList<>();
+        for (String itemStringType : itemsStringType) {
+            Optional<CollectableEntity> itemOpt = this.collectables.stream()
+                // find an item of the right type that isn't already used
+                .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
+                .findFirst();
+
+            if (itemOpt.isEmpty())
+                return false;
+            else 
+                toRemove.add(itemOpt.get());
+        }
+        this.collectables.removeAll(toRemove);
+        return true;
+    }
+
+    /**
+     * @usage for example, {@code inventory.itemsOfType(Shield).forEach(shield -> foobar)}
+     * @param <T> type
+     * @param type type
+     * @return Stream of CollectableEntities
+     */
+    public <T extends CollectableEntity> Stream<T> itemsOfType(Class<T> type) {
+        return this.collectables.stream().filter(e -> type.isInstance(e)).map(e -> {
+            @SuppressWarnings("unchecked") T t = (T)e; // bruh
+            return t;
+        });
     }
 
     public List<ItemResponse> asItemResponses() {
