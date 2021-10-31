@@ -1,13 +1,18 @@
 package dungeonmania.entities.statics;
 
 import dungeonmania.Dungeon;
+import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.util.BlockingReason;
 
 public class Door extends StaticEntity {
 
     public static String STRING_TYPE = "door";
+
+    private boolean locked = true;
 
     public int doorId;
 
@@ -16,14 +21,33 @@ public class Door extends StaticEntity {
         this.doorId = doorId;
     }
 
+    /**
+     * checks through the player inventory to see if there is a key to this door
+     * @return true if door is successfully opened
+     */
+    public boolean open() {
+        Inventory inventory = this.dungeon.getInventory();
+        for (CollectableEntity c : inventory.getCollectables()) {
+            if (c instanceof Key && ((Key)c).getKeyId() == doorId) {
+                // key matches, remove the key from inventory and unlock door
+                inventory.remove(c);
+                locked = false;
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public BlockingReason isBlocking() {
-        return BlockingReason.DOOR;
+        if (locked) return BlockingReason.DOOR;
+        else return BlockingReason.NOT;
     }
 
     @Override
     public String getTypeAsString() {
-        return Exit.STRING_TYPE;
+        if (locked) return "door";
+        else return "door_unlocked";
     }
 
     @Override

@@ -159,15 +159,14 @@ public class Dungeon {
         if (playerCell.getOccupants() == null) {
             return;
         }
+
         List<Entity> playerCellOccupants = playerCell.getOccupants();
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
                 //Add To Collectables Inventory
-                this.inventory.add(collectableOccupant);
                 //Remove the Collectable From the Current Cell
-                playerCell.removeOccupant(occupant);
-
+                if (this.inventory.add(collectableOccupant)) playerCell.removeOccupant(occupant);
             }
         }
     }
@@ -282,6 +281,10 @@ public class Dungeon {
 
     public DungeonMap getMap() {
         return dungeonMap;
+    }
+
+    public Inventory getInventory() {
+        return this.inventory;
     }
 
     /**
