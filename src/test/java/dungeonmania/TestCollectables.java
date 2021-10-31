@@ -333,9 +333,7 @@ public class TestCollectables {
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
-        System.out.println(curr_inventory.toString());
         for (ItemResponse item : curr_inventory) {
-            System.out.println(item.toString());
             curr_type = item.getType();
             if (curr_type == "bomb") {
                 found = true;
@@ -366,8 +364,6 @@ public class TestCollectables {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
-        //ctr.tick("", Direction.RIGHT);
-        //Place bomb at (5,3)
 
         //Get ID for Bomb
         curr_type = "";
@@ -392,16 +388,13 @@ public class TestCollectables {
         //Make Player walk through all cells in blast radius and check no entities other
         //than player
 
-        //Player is at Cell (6,3) check no entities here
-        //resp = ctr.tick("", Direction.NONE);
-        System.out.println("TEST 1 START");
+        //Player is at Cell (5,3) check no entities here
         boolean entityFound = false;
         boolean playerFound = false;
         curr_type = "";
         List<EntityResponse> currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            System.out.println(curr_type);
             if (curr_type == "player") {
                 playerFound = true;
             }
@@ -412,7 +405,6 @@ public class TestCollectables {
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        System.out.println("TEST 1 END");
 
         //Move Player to Cell (5,3) check no entities here
         resp = ctr.tick("", Direction.LEFT);
