@@ -2,6 +2,7 @@ package dungeonmania.response.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class DungeonResponse {
     private final String dungeonId;
@@ -56,4 +57,22 @@ public final class DungeonResponse {
     public final List<EntityResponse> getEntities() {
         return entities;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof DungeonResponse)) {
+            return false;
+        }
+        DungeonResponse dungeonResponse = (DungeonResponse) o;
+        return Objects.equals(dungeonId, dungeonResponse.dungeonId) && Objects.equals(dungeonName, dungeonResponse.dungeonName) && Objects.equals(entities, dungeonResponse.entities) && Objects.equals(inventory, dungeonResponse.inventory) && Objects.equals(buildables, dungeonResponse.buildables) && Objects.equals(goals, dungeonResponse.goals) && Objects.equals(animations, dungeonResponse.animations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dungeonId, dungeonName, entities, inventory, buildables, goals, animations);
+    }
+
 }
