@@ -15,7 +15,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
 
     public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.addMovementBehaviour(new RandomMovementBehaviour(0, dungeon.getMap(), dungeon.getMap().getCell(position)));
+        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon.getMap(), dungeon.getMap().getCell(position)));
     }
 
     @Override
