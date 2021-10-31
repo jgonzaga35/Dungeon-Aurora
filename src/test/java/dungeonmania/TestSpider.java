@@ -90,10 +90,10 @@ public class TestSpider {
     @Test
     public void testNullPointerError() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        ctr.newGame("maze", GameMode.PEACEFUL.getValue());
     
         for (int i = 0; i < 50; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            ctr.tick("", Direction.NONE);
         }
     }
 

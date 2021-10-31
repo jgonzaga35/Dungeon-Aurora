@@ -28,7 +28,7 @@
         "subgoals": [
           {
             "goal": "AND",
-            "subgoals": ["enemies", "treasure"]
+            "subgoals": ["boulder", "treasure"]
           },
           {
             "goal": "exit"
