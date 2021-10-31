@@ -167,25 +167,36 @@ public class Dungeon {
         if (playerCell == null) {
             return;
         }
-
+        if (itemUsed == null) {
+            itemUsed = "";
+        }
         //Check if Bomb is Being Placed 
-        if (itemUsed != "") {
-            System.out.println("Ran");
+        if (itemUsed.length() != 0) {
+            System.out.println("Ran that Bomb was Placed");
             List<CollectableEntity> collectables = inventory.getCollectables();
             if (collectables.size() == 0) {
                 return;
             }
             boolean itemPlaced = false;
             CollectableEntity collectableRemoved = collectables.get(0);
+            System.out.println(collectables.toString());
             for (CollectableEntity currCollectable : collectables) {
+                System.out.println("Current Collectable");
+                System.out.println(currCollectable.getTypeAsString());
+                System.out.println(currCollectable.getId());
                 if (currCollectable.getTypeAsString() == "bomb" && currCollectable.getId() == itemUsed) {
                     //Place Bomb & Remove from Collectables
-                    playerCell.addOccupant(currCollectable);
+                    System.out.println("Bomb placed");
                     collectableRemoved = currCollectable;
+                    Bomb removedBomb = (Bomb) collectableRemoved;
+                    removedBomb.setIsPlaced();
+                    playerCell.addOccupant(collectableRemoved);
+                    
                     itemPlaced = true;
                 }
             }
             if (itemPlaced == true) {
+                System.out.println("Remove from inentory");
                 inventory.remove(collectableRemoved);
             }
         }

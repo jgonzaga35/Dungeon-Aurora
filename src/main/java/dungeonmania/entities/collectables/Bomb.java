@@ -155,7 +155,7 @@ public class Bomb extends CollectableEntity {
         return false; // i don't think so at least
     }
     
-    private void setIsPlaced() {
+    public void setIsPlaced() {
         this.isPlaced = true;
     }
 

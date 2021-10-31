@@ -29,6 +29,7 @@ public class Inventory {
                 return false;
             }
         } 
+        System.out.println("Ran that bomb is Picked Up");
         return this.collectables.add(c);
     }
 
