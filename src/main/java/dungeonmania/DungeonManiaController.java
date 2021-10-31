@@ -55,6 +55,10 @@ public class DungeonManiaController {
     public DungeonManiaController() {
     }
 
+    public DungeonManiaController(Dungeon dungeon) {
+        this.dungeon = dungeon;
+    }
+
     public String getSkin() {
         return "default";
     }
