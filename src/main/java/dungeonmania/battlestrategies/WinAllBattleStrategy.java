@@ -44,7 +44,7 @@ public class WinAllBattleStrategy implements BattleStrategy {
     }
 
     @Override
-    public int getPrecendence() {
+    public int getPrecedence() {
         return this.precedence;
     }
     

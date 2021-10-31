@@ -17,6 +17,6 @@ public interface BattleStrategy {
      */
     public void findAndPerformBattles(Dungeon dungeon);
 
-    public int getPrecendence();
+    public int getPrecedence();
 
 }

@@ -19,7 +19,7 @@ public class NoBattleStrategy implements BattleStrategy {
     }
 
     @Override
-    public int getPrecendence() {
+    public int getPrecedence() {
         return this.precedence;
     }
     
