@@ -379,8 +379,6 @@ public class TestCollectables {
                 bombId = item.getId();
             }
         }
-        System.out.println("Testing Reqested Id:");
-        System.out.println(bombId);
         //Place bomb onto (6,3)
         resp = ctr.tick(bombId, Direction.NONE);
 
@@ -403,6 +401,7 @@ public class TestCollectables {
         List<EntityResponse> currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
+            System.out.println(curr_type);
             if (curr_type == "player") {
                 playerFound = true;
             }

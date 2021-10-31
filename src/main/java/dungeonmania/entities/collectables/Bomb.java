@@ -20,7 +20,7 @@ public class Bomb extends CollectableEntity {
 
     public static String STRING_TYPE = "bomb";
 
-    public static int BLAST_RADIUS = 1;
+    public static int BLAST_RADIUS = 2;
 
     public boolean isPlaced = false;
 
