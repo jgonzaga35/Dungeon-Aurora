@@ -340,7 +340,6 @@ public class Dungeon {
         return this.inventory.asItemResponses();
     }
 
-<<<<<<< HEAD
     /**
      * Attempts to bribe the map's mercenary raises an InvalidActionException
      * when:
@@ -355,9 +354,5 @@ public class Dungeon {
         if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
             
         merc.bribe();
-=======
-    public Inventory getInventory() {
-        return this.inventory;
->>>>>>> Dungeon: implement build, fix bug in collectable logic
     }
 }
