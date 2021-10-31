@@ -25,5 +25,6 @@
    https://edstem.org/au/courses/7065/discussion/660682
 
 ## Potions
+
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.
