@@ -20,6 +20,7 @@ import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
+import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -188,7 +189,9 @@ public class Dungeon {
 
         if (itemUsed != null) inventory.useItem(itemUsed);
         
-        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        dungeonMap.allEntities().stream().forEach(entity -> {if (entity instanceof Potion) entity.tick();});
+        dungeonMap.allEntities().stream().forEach(entity -> {if (!(entity instanceof Potion)) entity.tick();});
+
         
         pickupCollectableEntities();
 
