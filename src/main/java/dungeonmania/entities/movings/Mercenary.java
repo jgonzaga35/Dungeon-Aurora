@@ -7,10 +7,13 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.FollowMovementBehaviour;
+import dungeonmania.movement.FriendlyMovementBehaviour;
 
 public class Mercenary extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "mercenary";
+    private float health = 6;
+    private FighterRelation relationship = FighterRelation.ENEMY;
 
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -23,58 +26,59 @@ public class Mercenary extends MovingEntity implements Fighter {
         );
     }
 
-    @Override
-    public float getHealth() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setHealth(float h) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public float getAttackDamage() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public float getDefenceCoef() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void usedItemFor(BattleDirection d) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public FighterRelation getFighterRelation() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Entity getEntity() {
-        // TODO Auto-generated method stub
-        return null;
+    public void bribe() {
+        relationship = FighterRelation.ALLY;
+        addMovementBehaviour(
+            new FriendlyMovementBehaviour(
+                100, 
+                dungeon.getMap(), 
+                getCell()
+            )
+        );
     }
 
     @Override
     public String getTypeAsString() {
-        // TODO Auto-generated method stub
-        return null;
+        return Mercenary.STRING_TYPE;
     }
 
     @Override
     public void tick() {
-        // TODO Auto-generated method stub
-        
+        this.move();
     }
-    
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float h) {
+        this.health = h;
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return 1;
+    }
+
+    @Override
+    public float getDefenceCoef() {
+        return 1;
+    }
+
+    @Override
+    public void usedItemFor(BattleDirection d) {
+        // mercenaries don't use items, so that doesn't matter
+    }
+
+    @Override
+    public FighterRelation getFighterRelation() {
+        return relationship;
+    }
+
+    @Override
+    public Entity getEntity() {
+        return this;
+    }
 }
