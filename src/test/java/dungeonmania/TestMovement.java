@@ -62,7 +62,7 @@ public class TestMovement {
     }
 
     @Test
-    public void testCircleMovementAgainstBoundry() 
+    public void testCircleMovementAgainstBoundary() 
     {
         DungeonMap map = dungeon.getMap();
         startingCell = map.getCell(new Pos2d(4, 2));
@@ -92,6 +92,44 @@ public class TestMovement {
         spider.move();
         assertEquals(new Pos2d(3, 3), spider.getCurrentCell().getPosition());
 
+    }
+
+    @Test
+    public void testCircleMovementAgainstBoundaryTop() 
+    {
+        DungeonMap map = dungeon.getMap();
+        startingCell = map.getCell(new Pos2d(2, 0));
+        MovementBehaviour spider = new CircleMovementBehaviour(1, map, startingCell);
+        
+        spider.move();
+        assertEquals(new Pos2d(2, 0), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(3, 0), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(3, 1), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(3, 2), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(2, 2), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(1, 2), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(1, 1), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(1, 0), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(2, 0), spider.getCurrentCell().getPosition());
+        
+        spider.move();
+        assertEquals(new Pos2d(3, 0), spider.getCurrentCell().getPosition());
     }
 
     @Test
