@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
@@ -141,7 +142,15 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        Entity interactEntity = dungeon.getMap()
+            .allEntities().stream().filter(e -> e.getId().equals(entityId))
+            .findFirst().orElse(null);
+
+        if (interactEntity == null) throw new IllegalArgumentException("entityId does not exist");
+        if (!interactEntity.isInteractable()) throw new IllegalArgumentException("Entity is not interactable");
+        if (interactEntity instanceof Mercenary) dungeon.bribeMercenary((Mercenary)interactEntity);
+        
+        return this.makeDungeonResponse();
     }
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {

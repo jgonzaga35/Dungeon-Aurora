@@ -306,19 +306,14 @@ public class Dungeon {
      * - The player is not in range to bribe the mercenary
      * - The player does not have any gold.
      * 
-     * @return true if the action succeeds and false if there is no unfriendly 
-     * mercenary on the map.
+     * removes a coin from the inventory on success.
      */
-    public boolean bribeMercenary() {
-        if (collectables.stream().noneMatch(c -> c instanceof Treasure)) {
-            throw new InvalidActionException("The player has nothing to bribe with.");
-        }
-        Mercenary merc = (Mercenary) dungeonMap.allEntities().stream()
-            .filter(e -> e instanceof Mercenary)
+    public void bribeMercenary(Mercenary merc) throws InvalidActionException {
+        Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
             .findFirst().orElse(null);
 
-        if (merc == null || merc.getFighterRelation() == FighterRelation.ALLY) {
-            return false;
+        if (coin == null) {
+            throw new InvalidActionException("The player has nothing to bribe with.");
         }
 
         if (merc.getCell().getPlayerDistance() > 2) {
@@ -327,6 +322,6 @@ public class Dungeon {
 
         merc.bribe();
 
-        return true;
+        collectables.remove(coin);
     }
 }
