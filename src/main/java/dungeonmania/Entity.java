@@ -3,7 +3,6 @@ package dungeonmania;
 import java.util.stream.Stream;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
 public abstract class Entity {
@@ -54,6 +53,12 @@ public abstract class Entity {
             this.dungeon.getMap().getCellAround(this.getCell(), Direction.LEFT),
             this.dungeon.getMap().getCellAround(this.getCell(), Direction.RIGHT)
         ).filter(cell -> cell != null);
+    }
+
+    @Override
+    public String toString()
+    {
+        return getTypeAsString();
     }
 
     public abstract boolean isInteractable();

@@ -5,16 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.util.Direction;
-
-import java.lang.System;
 
 public class DungeonMap {
 
@@ -40,6 +42,51 @@ public class DungeonMap {
             dungeonMap.add(row);
         }
         resetDistances();
+    }
+
+    /**
+     * Counts all the treasure remaining on the map
+     */
+    public Integer countTreasure() {
+        int count = 0;
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                if (cell.getOccupants().stream().anyMatch(e -> e instanceof Treasure)) {
+                    count++;
+                } 
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Counts all cells with enemies remaining on the map
+     */
+    public Integer countCellsWithZombieToast() {
+        int count = 0;
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
+                    count++;
+                } 
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Counts all cells with enemies remaining on the map
+     */
+    public Integer countCellsWithSpawners() {
+        int count = 0;
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToastSpawner)) {
+                    count++;
+                } 
+            }
+        }
+        return count;
     }
 
     /**
@@ -83,7 +130,7 @@ public class DungeonMap {
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
                 //Checks Where Cell is 0 blocks from player
-                if (cell.getPlayerDistance() == 0) {
+                if (cell.hasPlayer()) {
                     return cell;
                 }
             }
@@ -162,6 +209,19 @@ public class DungeonMap {
     public Cell getCellAround(Pos2d position, Direction d) {
         Cell cell = getCell(position);
         return getCellAround(cell, d);
+    }
+
+
+    /**
+     * Note that it doesn't always return 4 cells. If you are on a top-most
+     * cell, it will only return (left, bottom, right)
+     * @return cells around the current cell
+     */
+    public Stream<Cell> getCellsAround(Cell base) {
+        return Arrays.stream(Direction.values())
+            .filter(d -> d != Direction.NONE)
+            .map(direction -> this.getCellAround(base, direction))
+            .filter(cell -> cell != null);
     }
 
     private int propagateFrom(Cell cell) {

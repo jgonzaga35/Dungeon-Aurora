@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
+import dungeonmania.entities.statics.Exit;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -58,6 +60,10 @@ public class Cell {
         else return boulder.roll(d);
     }
 
+    /**
+     * Return portal if cell has a portal
+     * @return
+     */
     public Portal hasPortal() {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof Portal) {
@@ -65,6 +71,14 @@ public class Cell {
             }
         }
         return null;
+    }
+    
+    public boolean hasPlayer() {
+        return this.occupants.stream().anyMatch(e -> e instanceof Player);
+    }
+
+    public boolean hasExit() {
+        return this.occupants.stream().anyMatch(e -> e instanceof Exit);
     }
     
     /**

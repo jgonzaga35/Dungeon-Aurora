@@ -1,8 +1,8 @@
 package dungeonmania.goal;
 
-import java.util.List;
-
+import dungeonmania.Cell;
 import dungeonmania.Dungeon;
+import dungeonmania.DungeonMap;
 
 public class ExitGoal extends Goal {
    
@@ -11,20 +11,16 @@ public class ExitGoal extends Goal {
         super();
     }
 
+    @Override
     public boolean isCompleted(Dungeon dungeon) {
-        Goal goal = dungeon.getGoal();
-        if (goal instanceof AndGoal || goal instanceof OrGoal) {
-            List<Goal> subgoals = goal.getSubgoals();
-            
-            // Check that every other subgoal has been completed before checking exit condition
-            for (Goal subgoal: subgoals) {
-                if (!subgoal.isCompleted(dungeon)) {
-                    return false;
-                }  
-            }
-        }
 
         // Check if exit condition has been reached.
+        DungeonMap map = dungeon.getMap();
+
+        Cell playerCell = map.getPlayerCell();
+        if (playerCell != null && playerCell.hasExit()) {
+            return true;
+        }
 
         return false;
     }

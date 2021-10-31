@@ -2,14 +2,14 @@ package dungeonmania.movement;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
 
-public class FleeMovementBehaviour implements Movement {
+public class FleeMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
     private Cell currentCell;
 
-    public FleeMovementBehaviour(DungeonMap map, Cell initialCell)
+    public FleeMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
+        super(precedence);
         this.map = map;
         this.currentCell = initialCell;
     }
@@ -26,7 +26,7 @@ public class FleeMovementBehaviour implements Movement {
         return currentCell;
     }
 
-    public Cell getCurrentPosition()
+    public Cell getCurrentCell()
     {
         return currentCell;
     }

@@ -11,6 +11,13 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -34,8 +41,6 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.lang.System;
-
 public class Dungeon {
     private String id;
     private DungeonMap dungeonMap;
@@ -43,7 +48,7 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
-    private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
+    private Inventory inventory = new Inventory();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -166,7 +171,7 @@ public class Dungeon {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
                 //Add To Collectables Inventory
-                this.collectables.add(collectableOccupant);
+                this.inventory.add(collectableOccupant);
                 //Remove the Collectable From the Current Cell
                 playerCell.removeOccupant(occupant);
 
@@ -209,11 +214,23 @@ public class Dungeon {
         return this.name;
     }
 
+    /**
+     * Check if the dungeon has been cleared
+     */
+    public boolean isCleared() {
+        Goal goal = getGoal();
+        return goal.isCompleted(this);
+    }
+
     public Goal getGoal() {
         return this.goal;
     }
 
     public String getGoalAsString() {
+        // Return a success message (empty goal string) if dungeon cleared
+        if (isCleared()) {
+            return "";
+        }
         return this.goal.asString();
     }
 
@@ -279,14 +296,7 @@ public class Dungeon {
      * ItemResponse instances. 
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
-        List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
-        for (CollectableEntity item : collectables) {
-            String id = item.getId();
-            String type = item.getTypeAsString();
-            ItemResponse currItemResponse = new ItemResponse(id, type);
-            outputListItemResponses.add(currItemResponse);
-        }
-        return outputListItemResponses;
+        return this.inventory.asItemResponses();
     }
 
     
