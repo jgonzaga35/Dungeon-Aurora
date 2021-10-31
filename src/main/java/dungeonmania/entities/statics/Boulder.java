@@ -21,38 +21,32 @@ public class Boulder extends StaticEntity {
      */
     public boolean roll(Direction d) {
         Cell target = this.inspectCell(d);
-        
         if (target == null) return false;
-        switch (target.getBlocking()) {
-            case NOT:
-                this.moveTo(target);
-                return true;
-            default:
-                return false;
-        }
-    }
 
-    /**
-     * A moveTo method, same as the one from moving entity
-     * @param target
-     */
-    public void moveTo(Cell target) {
-        
-        Cell from = this.getCell();
-        FloorSwitch sourceSwitch = from.getFloorSwitch();
-        if (sourceSwitch != null) {
-            sourceSwitch.setTriggered(false);            
-        }
-        from.removeOccupant(this);
-        target.addOccupant(this);
-
-        FloorSwitch targetSwitch = target.getFloorSwitch();
-        if (targetSwitch != null) {
-            targetSwitch.setTriggered(true);
+    
+        if (target.getBlocking() == BlockingReason.NOT) {
+            Cell from = this.getCell();
+    
+            // Trigger floor switch if exists
+            FloorSwitch sourceSwitch = from.getFloorSwitch();
+            if (sourceSwitch != null) {
+                sourceSwitch.setTriggered(false);            
+            }
+    
+            from.removeOccupant(this);
+            target.addOccupant(this);
+    
+            FloorSwitch targetSwitch = target.getFloorSwitch();
+            if (targetSwitch != null) {
+                targetSwitch.setTriggered(true);
+            }
+    
+            this.position = target.getPosition();
+            this.getCell().onWalked(from.getPosition(), this.position);
+            return true;
         }
 
-        this.position = target.getPosition();
-        this.getCell().onWalked(from.getPosition(), this.position);
+        return false;
     }
 
     @Override

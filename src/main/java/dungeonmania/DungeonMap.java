@@ -73,15 +73,28 @@ public class DungeonMap {
     }
 
     /**
-     * Counts all cells with spiders remaining on the map
+     * Counts all the mercenaries remaining on the map
      */
-    public Integer countCellsWithSpiders() {
+    public Integer countMercenaries() {
+        int count = 0;
+        // for (List<Cell> row : dungeonMap) {
+        //     for (Cell cell : row) {
+        //         // if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
+        //         //     count++;
+        //         // } 
+        //     }
+        // }
+        return count;
+    }
+
+    /**
+     * Counts all spiders remaining on the map
+     */
+    public Integer countSpiders() {
         int count = 0;
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
-                if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
-                    count++;
-                } 
+                count += cell.getOccupants().stream().filter(e -> e instanceof Spider).count();
             }
         }
         return count;
@@ -91,13 +104,11 @@ public class DungeonMap {
     /**
      * Counts all cells with zombie toasts remaining on the map
      */
-    public Integer countCellsWithZombieToast() {
+    public Integer countZombieToasts() {
         int count = 0;
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
-                if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
-                    count++;
-                } 
+                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToast).count();
             }
         }
         return count;
@@ -106,13 +117,11 @@ public class DungeonMap {
     /**
      * Counts all cells with enemies remaining on the map
      */
-    public Integer countCellsWithSpawners() {
+    public Integer countSpawners() {
         int count = 0;
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
-                if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToastSpawner)) {
-                    count++;
-                } 
+                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToastSpawner).count();
             }
         }
         return count;

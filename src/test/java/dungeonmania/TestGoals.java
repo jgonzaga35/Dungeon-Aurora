@@ -103,6 +103,29 @@ public class TestGoals {
     }
 
     @Test
+    public void testCheckEnemiesGoalCompletion() {
+        DungeonManiaController ctr = new DungeonManiaController();
+
+        // _enemies_goal contains no enemies but will spawn spiders eventually
+        DungeonResponse resp = ctr.newGame("_enemies_goal", GameMode.STANDARD.getValue());
+
+        // Should be empty because no spiders have spawned yet
+        assertEquals("", resp.getGoals());
+
+        // the only place where the spider can spawn is exactly on the spot
+        // where the player is
+
+        int player_kills_n_spiders = 16;
+        
+        for (int j = 0; j < player_kills_n_spiders; j++) {
+            resp = ctr.tick("", Direction.NONE);
+            resp.getEntities().forEach(e -> System.out.println(e.getType() + " " + e.getPosition()));
+        }
+        // Now 1 spider has spawned, so goal should appear now.
+        assertEquals("destroy all enemies and spawners", resp.getGoals());
+    }
+
+    @Test
     public void testCheckOrGoalCompletion() {
         DungeonManiaController ctr = new DungeonManiaController();
         
