@@ -61,7 +61,7 @@ public class Dungeon {
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
 
-        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecendence() - b.getPrecendence());
+        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecedence() - b.getPrecedence());
         this.battleStrategies.add(new NormalBattleStrategy(0));
 
         Dungeon.nextDungeonId++;
@@ -179,6 +179,10 @@ public class Dungeon {
                 if (this.inventory.add(collectableOccupant)) playerCell.removeOccupant(occupant);
             }
         }
+    }
+    
+    public Pos2d getPlayerPosition() {
+        return this.player.getPosition();
     }
 
     public void tick(String itemUsed, Direction movementDirection)
