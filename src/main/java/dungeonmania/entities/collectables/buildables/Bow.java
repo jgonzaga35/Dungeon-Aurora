@@ -6,20 +6,19 @@ import dungeonmania.Dungeon;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
+import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.BuildableEntity;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
-public class Shield extends BuildableEntity implements BattleItem {
+public class Bow extends BuildableEntity implements BattleItem {
 
-    public static final String STRING_TYPE = "shield";
-    public static int INITIAL_DURABILITY = 20;
+    public static final String STRING_TYPE = "bow";
+    public static int INITIAL_DURABILITY = 100;
 
     private int durability;
 
-    public Shield(Dungeon dungeon, Pos2d position) {
+    public Bow(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durability = INITIAL_DURABILITY;
     }
@@ -32,7 +31,7 @@ public class Shield extends BuildableEntity implements BattleItem {
     @Override
     public void usedForBattleRound(BattleDirection d) {
         if (d == BattleDirection.DEFENCE) {
-            this.durability--;
+            this.durability -= 2; // two because it attacks twice
         }
     }
 
@@ -43,7 +42,7 @@ public class Shield extends BuildableEntity implements BattleItem {
 
     @Override
     public String getTypeAsString() {
-        return Shield.STRING_TYPE;
+        return STRING_TYPE;
     }
 
     /**
@@ -59,16 +58,13 @@ public class Shield extends BuildableEntity implements BattleItem {
     public static boolean craft(Inventory inventory) {
         if (!inventory.useItems(List.of(
             Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Treasure.STRING_TYPE
-        )) && !inventory.useItems(List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Key.STRING_TYPE
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE
         ))) {
             return false;
         }
-        inventory.add(new Shield(null, null));
+        inventory.add(new Bow(null, null));
         return true;
     }
 
@@ -79,7 +75,7 @@ public class Shield extends BuildableEntity implements BattleItem {
 
     @Override
     public float getAttackDamageBonus() {
-        return 0;
+        return 1; // player normally does 1 attack damage. This doubles it.
     }
     
 }

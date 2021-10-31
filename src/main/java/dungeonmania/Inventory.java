@@ -136,7 +136,7 @@ public class Inventory {
      * @return total bonus
      */
     public float totalBonus(BattleDirection d) {
-        float bonus = 0;
+        float bonus = 1;
         if (d == BattleDirection.ATTACK) {
             bonus = 0;
         } else if (d == BattleDirection.DEFENCE) {

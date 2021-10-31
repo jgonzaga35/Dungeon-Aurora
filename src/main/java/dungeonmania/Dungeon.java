@@ -18,6 +18,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
@@ -228,8 +229,13 @@ public class Dungeon {
     }
 
     public void build(String buildable) throws InvalidActionException {
+        // this could be done better, but with just two items it's fine.
         if (Objects.equals(buildable, Shield.STRING_TYPE)) {
             if (!Shield.craft(this.inventory)) {
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            }
+        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
+            if (!Bow.craft(this.inventory)) {
                 throw new InvalidActionException("not enough resources to build " + buildable);
             }
         } else {

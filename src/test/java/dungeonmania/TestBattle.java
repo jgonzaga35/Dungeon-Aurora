@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -262,12 +263,16 @@ public class TestBattle {
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
         ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        assertDoesNotThrow(() -> {
+            ctr.build(Bow.STRING_TYPE);
+        });
 
         // more than the player can kill without a bow
-        int player_kills_n_zombies = 20;
+        int player_kills_n_zombies = 29;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
-            for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
+            for (int i = 0; i < 19 - (j == 0 ? 3 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
                 resp = ctr.tick("", Direction.NONE);
             }
@@ -277,8 +282,8 @@ public class TestBattle {
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
             resp = ctr.tick("", Direction.NONE);
 
-            boolean hasBow = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals("bow change me"));
-            if (j < 10) assertTrue(hasBow, "j=" + j);
+            boolean hasBow = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Bow.STRING_TYPE));
+            if (j < 24) assertTrue(hasBow, "j=" + j);
             else assertTrue(!hasBow);
 
             if (j == player_kills_n_zombies - 1) {
