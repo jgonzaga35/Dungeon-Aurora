@@ -6,6 +6,7 @@ import java.util.List;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
+import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
@@ -58,6 +59,18 @@ public class Cell {
 
         if (boulder == null) return false;
         else return boulder.roll(d);
+    }
+
+    public boolean unlockDoor() {
+        Door door = null;
+        for (Entity e : occupants) {
+            if (e instanceof Door) {
+                door = (Door) e;
+            }
+        }
+
+        if (door == null) return false;
+        else return door.open();
     }
 
     /**
