@@ -11,6 +11,8 @@ import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.movement.CircleMovementBehaviour;
+import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.util.Direction;
 
@@ -76,6 +78,13 @@ public class Spider extends MovingEntity implements Fighter {
 
     public Spider(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        addMovementBehaviour(
+            new CircleMovementBehaviour(
+                4,
+                dungeon.getMap(),
+                dungeon.getMap().getCell(position)
+            )
+        );
         makeSpiderMap(dungeon.getMap());
     }
 
@@ -135,14 +144,15 @@ public class Spider extends MovingEntity implements Fighter {
 
     @Override
     public void tick() {
-        if (hasMoved) {
-            spiderMove();
-        } else {
-            if (!movementMap.get(0).hasBoulder()) {
-                super.moveTo(movementMap.get(0));
-                hasMoved = true;
-            }
-        }
+        this.move();
+        // if (hasMoved) {
+        //     spiderMove();
+        // } else {
+        //     if (!movementMap.get(0).hasBoulder()) {
+        //         super.moveTo(movementMap.get(0));
+        //         hasMoved = true;
+        //     }
+        // }
     }
 
     @Override
