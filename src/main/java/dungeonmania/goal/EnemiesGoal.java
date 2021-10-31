@@ -10,14 +10,11 @@ public class EnemiesGoal extends Goal {
         super();
     }
 
-    /**
-     * I don't include spiders at the moment for the sake of testing, I will add later - justin
-     */
     @Override
     public boolean isCompleted(Dungeon dungeon) {
         // Count all enemies and spawners
         DungeonMap map = dungeon.getMap();
-        if (map.countCellsWithZombieToast() == 0 && map.countCellsWithSpawners() == 0) {
+        if (map.countSpiders() == 0 && map.countZombieToasts() == 0 && map.countSpawners() == 0 && map.countMercenaries() == 0) {
             return true;
         }
 
