@@ -89,15 +89,15 @@ public class TestGoals {
         DungeonResponse resp = ctr.newGame("floorswitch", GameMode.PEACEFUL.getValue());
         assertEquals("have a boulder on all floor switches",resp.getGoals());
 
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         assertEquals("have a boulder on all floor switches",resp.getGoals());
 
         // Push boulder on switch - Goal should be completed
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         assertEquals("",resp.getGoals());
 
         // Pushing boulder off switch makes goal incomplete again
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         assertEquals("have a boulder on all floor switches",resp.getGoals());
 
     }
@@ -118,7 +118,7 @@ public class TestGoals {
         int player_kills_n_spiders = 16;
         
         for (int j = 0; j < player_kills_n_spiders; j++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             resp.getEntities().forEach(e -> System.out.println(e.getType() + " " + e.getPosition()));
         }
         // Now 1 spider has spawned, so goal should appear now.
