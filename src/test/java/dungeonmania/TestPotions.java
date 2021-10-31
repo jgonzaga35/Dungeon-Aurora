@@ -18,7 +18,7 @@ import dungeonmania.util.FileLoader;
 public class TestPotions {
     DungeonManiaController dc;
     Dungeon dungeon;
-    InvincibilityPotion invinsiblePot;
+    InvincibilityPotion invincibilityPot;
 
     @BeforeEach
     public void setStartingPostition() throws IOException {
@@ -27,9 +27,9 @@ public class TestPotions {
         dungeon.getMap().flood();
 
         
-        Cell invinsibleCell = dungeon.getMap().getCell(5, 4);
-        invinsiblePot= new InvincibilityPotion(dungeon, invinsibleCell.getPosition());
-        invinsibleCell.addOccupant(invinsiblePot);
+        Cell invincibleCell = dungeon.getMap().getCell(5, 4);
+        invincibilityPot= new InvincibilityPotion(dungeon, invincibleCell.getPosition());
+        invincibleCell.addOccupant(invincibilityPot);
         
         dc = new DungeonManiaController(dungeon);
         // player in (5, 5) with no inventory
@@ -46,7 +46,7 @@ public class TestPotions {
         Integer zomDist = zombie.getCell().getPlayerDistance();
 
         // use pot
-        dc.tick(invinsiblePot.getId(), Direction.NONE);
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
 
         for (int i = 0; i < 5; i++) {
             assertTrue(zomDist < zombie.getCell().getPlayerDistance());
