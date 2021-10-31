@@ -5,11 +5,8 @@ import java.util.PriorityQueue;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.entities.collectables.ConsumableEntity;
-import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
-import dungeonmania.movement.FleeMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
 public abstract class MovingEntity extends Entity {

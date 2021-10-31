@@ -3,7 +3,6 @@ package dungeonmania.entities.collectables.consumables;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.ConsumableEntity;
 
 public abstract class Potion extends CollectableEntity {
     // Inactive potions have -1 duration
