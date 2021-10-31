@@ -1,7 +1,6 @@
 package dungeonmania;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -19,6 +18,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.entities.movings.Mercenary;
@@ -170,15 +170,17 @@ public class Dungeon {
         if (playerCell.getOccupants() == null) {
             return;
         }
-        List<Entity> playerCellOccupants = new ArrayList<>(playerCell.getOccupants());
+        List<Entity> playerCellOccupants = playerCell.getOccupants();
+        List<CollectableEntity> toRemove = new ArrayList<>();
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                //Add To Collectables Inventory
-                //Remove the Collectable From the Current Cell
-                if (this.inventory.add(collectableOccupant)) playerCell.removeOccupant(occupant);
+                if (this.inventory.add(collectableOccupant))
+                    toRemove.add(collectableOccupant);
             }
         }
+        for (CollectableEntity occupant : toRemove)
+            playerCell.removeOccupant(occupant);
     }
     
     public Pos2d getPlayerPosition() {
@@ -223,6 +225,16 @@ public class Dungeon {
         }
 
         this.battleStrategies.peek().findAndPerformBattles(this);
+    }
+
+    public void build(String buildable) throws InvalidActionException {
+        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
+            if (!Shield.craft(this.inventory)) {
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            }
+        } else {
+            throw new IllegalArgumentException("unknown buildable: " + buildable);
+        }
     }
 
     public String getId() {
@@ -322,6 +334,7 @@ public class Dungeon {
         return this.inventory.asItemResponses();
     }
 
+<<<<<<< HEAD
     /**
      * Attempts to bribe the map's mercenary raises an InvalidActionException
      * when:
@@ -336,5 +349,9 @@ public class Dungeon {
         if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
             
         merc.bribe();
+=======
+    public Inventory getInventory() {
+        return this.inventory;
+>>>>>>> Dungeon: implement build, fix bug in collectable logic
     }
 }
