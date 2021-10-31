@@ -188,7 +188,7 @@ public class TestGoals {
         DungeonManiaController ctr = new DungeonManiaController();
         
         DungeonResponse resp = ctr.newGame("recursive_goals_test", GameMode.PEACEFUL.getValue());
-        assertEquals("(destroy all enemies and spawners AND collect all treasure) OR get to an exit",resp.getGoals());
+        assertEquals("(have a boulder on all floor switches AND collect all treasure) OR get to an exit",resp.getGoals());
 
         ctr.tick("", Direction.NONE);
 
@@ -199,7 +199,7 @@ public class TestGoals {
         // Now try completing the exit goal only
         ctr = new DungeonManiaController();
         resp = ctr.newGame("recursive_goals_test_2", GameMode.PEACEFUL.getValue());
-        assertEquals("(destroy all enemies and spawners AND collect all treasure) OR get to an exit",resp.getGoals());
+        assertEquals("(have a boulder on all floor switches AND collect all treasure) OR get to an exit",resp.getGoals());
         
         resp = ctr.tick("", Direction.DOWN);
         assertEquals("",resp.getGoals());
