@@ -19,7 +19,7 @@ public class Mercenary extends MovingEntity implements Fighter {
         super(dungeon, position);
         this.addMovementBehaviour(
             new FollowMovementBehaviour(
-                0, 
+                1, 
                 dungeon.getMap(), 
                 dungeon.getMap().getCell(position)
             )
@@ -30,7 +30,7 @@ public class Mercenary extends MovingEntity implements Fighter {
         relationship = FighterRelation.ALLY;
         addMovementBehaviour(
             new FriendlyMovementBehaviour(
-                100, 
+                0, 
                 dungeon.getMap(), 
                 getCell()
             )
@@ -80,5 +80,10 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public Entity getEntity() {
         return this;
+    }
+
+    @Override
+    public boolean isInteractable() {
+        return relationship == FighterRelation.ENEMY;
     }
 }
