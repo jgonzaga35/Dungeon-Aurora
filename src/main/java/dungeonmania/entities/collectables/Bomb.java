@@ -1,6 +1,7 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
 package dungeonmania.entities.collectables;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
@@ -10,10 +11,10 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+
 import dungeonmania.Cell;
 import dungeonmania.Entity;
 
-//import math.abs;
 
 public class Bomb extends CollectableEntity {
 
@@ -25,6 +26,8 @@ public class Bomb extends CollectableEntity {
 
     public Bomb(Dungeon dungeon, Pos2d position, boolean isPlaced) {
         super(dungeon, position);
+        System.out.println("Is Placed in Bomb Constructor");
+        System.out.println(isPlaced);
         this.isPlaced = isPlaced;
     }
 
@@ -33,6 +36,8 @@ public class Bomb extends CollectableEntity {
      * @return If Item is Placed (boolean)
      */
     public boolean getIsPlaced() {
+        System.out.println("Is Placed Value");
+        System.out.println(isPlaced);
         return isPlaced;
     }
 
@@ -40,6 +45,8 @@ public class Bomb extends CollectableEntity {
      * Destroys all Entities (excl Player) in blast radius
      * @return void
      */
+
+    
     public void explode() {
         //Get Current Coords of Bomb
         int bombXCoord = this.position.getX();
@@ -140,14 +147,14 @@ public class Bomb extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return Armour.STRING_TYPE;
+        return Bomb.STRING_TYPE;
     }
 
     @Override
     public boolean isInteractable() {
         return false; // i don't think so at least
     }
-
+    
     private void setIsPlaced() {
         this.isPlaced = true;
     }
@@ -158,11 +165,9 @@ public class Bomb extends CollectableEntity {
     @Override
     public void tick() {
         //If Bomb is Cardinally Adjacent to Floor Switch then Explode
-        setIsPlaced();
+        //setIsPlaced();
         if (bombCheckCardinalAdjacency()) {
             explode();
         }
-
-
     }
 }

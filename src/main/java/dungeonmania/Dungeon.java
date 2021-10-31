@@ -159,7 +159,7 @@ public class Dungeon {
      * If any collectables are in the player's square this function will remove
      * the collectable item from the cell and add it to the player's inventory.
      */
-    private void pickupCollectableEntities() {
+    private void pickupPlaceCollectableEntities(String itemUsed) {
         dungeonMap.flood();
 
         //Retreiving Player's Cell
@@ -168,19 +168,53 @@ public class Dungeon {
             return;
         }
 
+        //Check if Bomb is Being Placed 
+        if (itemUsed != "") {
+            System.out.println("Ran");
+            List<CollectableEntity> collectables = inventory.getCollectables();
+            if (collectables.size() == 0) {
+                return;
+            }
+            boolean itemPlaced = false;
+            CollectableEntity collectableRemoved = collectables.get(0);
+            for (CollectableEntity currCollectable : collectables) {
+                if (currCollectable.getTypeAsString() == "bomb" && currCollectable.getId() == itemUsed) {
+                    //Place Bomb & Remove from Collectables
+                    playerCell.addOccupant(currCollectable);
+                    collectableRemoved = currCollectable;
+                    itemPlaced = true;
+                }
+            }
+            if (itemPlaced == true) {
+                inventory.remove(collectableRemoved);
+            }
+        }
+
         //Check if Collectibles in the Player's Cell
         if (playerCell.getOccupants() == null) {
             return;
         }
 
         List<Entity> playerCellOccupants = playerCell.getOccupants();
+        boolean ifOccupantRemoved = false;
+        if (playerCellOccupants.size() == 0) {
+            return;
+        }
+        Entity removedOccupant = playerCellOccupants.get(0);
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
                 //Add To Collectables Inventory
                 //Remove the Collectable From the Current Cell
-                if (this.inventory.add(collectableOccupant)) playerCell.removeOccupant(occupant);
+                if (this.inventory.add(collectableOccupant)) {
+                    ifOccupantRemoved = true;
+                    removedOccupant = collectableOccupant;
+                }
+                
             }
+        }
+        if (ifOccupantRemoved == true) {
+            playerCell.removeOccupant(removedOccupant);
         }
     }
 
@@ -199,7 +233,7 @@ public class Dungeon {
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
 
-        pickupCollectableEntities();
+        pickupPlaceCollectableEntities(itemUsed);
         
 
         long spiderPopulation = this.dungeonMap.allEntities().stream()

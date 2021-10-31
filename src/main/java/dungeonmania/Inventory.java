@@ -5,6 +5,7 @@ import java.util.List;
 
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
@@ -13,12 +14,22 @@ public class Inventory {
     /**
      * @param c collectable to add
      * @return true if the inventory has changed as a result of this operation
-     */
+     */  
     public boolean add(CollectableEntity c) {
         if (c instanceof Key && hasKey()) {
             // Player cannot pickup a second key
             return false;
-        } else return this.collectables.add(c);
+        } 
+        if (c instanceof Bomb) {
+            // Player cannot pickup bomb already placed
+            Bomb bomb = (Bomb) c;
+            System.out.println(bomb.toString());
+            if (bomb.getIsPlaced() == true) {
+                System.out.println("It was placed");
+                return false;
+            }
+        } 
+        return this.collectables.add(c);
     }
 
     /**

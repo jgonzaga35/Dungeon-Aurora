@@ -333,7 +333,9 @@ public class TestCollectables {
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
+        System.out.println(curr_inventory.toString());
         for (ItemResponse item : curr_inventory) {
+            System.out.println(item.toString());
             curr_type = item.getType();
             if (curr_type == "bomb") {
                 found = true;

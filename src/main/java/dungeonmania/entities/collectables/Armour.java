@@ -2,7 +2,7 @@
 package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Pos2d;
+import dungeonmania.Pos2d; 
 import dungeonmania.entities.CollectableEntity;
 
 public class Armour extends CollectableEntity {
