@@ -1,10 +1,13 @@
 package dungeonmania;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -113,5 +116,48 @@ public class TestBattle {
         p = resp.getEntities().stream().filter(er -> er.getType().equals(ZombieToast.STRING_TYPE)).findFirst().get().getPosition();
         assertEquals(0, p.getX());
         assertEquals(2, p.getY());
+    }
+
+    @Test
+    public void testSimpleZombieBattleWithShield() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_shield_battle", GameMode.STANDARD.getValue());
+
+        // there are no spiders because the map is too small
+
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        ctr.tick("", Direction.RIGHT);
+        assertDoesNotThrow(() -> {
+            ctr.build(Shield.STRING_TYPE);
+        });
+
+        // more than the player can kill without a shield
+        int player_kills_n_zombies = 14;
+        
+        for (int j = 0; j < player_kills_n_zombies; j++) { 
+            for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                resp = ctr.tick("", Direction.NONE);
+            }
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+            // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            resp = ctr.tick("", Direction.NONE);
+
+            boolean hasShield = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Shield.STRING_TYPE));
+            if (j < 10) assertTrue(hasShield);
+            else assertTrue(!hasShield);
+
+            if (j == player_kills_n_zombies - 1) {
+                // the player has been killed
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+            } else {
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " zombies");
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            }
+        }
     }
 }
