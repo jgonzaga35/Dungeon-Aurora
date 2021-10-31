@@ -185,6 +185,8 @@ public class Dungeon {
         //           and *only* then call tick on them all
 
         this.player.handleMoveOrder(movementDirection);
+
+        if (itemUsed != null) inventory.useItem(itemUsed);
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
