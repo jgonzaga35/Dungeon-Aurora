@@ -7,6 +7,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -87,12 +88,16 @@ public class Player extends MovingEntity implements Fighter {
 
     @Override
     public float getDefenceCoef() {
+        if (this.dungeon.getInventory().itemsOfType(Shield.class).count() > 0) {
+            // if you have 2 shield, it's the same as having 1 shield
+            return 1.5f;
+        }
         return 1;
     }
 
     @Override
     public void usedItemFor(BattleDirection d) {
-        // TODO: update items durability
+        // this.dungeon.getInventory().usedItemsFor(d);
         
     }
 

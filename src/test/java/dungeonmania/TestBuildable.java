@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.buildables.Shield;
@@ -42,10 +43,11 @@ public class TestBuildable {
         Collections.sort(expected);
         assertEquals(expected, actual);
 
+        actual.clear();
         assertDoesNotThrow(() -> {
-            ctr.build(Shield.STRING_TYPE);
+            DungeonResponse r = ctr.build(Shield.STRING_TYPE);
+            actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
         });
-        actual = resp.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList());
         assertEquals(List.of(Shield.STRING_TYPE), actual);
     }
 
@@ -66,15 +68,16 @@ public class TestBuildable {
         });
         resp = ctr.tick(null, Direction.DOWN); // pick up the key
         List<String> actual = resp.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList());
-        List<String> expected = Arrays.asList(Wood.STRING_TYPE, Wood.STRING_TYPE, Treasure.STRING_TYPE);
+        List<String> expected = Arrays.asList(Wood.STRING_TYPE, Wood.STRING_TYPE, Key.STRING_TYPE);
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(expected, actual);
 
+        actual.clear();
         assertDoesNotThrow(() -> {
-            ctr.build(Shield.STRING_TYPE);
+            DungeonResponse r = ctr.build(Shield.STRING_TYPE);
+            actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
         });
-        actual = resp.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList());
         assertEquals(List.of(Shield.STRING_TYPE), actual);
     }
 
