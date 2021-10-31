@@ -137,9 +137,9 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
         assertDoesNotThrow(() -> {
             ctr.build(Shield.STRING_TYPE);
         });
@@ -150,13 +150,13 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                resp = ctr.tick("", Direction.NONE);
+                resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
 
             boolean hasShield = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Shield.STRING_TYPE));
             if (j < 6) assertTrue(hasShield, "j=" + j);
@@ -180,9 +180,9 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
 
         // more than the player can kill without a sword
         int player_kills_n_zombies = 16;
@@ -190,13 +190,13 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                resp = ctr.tick("", Direction.NONE);
+                resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
 
             boolean hasSword = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Sword.STRING_TYPE));
             if (j < 13) assertTrue(hasSword, "j=" + j);
@@ -220,9 +220,9 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
 
         // more than the player can kill without an armour
         int player_kills_n_zombies = 15;
@@ -230,13 +230,13 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                resp = ctr.tick("", Direction.NONE);
+                resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
 
             boolean hasArmour = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Armour.STRING_TYPE));
             if (j < 9) assertTrue(hasArmour, "j=" + j);
@@ -260,10 +260,10 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
         assertDoesNotThrow(() -> {
             ctr.build(Bow.STRING_TYPE);
         });
@@ -274,13 +274,13 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 3 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                resp = ctr.tick("", Direction.NONE);
+                resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
 
             boolean hasBow = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Bow.STRING_TYPE));
             if (j < 24) assertTrue(hasBow, "j=" + j);

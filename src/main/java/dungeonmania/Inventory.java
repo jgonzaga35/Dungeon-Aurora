@@ -18,8 +18,10 @@ public class Inventory {
     private List<CollectableEntity> collectables = new ArrayList<>();
 
     /**
+     * Can't pick up more than one key
+     * 
      * @param c collectable to add
-     * @return true if the inventory has changed as a result of this operation
+     * @return true if the player was able to pick the collectable up
      */
     public boolean add(CollectableEntity c) {
         if (c instanceof Key && hasKey()) {
