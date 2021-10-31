@@ -7,7 +7,6 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
-import dungeonmania.util.*;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
