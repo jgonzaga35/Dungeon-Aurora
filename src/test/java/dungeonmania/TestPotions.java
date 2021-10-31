@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -37,8 +38,72 @@ public class TestPotions {
     
     @Test
     public void testInvincibilityFleeBehaviour() {
+        Cell mercCell = dungeon.getMap().getCell(5, 7);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        dc.tick(null, Direction.UP);
+        
+        Integer mercDist = merc.getCell().getPlayerDistance();
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        
+        for (int i = 0; i < 5; i++) {
+            assertTrue(mercDist < merc.getCell().getPlayerDistance());
+            mercDist = merc.getCell().getPlayerDistance();
+            dc.tick(null, Direction.NONE);
+        }
+    }
+    
+    @Test
+    public void testInvincibilityAffectsNewSpawns() {        
+        dc.tick(null, Direction.UP);
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        
+        Cell mercCell = dungeon.getMap().getCell(5, 7);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        Integer mercDist = merc.getCell().getPlayerDistance();
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.NONE);
+            assertTrue(mercDist < merc.getCell().getPlayerDistance());
+            mercDist = merc.getCell().getPlayerDistance();
+        }
+    }
+    
+    @Test
+    public void testInvincibilityDuration() {        
+        dc.tick(null, Direction.UP);
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        
+        Cell mercCell = dungeon.getMap().getCell(5, 7);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        Integer mercDist = merc.getCell().getPlayerDistance();
+        for (int i = 0; i < 4; i++) {
+            dc.tick(null, Direction.NONE);
+            assertTrue(mercDist < merc.getCell().getPlayerDistance());
+            mercDist = merc.getCell().getPlayerDistance();
+        }
+
+        for (int i = 0; i < 4; i++) {
+            dc.tick(null, Direction.NONE);
+            assertTrue(mercDist > merc.getCell().getPlayerDistance());
+            mercDist = merc.getCell().getPlayerDistance();
+        }
+    }
+    
+    @Test
+    public void testMultiplePotionsWithZombie() {
         Cell zomCell = dungeon.getMap().getCell(5, 7);
-        ZombieToast zombie = new ZombieToast(dungeon, zomCell.getPosition());
+        Mercenary zombie = new Mercenary(dungeon, zomCell.getPosition());
         zomCell.addOccupant(zombie);
         
         dc.tick(null, Direction.UP);
@@ -54,23 +119,9 @@ public class TestPotions {
             dc.tick(null, Direction.NONE);
         }
     }
-    
-    @Test
-    public void testInvincibilityAffectsNewSpawns() {        
-        dc.tick(null, Direction.UP);
-        
-        // use pot
-        dc.tick(invincibilityPot.getId(), Direction.NONE);
 
-        Cell zomCell = dungeon.getMap().getCell(5, 7);
-        ZombieToast zombie = new ZombieToast(dungeon, zomCell.getPosition());
-        zomCell.addOccupant(zombie);
-        
-        Integer zomDist = zombie.getCell().getPlayerDistance();
-        for (int i = 0; i < 5; i++) {
-            dc.tick(null, Direction.NONE);
-            assertTrue(zomDist < zombie.getCell().getPlayerDistance());
-            zomDist = zombie.getCell().getPlayerDistance();
-        }
+    @Test
+    public void testInvincibilityOnSpiders() {
+
     }
 }
