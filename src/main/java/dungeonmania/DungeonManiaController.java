@@ -1,11 +1,8 @@
 package dungeonmania;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 import org.json.JSONObject;
 
@@ -17,6 +14,7 @@ import dungeonmania.util.FileLoader;
 
 public class DungeonManiaController {
     private Dungeon dungeon;
+    private Map<String, Dungeon> savedGames = new HashMap<>();
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
@@ -119,11 +117,13 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        return null;
+        savedGames.put(name, this.dungeon);
+        return this.makeDungeonResponse();
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        this.dungeon = savedGames.get(name);
+        return this.makeDungeonResponse();
     }
 
     public List<String> allGames() {
