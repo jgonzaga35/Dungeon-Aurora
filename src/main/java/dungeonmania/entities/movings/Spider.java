@@ -125,7 +125,7 @@ public class Spider extends MovingEntity implements Fighter {
     }
 
     /**
-     * Helper method, ensures that currtentMovementStage is in s
+     * Helper method, ensures that currtentMovementStage is inside
      * the range [0,7].
      */
     private void stayInBound() {
