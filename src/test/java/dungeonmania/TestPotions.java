@@ -54,4 +54,23 @@ public class TestPotions {
             dc.tick(null, Direction.NONE);
         }
     }
+    
+    @Test
+    public void testInvincibilityAffectsNewSpawns() {        
+        dc.tick(null, Direction.UP);
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+
+        Cell zomCell = dungeon.getMap().getCell(5, 7);
+        ZombieToast zombie = new ZombieToast(dungeon, zomCell.getPosition());
+        zomCell.addOccupant(zombie);
+        
+        Integer zomDist = zombie.getCell().getPlayerDistance();
+        for (int i = 0; i < 5; i++) {
+            assertTrue(zomDist < zombie.getCell().getPlayerDistance());
+            zomDist = zombie.getCell().getPlayerDistance();
+            dc.tick(null, Direction.NONE);
+        }
+    }
 }
