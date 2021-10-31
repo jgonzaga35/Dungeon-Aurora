@@ -51,9 +51,10 @@ public class Inventory {
      * Raise an InvalidActionException if the item is not in the inventory.
      * 
      * @param entityId to be used
+     * @return the entity used.
      * 
      */
-    public void useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
+    public CollectableEntity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
 
         // find item
         CollectableEntity itemUsed = collectables.stream()
@@ -73,6 +74,8 @@ public class Inventory {
         //TODO: add bomb
 
         collectables.remove(itemUsed);
+        
+        return itemUsed;
     }
 
     public List<ItemResponse> asItemResponses() {

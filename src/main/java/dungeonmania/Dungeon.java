@@ -47,6 +47,7 @@ public class Dungeon {
     private Player player;
     private String name;
     private Inventory inventory = new Inventory();
+    private List<Potion> activePotions = new ArrayList<>();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -194,10 +195,17 @@ public class Dungeon {
 
         dungeonMap.flood();
 
-        if (itemUsed != null) inventory.useItem(itemUsed);
+        CollectableEntity item = null;
+        if (itemUsed != null) item = inventory.useItem(itemUsed);
+        if (item instanceof Potion) activePotions.add((Potion)item);
         
-        dungeonMap.allEntities().stream().forEach(entity -> {if (entity instanceof Potion) entity.tick();});
-        dungeonMap.allEntities().stream().forEach(entity -> {if (!(entity instanceof Potion)) entity.tick();});
+        // make sure all potion effects are applied and remove inactive potions.
+        List<Potion> activePotionCpy = new ArrayList<>(activePotions);
+        activePotionCpy.stream().forEach(pot -> {
+            pot.tick();
+            if (!pot.isActive()) activePotions.remove(pot);
+        });
+        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
         pickupCollectableEntities();
 

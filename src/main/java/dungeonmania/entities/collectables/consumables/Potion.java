@@ -33,6 +33,10 @@ public abstract class Potion extends CollectableEntity {
      */
     public abstract void expire();
 
+    public boolean isActive() {
+        return duration > 0;
+    }
+    
     @Override
     public boolean isInteractable() {
         return false;
