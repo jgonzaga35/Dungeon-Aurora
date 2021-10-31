@@ -122,12 +122,13 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        if (!savedGames.containsKey(name)) throw new IllegalArgumentException();
         this.dungeon = savedGames.get(name);
         return this.makeDungeonResponse();
     }
 
     public List<String> allGames() {
-        return new ArrayList<>();
+        return savedGames.keySet().stream().collect(Collectors.toList());
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection)
