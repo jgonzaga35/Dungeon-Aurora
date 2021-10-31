@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -18,6 +19,8 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
+import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -44,6 +47,7 @@ public class Dungeon {
     private Player player;
     private String name;
     private Inventory inventory = new Inventory();
+    private List<Potion> activePotions = new ArrayList<>();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -114,6 +118,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
+            } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
+                cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
@@ -135,6 +141,7 @@ public class Dungeon {
             else {
                 throw new Error("unhandled entity type: " + type);
             }
+
         }
 
         if (player == null) {
@@ -163,8 +170,7 @@ public class Dungeon {
         if (playerCell.getOccupants() == null) {
             return;
         }
-
-        List<Entity> playerCellOccupants = playerCell.getOccupants();
+        List<Entity> playerCellOccupants = new ArrayList<>(playerCell.getOccupants());
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
@@ -188,10 +194,23 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
+
+        CollectableEntity item = null;
+        if (itemUsed != null) item = inventory.useItem(itemUsed);
+        if (item instanceof Potion) activePotions.add((Potion)item);
         
-        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        // make sure all potion effects are applied and remove inactive potions.
+        List<Potion> activePotionCpy = new ArrayList<>(activePotions);
+        activePotionCpy.stream().forEach(pot -> {
+            pot.tick();
+            if (!pot.isActive()) activePotions.remove(pot);
+        });
+        dungeonMap.allEntities().stream()
+            .filter(e -> !(e instanceof Potion))
+            .forEach(entity -> entity.tick());
         
         pickupCollectableEntities();
+
         
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();

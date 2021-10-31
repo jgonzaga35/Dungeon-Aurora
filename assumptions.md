@@ -16,3 +16,5 @@
 - New mercenaries spawn every 10 ticks on maps with at least one enemy present at that point.
 - Allies can see the player when invisible.
 - IllegalArgumentException when the player bribes a friendly mercenary.
+
+- Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.

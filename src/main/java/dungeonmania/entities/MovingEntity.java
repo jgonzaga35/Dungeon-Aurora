@@ -56,6 +56,7 @@ public abstract class MovingEntity extends Entity {
         assert this.position.equals(this.movementBehaviours.peek().getCurrentCell().getPosition());
 
         Cell cell = this.movementBehaviours.peek().move();
+        this.movementBehaviours.stream().forEach(b -> b.setCurrentCell(cell));
         this.moveTo(cell);
         return cell;
     }
@@ -73,6 +74,22 @@ public abstract class MovingEntity extends Entity {
         this.position = target.getPosition();
         this.getCell().onWalked(from.getPosition(), this.position);
     }
+
+    // /**
+    //  * Activates the effects of the given consumable on this entity. The same 
+    //  * consumable can affect entities in different ways. These changes are handled
+    //  * in the sub classes.
+    //  * 
+    //  * ex. A health potion being consumed heals the player but does nothing to 
+    //  * enemies.
+    //  * 
+    //  * @param consumable the consumable who's effect to apply
+    //  */
+    // public void activateConsumable(ConsumableEntity consumable) {
+    //     if (consumable instanceof InvincibilityPotion) {
+    //         addMovementBehaviour(new FleeMovementBehaviour(2, dungeon.getMap(), getCell()));
+    //     }
+    // }
 
     @Override
     public boolean isInteractable() {

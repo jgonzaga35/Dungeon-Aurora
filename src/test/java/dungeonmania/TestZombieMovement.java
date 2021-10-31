@@ -48,7 +48,7 @@ public class TestZombieMovement {
         }
 
         for (int i = 1; i < 200; i++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             for (EntityResponse er : resp.getEntities()) {
                 if (er.getType() != ZombieToast.STRING_TYPE) 
                     continue;

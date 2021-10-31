@@ -22,31 +22,31 @@ public class TestWalk {
         });
 
         // don't move
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(0, p.getY());
 
         // move on a free spot
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());
 
         // try to move against a wall
-        resp  = ctr.tick("", Direction.DOWN);
+        resp  = ctr.tick(null, Direction.DOWN);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());
 
         // try to move out of the map
-        resp  = ctr.tick("", Direction.UP);
+        resp  = ctr.tick(null, Direction.UP);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());
 
         // move back to starting point
-        resp  = ctr.tick("", Direction.LEFT);
+        resp  = ctr.tick(null, Direction.LEFT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(0, p.getY());

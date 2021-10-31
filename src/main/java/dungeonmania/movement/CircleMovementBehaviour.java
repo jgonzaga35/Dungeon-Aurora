@@ -6,6 +6,7 @@ import java.util.List;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
+import dungeonmania.util.Direction;
 
 public class CircleMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
@@ -13,17 +14,14 @@ public class CircleMovementBehaviour extends MovementBehaviour {
     public DungeonMap getMap() {
         return this.map;
     }
-
-    private Cell currentCell;
     private List<Pos2d> movementCycle = new ArrayList<>();
     private int step = 0;
     private int direction = 1;
 
     public CircleMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
-        super(precedence);
+        super(precedence, initialCell);
         this.map = map;
-        this.currentCell = initialCell;
         int initialX = initialCell.getPosition().getX();
         int initialY = initialCell.getPosition().getY();
 
@@ -62,13 +60,18 @@ public class CircleMovementBehaviour extends MovementBehaviour {
     }
 
     public Cell move()
-    {
-        System.out.println("Step: " + step);
-        System.out.println("Direction: " + direction);
-        
+    {   
         Cell nextCell = map.getCell(movementCycle.get(step));
-        if (nextCell.hasBoulder())
+        if (nextCell == null || nextCell.hasBoulder())
         {
+            // The case where the spider spawns right under the boundry
+            if (step == 0 && nextCell == null) {
+                step++;
+                setCurrentCell(map.getCellAround(getCurrentCell(), Direction.DOWN));
+                nextCell = map.getCell(movementCycle.get(0));
+                super.setCurrentCell(nextCell);
+                return nextCell;
+            }
             direction *= -1;
             step += direction;
 
@@ -76,8 +79,6 @@ public class CircleMovementBehaviour extends MovementBehaviour {
             if (step > 7) step = 0;
             if (step < 0) step = 7;
 
-            System.out.println("Step2: " + step);
-            System.out.println("Direction2: " + direction);
             nextCell = map.getCell(movementCycle.get(step));
         }
         step += direction;
@@ -85,14 +86,25 @@ public class CircleMovementBehaviour extends MovementBehaviour {
         if (step > 7) step = 0; 
         if (step < 0) step = 7; 
 
-        currentCell = nextCell;
+        super.setCurrentCell(nextCell);
 
-        return currentCell;
+        return nextCell;
     }
 
-    public Cell getCurrentCell()
-    {
-        return currentCell;
+    /**
+     * Updates the position but also moves the movement circle along.
+     */
+    @Override
+    public void setCurrentCell(Cell cell) {
+        int xDiff = getCurrentCell().getPosition().getX() - cell.getPosition().getX();
+        int yDiff = getCurrentCell().getPosition().getY() - cell.getPosition().getY();
+
+        super.setCurrentCell(cell);
+
+        movementCycle.stream().forEach(pos -> {
+            pos.setX(pos.getX() - xDiff);
+            pos.setY(pos.getY() - yDiff);
+        });
     }
     
 }
