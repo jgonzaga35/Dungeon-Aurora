@@ -1,7 +1,5 @@
 package dungeonmania.entities.movings;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import dungeonmania.Cell;
@@ -12,18 +10,11 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.CircleMovementBehaviour;
-import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.util.Direction;
 
 public class Spider extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "spider";
-
-    private List<Cell> movementMap = new ArrayList<>();
-    private int currentMovementStage = 0;
-    private int direction = 1;
-    private boolean hasMoved = false;
 
     private float health = 1;
     
@@ -85,74 +76,11 @@ public class Spider extends MovingEntity implements Fighter {
                 dungeon.getMap().getCell(position)
             )
         );
-        makeSpiderMap(dungeon.getMap());
-    }
-
-    /**
-     * Stores the cells around a spider's spawn in an array
-     * @param dungeonMap
-     */
-    private void makeSpiderMap(DungeonMap dungeonMap) {
-        Cell current = dungeonMap.getCellAround(super.getCell(), Direction.UP);
-        movementMap.add(current);
-        current = dungeonMap.getCellAround(current, Direction.RIGHT);
-        movementMap.add(current);
-        for (int i = 0; i < 2; i++) {
-            current = dungeonMap.getCellAround(current, Direction.DOWN);
-            movementMap.add(current);
-        }
-        for (int i = 0; i < 2; i++) {
-            current = dungeonMap.getCellAround(current, Direction.LEFT);
-            movementMap.add(current);
-        }
-        for (int i = 0; i < 2; i++) {
-            current = dungeonMap.getCellAround(current, Direction.UP);
-            movementMap.add(current);
-        }
-    }
-
-    /**
-     * The spider moves in the circular pattern
-     */
-    private void spiderMove() {
-        for (int i = 0; i < 2; i++) {
-            // A spider should only be able to change direction twice
-            // per move/tick. Eg. if a spider is caught between two boulders
-            // it would not infinitely loop.
-            currentMovementStage += direction;
-            stayInBound();
-            if (movementMap.get(currentMovementStage).hasBoulder()) {
-                // Boulder in path, change direction
-                direction = direction * -1;
-                currentMovementStage += direction;
-                stayInBound();
-            } else {
-                super.moveTo(movementMap.get(currentMovementStage));
-                return;
-            }
-        }
-    }
-
-    /**
-     * Helper method, ensures that currtentMovementStage is inside
-     * the range [0,7].
-     */
-    private void stayInBound() {
-        if (currentMovementStage > 7) currentMovementStage = 0;
-        if (currentMovementStage < 0) currentMovementStage = 7;
     }
 
     @Override
     public void tick() {
         this.move();
-        // if (hasMoved) {
-        //     spiderMove();
-        // } else {
-        //     if (!movementMap.get(0).hasBoulder()) {
-        //         super.moveTo(movementMap.get(0));
-        //         hasMoved = true;
-        //     }
-        // }
     }
 
     @Override
