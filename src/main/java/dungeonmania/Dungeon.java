@@ -21,6 +21,7 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Arrow;
@@ -185,7 +186,7 @@ public class Dungeon {
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
-
+        
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
         pickupCollectableEntities();
@@ -297,5 +298,35 @@ public class Dungeon {
             outputListItemResponses.add(currItemResponse);
         }
         return outputListItemResponses;
+    }
+
+    /**
+     * Attempts to bribe the map's mercenary raises an InvalidActionException
+     * when:
+     * - The player is not in range to bribe the mercenary
+     * - The player does not have any gold.
+     * 
+     * @return true if the action succeeds and false if there is no unfriendly 
+     * mercenary on the map.
+     */
+    public boolean bribeMercenary() {
+        if (collectables.stream().noneMatch(c -> c instanceof Treasure)) {
+            throw new InvalidActionException("The player has nothing to bribe with.");
+        }
+        Mercenary merc = (Mercenary) dungeonMap.allEntities().stream()
+            .filter(e -> e instanceof Mercenary)
+            .findFirst().orElse(null);
+
+        if (merc == null || merc.getFighterRelation() == FighterRelation.ALLY) {
+            return false;
+        }
+
+        if (merc.getCell().getPlayerDistance() > 2) {
+            throw new InvalidActionException("Too far, the mercenary can't hear you");
+        }
+
+        merc.bribe();
+
+        return true;
     }
 }
