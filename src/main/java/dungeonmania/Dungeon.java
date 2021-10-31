@@ -176,41 +176,24 @@ public class Dungeon {
         }
         //Check if Bomb is Being Placed 
         if (itemUsed.length() != 0) {
-            System.out.println("Ran that Bomb was Placed");
             List<CollectableEntity> collectables = inventory.getCollectables();
             if (collectables.size() == 0) {
                 return;
             }
             boolean itemPlaced = false;
             CollectableEntity collectableRemoved = collectables.get(0);
-            System.out.println(collectables.toString());
             for (CollectableEntity currCollectable : collectables) {
-                System.out.println("ItemUsed ID");
-                System.out.println(itemUsed);
-                System.out.println("Current Collectable");
-                System.out.println(currCollectable.getTypeAsString());
-                System.out.println(currCollectable.getId());
-                if (currCollectable.getTypeAsString() == "bomb") {
-                    System.out.println("Works 1");
-                }
-                if (itemUsed.equals(currCollectable.getId())) {
-                    System.out.println(" Works 2");
-                }
                 if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
                     //Place Bomb & Remove from Collectables
-                    System.out.println("Bomb placed");
                     collectableRemoved = currCollectable;
                     Bomb removedBomb = (Bomb) collectableRemoved;
                     removedBomb.setIsPlaced();
                     removedBomb.updatePosition(playerXCoord, playerYCoord);
-
                     playerCell.addOccupant(removedBomb);
-                    
                     itemPlaced = true;
                 }
             }
             if (itemPlaced == true) {
-                System.out.println("Remove from inentory");
                 inventory.remove(collectableRemoved);
                 dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
             }

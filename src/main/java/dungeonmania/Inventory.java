@@ -23,13 +23,10 @@ public class Inventory {
         if (c instanceof Bomb) {
             // Player cannot pickup bomb already placed
             Bomb bomb = (Bomb) c;
-            System.out.println(bomb.toString());
             if (bomb.getIsPlaced() == true) {
-                System.out.println("It was placed");
                 return false;
             }
         } 
-        System.out.println("Ran that bomb is Picked Up");
         return this.collectables.add(c);
     }
 
