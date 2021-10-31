@@ -13,7 +13,7 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
-public class TestConsumables {
+public class TestPotions {
     DungeonManiaController dc;
     Dungeon dungeon;
 
