@@ -85,16 +85,16 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.NONE);
+        ctr.tick(null, Direction.NONE);
 
         for (int i = 0; i < 19; i++) {
             assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
         }
         assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
-        resp = ctr.tick("", Direction.UP);
+        resp = ctr.tick(null, Direction.UP);
 
         // the zombie no *has* to move on the player's cell (ie. down)
         // BUT, the player moves up
