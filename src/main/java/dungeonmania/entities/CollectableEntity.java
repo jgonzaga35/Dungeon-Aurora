@@ -10,6 +10,7 @@ public abstract class CollectableEntity extends Entity {
         super(dungeon, position);
     }
 
+
     @Override
     public LayerLevel getLayerLevel() {
         return LayerLevel.MOVING_ENTITY;

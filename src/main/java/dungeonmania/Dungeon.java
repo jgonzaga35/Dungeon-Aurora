@@ -26,6 +26,7 @@ import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
@@ -103,6 +104,8 @@ public class Dungeon {
                 cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
+                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
@@ -285,4 +288,6 @@ public class Dungeon {
         }
         return outputListItemResponses;
     }
+
+    
 }
