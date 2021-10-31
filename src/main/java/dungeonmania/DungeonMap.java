@@ -257,6 +257,7 @@ public class DungeonMap {
      */
     public Stream<Cell> getCellsAround(Cell base) {
         return Arrays.stream(Direction.values())
+            .filter(d -> d != Direction.NONE)
             .map(direction -> this.getCellAround(base, direction))
             .filter(cell -> cell != null);
     }

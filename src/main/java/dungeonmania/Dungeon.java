@@ -11,22 +11,23 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Boulder;
+import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.Armour;
-import dungeonmania.entities.collectables.Key;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
@@ -41,7 +42,7 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
-    private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
+    private Inventory inventory = new Inventory();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -105,7 +106,9 @@ public class Dungeon {
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
+            } else if (Objects.equals(type, Door.STRING_TYPE)) {
+                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
@@ -159,15 +162,14 @@ public class Dungeon {
         if (playerCell.getOccupants() == null) {
             return;
         }
+
         List<Entity> playerCellOccupants = playerCell.getOccupants();
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
                 //Add To Collectables Inventory
-                this.collectables.add(collectableOccupant);
                 //Remove the Collectable From the Current Cell
-                playerCell.removeOccupant(occupant);
-
+                if (this.inventory.add(collectableOccupant)) playerCell.removeOccupant(occupant);
             }
         }
     }
@@ -284,18 +286,15 @@ public class Dungeon {
         return dungeonMap;
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
     /**
      * Returns the Inventory in the form of a list of
      * ItemResponse instances. 
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
-        List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
-        for (CollectableEntity item : collectables) {
-            String id = item.getId();
-            String type = item.getTypeAsString();
-            ItemResponse currItemResponse = new ItemResponse(id, type);
-            outputListItemResponses.add(currItemResponse);
-        }
-        return outputListItemResponses;
+        return this.inventory.asItemResponses();
     }
 }

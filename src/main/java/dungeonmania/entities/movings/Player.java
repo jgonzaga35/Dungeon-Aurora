@@ -50,6 +50,10 @@ public class Player extends MovingEntity implements Fighter {
                 //try to push boulder
                 if (target.pushBoulder(d)) this.moveTo(target);
                 return;
+            case DOOR:
+                //try to unlocked door
+                if (target.unlockDoor()) this.moveTo(target);
+                return;
             default:
                 return;
         }

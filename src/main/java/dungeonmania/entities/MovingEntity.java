@@ -47,10 +47,19 @@ public abstract class MovingEntity extends Entity {
         return this.movementBehaviours.remove(ms);
     }
 
-    public Cell shouldMoveTo() {
+    /**
+     * Moves to wherever the movement behaviour tells it to
+     * @return the cell the entity is now on
+     */
+    public Cell move() {
         assert this.movementBehaviours.size() > 0;
-        return this.movementBehaviours.peek().move();
+        assert this.position.equals(this.movementBehaviours.peek().getCurrentCell().getPosition());
+
+        Cell cell = this.movementBehaviours.peek().move();
+        this.moveTo(cell);
+        return cell;
     }
+
 
     /**
      * Moves an entity from the current cell to the target cell
