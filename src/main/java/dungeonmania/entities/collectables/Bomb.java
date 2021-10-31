@@ -148,11 +148,21 @@ public class Bomb extends CollectableEntity {
         return false; // i don't think so at least
     }
 
-    //If Cardinally Adjacent to Floor Switch Then Explode
+    private void setIsPlaced() {
+        this.isPlaced = true;
+    }
+
+    /**
+     * Called when Bomb is Placed
+     */
     @Override
     public void tick() {
+        //If Bomb is Cardinally Adjacent to Floor Switch then Explode
+        setIsPlaced();
         if (bombCheckCardinalAdjacency()) {
             explode();
         }
+
+
     }
 }

@@ -31,11 +31,6 @@
       "x": 6,
       "y": 4,
       "type": "wall"
-    },
-    {
-      "x": 7,
-      "y": 3,
-      "type": "switch"
     }
   ],
   "goal-condition": {
