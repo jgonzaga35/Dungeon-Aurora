@@ -110,6 +110,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
+            } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
+                cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
