@@ -68,6 +68,7 @@ public class TestPotions {
         mercCell.addOccupant(merc);
         
         Integer mercDist = merc.getCell().getPlayerDistance();
+        // 4 ticks left
         for (int i = 0; i < 4; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(mercDist < merc.getCell().getPlayerDistance());
@@ -97,26 +98,6 @@ public class TestPotions {
             dc.tick(null, Direction.NONE);
             assertTrue(mercDist > merc.getCell().getPlayerDistance());
             mercDist = merc.getCell().getPlayerDistance();
-        }
-    }
-    
-    @Test
-    public void testMultiplePotionsWithZombie() {
-        Cell zomCell = dungeon.getMap().getCell(5, 7);
-        Mercenary zombie = new Mercenary(dungeon, zomCell.getPosition());
-        zomCell.addOccupant(zombie);
-        
-        dc.tick(null, Direction.UP);
-        
-        Integer zomDist = zombie.getCell().getPlayerDistance();
-
-        // use pot
-        dc.tick(invincibilityPot.getId(), Direction.NONE);
-
-        for (int i = 0; i < 5; i++) {
-            assertTrue(zomDist < zombie.getCell().getPlayerDistance());
-            zomDist = zombie.getCell().getPlayerDistance();
-            dc.tick(null, Direction.NONE);
         }
     }
 
