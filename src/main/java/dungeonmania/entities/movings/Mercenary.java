@@ -16,7 +16,7 @@ public class Mercenary extends MovingEntity implements Fighter {
         super(dungeon, position);
         this.addMovementBehaviour(
             new FollowMovementBehaviour(
-                3, 
+                0, 
                 dungeon.getMap(), 
                 dungeon.getMap().getCell(position)
             )
