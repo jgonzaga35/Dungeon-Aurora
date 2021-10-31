@@ -79,6 +79,63 @@ public class TestPotions {
     }
     
     @Test
+    public void testInvincibilityBattles() {        
+        dc.tick(null, Direction.UP);
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        
+        // player at 5, 4
+        Cell mercCell = dungeon.getMap().getCell(5, 5);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        Cell mercCell2 = dungeon.getMap().getCell(5, 3);
+        Mercenary merc2 = new Mercenary(dungeon, mercCell2.getPosition());
+        mercCell2.addOccupant(merc2);
+        
+        Cell mercCell3 = dungeon.getMap().getCell(4, 4);
+        Mercenary merc3 = new Mercenary(dungeon, mercCell3.getPosition());
+        mercCell3.addOccupant(merc3);
+        
+        Cell mercCell4 = dungeon.getMap().getCell(6, 4);
+        Mercenary merc4 = new Mercenary(dungeon, mercCell4.getPosition());
+        mercCell4.addOccupant(merc4);
+        
+        // battle where player would have died.
+        DungeonResponse dr = dc.tick(null, Direction.NONE);
+        
+        assertEquals(1, TestUtils.countEntitiesOfType(dr, "player"));
+        
+        // remove Potion effect
+        for (int i = 0; i < 7; i++) dr = dc.tick(null, Direction.NONE);
+        
+        // now player should die
+        
+        Cell mercCell5 = dungeon.getMap().getCell(5, 5);
+        Mercenary merc5 = new Mercenary(dungeon, mercCell5.getPosition());
+        mercCell5.addOccupant(merc5);
+        
+        Cell mercCell6 = dungeon.getMap().getCell(5, 3);
+        Mercenary merc6 = new Mercenary(dungeon, mercCell6.getPosition());
+        mercCell6.addOccupant(merc6);
+        
+        Cell mercCell7 = dungeon.getMap().getCell(4, 4);
+        Mercenary merc7 = new Mercenary(dungeon, mercCell7.getPosition());
+        mercCell7.addOccupant(merc7);
+        
+        Cell mercCell8 = dungeon.getMap().getCell(6, 4);
+        Mercenary merc8 = new Mercenary(dungeon, mercCell8.getPosition());
+        mercCell8.addOccupant(merc8);
+        
+        // battle where player should died.
+        dr = dc.tick(null, Direction.NONE);
+        
+        assertEquals(0, TestUtils.countEntitiesOfType(dr, "player"));
+        
+    }
+    
+    @Test
     public void testInvincibilityDuration() {        
         dc.tick(null, Direction.UP);
         

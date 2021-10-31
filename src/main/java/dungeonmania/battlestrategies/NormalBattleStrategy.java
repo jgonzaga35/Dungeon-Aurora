@@ -3,7 +3,9 @@ package dungeonmania.battlestrategies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
@@ -38,7 +40,7 @@ public class NormalBattleStrategy implements BattleStrategy {
         // buffer (to not allocate a list every time. I like useless optimisations)
         List<Fighter> allies = new ArrayList<>();
         List<Fighter> enemies = new ArrayList<>();
-        List<Fighter> deaths = new ArrayList<>();
+        Set<Fighter> deaths = new HashSet<>();
 
         // this is important to form duels in a reproducible way (see
         // performRound for more details). Sort by health, attack damage and
@@ -77,7 +79,9 @@ public class NormalBattleStrategy implements BattleStrategy {
 
                 for (Fighter dead: deaths) {
                     // TODO: check if dead is player. This should be weird
-                    boolean result = map.getCell(x, y).removeOccupant(dead.getEntity());
+                    Entity e = dead.getEntity();
+                    
+                    boolean result = map.getCell(e.getPosition()).removeOccupant(e);
                     if (result == false) {
                         throw new Error("couldn't remove dead entity");
                     }
@@ -117,7 +121,7 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @param enemies
      * @param deaths
      */
-    private void performBattle(List<Fighter> allies, List<Fighter> enemies, List<Fighter> deaths) {
+    private void performBattle(List<Fighter> allies, List<Fighter> enemies, Set<Fighter> deaths) {
         assert allies.size() > 0;
         assert enemies.size() > 0;
         assert deaths.size() == 0;
@@ -151,7 +155,7 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @param enemies
      * @param deaths
      */
-    private void performRound(List<Fighter> allies, List<Fighter> enemies, List<Fighter> deaths) {
+    private void performRound(List<Fighter> allies, List<Fighter> enemies, Set<Fighter> deaths) {
 
         // form duels
 
