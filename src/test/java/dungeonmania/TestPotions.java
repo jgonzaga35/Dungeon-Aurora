@@ -68,9 +68,9 @@ public class TestPotions {
         
         Integer zomDist = zombie.getCell().getPlayerDistance();
         for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.NONE);
             assertTrue(zomDist < zombie.getCell().getPlayerDistance());
             zomDist = zombie.getCell().getPlayerDistance();
-            dc.tick(null, Direction.NONE);
         }
     }
 }
