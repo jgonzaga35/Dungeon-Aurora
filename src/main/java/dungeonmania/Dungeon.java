@@ -205,7 +205,9 @@ public class Dungeon {
             pot.tick();
             if (!pot.isActive()) activePotions.remove(pot);
         });
-        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        dungeonMap.allEntities().stream()
+            .filter(e -> !(e instanceof Potion))
+            .forEach(entity -> entity.tick());
         
         pickupCollectableEntities();
 
