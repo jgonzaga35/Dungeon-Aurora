@@ -1,13 +1,8 @@
 package dungeonmania.entities.movings;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
-import dungeonmania.Utils;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
@@ -20,14 +15,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
 
     public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.addMovementBehaviour(
-            new RandomMovementBehaviour(
-                0, 
-                dungeon.getMap(), 
-                dungeon.getMap().getCell(position)
-            )
-            // coment
-        );
+        this.addMovementBehaviour(new RandomMovementBehaviour(0, dungeon.getMap(), dungeon.getMap().getCell(position)));
     }
 
     @Override
@@ -37,8 +25,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
 
     @Override
     public void tick() {
-        // move in a random direction        
-        if (shouldMoveTo() != null) this.moveTo(shouldMoveTo());
+        this.move();
     }
 
     @Override
