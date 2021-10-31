@@ -56,7 +56,6 @@ public class TestMercenary {
         
         for (int i = 0; i < 5; i++) {
             resp = dc.tick(null, Direction.UP);
-            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -92,7 +91,6 @@ public class TestMercenary {
         
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
-            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -106,30 +104,36 @@ public class TestMercenary {
         // player pos (7, 0)
         // merc pos (6, 0)
         
-        dc.interact("mercenary");
+        dc.interact(merc.getId());
         dc.tick(null, Direction.UP);
         // player pos (7, 0)
         assertEquals(new Pos2d(6, 0), merc.getPosition());
         assertEquals(new Pos2d(7, 0), player.getPosition());
         
         dc.tick(null, Direction.LEFT);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
+        assertTrue(
+            merc.getPosition().equals(new Pos2d(5, 0)) || 
+            merc.getPosition().equals(new Pos2d(6, 1)) ||
+            merc.getPosition().equals(new Pos2d(7, 0))
+        );
         // player pos (6, 0)
         
         dc.tick(null, Direction.LEFT);
-        assertEquals(new Pos2d(4, 0), merc.getPosition());
+        
+        dc.tick(null, Direction.LEFT);
+        assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (5, 0)
         
         dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
+        assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 0)
         
         dc.tick(null, Direction.DOWN);
-        assertEquals(new Pos2d(5, 1), merc.getPosition());
+        assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 1)
         
         dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
+        assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 0)
     }
 
