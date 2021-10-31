@@ -3,6 +3,7 @@ package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -36,37 +37,42 @@ public class TestMercenary {
         merc = (Mercenary) dungeon.getMap().allEntities().stream()
             .filter(e -> e instanceof Mercenary)
             .findFirst().get();
+
+        dungeon.getMap().flood();
     }
 
     @Test
     public void testHostileMovement() {
         DungeonResponse resp;
-        resp = dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(1, 0), merc.getPosition());
-        // player pos (6, 5)
-        
-        resp = dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(2, 0), merc.getPosition());
+        Integer dist = merc.getCell().getPlayerDistance();
+
+        for (int i = 0; i < 2; i++) {
+            resp = dc.tick(null, Direction.RIGHT);
+
+            assertTrue(merc.getCell().getPlayerDistance() == dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
         // player pos (7, 5)
         
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(3, 0), merc.getPosition());
-        // player pos (7, 4)
+        for (int i = 0; i < 5; i++) {
+            resp = dc.tick(null, Direction.UP);
+            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
+            assertTrue(merc.getCell().getPlayerDistance() <= dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
         
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(4, 0), merc.getPosition());
-        // player pos (7, 3)
-        
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
-        // player pos (7, 2)
-        
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(6, 0), merc.getPosition());
-        // player pos (7, 1)
+        for (int i = 0; i < 5; i++) {
+            resp = dc.tick(null, Direction.NONE);
+            assertTrue(merc.getCell().getPlayerDistance() < dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
+        // merc pos (6, 0)
         
         resp = dc.tick(null, Direction.UP);
         // player pos (7, 0)
+        // merc pos (7, 0)
         // battle should happen
         assertEquals(0, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE));
         assertEquals(new Pos2d(7, 0), player.getPosition());
@@ -74,34 +80,35 @@ public class TestMercenary {
 
     @Test
     public void testFriendlyMovement() {
-        dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(1, 0), merc.getPosition());
-        // player pos (6, 5)
-        
-        dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(2, 0), merc.getPosition());
+        Integer dist = merc.getCell().getPlayerDistance();
+
+        for (int i = 0; i < 2; i++) {
+            dc.tick(null, Direction.RIGHT);
+
+            assertTrue(merc.getCell().getPlayerDistance() == dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
         // player pos (7, 5)
         
-        dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(3, 0), merc.getPosition());
-        // player pos (7, 4)
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.UP);
+            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
+            assertTrue(merc.getCell().getPlayerDistance() <= dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
         
-        dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(4, 0), merc.getPosition());
-        // player pos (7, 3)
-        
-        dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
-        // player pos (7, 2)
-        
-        dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(6, 0), merc.getPosition());
-        // player pos (7, 1)
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.NONE);
+            assertTrue(merc.getCell().getPlayerDistance() < dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
+        // merc pos (6, 0)
         
         dc.interact("mercenary");
         dc.tick(null, Direction.UP);
         // player pos (7, 0)
-        // battle should happen
         assertEquals(new Pos2d(6, 0), merc.getPosition());
         assertEquals(new Pos2d(7, 0), player.getPosition());
         
@@ -128,45 +135,43 @@ public class TestMercenary {
 
     @Test
     public void testBribe() {
-        DungeonResponse resp;
-        
+        Integer dist = merc.getCell().getPlayerDistance();
+
         // Try bribing with no money
         assertThrows(InvalidActionException.class, () -> {
             dc.interact("mercenary");
         });
-        
-        resp = dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(1, 0), merc.getPosition());
-        // player pos (6, 5)
 
+        for (int i = 0; i < 2; i++) {
+            dc.tick(null, Direction.RIGHT);
+            
+            assertTrue(merc.getCell().getPlayerDistance() == dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 5)
         // Try bribing outside of range
         assertThrows(InvalidActionException.class, () -> {
             dc.interact("mercenary");
         });
         
-        resp = dc.tick(null, Direction.RIGHT);
-        assertEquals(new Pos2d(2, 0), merc.getPosition());
-        // player pos (7, 5)
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.UP);
+            assertTrue(merc.getCell().getPlayerDistance() <= dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
         
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(3, 0), merc.getPosition());
-        // player pos (7, 4)
-        
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(4, 0), merc.getPosition());
-        // player pos (7, 3)
-        
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(5, 0), merc.getPosition());
-        // player pos (7, 2)
-        
-        resp = dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(6, 0), merc.getPosition());
-        // player pos (7, 1)
+        for (int i = 0; i < 4; i++) {
+            dc.tick(null, Direction.NONE);
+            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
+            assertTrue(merc.getCell().getPlayerDistance() < dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
+        // merc pos (5, 0)
         // two cardinal squares away, bribe possible
 
-        assertDoesNotThrow(() -> dc.interact("mercenary"));
-        
+        assertDoesNotThrow(() -> dc.interact("mercenary"));    
     }
 
     @Test
