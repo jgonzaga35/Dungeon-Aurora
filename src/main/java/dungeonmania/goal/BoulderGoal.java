@@ -1,6 +1,7 @@
 package dungeonmania.goal;
 
 import dungeonmania.Dungeon;
+import dungeonmania.DungeonMap;
 
 public class BoulderGoal extends Goal {
 
@@ -10,8 +11,8 @@ public class BoulderGoal extends Goal {
     }
 
     public boolean isCompleted(Dungeon dungeon) {
-        // Count all boulders on floor switches
-        return false;
+        DungeonMap map = dungeon.getMap();
+        return map.allFloorSwitchesTriggered();
     }
 
     @Override
