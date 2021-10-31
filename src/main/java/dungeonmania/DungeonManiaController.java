@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 

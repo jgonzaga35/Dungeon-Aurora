@@ -11,6 +11,14 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -19,23 +27,12 @@ import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.ConsumableEntity;
-import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
-import dungeonmania.entities.collectables.Armour;
-import dungeonmania.entities.collectables.Key;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
-
-import java.lang.System;
 
 public class Dungeon {
     private String id;
@@ -44,8 +41,7 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
-    private List<CollectableEntity> collectables = new ArrayList<CollectableEntity>();
-    private List<Entity> occupants = new ArrayList<Entity>();
+    private Inventory inventory = new Inventory();
 
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -87,37 +83,34 @@ public class Dungeon {
 
             // TODO: probably need a builder pattern here
             // for now, i just handle walls and player
-            Entity occupant;
             Cell cell = map.getCell(x, y);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
-                occupant = new Wall(dungeon, cell.getPosition());
+                cell.addOccupant(new Wall(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
-                occupant = new Exit(dungeon, cell.getPosition());
+                cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
-                occupant = new ZombieToastSpawner(dungeon, cell.getPosition());
+                cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
-                occupant = new ZombieToast(dungeon, cell.getPosition());
+                cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
-                occupant = new Treasure(dungeon, cell.getPosition());
+                cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
-                occupant = new Arrow(dungeon, cell.getPosition());
+                cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
-                occupant = new Wood(dungeon, cell.getPosition());
+                cell.addOccupant(new Wood(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Sword.STRING_TYPE)) {
-                occupant = new Sword(dungeon, cell.getPosition());
+                cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
-                occupant = new Armour(dungeon, cell.getPosition());
+                cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                occupant = new Key(dungeon, cell.getPosition(), entity.getInt("key"));
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
-                occupant = new Boulder(dungeon, cell.getPosition());
+                cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
-                occupant = Spider.spawnSpider(dungeon);
-            } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
-                occupant = new InvincibilityPotion(dungeon, cell.getPosition());
+                cell.addOccupant(Spider.spawnSpider(dungeon));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
-                occupant = player;
+                cell.addOccupant(player);
             } else if (Objects.equals(type, Portal.STRING_TYPE)) {
                 String colour = entity.getString("colour");
 
@@ -129,13 +122,12 @@ public class Dungeon {
                     portal.setCorrespondingPortal(correspondingPortal);
                     correspondingPortal.setCorrespondingPortal(portal);
                 }
-                occupant = portal;
+                cell.addOccupant(portal);
             } 
             else {
                 throw new Error("unhandled entity type: " + type);
             }
-            dungeon.addOccupant(occupant);
-            cell.addOccupant(occupant);
+
         }
 
         if (player == null) {
@@ -145,10 +137,6 @@ public class Dungeon {
         dungeon.setPlayer(player);
 
         return dungeon;
-    }
-
-    private void addOccupant(Entity occupant) {
-        this.occupants.add(occupant);
     }
 
     /**
@@ -175,7 +163,7 @@ public class Dungeon {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
                 //Add To Collectables Inventory
-                this.collectables.add(collectableOccupant);
+                this.inventory.add(collectableOccupant);
                 //Remove the Collectable From the Current Cell
                 playerCell.removeOccupant(occupant);
 
@@ -197,26 +185,7 @@ public class Dungeon {
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
-
         pickupCollectableEntities();
-
-        // TODO: figure out order
-        if (itemUsed != null) {
-            CollectableEntity item = collectables.stream()
-                .filter(e -> e.getId().equals(itemUsed))
-                .findFirst().orElse(null);
-
-            // Error checking
-            if (item == null) throw new InvalidActionException("Item can't be found");
-            if (item instanceof ConsumableEntity) {
-                ConsumableEntity useable = (ConsumableEntity) item;
-                useable.use();
-                collectables.remove(useable);
-            } else {
-                throw new IllegalArgumentException("Item not usable");
-            }
-        }
-        
 
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
@@ -235,11 +204,23 @@ public class Dungeon {
         return this.name;
     }
 
+    /**
+     * Check if the dungeon has been cleared
+     */
+    public boolean isCleared() {
+        Goal goal = getGoal();
+        return goal.isCompleted(this);
+    }
+
     public Goal getGoal() {
         return this.goal;
     }
 
     public String getGoalAsString() {
+        // Return a success message (empty goal string) if dungeon cleared
+        if (isCleared()) {
+            return "";
+        }
         return this.goal.asString();
     }
 
@@ -305,17 +286,6 @@ public class Dungeon {
      * ItemResponse instances. 
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
-        List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
-        for (CollectableEntity item : collectables) {
-            String id = item.getId();
-            String type = item.getTypeAsString();
-            ItemResponse currItemResponse = new ItemResponse(id, type);
-            outputListItemResponses.add(currItemResponse);
-        }
-        return outputListItemResponses;
-    }
-
-    public List<Entity> getOccupants() {
-        return this.occupants;
+        return this.inventory.asItemResponses();
     }
 }

@@ -15,8 +15,17 @@ public abstract class Goal {
         this.hasSubGoal = false;
     }
 
-    public void addSubGoal(Goal goal) {
-        
+    public boolean isChild() {
+        return false;
+    }
+
+    public void setChild(boolean bool) {
+    }
+
+    public void addSubGoalFromJSON(JSONObject subGoalsJSON) {
+    }
+
+    public void addToSubGoals(Goal subgoal) {
     }
 
     public List<Goal> getSubgoals() {
@@ -33,7 +42,7 @@ public abstract class Goal {
      * @return
      */
     public static Goal fromJSONObject(JSONObject obj) {
-
+        
         JSONObject goalConditions = obj.getJSONObject("goal-condition");
         String goalType = goalConditions.getString("goal");
         Goal goal = Goal.getGoalFromGoalType(goalType);
@@ -42,13 +51,12 @@ public abstract class Goal {
         if (goalType.equals("AND") || goalType.equals("OR")) {
             goal.setHasSubGoal(true);
 
-            // For every subgoal in the JSON file, add them to the goal object.
+            goal.setChild(false);
+            // Recursively add subgoals
             JSONArray subGoals = goalConditions.getJSONArray("subgoals");
             for (int i = 0; i < subGoals.length(); i++) {
-                JSONObject json = subGoals.getJSONObject(i);
-                String type = json.getString("goal");
-                Goal subgoal = Goal.getGoalFromGoalType(type);
-                goal.addSubGoal(subgoal);
+                JSONObject subGoalsJSON = subGoals.getJSONObject(i);
+                goal.addSubGoalFromJSON(subGoalsJSON);
             }
         }
 

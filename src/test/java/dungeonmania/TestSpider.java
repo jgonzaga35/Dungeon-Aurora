@@ -88,7 +88,7 @@ public class TestSpider {
 
 
     @Test
-    public void testNullPointerErrror() {
+    public void testNullPointerError() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
     
