@@ -48,48 +48,75 @@ public class Bomb extends CollectableEntity {
 
     
     public void explode() {
+        System.out.println("Now Exploding");
         //Get Current Coords of Bomb
+        System.out.println("Bomb Coords");
         int bombXCoord = this.position.getX();
+        System.out.println(bombXCoord);
         int bombYCoord = this.position.getY();
+        System.out.println(bombYCoord);
         
         //Get Width and Height
         DungeonMap map = this.dungeon.getMap();
+        System.out.println("Map Dimensions");
         int width = map.getWidth();
+        System.out.println(width);
         int height = map.getHeight();
+        System.out.println(height);
 
         //Corners of Blast Radius Search Square
         int leftBlastXCoord = bombXCoord - BLAST_RADIUS;
         if (leftBlastXCoord < 0) {
             leftBlastXCoord = 0;
         }
+        System.out.println("LeftX");
+        System.out.println(leftBlastXCoord);
         int rightBlastXCoord = bombXCoord + BLAST_RADIUS;
         if (rightBlastXCoord > (width - 1)) {
             rightBlastXCoord = width - 1;
         }
+        System.out.println("RightX");
+        System.out.println(rightBlastXCoord);
         int topBlastYCoord = bombYCoord - BLAST_RADIUS;
         if (topBlastYCoord < 0) {
             topBlastYCoord = 0;
         }
+        System.out.println("TopY");
+        System.out.println(topBlastYCoord);
         int bottomBlastYCoord = bombYCoord + BLAST_RADIUS;
         if (bottomBlastYCoord > (height - 1)) {
             bottomBlastYCoord = height - 1;
         }
+        System.out.println("BottomY");
+        System.out.println(bottomBlastYCoord);
 
         //Traversing through Blast Square
         for (int row=topBlastYCoord; row <= bottomBlastYCoord; row++) {
+            System.out.println("Iterated through Row");
             for (int col=leftBlastXCoord; col <= rightBlastXCoord; col++) {
+                System.out.println("Iterated Through Col");
                 //Check if Within Radius
                 int currDistanceFromBombX = Math.abs(bombXCoord - col);
-                int currDistanceFromBombY = Math.abs(bombYCoord - col);
+                int currDistanceFromBombY = Math.abs(bombYCoord - row);
                 double radialDistance = Math.sqrt(Math.pow(currDistanceFromBombX, 2) + Math.pow(currDistanceFromBombY, 2));
-                if (radialDistance <= BLAST_RADIUS) {
+                System.out.println(radialDistance);
+                if (Math.floor(radialDistance) <= BLAST_RADIUS) {
+                    System.out.println("Within Blast Radius");
                     //Destroy All Elements Other Than Player in Cell
                     Cell currCell = map.getCell(col, row);
                     List<Entity> currCellOccupants = currCell.getOccupants();
+                    Boolean isOccupantRemoved = false;
+                    Entity occupantRemoved = null;
                     for (Entity occupant : currCellOccupants) {
+                        System.out.println(occupant.toString());
                         if (occupant.getTypeAsString() != "player") {
-                            currCell.removeOccupant(occupant);
+                            System.out.println("Removed Occupants");
+                            isOccupantRemoved = true;
+                            occupantRemoved = occupant;
                         }
+                    }
+                    if (isOccupantRemoved == true) {
+                        currCell.removeOccupant(occupantRemoved);
                     }
                 }
             }
