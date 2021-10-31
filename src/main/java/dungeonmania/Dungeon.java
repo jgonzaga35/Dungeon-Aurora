@@ -18,6 +18,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -123,6 +124,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
+            } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
+                cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -220,10 +223,9 @@ public class Dungeon {
      * Runs Every Tick, After the Player Has Moved
      * If any collectables are in the player's square this function will remove
      * the collectable item from the cell and add it to the player's inventory.
-     */
+     */ 
     private void pickupPlaceCollectableEntities(String itemUsed) {
         dungeonMap.flood();
-        
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
@@ -254,15 +256,16 @@ public class Dungeon {
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-
+        
         this.player.handleMoveOrder(movementDirection);
+
+        dungeonMap.flood();
         
         dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         
 
         pickupPlaceCollectableEntities(itemUsed);
         
-
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
         if (spiderPopulation < Spider.MAX_SPIDERS) {
@@ -370,4 +373,19 @@ public class Dungeon {
     }
 
     
+    /**
+     * Attempts to bribe the map's mercenary raises an InvalidActionException
+     * when:
+     * - The player is not in range to bribe the mercenary
+     * - The player does not have any gold.
+     * 
+     * removes a coin from the inventory on success.
+     */
+    public void bribeMercenary(Mercenary merc) throws InvalidActionException {
+            
+        if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
+        if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
+            
+        merc.bribe();
+    }
 }
