@@ -1,12 +1,16 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
 package dungeonmania.entities.collectables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
 import dungeonmania.Cell;
+import dungeonmania.Entity;
 
 public class Bomb extends CollectableEntity {
 
@@ -68,7 +72,7 @@ public class Bomb extends CollectableEntity {
         int width = map.getWidth();
         int height = map.getHeight();
 
-        List<Cell> adjacentCells = ArrayList<Cell>();
+        List<Cell> adjacentCells = new ArrayList<Cell>();
         Cell currCell;
 
         //Get Cell Above
@@ -97,10 +101,10 @@ public class Bomb extends CollectableEntity {
 
         //Iterate Through These Cardinally Adjacent Cells and Check if Any
         //Contain a Floor Switch
-        for (Cell currCell : adjacentCells) {
-            List<Entity> occupants = currCell.getOccupants();
+        for (Cell currentCell : adjacentCells) {
+            List<Entity> occupants = currentCell.getOccupants();
             for (Entity currOccupant: occupants) {
-                if (currOccupant.getType() == "floor switch") {
+                if (currOccupant.getTypeAsString() == "floor switch") {
                     return true;
                 }
             }
