@@ -3,6 +3,7 @@ package dungeonmania.entities.collectables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Math;
 
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
@@ -11,6 +12,8 @@ import dungeonmania.entities.CollectableEntity;
 
 import dungeonmania.Cell;
 import dungeonmania.Entity;
+
+//import math.abs;
 
 public class Bomb extends CollectableEntity {
 
@@ -42,7 +45,10 @@ public class Bomb extends CollectableEntity {
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
         
-       
+        //Get Width and Height
+        DungeonMap map = this.dungeon.getMap();
+        int width = map.getWidth();
+        int height = map.getHeight();
 
         //Corners of Blast Radius Search Square
         int leftBlastXCoord = bombXCoord - BLAST_RADIUS;
@@ -50,17 +56,37 @@ public class Bomb extends CollectableEntity {
             leftBlastXCoord = 0;
         }
         int rightBlastXCoord = bombXCoord + BLAST_RADIUS;
-        //if (rightBlastXCoord > )
+        if (rightBlastXCoord > (width - 1)) {
+            rightBlastXCoord = width - 1;
+        }
         int topBlastYCoord = bombYCoord - BLAST_RADIUS;
         if (topBlastYCoord < 0) {
             topBlastYCoord = 0;
         }
         int bottomBlastYCoord = bombYCoord + BLAST_RADIUS;
+        if (bottomBlastYCoord > (height - 1)) {
+            bottomBlastYCoord = height - 1;
+        }
 
-        //Traversing through Potential Blast Radius
-        //for (int i=topLeftBlastXCoord; i <= () ) 
-
-
+        //Traversing through Blast Square
+        for (int row=topBlastYCoord; row <= bottomBlastYCoord; row++) {
+            for (int col=leftBlastXCoord; col <= rightBlastXCoord; col++) {
+                //Check if Within Radius
+                int currDistanceFromBombX = Math.abs(bombXCoord - col);
+                int currDistanceFromBombY = Math.abs(bombYCoord - col);
+                double radialDistance = Math.sqrt(Math.pow(currDistanceFromBombX, 2) + Math.pow(currDistanceFromBombY, 2));
+                if (radialDistance <= BLAST_RADIUS) {
+                    //Destroy All Elements Other Than Player in Cell
+                    Cell currCell = map.getCell(col, row);
+                    List<Entity> currCellOccupants = currCell.getOccupants();
+                    for (Entity occupant : currCellOccupants) {
+                        if (occupant.getTypeAsString() != "player") {
+                            currCell.removeOccupant(occupant);
+                        }
+                    }
+                }
+            }
+        } 
         return;
     }
     
