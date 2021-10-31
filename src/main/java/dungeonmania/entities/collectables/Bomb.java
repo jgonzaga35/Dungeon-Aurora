@@ -46,6 +46,7 @@ public class Bomb extends CollectableEntity {
      * @return void
      */
     public void explode() {
+        System.out.println("Exploding");
         //Get Current Coords of Bomb
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
@@ -60,42 +61,54 @@ public class Bomb extends CollectableEntity {
         if (leftBlastXCoord < 0) {
             leftBlastXCoord = 0;
         }
+        System.out.println("Search Corners");
+        System.out.println(leftBlastXCoord);
         
         int rightBlastXCoord = bombXCoord + BLAST_RADIUS;
         if (rightBlastXCoord > (width - 1)) {
             rightBlastXCoord = width - 1;
         }
+        System.out.println(rightBlastXCoord);
         
         int topBlastYCoord = bombYCoord - BLAST_RADIUS;
         if (topBlastYCoord < 0) {
             topBlastYCoord = 0;
         }
+        System.out.println(topBlastYCoord);
         
         int bottomBlastYCoord = bombYCoord + BLAST_RADIUS;
         if (bottomBlastYCoord > (height - 1)) {
             bottomBlastYCoord = height - 1;
         }
+        System.out.println(bottomBlastYCoord);
 
         //Traversing through Blast Square
         for (int row=topBlastYCoord; row <= bottomBlastYCoord; row++) {
             for (int col=leftBlastXCoord; col <= rightBlastXCoord; col++) {
+                
                 //Check if Within Radius
                 int currDistanceFromBombX = Math.abs(bombXCoord - col);
                 int currDistanceFromBombY = Math.abs(bombYCoord - row);
                 double radialDistance = Math.sqrt(Math.pow(currDistanceFromBombX, 2) + Math.pow(currDistanceFromBombY, 2));
+                //System.out.println(radialDistance);
                 if (Math.floor(radialDistance) <= BLAST_RADIUS) {
                     //Destroy All Elements Other Than Player in Cell
                     Cell currCell = map.getCell(col, row);
                     List<Entity> currCellOccupants = currCell.getOccupants();
                     Boolean isOccupantRemoved = false;
                     Entity occupantRemoved = null;
+                    //System.out.println("START OCCUPANTS");
                     for (Entity occupant : currCellOccupants) {
                         if (occupant.getTypeAsString() != "player") {
+                            //System.out.println(occupant.getTypeAsString());
                             isOccupantRemoved = true;
                             occupantRemoved = occupant;
                         }
                     }
+                    //System.out.println("END OCCUPANTS");
                     if (isOccupantRemoved == true) {
+                        //System.out.println("Removing Occupants");
+                        //System.out.println(occupantRemoved.toString());
                         currCell.removeOccupant(occupantRemoved);
                     }
                 }
@@ -138,13 +151,17 @@ public class Bomb extends CollectableEntity {
             currCell = map.getCell(bombXCoord + 1, bombYCoord);
             adjacentCells.add(currCell);
         } 
-
+        System.out.println("Adjacent Cells");
+        System.out.println(adjacentCells.toString());
         //Iterate Through These Cardinally Adjacent Cells and Check if Any
         //Contain a Floor Switch
         for (Cell currentCell : adjacentCells) {
             List<Entity> occupants = currentCell.getOccupants();
+            System.out.println("Cell Occupants");
+            System.out.println(occupants.toString());
             for (Entity currOccupant: occupants) {
                 if (currOccupant.getTypeAsString() == "floor switch") {
+                    System.out.println("Found floor switch");
                     return true;
                 }
             }
@@ -173,6 +190,7 @@ public class Bomb extends CollectableEntity {
     public void tick() {
         //If Bomb is Cardinally Adjacent to Floor Switch then Explode
         if (bombCheckCardinalAdjacency()) {
+            System.out.println("Is Adjacent");
             explode();
         }
     }

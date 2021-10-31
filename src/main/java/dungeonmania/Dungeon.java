@@ -185,6 +185,7 @@ public class Dungeon {
             for (CollectableEntity currCollectable : collectables) {
                 if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
                     //Place Bomb & Remove from Collectables
+                    System.out.println("Placed Bomb");
                     collectableRemoved = currCollectable;
                     Bomb removedBomb = (Bomb) collectableRemoved;
                     removedBomb.setIsPlaced();
