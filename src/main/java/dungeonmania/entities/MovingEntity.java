@@ -59,6 +59,7 @@ public abstract class MovingEntity extends Entity {
         assert this.position.equals(this.movementBehaviours.peek().getCurrentCell().getPosition());
 
         Cell cell = this.movementBehaviours.peek().move();
+        this.movementBehaviours.stream().forEach(b -> b.setCurrentCell(cell));
         this.moveTo(cell);
         return cell;
     }
