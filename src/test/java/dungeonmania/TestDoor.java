@@ -33,14 +33,12 @@ public class TestDoor {
         
         resp = ctr.tick("", Direction.DOWN);
         Position p2 = TestUtils.getPlayerPosition(resp);
-        assertEquals(p1.getX(), p2.getX());
-        assertEquals(p1.getY(), p2.getY());
+        assertEquals(p1, p2);
 
         // attempt to use key 1 to open door 1 (should succeed)
         resp = ctr.tick("", Direction.RIGHT);
         Position p3 = TestUtils.getPlayerPosition(resp);
-        assertNotEquals(p3.getX(), p2.getX());
-        assertNotEquals(p3.getY(), p2.getY());
+        assertNotEquals(p3, p2);
         // check there key is used and there is no key
         assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals("key")));
 
@@ -59,8 +57,7 @@ public class TestDoor {
         
         resp = ctr.tick("", Direction.RIGHT);
         Position p5 = TestUtils.getPlayerPosition(resp);
-        assertEquals(p4.getX(), p5.getX());
-        assertEquals(p4.getY(), p5.getY());
+        assertEquals(p4, p5);
 
         // attempt to walk through door 1, which is already opened
         resp = ctr.tick("", Direction.LEFT);
@@ -68,16 +65,14 @@ public class TestDoor {
         
         resp = ctr.tick("", Direction.LEFT);
         Position p7 = TestUtils.getPlayerPosition(resp);
-        assertNotEquals(p6.getX(), p7.getX());
-        assertNotEquals(p6.getY(), p7.getY());
+        assertNotEquals(p6, p7);
 
         // attempt to use key 2 to open door 2 (should succeed)
         resp = ctr.tick("", Direction.LEFT);
         Position p8 = TestUtils.getPlayerPosition(resp);
         resp = ctr.tick("", Direction.DOWN);
         Position p9 = TestUtils.getPlayerPosition(resp);
-        assertNotEquals(p8.getX(), p9.getX());
-        assertNotEquals(p8.getY(), p9.getY());
+        assertNotEquals(p8, p9);
         // check there key is used and there is no key
         assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals("key")));
 
@@ -86,17 +81,14 @@ public class TestDoor {
         resp = ctr.tick("", Direction.RIGHT);
         resp = ctr.tick("", Direction.RIGHT);
         resp = ctr.tick("", Direction.RIGHT);
-        // check there key is used and there is no key
-        assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals("key")));
         // check there is key
         assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("key")));
 
-        // attempt to use key 2 to open door 2 (should succeed)
+        // attempt to use key 3 to open door 3 (should succeed)
         Position p10 = TestUtils.getPlayerPosition(resp);
         resp = ctr.tick("", Direction.RIGHT);
         Position p11 = TestUtils.getPlayerPosition(resp);
-        assertNotEquals(p10.getX(), p11.getX());
-        assertNotEquals(p10.getY(), p11.getY());
+        assertNotEquals(p10, p11);
         // check there key is used and there is no key
         assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals("key")));
     }
