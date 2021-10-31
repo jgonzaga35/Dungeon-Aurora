@@ -154,57 +154,43 @@ public class Dungeon {
     }
 
     /**
-     * Picks Up the Collectable Entities that Are in the Player's Square
-     * Runs Every Tick, After the Player Has Moved
-     * If any collectables are in the player's square this function will remove
-     * the collectable item from the cell and add it to the player's inventory.
+     * Places a Bomb that is Currently in Player Inventory onto Map &
+     * Ensures that Player is Unable to Pick it Up Again
      */
-    private void pickupPlaceCollectableEntities(String itemUsed) {
-        dungeonMap.flood();
-        
-        //Retreiving Player's Cell
-        Cell playerCell = dungeonMap.getPlayerCell();
+    private void placeBomb(String itemUsed, Cell playerCell) {
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
 
-        if (playerCell == null) {
+        List<CollectableEntity> collectables = inventory.getCollectables();
+        if (collectables.size() == 0) {
             return;
         }
-        if (itemUsed == null) {
-            itemUsed = "";
-        }
-        //Check if Bomb is Being Placed 
-        if (itemUsed.length() != 0) {
-            List<CollectableEntity> collectables = inventory.getCollectables();
-            if (collectables.size() == 0) {
-                return;
-            }
-            boolean itemPlaced = false;
-            CollectableEntity collectableRemoved = collectables.get(0);
-            for (CollectableEntity currCollectable : collectables) {
-                if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
-                    //Place Bomb & Remove from Collectables
-                    System.out.println("Placed Bomb");
-                    collectableRemoved = currCollectable;
-                    Bomb removedBomb = (Bomb) collectableRemoved;
-                    removedBomb.setIsPlaced();
-                    removedBomb.updatePosition(playerXCoord, playerYCoord);
-                    playerCell.addOccupant(removedBomb);
-                    itemPlaced = true;
-                }
-            }
-            if (itemPlaced == true) {
-                inventory.remove(collectableRemoved);
-                dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        boolean itemPlaced = false;
+        CollectableEntity collectableRemoved = collectables.get(0);
+        for (CollectableEntity currCollectable : collectables) {
+            if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
+                //Place Bomb & Remove from Collectables
+                System.out.println("Placed Bomb");
+                collectableRemoved = currCollectable;
+                Bomb removedBomb = (Bomb) collectableRemoved;
+                removedBomb.setIsPlaced();
+                removedBomb.updatePosition(playerXCoord, playerYCoord);
+                playerCell.addOccupant(removedBomb);
+                itemPlaced = true;
             }
         }
-
-        //Check if Collectibles in the Player's Cell
-        if (playerCell.getOccupants() == null) {
-            return;
+        if (itemPlaced == true) {
+            inventory.remove(collectableRemoved);
+            dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         }
-
+    }
+    
+    /**
+     * Handles the player picking up collectable items and adding them to their 
+     * inventory.
+     */
+    private void pickupCollectables(Cell playerCell) {
         List<Entity> playerCellOccupants = playerCell.getOccupants();
         boolean ifOccupantRemoved = false;
         if (playerCellOccupants.size() == 0) {
@@ -227,6 +213,36 @@ public class Dungeon {
             playerCell.removeOccupant(removedOccupant);
             
         }
+    }
+
+    /**
+     * Picks Up the Collectable Entities that Are in the Player's Square
+     * Runs Every Tick, After the Player Has Moved
+     * If any collectables are in the player's square this function will remove
+     * the collectable item from the cell and add it to the player's inventory.
+     */
+    private void pickupPlaceCollectableEntities(String itemUsed) {
+        dungeonMap.flood();
+        
+        //Retreiving Player's Cell
+        Cell playerCell = dungeonMap.getPlayerCell();
+        if (playerCell == null) {
+            return;
+        }
+        
+        //Check if Bomb is Being Placed 
+        if (itemUsed == null) {
+            itemUsed = "";
+        }
+        if (itemUsed.length() != 0) {
+            placeBomb(itemUsed, playerCell);
+        }
+
+        //Check if Collectibles in the Player's Cell
+        if (playerCell.getOccupants() == null) {
+            return;
+        }
+        pickupCollectables(playerCell);
     }
 
     public void tick(String itemUsed, Direction movementDirection)
