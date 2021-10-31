@@ -22,10 +22,11 @@ public class ZombieToast extends MovingEntity implements Fighter {
         super(dungeon, position);
         this.addMovementBehaviour(
             new RandomMovementBehaviour(
-                3, 
+                0, 
                 dungeon.getMap(), 
                 dungeon.getMap().getCell(position)
             )
+            // coment
         );
     }
 
@@ -37,17 +38,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
     @Override
     public void tick() {
         // move in a random direction        
-        // List<Cell> availableCells = this.getCellsAround()
-        //     .filter(cell -> !cell.isBlocking())
-        //     .collect(Collectors.toList());
-
-        // if (availableCells.size() == 0)
-        //     return; // don't move anywhere
-
-        // Cell cell = Utils.choose(availableCells);
-        // this.moveTo(cell);
-
-        this.moveTo(shouldMoveTo());
+        if (shouldMoveTo() != null) this.moveTo(shouldMoveTo());
     }
 
     @Override
