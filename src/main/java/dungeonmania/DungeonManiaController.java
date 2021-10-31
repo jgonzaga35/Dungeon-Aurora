@@ -117,6 +117,7 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        if (savedGames.containsKey(name)) throw new IllegalArgumentException();
         savedGames.put(name, this.dungeon);
         return this.makeDungeonResponse();
     }
