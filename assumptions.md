@@ -11,3 +11,8 @@
 
 - when a player and an enemy swap cell in one tick, there is no battle.
    https://edstem.org/au/courses/7065/discussion/660682
+- players can't bribe mercenaries through walls.
+- There can only be one mercenary on a map at a time.
+- New mercenaries spawn every 10 ticks on maps with at least one enemy present at that point.
+- Allies can see the player when invisible.
+- IllegalArgumentException when the player bribes a friendly mercenary.

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.response.models.ItemResponse;
 
@@ -27,6 +28,19 @@ public class Inventory {
      */
     public boolean remove(CollectableEntity c) {
         return this.collectables.remove(c);
+    }
+    /**
+     * Removes one treasure from the inventory.
+     * 
+     * @return true if the inventory had a coin removed
+     */
+    public boolean pay() {
+        Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
+            .findFirst().orElse(null);
+
+        collectables.remove(coin);
+
+        return coin != null;
     }
 
     public List<ItemResponse> asItemResponses() {

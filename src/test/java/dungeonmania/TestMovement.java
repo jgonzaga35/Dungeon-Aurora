@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.movement.CircleMovementBehaviour;
+import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.util.FileLoader;
 
@@ -58,6 +59,20 @@ public class TestMovement {
 
         spider.move();
         assertEquals(new Pos2d(2, 1), spider.getCurrentCell().getPosition());
+    }
+
+    @Test
+    public void testFriendlyMovementBasic() 
+    {
+        DungeonMap map = dungeon.getMap();
+        startingCell = dungeon.getMap().getCell(new Pos2d(1, 0));
+        MovementBehaviour friend = new FriendlyMovementBehaviour(1, map, startingCell);
+
+        for (int i = 0; i < 5; i++) {
+            friend.move();
+
+            assertEquals(new Pos2d(1, 0), friend.getCurrentCell().getPosition());
+        }
     }
 
     @Test
