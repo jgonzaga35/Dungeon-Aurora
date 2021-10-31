@@ -149,8 +149,6 @@ public class Dungeon {
      * the collectable item from the cell and add it to the player's inventory.
      */
     private void pickupCollectableEntities() {
-        dungeonMap.flood();
-
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
@@ -186,10 +184,12 @@ public class Dungeon {
         
         this.player.handleMoveOrder(movementDirection);
 
+        dungeonMap.flood();
+
+        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
+        
         pickupCollectableEntities();
         
-        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
-
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
         if (spiderPopulation < Spider.MAX_SPIDERS) {
