@@ -183,14 +183,12 @@ public class Dungeon {
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-
+        
         this.player.handleMoveOrder(movementDirection);
-        
-        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
-        
 
         pickupCollectableEntities();
         
+        dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
 
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
