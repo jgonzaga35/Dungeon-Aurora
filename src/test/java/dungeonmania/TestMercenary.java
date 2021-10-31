@@ -141,11 +141,17 @@ public class TestMercenary {
     public void testBribe() {
         Integer dist = merc.getCell().getPlayerDistance();
 
+        // Try bribing invalid id
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact("invalid");
+        });
+        
+        
         // Try bribing with no money
         assertThrows(InvalidActionException.class, () -> {
-            dc.interact("mercenary");
+            dc.interact(merc.getId());
         });
-
+        
         for (int i = 0; i < 2; i++) {
             dc.tick(null, Direction.RIGHT);
             
@@ -155,7 +161,7 @@ public class TestMercenary {
         // player pos (7, 5)
         // Try bribing outside of range
         assertThrows(InvalidActionException.class, () -> {
-            dc.interact("mercenary");
+            dc.interact(merc.getId());
         });
         
         for (int i = 0; i < 5; i++) {
@@ -174,10 +180,15 @@ public class TestMercenary {
         // player pos (7, 0)
         // merc pos (5, 0)
         // two cardinal squares away, bribe possible
-
-        assertDoesNotThrow(() -> dc.interact("mercenary"));    
+        
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));    
+        
+        // Try bribing friendly
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact(merc.getId());
+        });
     }
-
+    
     @Test
     public void testSpawn() {
         
