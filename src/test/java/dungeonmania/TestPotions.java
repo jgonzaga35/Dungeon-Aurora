@@ -68,7 +68,7 @@ public class TestPotions {
         mercCell.addOccupant(merc);
         
         Integer mercDist = merc.getCell().getPlayerDistance();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(mercDist < merc.getCell().getPlayerDistance());
             mercDist = merc.getCell().getPlayerDistance();
