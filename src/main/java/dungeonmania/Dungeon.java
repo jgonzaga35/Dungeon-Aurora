@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
@@ -108,6 +109,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
+            } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
+                cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -158,7 +161,7 @@ public class Dungeon {
         if (playerCell.getOccupants() == null) {
             return;
         }
-        List<Entity> playerCellOccupants = playerCell.getOccupants();
+        List<Entity> playerCellOccupants = new ArrayList<>(playerCell.getOccupants());
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
