@@ -6,3 +6,4 @@
   (that is, when the map is smaller than 3x3)
 - when a player and an enemy swap cell in one tick, there is no battle.
    https://edstem.org/au/courses/7065/discussion/660682
+- players can't bribe mercenaries through walls.
