@@ -337,4 +337,23 @@ public class Dungeon {
             
         merc.bribe();
     }
+
+    /**
+     * When you add a strategy, it doesn't mean it's the one that is going to be
+     * used. The strategy with the highest precedence will be used.
+     * 
+     * @see BattleStrategy
+     * @param bs
+     */
+    public void addBattleStrategy(BattleStrategy bs) {
+        this.battleStrategies.add(bs);
+    }
+
+    /**
+     * @param bs the battle strategy to remove
+     * @return true if the battle strategy was present.
+     */
+    public boolean removeBattleStrategy(BattleStrategy bs) {
+        return this.battleStrategies.remove(bs);
+    }
 }
