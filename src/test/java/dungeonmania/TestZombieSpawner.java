@@ -25,7 +25,7 @@ public class TestZombieSpawner {
     public void testSpawnZombies() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_zombies_park", GameMode.PEACEFUL.getValue());
-
+        
         for (int i = 1; i < 101; i++) {
             resp = ctr.tick("", Direction.NONE);
             // a zombie should spawn every 20 ticks, and there is already one

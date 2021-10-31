@@ -9,6 +9,11 @@ import dungeonmania.Pos2d;
 
 public class CircleMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
+
+    public DungeonMap getMap() {
+        return this.map;
+    }
+
     private Cell currentCell;
     private List<Pos2d> movementCycle = new ArrayList<>();
     private int step = 0;

@@ -6,7 +6,9 @@ import java.util.List;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
+import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -60,6 +62,18 @@ public class Cell {
         else return boulder.roll(d);
     }
 
+    public boolean unlockDoor() {
+        Door door = null;
+        for (Entity e : occupants) {
+            if (e instanceof Door) {
+                door = (Door) e;
+            }
+        }
+
+        if (door == null) return false;
+        else return door.open();
+    }
+
     /**
      * Return portal if cell has a portal
      * @return
@@ -68,6 +82,15 @@ public class Cell {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof Portal) {
                 return (Portal) occupant;
+            }
+        }
+        return null;
+    }
+
+    public FloorSwitch getFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch) {
+                return (FloorSwitch) occupant;
             }
         }
         return null;
@@ -120,5 +143,14 @@ public class Cell {
         // for (Entity e: this.occupants) {
         //     // e.onWalked(from, to);
         // }
+    }
+
+    public boolean hasUntriggeredFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

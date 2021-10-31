@@ -5,6 +5,7 @@ import java.util.List;
 
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
@@ -15,7 +16,10 @@ public class Inventory {
      * @return true if the inventory has changed as a result of this operation
      */
     public boolean add(CollectableEntity c) {
-        return this.collectables.add(c);
+        if (c instanceof Key && hasKey()) {
+            // Player cannot pickup a second key
+            return false;
+        } else return this.collectables.add(c);
     }
 
     /**
@@ -49,4 +53,14 @@ public class Inventory {
         }
         return outputListItemResponses;
     }
+    
+
+    public List<CollectableEntity> getCollectables() {
+        return this.collectables;
+    }
+
+    public boolean hasKey() {
+        return collectables.stream().anyMatch(c -> c instanceof Key);
+    }
+
 }

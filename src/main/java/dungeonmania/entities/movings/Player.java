@@ -7,7 +7,6 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
-import dungeonmania.util.*;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -50,6 +49,10 @@ public class Player extends MovingEntity implements Fighter {
             case BOULDER:
                 //try to push boulder
                 if (target.pushBoulder(d)) this.moveTo(target);
+                return;
+            case DOOR:
+                //try to unlocked door
+                if (target.unlockDoor()) this.moveTo(target);
                 return;
             default:
                 return;
