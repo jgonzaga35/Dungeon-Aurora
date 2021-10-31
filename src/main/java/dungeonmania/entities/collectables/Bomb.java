@@ -98,8 +98,12 @@ public class Bomb extends CollectableEntity {
     }
     
     private boolean bombCheckCardinalAdjacency() {
+        System.out.println("Checking for Adjacency");
+        System.out.println("Bomb Coords");
         int bombXCoord = this.position.getX();
+        System.out.println(bombXCoord);
         int bombYCoord = this.position.getY();
+        System.out.println(bombYCoord);
         
         DungeonMap map = this.dungeon.getMap();
         int width = map.getWidth();
@@ -115,7 +119,7 @@ public class Bomb extends CollectableEntity {
         } 
 
         //Get Cell Below
-        if (bombYCoord == (height - 1)) {
+        if (bombYCoord <= (height - 1)) {
             currCell = map.getCell(bombXCoord, bombYCoord + 1);
             adjacentCells.add(currCell);
         } 
@@ -127,17 +131,20 @@ public class Bomb extends CollectableEntity {
         } 
 
         //Check if Floor Switch to Right
-        if (bombYCoord == (width - 1)) {
+        if (bombYCoord <= (width - 1)) {
             currCell = map.getCell(bombXCoord + 1, bombYCoord);
             adjacentCells.add(currCell);
         } 
 
+        System.out.println(adjacentCells.toString());
         //Iterate Through These Cardinally Adjacent Cells and Check if Any
         //Contain a Floor Switch
         for (Cell currentCell : adjacentCells) {
             List<Entity> occupants = currentCell.getOccupants();
+            System.out.println(occupants.toString());
             for (Entity currOccupant: occupants) {
                 if (currOccupant.getTypeAsString() == "floor switch") {
+                    System.out.println("Floor switch detected");
                     return true;
                 }
             }
@@ -167,6 +174,7 @@ public class Bomb extends CollectableEntity {
         //If Bomb is Cardinally Adjacent to Floor Switch then Explode
         //setIsPlaced();
         if (bombCheckCardinalAdjacency()) {
+            System.out.println("Is Adjacent to Switch");
             explode();
         }
     }

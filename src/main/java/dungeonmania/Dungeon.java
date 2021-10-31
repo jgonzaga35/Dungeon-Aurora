@@ -161,9 +161,13 @@ public class Dungeon {
      */
     private void pickupPlaceCollectableEntities(String itemUsed) {
         dungeonMap.flood();
-
+        
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
+        Pos2d playerPosition = playerCell.getPosition();
+        int playerXCoord = playerPosition.getX();
+        int playerYCoord = playerPosition.getY();
+
         if (playerCell == null) {
             return;
         }
@@ -181,16 +185,26 @@ public class Dungeon {
             CollectableEntity collectableRemoved = collectables.get(0);
             System.out.println(collectables.toString());
             for (CollectableEntity currCollectable : collectables) {
+                System.out.println("ItemUsed ID");
+                System.out.println(itemUsed);
                 System.out.println("Current Collectable");
                 System.out.println(currCollectable.getTypeAsString());
                 System.out.println(currCollectable.getId());
-                if (currCollectable.getTypeAsString() == "bomb" && currCollectable.getId() == itemUsed) {
+                if (currCollectable.getTypeAsString() == "bomb") {
+                    System.out.println("Works 1");
+                }
+                if (itemUsed.equals(currCollectable.getId())) {
+                    System.out.println(" Works 2");
+                }
+                if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
                     //Place Bomb & Remove from Collectables
                     System.out.println("Bomb placed");
                     collectableRemoved = currCollectable;
                     Bomb removedBomb = (Bomb) collectableRemoved;
                     removedBomb.setIsPlaced();
-                    playerCell.addOccupant(collectableRemoved);
+                    removedBomb.updatePosition(playerXCoord, playerYCoord);
+
+                    playerCell.addOccupant(removedBomb);
                     
                     itemPlaced = true;
                 }
@@ -198,6 +212,7 @@ public class Dungeon {
             if (itemPlaced == true) {
                 System.out.println("Remove from inentory");
                 inventory.remove(collectableRemoved);
+                dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
             }
         }
 
@@ -226,6 +241,7 @@ public class Dungeon {
         }
         if (ifOccupantRemoved == true) {
             playerCell.removeOccupant(removedOccupant);
+            
         }
     }
 
