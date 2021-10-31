@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.movings.Player;
@@ -183,7 +184,7 @@ public class TestBattle {
         ctr.tick("", Direction.RIGHT);
 
         // more than the player can kill without a sword
-        int player_kills_n_zombies = 18;
+        int player_kills_n_zombies = 16;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
@@ -197,7 +198,7 @@ public class TestBattle {
             resp = ctr.tick("", Direction.NONE);
 
             boolean hasSword = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Sword.STRING_TYPE));
-            if (j < 10) assertTrue(hasSword, "j=" + j);
+            if (j < 13) assertTrue(hasSword, "j=" + j);
             else assertTrue(!hasSword);
 
             if (j == player_kills_n_zombies - 1) {
@@ -223,7 +224,7 @@ public class TestBattle {
         ctr.tick("", Direction.RIGHT);
 
         // more than the player can kill without an armour
-        int player_kills_n_zombies = 18;
+        int player_kills_n_zombies = 15;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
@@ -236,8 +237,8 @@ public class TestBattle {
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
             resp = ctr.tick("", Direction.NONE);
 
-            boolean hasArmour = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Sword.STRING_TYPE));
-            if (j < 10) assertTrue(hasArmour, "j=" + j);
+            boolean hasArmour = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Armour.STRING_TYPE));
+            if (j < 9) assertTrue(hasArmour, "j=" + j);
             else assertTrue(!hasArmour);
 
             if (j == player_kills_n_zombies - 1) {
@@ -276,7 +277,7 @@ public class TestBattle {
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
             resp = ctr.tick("", Direction.NONE);
 
-            boolean hasBow = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Sword.STRING_TYPE));
+            boolean hasBow = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals("bow change me"));
             if (j < 10) assertTrue(hasBow, "j=" + j);
             else assertTrue(!hasBow);
 

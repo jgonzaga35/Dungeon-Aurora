@@ -6,7 +6,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 
-public class Sword extends CollectableEntity implements PerishableBattleItem {
+public class Sword extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "sword";
 
@@ -44,5 +44,17 @@ public class Sword extends CollectableEntity implements PerishableBattleItem {
 
     @Override
     public void tick() {
+    }
+
+
+    @Override
+    public float getDefenceCoefBonus() {
+        return 1; // doesn't affect defence coef bonus
+    }
+
+
+    @Override
+    public float getAttackDamageBonus() {
+        return 2; // attacking with a sword is a lot better than with your fists!
     }
 }

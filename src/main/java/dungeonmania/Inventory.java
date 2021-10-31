@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.PerishableBattleItem;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
@@ -116,15 +116,43 @@ public class Inventory {
     public void usedItemsForBattle(BattleDirection d) {
         List<CollectableEntity> deadItems = new ArrayList<>();
         for (CollectableEntity item : this.collectables) {
-            if (item instanceof PerishableBattleItem) {
-                PerishableBattleItem pitem = (PerishableBattleItem) item;
-                pitem.usedForBattleRound(d);
-                if (pitem.getDurability() <= 0) {
+            if (item instanceof BattleItem) {
+                BattleItem bitem = (BattleItem) item;
+                bitem.usedForBattleRound(d);
+                if (bitem.getDurability() <= 0) {
                     deadItems.add(item);
                 }
             }
         }
         this.collectables.removeAll(deadItems);
+    }
+
+    /**
+     * Total bonus added by the inventory in the specified direction 
+     *
+     * Notice that attack damage adds, but defence coefficients multiply.
+     * 
+     * @param d battle direction
+     * @return total bonus
+     */
+    public float totalBonus(BattleDirection d) {
+        float bonus = 0;
+        if (d == BattleDirection.ATTACK) {
+            bonus = 0;
+        } else if (d == BattleDirection.DEFENCE) {
+            bonus = 1;
+        }
+        for (CollectableEntity item : this.collectables) {
+            if (item instanceof BattleItem) {
+                BattleItem bitem = (BattleItem) item;
+                if (d == BattleDirection.ATTACK) {
+                    bonus += bitem.getAttackDamageBonus();
+                } else if (d == BattleDirection.DEFENCE) {
+                    bonus *= bitem.getDefenceCoefBonus();
+                }
+            }
+        }
+        return bonus;
     }
 
     /**

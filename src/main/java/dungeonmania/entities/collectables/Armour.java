@@ -6,11 +6,11 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 
-public class Armour extends CollectableEntity implements PerishableBattleItem {
+public class Armour extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "armour";
 
-    public static int INITIAL_DURABILITY = 10;
+    public static int INITIAL_DURABILITY = 30;
     public int durability;
 
     public Armour(Dungeon dungeon, Pos2d position) {
@@ -31,6 +31,16 @@ public class Armour extends CollectableEntity implements PerishableBattleItem {
     }
 
     @Override
+    public float getDefenceCoefBonus() {
+        return 2; // armour multiplies defence by 2
+    }
+
+    @Override
+    public float getAttackDamageBonus() {
+        return 0;
+    }
+
+    @Override
     public String getTypeAsString() {
         return Armour.STRING_TYPE;
     }
@@ -43,4 +53,5 @@ public class Armour extends CollectableEntity implements PerishableBattleItem {
     @Override
     public void tick() {
     }
+
 }

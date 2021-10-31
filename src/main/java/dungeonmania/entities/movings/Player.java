@@ -7,7 +7,6 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
-import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -83,23 +82,17 @@ public class Player extends MovingEntity implements Fighter {
 
     @Override
     public float getAttackDamage() {
-        return 1;
+        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK);
     }
 
     @Override
     public float getDefenceCoef() {
-        float defenceCoef = 1;
-        if (this.dungeon.getInventory().itemsOfType(Shield.class).count() > 0) {
-            // if you have 2 shield, it's the same as having 1 shield
-            defenceCoef += Shield.DEFENCE_COEF_BONUS;
-        }
-        return defenceCoef;
+        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE);
     }
 
     @Override
     public void usedItemFor(BattleDirection d) {
         this.dungeon.getInventory().usedItemsForBattle(d);
-        
     }
 
     @Override
