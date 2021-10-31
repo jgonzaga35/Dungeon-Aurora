@@ -13,17 +13,14 @@ public class CircleMovementBehaviour extends MovementBehaviour {
     public DungeonMap getMap() {
         return this.map;
     }
-
-    private Cell currentCell;
     private List<Pos2d> movementCycle = new ArrayList<>();
     private int step = 0;
     private int direction = 1;
 
     public CircleMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
-        super(precedence);
+        super(precedence, initialCell);
         this.map = map;
-        this.currentCell = initialCell;
         int initialX = initialCell.getPosition().getX();
         int initialY = initialCell.getPosition().getY();
 
@@ -85,14 +82,9 @@ public class CircleMovementBehaviour extends MovementBehaviour {
         if (step > 7) step = 0; 
         if (step < 0) step = 7; 
 
-        currentCell = nextCell;
+        setCurrentCell(nextCell);
 
-        return currentCell;
-    }
-
-    public Cell getCurrentCell()
-    {
-        return currentCell;
+        return nextCell;
     }
     
 }
