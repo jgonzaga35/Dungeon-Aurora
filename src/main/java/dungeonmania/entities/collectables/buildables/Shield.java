@@ -8,25 +8,30 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.collectables.BuildableEntity;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.PerishableBattleItem;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
-public class Shield extends BuildableEntity {
+public class Shield extends BuildableEntity implements PerishableBattleItem {
 
     public static final String STRING_TYPE = "shield";
+    public static int INITIAL_DURABILITY = 20;
+    public static float DEFENCE_COEF_BONUS = 2;
 
-    private int durability;    
+    private int durability;
 
     public Shield(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.durability = 10; // it can be used 10 times
+        this.durability = INITIAL_DURABILITY;
     }
 
-    /**
-     * If d == BattleDirection.DEFENCE, decreases the durability by one
-     * @param d
-     */
-    public void usedFor(BattleDirection d) {
+    @Override
+    public int getDurability() {
+        return this.durability;
+    }
+
+    @Override
+    public void usedForBattleRound(BattleDirection d) {
         if (d == BattleDirection.DEFENCE) {
             this.durability--;
         }

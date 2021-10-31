@@ -147,7 +147,7 @@ public class TestBattle {
             resp = ctr.tick("", Direction.NONE);
 
             boolean hasShield = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Shield.STRING_TYPE));
-            if (j < 10) assertTrue(hasShield);
+            if (j < 6) assertTrue(hasShield, "j=" + j);
             else assertTrue(!hasShield);
 
             if (j == player_kills_n_zombies - 1) {

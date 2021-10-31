@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.PerishableBattleItem;
+import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Key;
 import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
@@ -104,6 +106,25 @@ public class Inventory {
         }
         this.collectables.removeAll(toRemove);
         return true;
+
+    }
+
+    /**
+     * decreases the items' durability
+     * @param d
+     */
+    public void usedItemsForBattle(BattleDirection d) {
+        List<CollectableEntity> deadItems = new ArrayList<>();
+        for (CollectableEntity item : this.collectables) {
+            if (item instanceof PerishableBattleItem) {
+                PerishableBattleItem pitem = (PerishableBattleItem) item;
+                pitem.usedForBattleRound(d);
+                if (pitem.getDurability() <= 0) {
+                    deadItems.add(item);
+                }
+            }
+        }
+        this.collectables.removeAll(deadItems);
     }
 
     /**
