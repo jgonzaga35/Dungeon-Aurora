@@ -33,8 +33,10 @@ import dungeonmania.Cell;
 public abstract class MovementBehaviour {
 
     private int precedence;
-    public MovementBehaviour(int precedence) {
+    private Cell currentCell;
+    public MovementBehaviour(int precedence, Cell initialCell) {
         this.precedence = precedence;
+        this.currentCell = initialCell;
     }
 
     /**
@@ -43,7 +45,14 @@ public abstract class MovementBehaviour {
      * @return the next Cell that the entity should move to.
      */
     public abstract Cell move();
-    public abstract Cell getCurrentCell();
+
+    public Cell getCurrentCell() {
+        return this.currentCell;
+    }
+
+    public void setCurrentCell(Cell cell) {
+        this.currentCell = cell;
+    }
 
     public int getPrecendence() {
         return this.precedence;

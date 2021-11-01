@@ -20,7 +20,7 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.NONE);
+        ctr.tick(null, Direction.NONE);
 
         // doing the maths to compute that number is a pain because of the damage formula
         int player_kills_n_zombies = 10;
@@ -28,13 +28,13 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19; i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-                resp = ctr.tick("", Direction.NONE);
+                resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
 
             if (j == player_kills_n_zombies - 1) {
                 // the player has been killed
@@ -55,12 +55,12 @@ public class TestBattle {
         // the only place where the spider can spawn is exactly on the spot
         // where the player is
 
-        ctr.tick("", Direction.NONE);
+        ctr.tick(null, Direction.NONE);
 
         int player_kills_n_spiders = 15;
         
         for (int j = 0; j < player_kills_n_spiders; j++) {
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
             resp.getEntities().forEach(e -> System.out.println(e.getType() + " " + e.getPosition()));
 
             if (j == player_kills_n_spiders - 1) {
@@ -85,16 +85,16 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
-        ctr.tick("", Direction.NONE);
+        ctr.tick(null, Direction.NONE);
 
         for (int i = 0; i < 19; i++) {
             assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
-            resp = ctr.tick("", Direction.NONE);
+            resp = ctr.tick(null, Direction.NONE);
         }
         assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
-        resp = ctr.tick("", Direction.UP);
+        resp = ctr.tick(null, Direction.UP);
 
         // the zombie no *has* to move on the player's cell (ie. down)
         // BUT, the player moves up
