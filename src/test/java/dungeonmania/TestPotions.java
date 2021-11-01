@@ -13,9 +13,7 @@ import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.movings.Mercenary;
-import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
-import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -181,7 +179,7 @@ public class TestPotions {
             mercDist = merc.getCell().getPlayerDistance();
         }
     }
-
+    
     @Test
     public void testInvincibilityOnSpiders() {
         Cell spiderCell = dungeon.getMap().getCell(5, 6);
@@ -206,15 +204,15 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(7, 8)) ||
             spider.getCell().getPosition().equals(new Pos2d(0, 7)) ||
             spider.getCell().getPosition().equals(new Pos2d(3, 8))
-        );
-        
-        // spider should now continue into the loop by moving right or bouncing back.
-        dc.tick(null, Direction.NONE);
-        assertTrue(
-            spider.getCell().getPosition().equals(new Pos2d(8, 7)) || // bounce
-            spider.getCell().getPosition().equals(new Pos2d(8, 8)) || // right
-            spider.getCell().getPosition().equals(new Pos2d(1, 7)) || // right
-            spider.getCell().getPosition().equals(new Pos2d(4, 8))    // right
+            );
+            
+            // spider should now continue into the loop by moving right or bouncing back.
+            dc.tick(null, Direction.NONE);
+            assertTrue(
+                spider.getCell().getPosition().equals(new Pos2d(8, 7)) || // bounce
+                spider.getCell().getPosition().equals(new Pos2d(8, 8)) || // right
+                spider.getCell().getPosition().equals(new Pos2d(1, 7)) || // right
+                spider.getCell().getPosition().equals(new Pos2d(4, 8))    // right
             );
             
             dc.tick(null, Direction.NONE);
@@ -226,8 +224,7 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(4, 8))    // bounce
             );
             
-                
-            dc.tick(null, Direction.NONE);
+        dc.tick(null, Direction.NONE);
         assertTrue(
             spider.getCell().getPosition().equals(new Pos2d(6, 7)) || // left
             spider.getCell().getPosition().equals(new Pos2d(7, 8)) || // left
@@ -286,5 +283,25 @@ public class TestPotions {
         // battle should have been avoided
 
         assertEquals(1, TestUtils.countEntitiesOfType(dr, "mercenary"));
+            
+    @Test
+    public void testHealthPotionRefill() {
+        Cell mercCell = dungeon.getMap().getCell(5, 7);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        dc.tick(null, Direction.UP);
+        
+        Integer mercDist = merc.getCell().getPlayerDistance();
+        
+        // use pot
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        
+        for (int i = 0; i < 5; i++) {
+            assertTrue(mercDist < merc.getCell().getPlayerDistance());
+            mercDist = merc.getCell().getPlayerDistance();
+            dc.tick(null, Direction.NONE);
+        }
     }
 }
+        
