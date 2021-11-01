@@ -10,9 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -23,6 +25,7 @@ public class TestPotions {
     Dungeon dungeon;
     InvincibilityPotion invincibilityPot;
     InvisibilityPotion invisPot;
+    HealthPotion healthPot;
 
     @BeforeEach
     public void setStartingPostition() throws IOException {
@@ -37,6 +40,9 @@ public class TestPotions {
         Cell invisibleCell = dungeon.getMap().getCell(5, 6);
         invisPot= new InvisibilityPotion(dungeon, invisibleCell.getPosition());
         invisibleCell.addOccupant(invisPot);
+        Cell healthCell = dungeon.getMap().getCell(4, 5);
+        healthPot = new HealthPotion(dungeon, healthCell.getPosition());
+        healthCell.addOccupant(healthPot);
         
         dc = new DungeonManiaController(dungeon);
         // player in (5, 5) with no inventory
@@ -289,19 +295,21 @@ public class TestPotions {
         Cell mercCell = dungeon.getMap().getCell(5, 7);
         Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
         mercCell.addOccupant(merc);
+
+        Player player = (Player) dungeon.getMap().allEntities().stream().filter(e -> e instanceof Player).findFirst().get();
         
-        dc.tick(null, Direction.UP);
+        dc.tick(null, Direction.LEFT);
         
-        Integer mercDist = merc.getCell().getPlayerDistance();
-        
+        // battle should damage player;
+        for (int i = 0; i < 5; i++) dc.tick(null, Direction.NONE);
+
+        assertTrue(player.getHealth() < 10);
+
         // use pot
-        dc.tick(invincibilityPot.getId(), Direction.NONE);
+        dc.tick(healthPot.getId(), Direction.NONE);
+
+        assertTrue(player.getHealth() - 10 < 0.01);
         
-        for (int i = 0; i < 5; i++) {
-            assertTrue(mercDist < merc.getCell().getPlayerDistance());
-            mercDist = merc.getCell().getPlayerDistance();
-            dc.tick(null, Direction.NONE);
-        }
     }
 }
         
