@@ -322,12 +322,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_bombExample", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Bomb at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         //Checking If Bomb was Collected
         found = false;
@@ -360,10 +360,10 @@ public class TestCollectables {
 
         //Place Bomb on Ground Cardinally Adjacent to Switch
         // Right 4 Units to the Coord (5, 3)
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
 
         //Get ID for Bomb
         curr_type = "";
@@ -407,7 +407,7 @@ public class TestCollectables {
 
 
         //Move Player to Cell (5,3) check no entities here
-        resp = ctr.tick("", Direction.LEFT);
+        resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
         playerFound = false;
@@ -426,7 +426,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (5,4) check no entities here
-        resp = ctr.tick("", Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         entityFound = false;
         playerFound = false;
@@ -445,7 +445,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (6,4) check no entities here
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
 
         entityFound = false;
         playerFound = false;
@@ -464,7 +464,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (7,4) check no entities here
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
 
         entityFound = false;
         playerFound = false;
@@ -483,7 +483,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (7,3) check no entities here
-        resp = ctr.tick("", Direction.UP);
+        resp = ctr.tick(null, Direction.UP);
 
         entityFound = false;
         playerFound = false;
@@ -502,7 +502,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (7,2) check no entities here
-        resp = ctr.tick("", Direction.UP);
+        resp = ctr.tick(null, Direction.UP);
 
         entityFound = false;
         playerFound = false;
@@ -521,7 +521,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (6,2) check no entities here
-        resp = ctr.tick("", Direction.LEFT);
+        resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
         playerFound = false;
@@ -540,7 +540,7 @@ public class TestCollectables {
         assertEquals(false, entityFound);
 
         //Move Player to Cell (5,2) check no entities here
-        resp = ctr.tick("", Direction.LEFT);
+        resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
         playerFound = false;

@@ -56,6 +56,10 @@ public class Bomb extends CollectableEntity {
         int bombYCoord = this.position.getY();
         outputDict.put("bombXCoord", bombXCoord);
         outputDict.put("bombYCoord", bombYCoord);
+        System.out.println("BombXCoord");
+        System.out.println(bombXCoord);
+        System.out.println("BombYCoord");
+        System.out.println(bombYCoord);
         
         //Get Width and Height
         DungeonMap map = this.dungeon.getMap();
@@ -141,8 +145,10 @@ public class Bomb extends CollectableEntity {
         //Traversing through Blast Square
         for (int row=dimensionDetails.get("topBlastYCoord"); row <= dimensionDetails.get("bottomBlastYCoord"); row++) {
             for (int col=dimensionDetails.get("leftBlastXCoord"); col <= dimensionDetails.get("rightBlastXCoord"); col++) {
+                System.out.println("Iteration");
                 double radialDistance = getRadialDistance(dimensionDetails, col, row);
                 if (Math.floor(radialDistance) <= BLAST_RADIUS) {
+                    System.out.println("Ran destroy function");
                    destroyOtherOccupantsCell(col, row);
                 }
             }
@@ -156,7 +162,11 @@ public class Bomb extends CollectableEntity {
     private boolean bombCheckCardinalAdjacency() {
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
-        
+        System.out.println("bombXCoord");
+        System.out.println(bombXCoord);
+
+        System.out.println("bombYCoord");
+        System.out.println(bombYCoord);
 
         DungeonMap map = this.dungeon.getMap();
         Cell bombCell = map.getCell(bombXCoord, bombYCoord); 
@@ -184,13 +194,15 @@ public class Bomb extends CollectableEntity {
         if (adjacentCells == null) {
             return false;
         }
-
+        System.out.println(adjacentCells.toString());
         for (Cell currentCell : adjacentCells) {
             if (currentCell.getOccupants() != null) {
                 List<Entity> occupants = currentCell.getOccupants();
+                System.out.println(occupants.toString());
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
                         if (currOccupant.getTypeAsString() == "floor switch") {
+                            System.out.println("Found a floor switch");
                             return true;
                         }
                     }
@@ -221,6 +233,7 @@ public class Bomb extends CollectableEntity {
      */
     @Override
     public void tick() {
+        System.out.println("Tick method ran");
         if (bombCheckCardinalAdjacency()) {
             explode();
         }
