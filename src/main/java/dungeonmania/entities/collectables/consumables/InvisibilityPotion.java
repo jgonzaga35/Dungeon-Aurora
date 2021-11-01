@@ -21,7 +21,7 @@ public class InvisibilityPotion extends Potion {
     public InvisibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.maxDuration = 10;
-        battleStrategy = new NoBattleStrategy(1); // less priority than invincibility.
+        battleStrategy = new NoBattleStrategy(-1); // less priority than invincibility.
     }
 
     @Override
