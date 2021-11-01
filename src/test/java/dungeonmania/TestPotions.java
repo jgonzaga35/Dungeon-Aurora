@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
+import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
@@ -22,6 +24,7 @@ public class TestPotions {
     DungeonManiaController dc;
     Dungeon dungeon;
     InvincibilityPotion invincibilityPot;
+    InvisibilityPotion invisPot;
 
     @BeforeEach
     public void setStartingPostition() throws IOException {
@@ -29,10 +32,13 @@ public class TestPotions {
         dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
 
-        
         Cell invincibleCell = dungeon.getMap().getCell(5, 4);
         invincibilityPot= new InvincibilityPotion(dungeon, invincibleCell.getPosition());
         invincibleCell.addOccupant(invincibilityPot);
+        
+        Cell invisibleCell = dungeon.getMap().getCell(5, 6);
+        invisPot= new InvisibilityPotion(dungeon, invisibleCell.getPosition());
+        invisibleCell.addOccupant(invisPot);
         
         dc = new DungeonManiaController(dungeon);
         // player in (5, 5) with no inventory
@@ -152,7 +158,7 @@ public class TestPotions {
             assertTrue(mercDist < merc.getCell().getPlayerDistance());
             mercDist = merc.getCell().getPlayerDistance();
         }
-
+        
         for (int i = 0; i < 4; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(mercDist > merc.getCell().getPlayerDistance());
@@ -211,7 +217,7 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(4, 8))    // right
             );
             
-        dc.tick(null, Direction.NONE);
+            dc.tick(null, Direction.NONE);
         // then down or left
         assertTrue(
             spider.getCell().getPosition().equals(new Pos2d(7, 7)) || // left
@@ -219,14 +225,66 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(1, 8)) || // down
             spider.getCell().getPosition().equals(new Pos2d(4, 8))    // bounce
             );
+            
                 
-                
-        dc.tick(null, Direction.NONE);
+            dc.tick(null, Direction.NONE);
         assertTrue(
             spider.getCell().getPosition().equals(new Pos2d(6, 7)) || // left
             spider.getCell().getPosition().equals(new Pos2d(7, 8)) || // left
             spider.getCell().getPosition().equals(new Pos2d(1, 8)) || // bounce
             spider.getCell().getPosition().equals(new Pos2d(3, 8))    // left
-        );
+            );
+    }
+    
+    @Test
+    public void testInvisibilityMovement() {
+        
+        dc.tick(null, Direction.DOWN);
+
+        Cell mercCell = dungeon.getMap().getCell(2, 2);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        Integer mercDist = merc.getCell().getPlayerDistance();
+        
+        // use pot
+        dc.tick(invisPot.getId(), Direction.NONE);
+        
+        // Highly unlikely that the merc always moves closer when moving randomly.
+        boolean hasNotMovedCloser = false;
+        for (int i = 0; i < 9; i++) {
+            if (mercDist < merc.getCell().getPlayerDistance()) hasNotMovedCloser = true;
+            mercDist = merc.getCell().getPlayerDistance();
+            dc.tick(null, Direction.NONE);
+        }
+
+        assertTrue(hasNotMovedCloser);
+    }
+    
+    @Test
+    public void testInvisibilityNoBattles() throws IOException{
+        String content = FileLoader.loadResourceFile("/dungeons/_force_battle.json");
+        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon.getMap().flood();
+        
+        Cell invisibleCell = dungeon.getMap().getCell(0, 1);
+        invisPot= new InvisibilityPotion(dungeon, invisibleCell.getPosition());
+        invisibleCell.addOccupant(invisPot);
+        
+        dc = new DungeonManiaController(dungeon);
+        // player in (0, 0) with no inventory
+        
+        dc.tick(null, Direction.DOWN);
+        
+        Cell mercCell = dungeon.getMap().getCell(0, 0);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        // use pot merc is forced to move down.
+        DungeonResponse dr = dc.tick(invisPot.getId(), Direction.NONE);
+
+        // battle should have been avoided
+
+        assertEquals(1, TestUtils.countEntitiesOfType(dr, "mercenary"));
     }
 }

@@ -21,7 +21,7 @@ public class InvincibilityPotion extends Potion {
     public InvincibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.maxDuration = 5;
-        this.battleStrategy = new WinAllBattleStrategy(0);
+        this.battleStrategy = new WinAllBattleStrategy(-2);
     }
 
     @Override
