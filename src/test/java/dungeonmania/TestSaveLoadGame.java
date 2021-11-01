@@ -44,10 +44,10 @@ public class TestSaveLoadGame {
     public void testSavedContent() {
         DungeonManiaController ctr = new DungeonManiaController();
         ctr.newGame("_boulder_simple", GameMode.PEACEFUL.getValue());
-        ctr.tick("", Direction.NONE);
-        ctr.tick("", Direction.UP);
-        ctr.tick("", Direction.DOWN);
-        ctr.tick("", Direction.LEFT);
+        ctr.tick(null, Direction.NONE);
+        ctr.tick(null, Direction.UP);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.LEFT);
         DungeonResponse resp1 = ctr.saveGame("g1");
         DungeonResponse resp2 = ctr.loadGame("g1");
 
