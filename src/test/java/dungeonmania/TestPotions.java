@@ -266,11 +266,6 @@ public class TestPotions {
         String content = FileLoader.loadResourceFile("/dungeons/_force_battle.json");
         dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
-
-
-        Cell playerCell = dungeon.getMap().getCell(0, 0);
-        Player player = new Player(dungeon, playerCell.getPosition());
-        playerCell.addOccupant(player);
         
         Cell invisibleCell = dungeon.getMap().getCell(0, 1);
         invisPot= new InvisibilityPotion(dungeon, invisibleCell.getPosition());
@@ -284,14 +279,11 @@ public class TestPotions {
         Cell mercCell = dungeon.getMap().getCell(0, 0);
         Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
         mercCell.addOccupant(merc);
-
-        float playerHealth = player.getHealth();
         
         // use pot merc is forced to move down.
         DungeonResponse dr = dc.tick(invisPot.getId(), Direction.NONE);
 
         // battle should have been avoided
-        assertEquals(playerHealth, player.getHealth());
 
         assertEquals(1, TestUtils.countEntitiesOfType(dr, "mercenary"));
     }

@@ -2,6 +2,7 @@
     "width": 1,
     "height": 3,
     "entities": [
+        { "x": 0, "y": 0, "type": "player" },
         { "x": 0, "y": 2, "type": "wall" }
     ],
     "goal-condition": {
