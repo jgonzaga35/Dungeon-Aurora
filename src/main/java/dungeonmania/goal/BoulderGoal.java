@@ -10,6 +10,7 @@ public class BoulderGoal extends Goal {
         super();
     }
 
+    @Override
     public boolean isCompleted(Dungeon dungeon) {
         DungeonMap map = dungeon.getMap();
         return map.allFloorSwitchesTriggered();
