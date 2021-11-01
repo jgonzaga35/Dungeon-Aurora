@@ -1,6 +1,7 @@
 package dungeonmania.response.models;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AnimationQueue {
     private final String when;
@@ -36,4 +37,22 @@ public class AnimationQueue {
     public double getDuration() {
         return duration;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof AnimationQueue)) {
+            return false;
+        }
+        AnimationQueue animationQueue = (AnimationQueue) o;
+        return Objects.equals(when, animationQueue.when) && Objects.equals(entityId, animationQueue.entityId) && Objects.equals(queue, animationQueue.queue) && loop == animationQueue.loop && duration == animationQueue.duration;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(when, entityId, queue, loop, duration);
+    }
+
 }
