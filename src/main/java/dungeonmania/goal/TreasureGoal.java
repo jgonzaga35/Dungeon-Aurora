@@ -24,7 +24,6 @@ public class TreasureGoal extends Goal {
 
     @Override
     public String asString() {
-        
         return "collect all treasure";
     }
 }
