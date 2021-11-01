@@ -289,6 +289,7 @@ public class TestPotions {
         // battle should have been avoided
 
         assertEquals(1, TestUtils.countEntitiesOfType(dr, "mercenary"));
+    }
             
     @Test
     public void testHealthPotionRefill() {
