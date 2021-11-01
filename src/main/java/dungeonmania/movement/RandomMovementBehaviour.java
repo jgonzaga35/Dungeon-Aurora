@@ -9,25 +9,21 @@ import dungeonmania.Utils;
 
 public class RandomMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
-    private Cell currentCell;
 
     public RandomMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
-        super(precedence);
+        super(precedence, initialCell);
         this.map = map;
-        this.currentCell = initialCell;
     }
 
     public Cell move() {
-        List<Cell> availableCells = this.map.getCellsAround(this.currentCell)
+        Cell nextCell;
+        List<Cell> availableCells = this.map.getCellsAround(getCurrentCell())
             .filter(cell -> !cell.isBlocking())
             .collect(Collectors.toList());
-        this.currentCell = Utils.choose(availableCells);
-        return this.currentCell;
-    }
+            nextCell = Utils.choose(availableCells);
+            setCurrentCell(nextCell);
 
-    public Cell getCurrentCell()
-    {
-        return currentCell;
+        return nextCell;
     }
 }

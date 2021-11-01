@@ -22,14 +22,14 @@ public class TestPortal {
         });
 
         // don't move
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(0, p.getY());
 
 
         // move on a portal
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(4, p.getX());
         assertEquals(0, p.getY());
@@ -45,14 +45,14 @@ public class TestPortal {
         });
 
         // don't move
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(0, p.getY());
 
 
         // make sure portal does not teleport the player
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());
@@ -68,14 +68,14 @@ public class TestPortal {
         });
 
         // don't move
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(0, p.getX());
         assertEquals(0, p.getY());
 
 
         // make sure portal does not teleport the player
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());

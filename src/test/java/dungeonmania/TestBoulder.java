@@ -19,14 +19,14 @@ public class TestBoulder {
         ctr.newGame("_boulder_simple", GameMode.PEACEFUL.getValue());
 
         // move the boulder to a free spot
-        resp = ctr.tick("", Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());
 
         // try to push the boulder further
         // no movement
-        resp  = ctr.tick("", Direction.RIGHT);
+        resp  = ctr.tick(null, Direction.RIGHT);
         p = TestUtils.getPlayerPosition(resp);
         assertEquals(1, p.getX());
         assertEquals(0, p.getY());

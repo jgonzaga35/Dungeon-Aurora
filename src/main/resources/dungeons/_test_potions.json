@@ -1,0 +1,11 @@
+{
+    "width": 9,
+    "height": 9,
+    "entities": [
+        { "x": 5, "y": 5, "type": "player" },
+        { "x": 8, "y": 8, "type": "exit" }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}

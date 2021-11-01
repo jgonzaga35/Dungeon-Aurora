@@ -3,37 +3,33 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 
-public class Sword extends CollectableEntity {
+public class Sword extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "sword";
 
-    public static int INITIAL_DURABILITY = 10;
+    public static int INITIAL_DURABILITY = 20;
 
-    public int durabilityLeft;
+    public int durability;
 
     public Sword(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.durabilityLeft = INITIAL_DURABILITY;
+        this.durability = INITIAL_DURABILITY;
     }
 
-    /**
-     * 
-     * @return Remaining Durability (int)
-     */
+
+    @Override
     public int getDurability() {
-        return durabilityLeft;
+        return this.durability;
     }
 
-    /**
-     * 
-     * @param numTimes : int (Number of Times Sword Used)
-     * @return Remaining Durability (int)
-     */
-    public int used(int numTimes) {
-        durabilityLeft = durabilityLeft - numTimes;
-        return durabilityLeft;
+    @Override
+    public void usedForBattleRound(BattleDirection d) {
+        if (d == BattleDirection.DEFENCE) {
+            this.durability--;
+        }
     }
 
     @Override
@@ -48,5 +44,17 @@ public class Sword extends CollectableEntity {
 
     @Override
     public void tick() {
+    }
+
+
+    @Override
+    public float getDefenceCoefBonus() {
+        return 1; // doesn't affect defence coef bonus
+    }
+
+
+    @Override
+    public float getAttackDamageBonus() {
+        return 2; // attacking with a sword is a lot better than with your fists!
     }
 }

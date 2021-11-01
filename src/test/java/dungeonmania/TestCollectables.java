@@ -23,11 +23,11 @@ public class TestCollectables {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_treasureExample", GameMode.PEACEFUL.getValue());
         Boolean found = false;
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
 
         // Down 2 Units to the Treasure at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         //Checking that the Item has Been Added to Inventory
         found = false;
@@ -72,12 +72,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_woodExample", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Wood at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
         
         //Checking If Wood was Collected
         found = false;
@@ -118,12 +118,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_arrowExample", GameMode.STANDARD.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Arrow at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
         
         //Checking If Arrow was Collected
         found = false;
@@ -165,12 +165,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_keyExample", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Key at Coord (3, 1)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
         
         //Checking If Key was Collected
         found = false;
@@ -202,8 +202,8 @@ public class TestCollectables {
         assertEquals(true, itemRemoved);
         
         //Then Entering the Linked Door
-        ctr.tick("", Direction.RIGHT);
-        ctr.tick("", Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
 
         //Checking that the Key has Then Been Removed by Opening Same Door Again
     }
@@ -217,12 +217,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_swordExample", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Sword at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         //Checking If Sword was Collected
         found = false;
@@ -266,12 +266,12 @@ public class TestCollectables {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_armourExample", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick("", Direction.NONE);
+        resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
         // Down 2 Units to the Armour at Coord (1, 3)
-        ctr.tick("", Direction.DOWN);
-        resp = ctr.tick("", Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
 
         //Checking If Armour was Collected
         found = false;

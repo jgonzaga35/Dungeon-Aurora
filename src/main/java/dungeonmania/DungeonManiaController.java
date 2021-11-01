@@ -54,6 +54,7 @@ public class DungeonManiaController {
     }
 
     public DungeonManiaController() {
+        
     }
 
     public DungeonManiaController(Dungeon dungeon) {
@@ -154,7 +155,8 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        this.dungeon.build(buildable);
+        return this.makeDungeonResponse();
     }
 
     /**
