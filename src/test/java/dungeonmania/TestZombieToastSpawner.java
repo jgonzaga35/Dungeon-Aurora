@@ -12,7 +12,7 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 
-public class TestZombieSpawner {
+public class TestZombieToastSpawner {
     @BeforeEach
     public void setSeed() {
         Utils.setSeed(1);
