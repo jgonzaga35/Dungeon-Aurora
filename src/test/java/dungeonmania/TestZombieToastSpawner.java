@@ -110,4 +110,33 @@ public class TestZombieToastSpawner {
         assertEquals(0, p.getY());
     }
 
+
+    @Test
+    public void testDestroyZombieToastSpawnerNoSword() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_destroy_zombie_toast_spawner", GameMode.STANDARD.getValue());
+
+        assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals(Sword.STRING_TYPE)));
+        // avoid the sword
+        resp = ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT); // we are right under the toast spawner
+        assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals(Sword.STRING_TYPE)));
+
+        String zombieToastSpawnerId = resp.getEntities().stream()
+            .filter(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE))
+            .findFirst().get().getId();
+
+        // java's annoying with setting variable outside of scope
+        ArrayList<DungeonResponse> arr = new ArrayList<>();
+        assertThrows(InvalidActionException.class, () -> {
+            arr.set(0, ctr.interact(zombieToastSpawnerId));
+        });
+        resp = arr.get(0);
+        assertTrue(resp.getEntities().stream().anyMatch(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE)));
+
+        Position p = TestUtils.getPlayerPosition(resp);
+        assertEquals(2, p.getX());
+        assertEquals(1, p.getY());
+    }
 }
