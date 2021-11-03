@@ -1,6 +1,8 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Objects;
 
@@ -8,9 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class TestZombieToastSpawner {
     @BeforeEach
@@ -51,4 +56,26 @@ public class TestZombieToastSpawner {
                 .filter(e -> Objects.equals(ZombieToast.STRING_TYPE, e.getType())).count());
         }
     }
+
+    @Test
+    public void testDestroyZombieToastSpawnerSuccess() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_destroy_zombie_toast_spawner", GameMode.STANDARD.getValue());
+
+        assertFalse(resp.getInventory().stream().anyMatch(item -> item.getType().equals(Sword.STRING_TYPE)));
+        resp = ctr.tick(null, Direction.RIGHT);
+        assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals(Sword.STRING_TYPE)));
+
+        String zombieToastSpawnerId = resp.getEntities().stream()
+            .filter(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE))
+            .findFirst().get().getId();
+
+        resp = ctr.interact(zombieToastSpawnerId); // destroys the zombie toast spawner
+        assertFalse(resp.getEntities().stream().anyMatch(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE)));
+
+        Position p = TestUtils.getPlayerPosition(resp);
+        assertEquals(2, p.getX());
+        assertEquals(0, p.getY());
+    }
+
 }
