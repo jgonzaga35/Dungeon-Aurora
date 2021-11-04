@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +76,7 @@ public class TestZombieToastSpawner {
         assertFalse(resp.getEntities().stream().anyMatch(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE)));
 
         Position p = TestUtils.getPlayerPosition(resp);
-        assertEquals(2, p.getX());
+        assertEquals(1, p.getX());
         assertEquals(0, p.getY());
     }
 
@@ -97,17 +96,15 @@ public class TestZombieToastSpawner {
 
         resp = ctr.tick(null, Direction.DOWN); // move too far away from spawner
 
-        // java's annoying with setting variable outside of scope
-        ArrayList<DungeonResponse> arr = new ArrayList<>();
         assertThrows(InvalidActionException.class, () -> {
-            arr.set(0, ctr.interact(zombieToastSpawnerId));
+            ctr.interact(zombieToastSpawnerId);
         });
-        resp = arr.get(0);
+        resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE)));
 
         Position p = TestUtils.getPlayerPosition(resp);
-        assertEquals(2, p.getX());
-        assertEquals(0, p.getY());
+        assertEquals(1, p.getX());
+        assertEquals(1, p.getY());
     }
 
 
@@ -127,12 +124,10 @@ public class TestZombieToastSpawner {
             .filter(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE))
             .findFirst().get().getId();
 
-        // java's annoying with setting variable outside of scope
-        ArrayList<DungeonResponse> arr = new ArrayList<>();
         assertThrows(InvalidActionException.class, () -> {
-            arr.set(0, ctr.interact(zombieToastSpawnerId));
+            ctr.interact(zombieToastSpawnerId);
         });
-        resp = arr.get(0);
+        resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(e -> e.getType().equals(ZombieToastSpawner.STRING_TYPE)));
 
         Position p = TestUtils.getPlayerPosition(resp);
