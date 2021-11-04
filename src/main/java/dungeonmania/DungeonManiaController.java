@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,11 +84,14 @@ public class DungeonManiaController {
      * Done for you.
      */
     public static List<String> dungeons() {
+        List<String> filenames;
         try {
-            return FileLoader.listFileNamesInResourceDirectory("/dungeons");
+            filenames = FileLoader.listFileNamesInResourceDirectory("/dungeons");
         } catch (IOException e) {
             return new ArrayList<>();
         }
+        Collections.sort(filenames);
+        return filenames;
     }
 
     /**
