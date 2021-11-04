@@ -23,9 +23,17 @@ public class TestSaveLoadGame {
     }
 
     @Test
+    public void testLoadGameError() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        assertThrows(IllegalArgumentException.class, () -> ctr.loadGame("NonExistent"));
+    }
+
+    @Test
     public void testLoadGame() {
         DungeonManiaController ctr = new DungeonManiaController();
         assertThrows(IllegalArgumentException.class, () -> ctr.loadGame("NonExistent"));
+        ctr.newGame("_boulder_simple", GameMode.PEACEFUL.getValue());
+        DungeonResponse resp = ctr.saveGame("g1");
     }
 
     @Test

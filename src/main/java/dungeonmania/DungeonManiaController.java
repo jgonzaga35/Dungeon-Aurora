@@ -1,6 +1,11 @@
 package dungeonmania;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.stream.*;
 
@@ -125,12 +130,36 @@ public class DungeonManiaController {
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
         if (savedGames.containsKey(name)) throw new IllegalArgumentException();
         savedGames.put(name, this.dungeon);
+
+        try {
+            File f = new File(name + ".txt");
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(this.dungeon);
+            fos.close();
+            oos.close();
+        } catch (Exception e) {
+
+        }
+
         return this.makeDungeonResponse();
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
         if (!savedGames.containsKey(name)) throw new IllegalArgumentException();
-        this.dungeon = savedGames.get(name);
+
+        try {
+            File f = new File(name + ".txt");
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            this.dungeon = (Dungeon) ois.readObject();
+            fis.close();
+            ois.close();
+        } catch (Exception e) {
+            System.out.println("load game error " + e);
+            this.dungeon = savedGames.get(name);
+        }
+        
         return this.makeDungeonResponse();
     }
 

@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +43,7 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Dungeon {
+public class Dungeon implements Serializable {
     private String id;
     private DungeonMap dungeonMap;
     private GameMode mode;
