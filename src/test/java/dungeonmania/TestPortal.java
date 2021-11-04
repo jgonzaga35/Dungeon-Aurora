@@ -18,7 +18,7 @@ public class TestPortal {
         DungeonResponse resp;
         Position p;
         assertDoesNotThrow(() -> {
-            ctr.newGame("portals", GameMode.PEACEFUL.getValue());
+            ctr.newGame("portals_custom", GameMode.PEACEFUL.getValue());
         });
 
         // don't move
