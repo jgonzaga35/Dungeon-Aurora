@@ -70,17 +70,15 @@ public class TestBattle {
         // the only place where the spider can spawn is exactly on the spot
         // where the player is
 
-        ctr.tick(null, Direction.NONE);
-
-        int player_kills_n_spiders = 15;
+        int player_kills_n_spiders = 16;
         
         for (int j = 0; j < player_kills_n_spiders; j++) {
-            resp = ctr.tick(null, Direction.NONE);
-            resp.getEntities().forEach(e -> System.out.println(e.getType() + " " + e.getPosition()));
-
+            for (int i = 0; i < Spider.SPAWN_EVERY_N_TICKS; i++) {
+                resp = ctr.tick(null, Direction.NONE);
+            }
             if (j == player_kills_n_spiders - 1) {
                 // the player has been killed
-                assertEquals(1, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE), "j=" + j);
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
             } else {
                 assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " spiders");

@@ -26,7 +26,8 @@ public class TestSpider {
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        for (int i = 0 ; i < 10; i++) {
+        ctr.setSeed(1);
+        for (int i = 0 ; i < Spider.SPAWN_EVERY_N_TICKS; i++) {
             assertFalse(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
             resp = ctr.tick(null, Direction.NONE);
         }
