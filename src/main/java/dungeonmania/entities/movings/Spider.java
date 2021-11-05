@@ -7,10 +7,10 @@ import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.CircleMovementBehaviour;
-import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 
 public class Spider extends MovingEntity implements Fighter {
 
@@ -21,27 +21,12 @@ public class Spider extends MovingEntity implements Fighter {
     public static final int MAX_SPIDERS = 5;
 
     /**
-     * A Factory method that makes a new instance of Spider 
-     * at a random coordinate.
-     * @param dungeon
-     * @return
-     */
-    public static Spider spawnSpider(Dungeon dungeon) {
-        Cell cell = randomPosition(dungeon);
-        if (cell != null) {
-            Spider spider = new Spider(dungeon, cell.getPosition());
-            cell.addOccupant(spider);
-            return spider;
-        }
-        return null;
-    }
-
-    /**
      * Generates a random location for the Spider to spawn.
      * @param dungeon
-     * @return
+     * @return the cell on which the spawn the spider. {@code null} if there are
+     * no cell on which a spider can spawn
      */
-    private static Cell randomPosition(Dungeon dungeon) {
+    public static Cell getRandomPosition(Dungeon dungeon) {
         DungeonMap dungeonMap = dungeon.getMap();
         int width = dungeonMap.getWidth();
         int height = dungeonMap.getHeight();

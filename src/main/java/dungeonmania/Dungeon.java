@@ -137,7 +137,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
-                cell.addOccupant(Spider.spawnSpider(dungeon));
+                cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
@@ -244,8 +244,12 @@ public class Dungeon {
         
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
+
         if (spiderPopulation < Spider.MAX_SPIDERS) {
-            Spider.spawnSpider(this);
+            Cell c = Spider.getRandomPosition(this);
+            if (c != null) {
+                c.addOccupant(new Spider(this, c.getPosition()));
+            }
         }
 
         this.battleStrategies.peek().findAndPerformBattles(this);
