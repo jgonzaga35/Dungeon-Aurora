@@ -15,10 +15,11 @@ import dungeonmania.movement.CircleMovementBehaviour;
 public class Spider extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "spider";
+    public static final int MAX_SPIDERS = 5;
+    public static final int SPAWN_EVERY_N_TICKS = 10;
 
     private float health = 1;
     
-    public static final int MAX_SPIDERS = 5;
 
     /**
      * Generates a random location for the Spider to spawn.

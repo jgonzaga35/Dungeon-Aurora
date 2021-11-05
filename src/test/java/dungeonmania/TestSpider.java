@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -25,11 +26,10 @@ public class TestSpider {
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick(null, Direction.NONE);
-
-        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
-        resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick(null, Direction.NONE);
+        for (int i = 0 ; i < 10; i++) {
+            assertFalse(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
+            resp = ctr.tick(null, Direction.NONE);
+        }
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
@@ -57,7 +57,8 @@ public class TestSpider {
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
         ctr.setSeed(1);
 
-        resp = ctr.tick(null, Direction.NONE);
+        for (int i = 0; i < 10; i++)
+            resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
         Map<String, Pos2d> positions = new HashMap<>();

@@ -58,6 +58,8 @@ public class Dungeon {
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
+    
+    private int tickCount = 0;
 
     /**
      * make sure to seed before each test
@@ -215,6 +217,7 @@ public class Dungeon {
             throws IllegalArgumentException, InvalidActionException {
 
         assert this.battleStrategies.size() > 0;
+        this.tickCount++;
 
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
@@ -242,16 +245,18 @@ public class Dungeon {
         pickupCollectableEntities();
 
         
+        // spawn spiders
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
 
-        if (spiderPopulation < Spider.MAX_SPIDERS) {
+        if (spiderPopulation < Spider.MAX_SPIDERS && (this.tickCount % Spider.SPAWN_EVERY_N_TICKS == 0)) {
             Cell c = Spider.getRandomPosition(this);
             if (c != null) {
                 c.addOccupant(new Spider(this, c.getPosition()));
             }
         }
 
+        // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
     }
 
