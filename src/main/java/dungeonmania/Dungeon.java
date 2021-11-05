@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,6 +59,11 @@ public class Dungeon {
 
     public static int nextDungeonId = 1;
 
+    /**
+     * make sure to seed before each test
+     */
+    private Random r = new Random(1);
+
     public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
@@ -71,6 +77,15 @@ public class Dungeon {
 
         Dungeon.nextDungeonId++;
     }
+
+    /**
+     * All source of randomness should come from here, so that we can seed it.
+     * 
+     * to seed: dungeon.getRandom().setSeed(1);
+     */
+    public Random getRandom() {
+        return this.r;
+    } 
 
     /**
      * Creates a Dungeon instance from the JSON file's content
