@@ -55,6 +55,8 @@ public class TestSpider {
     public void testSpiderMovement() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
+
         resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
@@ -84,6 +86,7 @@ public class TestSpider {
     public void testSpiderId() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.STANDARD.getValue());
+        ctr.setSeed(1);
 
         List<String> idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
         Set<String> idSet = new HashSet<String>(idList);
@@ -112,6 +115,7 @@ public class TestSpider {
     public void testNullPointerError() {
         DungeonManiaController ctr = new DungeonManiaController();
         ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
     
         for (int i = 0; i < 50; i++) {
             ctr.tick(null, Direction.NONE);
@@ -122,6 +126,7 @@ public class TestSpider {
     public void testSpiderSpawnLimit() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
 
         for (int i = 0; i < 10; i ++) {
             resp = ctr.tick(null, Direction.NONE);
