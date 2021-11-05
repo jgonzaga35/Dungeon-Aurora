@@ -10,7 +10,9 @@ import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
@@ -149,6 +151,35 @@ public class Inventory {
             }
         }
         this.collectables.removeAll(deadItems);
+    }
+
+    /**
+     * @param bitem battle item
+     * @param d direction
+     * @return true if the battle item is dead
+     */
+    public boolean usedItemForBattle(BattleItem bitem, BattleDirection d) {
+        bitem.usedForBattleRound(d);
+        if (bitem.getDurability() <= 0) {
+            assert bitem instanceof CollectableEntity;
+            this.collectables.remove((CollectableEntity) bitem);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * See the list below for what is classified as a weapon
+     * @return a weapon, or null
+     */
+    public BattleItem getOneWeapon() {
+        // we could add another layer (make a super class Weapon, but this is
+        // good enough)
+        List<Class<? extends BattleItem>> weapons = List.of(
+            Sword.class,
+            Bow.class
+        );
+        return (BattleItem) this.collectables.stream().filter(e -> weapons.contains(e.getClass())).findFirst().orElse(null);
     }
 
     /**

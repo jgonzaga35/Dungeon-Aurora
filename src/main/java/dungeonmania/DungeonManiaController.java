@@ -2,7 +2,9 @@ package dungeonmania;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,6 +12,7 @@ import java.util.stream.Stream;
 import org.json.JSONObject;
 
 import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
@@ -18,6 +21,7 @@ import dungeonmania.util.FileLoader;
 
 public class DungeonManiaController {
     private Dungeon dungeon;
+    private Map<String, Dungeon> savedGames = new HashMap<>();
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
@@ -26,7 +30,7 @@ public class DungeonManiaController {
      * https://stackoverflow.com/a/3990421/6164984
      */
     public enum LayerLevel {
-        STATIC(1), MOVING_ENTITY(50), PLAYER(100);
+        STATIC(1), COLLECTABLE(25), MOVING_ENTITY(50), PLAYER(100);
 
         private final int value;
 
@@ -125,15 +129,19 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        return null;
+        if (savedGames.containsKey(name)) throw new IllegalArgumentException();
+        savedGames.put(name, this.dungeon);
+        return this.makeDungeonResponse();
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        if (!savedGames.containsKey(name)) throw new IllegalArgumentException();
+        this.dungeon = savedGames.get(name);
+        return this.makeDungeonResponse();
     }
 
     public List<String> allGames() {
-        return new ArrayList<>();
+        return savedGames.keySet().stream().collect(Collectors.toList());
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection)
@@ -147,9 +155,14 @@ public class DungeonManiaController {
             .allEntities().stream().filter(e -> e.getId().equals(entityId))
             .findFirst().orElse(null);
 
-        if (interactEntity == null) throw new IllegalArgumentException("entityId does not exist");
-        if (!interactEntity.isInteractable()) throw new IllegalArgumentException("Entity is not interactable");
-        if (interactEntity instanceof Mercenary) dungeon.bribeMercenary((Mercenary)interactEntity);
+        if (interactEntity == null)
+            throw new IllegalArgumentException("entityId does not exist");
+        if (!interactEntity.isInteractable())
+            throw new IllegalArgumentException("Entity is not interactable");
+        if (interactEntity instanceof Mercenary)
+            dungeon.bribeMercenary((Mercenary)interactEntity);
+        if (interactEntity instanceof ZombieToastSpawner)
+            dungeon.destroyZombieToastSpawner((ZombieToastSpawner) interactEntity);
         
         return this.makeDungeonResponse();
     }

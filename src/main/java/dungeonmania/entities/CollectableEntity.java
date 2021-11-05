@@ -13,6 +13,6 @@ public abstract class CollectableEntity extends Entity {
 
     @Override
     public LayerLevel getLayerLevel() {
-        return LayerLevel.MOVING_ENTITY;
+        return LayerLevel.COLLECTABLE;
     }
 }

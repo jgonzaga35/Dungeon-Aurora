@@ -40,7 +40,7 @@ public class ZombieToastSpawner extends StaticEntity {
 
     @Override
     public boolean isInteractable() {
-        return false;
+        return true; // it can be destroyed
     }
 
     @Override

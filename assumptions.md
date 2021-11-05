@@ -7,6 +7,11 @@
 - when zombies move in a random direction, that direction cannot be
   Direction.NONE unless there all the cells around it are blocking.
 
+## ZombieToastSpawners
+
+- valid weapons to destroy zombie toast spawners are bows and swords.
+  https://edstem.org/au/courses/7065/discussion/661191
+
 ## Spiders
 - Spiders bounce off of map borders like boulders.
 - when the map is too small for a spider to make a full circle, no spider spawns
@@ -25,5 +30,6 @@
    https://edstem.org/au/courses/7065/discussion/660682
 
 ## Potions
+
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.

@@ -10,12 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
-import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -25,6 +25,7 @@ public class TestPotions {
     Dungeon dungeon;
     InvincibilityPotion invincibilityPot;
     InvisibilityPotion invisPot;
+    HealthPotion healthPot;
 
     @BeforeEach
     public void setStartingPostition() throws IOException {
@@ -39,6 +40,9 @@ public class TestPotions {
         Cell invisibleCell = dungeon.getMap().getCell(5, 6);
         invisPot= new InvisibilityPotion(dungeon, invisibleCell.getPosition());
         invisibleCell.addOccupant(invisPot);
+        Cell healthCell = dungeon.getMap().getCell(4, 5);
+        healthPot = new HealthPotion(dungeon, healthCell.getPosition());
+        healthCell.addOccupant(healthPot);
         
         dc = new DungeonManiaController(dungeon);
         // player in (5, 5) with no inventory
@@ -181,7 +185,7 @@ public class TestPotions {
             mercDist = merc.getCell().getPlayerDistance();
         }
     }
-
+    
     @Test
     public void testInvincibilityOnSpiders() {
         Cell spiderCell = dungeon.getMap().getCell(5, 6);
@@ -206,15 +210,15 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(7, 8)) ||
             spider.getCell().getPosition().equals(new Pos2d(0, 7)) ||
             spider.getCell().getPosition().equals(new Pos2d(3, 8))
-        );
-        
-        // spider should now continue into the loop by moving right or bouncing back.
-        dc.tick(null, Direction.NONE);
-        assertTrue(
-            spider.getCell().getPosition().equals(new Pos2d(8, 7)) || // bounce
-            spider.getCell().getPosition().equals(new Pos2d(8, 8)) || // right
-            spider.getCell().getPosition().equals(new Pos2d(1, 7)) || // right
-            spider.getCell().getPosition().equals(new Pos2d(4, 8))    // right
+            );
+            
+            // spider should now continue into the loop by moving right or bouncing back.
+            dc.tick(null, Direction.NONE);
+            assertTrue(
+                spider.getCell().getPosition().equals(new Pos2d(8, 7)) || // bounce
+                spider.getCell().getPosition().equals(new Pos2d(8, 8)) || // right
+                spider.getCell().getPosition().equals(new Pos2d(1, 7)) || // right
+                spider.getCell().getPosition().equals(new Pos2d(4, 8))    // right
             );
             
             dc.tick(null, Direction.NONE);
@@ -226,8 +230,7 @@ public class TestPotions {
             spider.getCell().getPosition().equals(new Pos2d(4, 8))    // bounce
             );
             
-                
-            dc.tick(null, Direction.NONE);
+        dc.tick(null, Direction.NONE);
         assertTrue(
             spider.getCell().getPosition().equals(new Pos2d(6, 7)) || // left
             spider.getCell().getPosition().equals(new Pos2d(7, 8)) || // left
@@ -287,4 +290,27 @@ public class TestPotions {
 
         assertEquals(1, TestUtils.countEntitiesOfType(dr, "mercenary"));
     }
+            
+    @Test
+    public void testHealthPotionRefill() {
+        Cell mercCell = dungeon.getMap().getCell(5, 7);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+
+        Player player = (Player) dungeon.getMap().allEntities().stream().filter(e -> e instanceof Player).findFirst().get();
+        
+        dc.tick(null, Direction.LEFT);
+        
+        // battle should damage player;
+        for (int i = 0; i < 5; i++) dc.tick(null, Direction.NONE);
+
+        assertTrue(player.getHealth() < 10);
+
+        // use pot
+        dc.tick(healthPot.getId(), Direction.NONE);
+
+        assertTrue(player.getHealth() - 10 < 0.01);
+        
+    }
 }
+        

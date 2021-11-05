@@ -10,17 +10,21 @@ import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
+import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -131,6 +135,10 @@ public class Dungeon {
                 cell.addOccupant(Spider.spawnSpider(dungeon));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
+                cell.addOccupant(new HealthPotion(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, InvisibilityPotion.STRING_TYPE)) {
+                cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
@@ -427,6 +435,28 @@ public class Dungeon {
         if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
             
         merc.bribe();
+    }
+
+    public void destroyZombieToastSpawner(ZombieToastSpawner zts) {
+        // check if we are close enough to the spawner
+
+        if (this.player.getPosition().squareDistance(zts.getPosition()) > 1) {
+            throw new InvalidActionException("player is too far away from the spawner");
+        }
+        
+
+        // check if we have a weapon to destroy the spawner with
+        BattleItem weapon = this.inventory.getOneWeapon();
+        if (weapon == null) {
+            throw new InvalidActionException("no weapons to destroy the spawner");
+        }
+
+        // don't do it in one line, because asserts are disabled
+        // by default (and thus the entity wouldn't be removed)
+        boolean removed = this.dungeonMap.removeEntity(zts);
+        assert removed;
+
+        this.inventory.usedItemForBattle(weapon, BattleDirection.ATTACK);
     }
 
     /**
