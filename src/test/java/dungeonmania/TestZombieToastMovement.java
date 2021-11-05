@@ -17,7 +17,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 
-public class TestZombieMovement {
+public class TestZombieToastMovement {
     
     @BeforeEach
     public void setSeed() {

@@ -294,6 +294,13 @@ public class DungeonMap {
             .collect(Collectors.toList());
     }
 
+    /**
+     * @return true if the entity was found (and removed) in the map
+     */
+    public boolean removeEntity(Entity e) {
+        return this.getCell(e.getPosition()).removeOccupant(e);
+    }
+
     @Override
     public String toString() {
         String result = "";

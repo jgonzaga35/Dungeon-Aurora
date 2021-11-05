@@ -1,12 +1,18 @@
 package dungeonmania;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
 import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
@@ -149,9 +155,14 @@ public class DungeonManiaController {
             .allEntities().stream().filter(e -> e.getId().equals(entityId))
             .findFirst().orElse(null);
 
-        if (interactEntity == null) throw new IllegalArgumentException("entityId does not exist");
-        if (!interactEntity.isInteractable()) throw new IllegalArgumentException("Entity is not interactable");
-        if (interactEntity instanceof Mercenary) dungeon.bribeMercenary((Mercenary)interactEntity);
+        if (interactEntity == null)
+            throw new IllegalArgumentException("entityId does not exist");
+        if (!interactEntity.isInteractable())
+            throw new IllegalArgumentException("Entity is not interactable");
+        if (interactEntity instanceof Mercenary)
+            dungeon.bribeMercenary((Mercenary)interactEntity);
+        if (interactEntity instanceof ZombieToastSpawner)
+            dungeon.destroyZombieToastSpawner((ZombieToastSpawner) interactEntity);
         
         return this.makeDungeonResponse();
     }
