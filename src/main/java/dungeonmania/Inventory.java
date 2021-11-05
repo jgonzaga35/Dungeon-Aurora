@@ -81,27 +81,13 @@ public class Inventory {
 
         if (itemUsed == null) throw new InvalidActionException("Item not in inventory");
 
-        //TODO: add bomb
         if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb)) throw new IllegalArgumentException("Item not useable");
         
         if (itemUsed instanceof Potion) {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
         }
-
-        //TODO: add bomb
-        /*if (itemUsed instanceof Bomb) {
-            DungeonMap map = this.super.dungeonMap; 
-            Cell playerCell = map.getPlayerCell();
-            Pos2d playerPosition = playerCell.getPosition();
-            int playerXCoord = playerPosition.getX();
-            int playerYCoord = playerPosition.getY();
-
-            Bomb removedBomb = (Bomb) itemUsed;
-            removedBomb.setIsPlaced();
-            removedBomb.updatePosition(playerXCoord, playerYCoord);
-            playerCell.addOccupant(removedBomb);
-        }*/
+        
 
         collectables.remove(itemUsed);
         
