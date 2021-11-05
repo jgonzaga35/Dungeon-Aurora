@@ -169,46 +169,55 @@ public class Dungeon {
      * Ensures that Player is Unable to Pick it Up Again
      */
     private void placeBomb(String itemUsed, CollectableEntity currCollectable) {
-        System.out.println("Place Bomb Ran");
+        //Get Player Positions & Collectables
         Cell playerCell = dungeonMap.getPlayerCell();
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
         boolean itemPlaced = false;
-        List<CollectableEntity> collectables = inventory.getCollectables();
         
-            if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
-                //Place Bomb & Remove from Collectables
-                System.out.println("Placed Bomb");
-                CollectableEntity collectableRemoved = currCollectable;
-                Bomb removedBomb = (Bomb) collectableRemoved;
-                removedBomb.setIsPlaced();
-                removedBomb.updatePosition(playerXCoord, playerYCoord);
-                playerCell.addOccupant(removedBomb);
-                itemPlaced = true;
-            }
+        //Check the Collectable Passed to this Function is a Bomb and that the ID matches
+        if ((currCollectable.getTypeAsString() == "bomb") && (itemUsed.equals(currCollectable.getId()))) {
+            //Retreive Bomb Removed from Collectables that is To Be Placed
+            CollectableEntity collectableRemoved = currCollectable;
+            Bomb removedBomb = (Bomb) collectableRemoved;
+
+            //Update Position and Set the Bombs is_placed status to be True so Bomb cannot be re-picked up
+            removedBomb.setIsPlaced();
+            removedBomb.updatePosition(playerXCoord, playerYCoord);
+
+            //Placing this Bomb on the Player's Cell
+            playerCell.addOccupant(removedBomb);
+            
+            itemPlaced = true;
+        }
         
         if (itemPlaced == true) {
+            //Running Tick for Whole Map (if Bomb is Next to Switch Will Explode)
             dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
         }
     }
     
     /**
-     * Handles the player picking up collectable items and adding them to their 
-     * inventory.
+     * Removes the item from cell if player picked it up. 
      */
-    private void pickupCollectables(Cell playerCell) {
+    private void pickupCollectablesRemoveFromCell(Cell playerCell) {
+        //Getting Occupants of Player's Cell
         List<Entity> playerCellOccupants = playerCell.getOccupants();
-        boolean ifOccupantRemoved = false;
+      
+
+        //If No Items In Player's Cell, There are No Items to Pickup
         if (playerCellOccupants.size() == 0) {
             return;
         }
+
+        //Removing Any Collectable Occupants from Current Cell as they Are Picked Up
         Entity removedOccupant = playerCellOccupants.get(0);
+        boolean ifOccupantRemoved = false;
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
+                //Assign the Current Collectable Occupant in Cell to be Removed
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                //Add To Collectables Inventory
-                //Remove the Collectable From the Current Cell
                 if (this.inventory.add(collectableOccupant)) {
                     ifOccupantRemoved = true;
                     removedOccupant = collectableOccupant;
@@ -217,49 +226,32 @@ public class Dungeon {
             }
         }
         if (ifOccupantRemoved == true) {
+            //Remove the Assigned Collectable in Cell
             playerCell.removeOccupant(removedOccupant);
-            
         }
     }
 
     /**
      * Picks Up the Collectable Entities that Are in the Player's Square
      * Runs Every Tick, After the Player Has Moved
-     * If any collectables are in the player's square this function will remove
-     * the collectable item from the cell and add it to the player's inventory.
      */ 
-    private void pickupPlaceCollectableEntities(String itemUsed) {
+    private void pickupCollectableEntities(String itemUsed) {
         dungeonMap.flood();
+
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
             return;
         }
-        
-        //Check if Bomb is Being Placed 
-        if (itemUsed == null) {
-            itemUsed = "";
-        }
-        /*if (itemUsed.length() != 0) {
-            //placeBomb(itemUsed);
-        }*/
 
-        //Check if Collectibles in the Player's Cell
+        //If No Items in Player's Cell Then there are No Items to Pickup
         if (playerCell.getOccupants() == null) {
             return;
         }
-        pickupCollectables(playerCell);
-        List<Entity> playerCellOccupants = playerCell.getOccupants();
-        List<CollectableEntity> toRemove = new ArrayList<>();
-        for (Entity occupant : playerCellOccupants) {
-            if (occupant instanceof CollectableEntity) {
-                CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                if (this.inventory.add(collectableOccupant))
-                    toRemove.add(collectableOccupant);
-            }
-        }
-        for (CollectableEntity occupant : toRemove)
-            playerCell.removeOccupant(occupant);
+
+        //Remove Collectable From Cell
+        pickupCollectablesRemoveFromCell(playerCell);
+
     }
     
     public Pos2d getPlayerPosition() {
@@ -294,15 +286,9 @@ public class Dungeon {
         dungeonMap.allEntities().stream()
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
-
-         
-        /*dungeonMap.allEntities().stream()
-        .filter(e -> (e instanceof Bomb))
-        .forEach(entity -> entity.tick());*/
         
-
-        pickupPlaceCollectableEntities(itemUsed);
-        //pickupCollectableEntities();
+        //Dealing With Picking Up or Placing Collectable Entities
+        pickupCollectableEntities(itemUsed);
 
         
         long spiderPopulation = this.dungeonMap.allEntities().stream()
