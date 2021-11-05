@@ -201,7 +201,7 @@ public class Bomb extends CollectableEntity {
                 System.out.println(occupants.toString());
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
-                        if (currOccupant.getTypeAsString() == "floor switch") {
+                        if (currOccupant.getTypeAsString().equals("floor switch")) {
                             System.out.println("Found a floor switch");
                             return true;
                         }
