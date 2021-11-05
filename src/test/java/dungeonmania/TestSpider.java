@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -16,8 +17,10 @@ import dungeonmania.entities.movings.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class TestSpider {
+
     @Test
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
@@ -30,8 +33,26 @@ public class TestSpider {
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
+    /**
+     * Regression test: spiders use to spawn randomly, even when you specified a
+     * position on the map. Instead, 
+     */
     @Test
-    public void testSpiderMovment() {
+    public void testSpiderSpawnFromMap() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_spider_on_map", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
+        Position p = resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).findFirst().get().getPosition();
+        assertEquals(6, p.getX());
+        assertEquals(5, p.getY());
+        System.out.println(
+            resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).map(e -> e.getId()).collect(Collectors.toList())
+        );
+        assertEquals(1, resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).count());
+    }
+
+    @Test
+    public void testSpiderMovement() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
