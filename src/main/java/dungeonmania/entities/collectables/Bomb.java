@@ -11,7 +11,8 @@ import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
-
+import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.util.Direction;
 
 import dungeonmania.Cell;
@@ -116,19 +117,14 @@ public class Bomb extends CollectableEntity {
         Cell currCell = map.getCell(col, row);
         List<Entity> currCellOccupants = currCell.getOccupants();
 
-        //Remove the Occupant if Not a Player
-        Boolean isOccupantRemoved = false;
-        Entity occupantRemoved = null;
-
-        for (Entity occupant : currCellOccupants) {
-            if (occupant.getTypeAsString() != "player") {
-                isOccupantRemoved = true;
-                occupantRemoved = occupant;
+        //Remove the Occupant if it is Not the Player
+        Entity occupant = null;
+        for (int i=0; i < currCellOccupants.size(); i++) {
+            occupant = currCellOccupants.get(i);
+            if (occupant.getTypeAsString().equals(Player.STRING_TYPE) == false) {
+                currCell.removeOccupant(occupant);
+                i--;
             }
-        }
-        
-        if (isOccupantRemoved == true) {
-            currCell.removeOccupant(occupantRemoved);
         }
         
         return;
@@ -201,7 +197,7 @@ public class Bomb extends CollectableEntity {
                 System.out.println(occupants.toString());
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
-                        if (currOccupant.getTypeAsString().equals("floor switch")) {
+                        if (currOccupant.getTypeAsString().equals(FloorSwitch.STRING_TYPE)) {
                             System.out.println("Found a floor switch");
                             return true;
                         }

@@ -6,11 +6,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.collectables.Bomb;
+
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+
+
 
 public class TestCollectables {
     /** 
@@ -335,7 +342,7 @@ public class TestCollectables {
         List<ItemResponse> curr_inventory = resp.getInventory();
         for (ItemResponse item : curr_inventory) {
             curr_type = item.getType();
-            if (curr_type.equals("bomb")) {
+            if (curr_type.equals(Bomb.STRING_TYPE)) {
                 found = true;
             }
         }
@@ -352,7 +359,7 @@ public class TestCollectables {
             Position currPosition = currEntity.getPosition();
             currPositionX = currPosition.getX();
             currPositionY = currPosition.getY();
-            if (curr_type.equals("bomb") && currPositionX == 1 && currPositionY == 3) {
+            if (curr_type.equals(Bomb.STRING_TYPE) && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
@@ -395,10 +402,10 @@ public class TestCollectables {
         List<EntityResponse> currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -415,10 +422,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -434,10 +441,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -453,10 +460,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -472,10 +479,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -491,10 +498,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -510,10 +517,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -529,10 +536,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
@@ -548,10 +555,10 @@ public class TestCollectables {
         currEntities = resp.getEntities();
         for (EntityResponse item : currEntities) {
             curr_type = item.getType();
-            if (curr_type.equals("player")) {
+            if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals("wall")) || (curr_type.equals("floor switch")) || (curr_type.equals("bomb"))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }

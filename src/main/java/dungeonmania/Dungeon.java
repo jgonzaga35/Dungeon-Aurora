@@ -185,7 +185,7 @@ public class Dungeon {
         boolean itemPlaced = false;
         
         //Check the Collectable Passed to this Function is a Bomb and that the ID matches
-        if ((currCollectable.getTypeAsString().equals("bomb")) && (itemUsed.equals(currCollectable.getId()))) {
+        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
             //Retreive Bomb Removed from Collectables that is To Be Placed
             CollectableEntity collectableRemoved = currCollectable;
             Bomb removedBomb = (Bomb) collectableRemoved;
@@ -200,10 +200,6 @@ public class Dungeon {
             itemPlaced = true;
         }
         
-        if (itemPlaced == true) {
-            //Running Tick for Whole Map (if Bomb is Next to Switch Will Explode)
-            dungeonMap.allEntities().stream().forEach(entity -> entity.tick());
-        }
     }
     
     /**
