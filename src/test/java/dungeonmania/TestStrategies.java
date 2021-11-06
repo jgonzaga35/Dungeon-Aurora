@@ -17,6 +17,7 @@ import dungeonmania.goal.ExitGoal;
 import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.FleeMovementBehaviour;
 import dungeonmania.movement.FollowMovementBehaviour;
+import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.RandomMovementBehaviour;
 import dungeonmania.util.Direction;
 
@@ -72,6 +73,7 @@ public class TestStrategies {
         
         // now we can tick without having to worry about someone getting killed
 
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FollowMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
@@ -82,6 +84,8 @@ public class TestStrategies {
         d.tick(null, Direction.NONE); // player picks up the potion
         d.tick(invinc.getId(), Direction.NONE);
 
+        // invincibility potion is active
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
@@ -90,6 +94,8 @@ public class TestStrategies {
         // potion runs out
         for (int i = 0; i < InvincibilityPotion.MAX_DURATION; i++) d.tick(null, Direction.NONE);
 
+        // back to normal
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FollowMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
@@ -102,6 +108,7 @@ public class TestStrategies {
         d.tick(invis.getId(), Direction.NONE);
 
         // invisibility potion active
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour); // allies can see the player when invisible
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
@@ -110,6 +117,8 @@ public class TestStrategies {
         // potion runs out
         for (int i = 0; i < InvisibilityPotion.MAX_DURATION; i++) d.tick(null, Direction.NONE);
 
+        // back to normal
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FollowMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
@@ -124,9 +133,29 @@ public class TestStrategies {
         d.tick(invis.getId(), Direction.NONE);
         d.tick(invinc.getId(), Direction.NONE);
 
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
         assertTrue(d.getBattleStrategy() instanceof WinAllBattleStrategy);
+
+        assertTrue(InvincibilityPotion.MAX_DURATION < InvisibilityPotion.MAX_DURATION, "you changed potion durations, update the test");
+        for (int i = 0; i < InvincibilityPotion.MAX_DURATION; i++) d.tick(null, Direction.NONE);
+
+        // only invisbility potion left
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
+        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
+        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
+        assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
+        assertTrue(d.getBattleStrategy() instanceof NoBattleStrategy);
+
+        for (int i = 0; i < InvisibilityPotion.MAX_DURATION - InvincibilityPotion.MAX_DURATION; i++) d.tick(null, Direction.NONE);
+
+        // back to normal
+        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
+        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
+        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FollowMovementBehaviour);
+        assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
+        assertTrue(d.getBattleStrategy() instanceof NoBattleStrategy);
     }
 }
