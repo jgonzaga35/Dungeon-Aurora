@@ -206,6 +206,7 @@ public class TestMercenary {
         // lot of mercenaries and test probability distributions (for assassins)
         DungeonResponse resp = ctr.newGame("_mercenary_zoo", GameMode.STANDARD.getValue());
         ctr.setSeed(1);
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE));
         
         // player locks goes and locks himself with the boulder
         for (int i = 0; i < 3; i++) ctr.tick(null, Direction.RIGHT);
@@ -243,6 +244,18 @@ public class TestMercenary {
             
             knownMercIds.add(newMerc.get(0).getId());
         }
+    }
 
+    @Test
+    public void testNoSpawn() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_mercenary_zoo", GameMode.STANDARD.getValue());
+        ctr.setSeed(1);
+        for (int i = 0; i < 1000; i++) {
+            // move down as far as we can so that the mercenary doesn't spawn
+            // onto the player (and gets killed)
+            resp = ctr.tick(null, Direction.DOWN);
+            assertEquals(0, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "i=" + i);
+        }
     }
 }
