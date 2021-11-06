@@ -58,7 +58,6 @@ public class DungeonManiaController {
     }
 
     public DungeonManiaController() {
-        
     }
 
     public DungeonManiaController(Dungeon dungeon) {
@@ -88,6 +87,10 @@ public class DungeonManiaController {
         } catch (IOException e) {
             return new ArrayList<>();
         }
+    }
+
+    public void setSeed(long s) {
+        this.dungeon.getRandom().setSeed(s);
     }
 
     /**
