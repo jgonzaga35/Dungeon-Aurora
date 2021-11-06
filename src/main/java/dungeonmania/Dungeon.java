@@ -173,6 +173,7 @@ public class Dungeon {
         if (player == null) {
             throw new Error("the player's position wasn't specified");
         }
+        map.setEntry(player.getPosition());
 
         dungeon.setPlayer(player);
 
@@ -255,6 +256,8 @@ public class Dungeon {
                 c.addOccupant(new Spider(this, c.getPosition()));
             }
         }
+
+        this.spawnMercenaries();
 
         // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
@@ -427,5 +430,14 @@ public class Dungeon {
      */
     public boolean removeBattleStrategy(BattleStrategy bs) {
         return this.battleStrategies.remove(bs);
+    }
+
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnMercenaries() {
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
+        this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
 }

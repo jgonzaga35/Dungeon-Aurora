@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +20,7 @@ import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
@@ -189,6 +194,9 @@ public class TestMercenary {
         });
     }
     
+    /**
+     * Makes sure mercenaries spawn, and at the right place!
+     */
     @Test
     public void testSpawn() {
         // black box test because we don't need too much control
@@ -204,19 +212,36 @@ public class TestMercenary {
         for (int i = 0; i < 2; i++) ctr.tick(null, Direction.DOWN);
         ctr.tick(null, Direction.LEFT);
         ctr.tick(null, Direction.UP);
+        // player is now safe (apart from spiders)
 
+        // tick until a mercenary spawns, so that we line up with the tick count
         int ticks_used = 3 + 2 + 1 + 1;
         assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
+        for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) resp = ctr.tick(null, Direction.NONE);
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE));
 
-        // tick until a mercenary spawns, so that we line up
-        for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) ctr.tick(null, Direction.NONE);
+        Set<String> knownMercIds = new HashSet<>();
+        knownMercIds.add(resp.getEntities().stream().filter(e -> e.getType().equals(Mercenary.STRING_TYPE)).findFirst().get().getId());
 
-        // player is now safe (apart from spiders)
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { // every loop, we spawn a new zombie
             for (int j = 0; j < Mercenary.SPAWN_EVERY_N_TICKS; j++) {
+                assertEquals(1 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
                 resp = ctr.tick(null, Direction.NONE);
             }
-            assertEquals(1 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
+            assertEquals(2 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
+
+            // make sure new mercenaries spawn on the player's starting position
+            List<EntityResponse> newMerc = resp.getEntities().stream()
+                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE))
+                .filter(e -> !knownMercIds.contains(e.getId()))
+                .collect(Collectors.toList());
+
+            assertEquals(1, newMerc.size());
+
+            assertEquals(0, newMerc.get(0).getPosition().getX());
+            assertEquals(2, newMerc.get(0).getPosition().getY());
+            
+            knownMercIds.add(newMerc.get(0).getId());
         }
 
     }
