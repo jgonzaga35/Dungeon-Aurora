@@ -61,6 +61,16 @@ public class CircleMovementBehaviour extends MovementBehaviour {
 
     public Cell move()
     {   
+        // if the spider is completely blocked, don't move
+        Predicate<Pos2d> isBlocking = p -> {
+            Cell c = map.getCell(p);
+            if (c == null) return true; // it's blocking
+            return c.hasBoulder();
+        };
+        if (movementCycle.stream().allMatch(isBlocking)) {
+            return getCurrentCell();
+        }
+
         Cell nextCell = map.getCell(movementCycle.get(step));
         if (nextCell == null || nextCell.hasBoulder())
         {
