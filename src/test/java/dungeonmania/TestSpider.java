@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -16,25 +18,48 @@ import dungeonmania.entities.movings.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class TestSpider {
+
     @Test
     public void testSpiderSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick(null, Direction.NONE);
-
-        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
-        resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick(null, Direction.NONE);
+        ctr.setSeed(1);
+        for (int i = 0 ; i < Spider.SPAWN_EVERY_N_TICKS; i++) {
+            assertFalse(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
+            resp = ctr.tick(null, Direction.NONE);
+        }
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
     }
 
+    /**
+     * Regression test: spiders use to spawn randomly, even when you specified a
+     * position on the map. Instead, 
+     */
     @Test
-    public void testSpiderMovment() {
+    public void testSpiderSpawnFromMap() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_spider_on_map", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
+        Position p = resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).findFirst().get().getPosition();
+        assertEquals(6, p.getX());
+        assertEquals(5, p.getY());
+        System.out.println(
+            resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).map(e -> e.getId()).collect(Collectors.toList())
+        );
+        assertEquals(1, resp.getEntities().stream().filter(e -> e.getType().equals(Spider.STRING_TYPE)).count());
+    }
+
+    @Test
+    public void testSpiderMovement() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
-        resp = ctr.tick(null, Direction.NONE);
+        ctr.setSeed(1);
+
+        for (int i = 0; i < 10; i++)
+            resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 
         Map<String, Pos2d> positions = new HashMap<>();
@@ -62,28 +87,15 @@ public class TestSpider {
     @Test
     public void testSpiderId() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("maze", GameMode.STANDARD.getValue());
+        DungeonResponse resp = ctr.newGame("_spider_on_map", GameMode.STANDARD.getValue());
+        ctr.setSeed(1);
 
-        List<String> idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
-        Set<String> idSet = new HashSet<String>(idList);
-
-        assertTrue(idList.size() == idSet.size());
-        
-        resp = ctr.tick(null, Direction.DOWN);
-
-        idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
-        idSet = new HashSet<String>(idList);
-
-        assertTrue(idList.size() == idSet.size());
-
-        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
-
-        resp = ctr.tick(null, Direction.DOWN);
-        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
-        idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
-        idSet = new HashSet<String>(idList);
-
-        assertTrue(idList.size() == idSet.size());
+        for (int i = 0; i < 100; i++) {
+            resp = ctr.tick(null, Direction.DOWN);
+            List<String> idList = resp.getEntities().stream().map(e -> e.getId()).collect(Collectors.toList());
+            Set<String> idSet = new HashSet<String>(idList);
+            assertTrue(idList.size() == idSet.size());
+        }
     }
 
 
@@ -91,6 +103,7 @@ public class TestSpider {
     public void testNullPointerError() {
         DungeonManiaController ctr = new DungeonManiaController();
         ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
     
         for (int i = 0; i < 50; i++) {
             ctr.tick(null, Direction.NONE);
@@ -101,6 +114,7 @@ public class TestSpider {
     public void testSpiderSpawnLimit() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
 
         for (int i = 0; i < 10; i ++) {
             resp = ctr.tick(null, Direction.NONE);

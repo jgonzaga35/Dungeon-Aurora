@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,6 +59,13 @@ public class Dungeon {
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
+    
+    private int tickCount = 0;
+
+    /**
+     * make sure to seed before each test
+     */
+    private Random r = new Random(1);
 
     public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
@@ -72,6 +80,15 @@ public class Dungeon {
 
         Dungeon.nextDungeonId++;
     }
+
+    /**
+     * All source of randomness should come from here, so that we can seed it.
+     * 
+     * to seed: dungeon.getRandom().setSeed(1);
+     */
+    public Random getRandom() {
+        return this.r;
+    } 
 
     /**
      * Creates a Dungeon instance from the JSON file's content
@@ -123,7 +140,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
-                cell.addOccupant(Spider.spawnSpider(dungeon));
+                cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
@@ -209,6 +226,7 @@ public class Dungeon {
             throws IllegalArgumentException, InvalidActionException {
 
         assert this.battleStrategies.size() > 0;
+        this.tickCount++;
 
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
@@ -235,18 +253,23 @@ public class Dungeon {
         
         pickupCollectableEntities();
 
-        
+        // spawn spiders
         long spiderPopulation = this.dungeonMap.allEntities().stream()
             .filter(e -> e instanceof Spider).count();
-        if (spiderPopulation < Spider.MAX_SPIDERS) {
-            Spider.spawnSpider(this);
+
+        if (spiderPopulation < Spider.MAX_SPIDERS && (this.tickCount % Spider.SPAWN_EVERY_N_TICKS == 0)) {
+            Cell c = Spider.getRandomPosition(this);
+            if (c != null) {
+                c.addOccupant(new Spider(this, c.getPosition()));
+            }
         }
 
         // Spawn Hydra every 50 ticks and HARD MODE enabled
-        if (getGameMode().equals(GameMode.HARD) && getTickCount() % 50 == 0) {
+        if (getGameMode().equals(GameMode.HARD) && getTickCount() % 5 == 0) {
             Hydra.spawnHydra(this);
         }
 
+        // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
     }
 

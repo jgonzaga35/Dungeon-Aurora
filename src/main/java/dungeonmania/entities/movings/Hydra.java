@@ -1,13 +1,14 @@
 package dungeonmania.entities.movings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
-import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.RandomMovementBehaviour;
@@ -16,7 +17,7 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 public class Hydra extends MovingEntity implements Fighter{
     
     public static final String STRING_TYPE = "hydra";
-    private float health = 20; // dont know what health should be 
+    private float health = 1; // dont know what health should be 
 
     public Hydra(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -42,21 +43,26 @@ public class Hydra extends MovingEntity implements Fighter{
     }
 
     /**
-     * Generates a random location for the Spider to spawn.
+     * Generates a random location for the Hydra to spawn.
      * @param dungeon
      * @return
      */
     private static Cell randomPosition(Dungeon dungeon) {
-        // check cells where can spawn a zombie
-        List<Cell> availableCells = this.getCellsAround()
-            .filter(cell -> !cell.isBlocking())
-            .collect(Collectors.toList());
+        // check cells where can spawn a hydra
+        List<Cell> availableCells = new ArrayList<Cell>();
+        for (int y = 0; y < dungeon.getMap().getHeight(); y++) {
+            for (int x = 0; x < dungeon.getMap().getWidth(); x++) {
+                availableCells.add(dungeon.getMap().getCell(x, y));
+            }
+        }
 
-        if (availableCells.size() == 0)
-            return; // don't spawn anything
+        if (availableCells.size() == 0) {
+            return null; // don't spawn anything
+        }
 
         // choose a random cell
         Cell cell = Utils.choose(availableCells);
+        return cell;
     }
 
     @Override 
