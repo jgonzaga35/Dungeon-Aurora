@@ -23,7 +23,7 @@ public class HealthPotion extends Potion {
     }
 
     @Override
-    public void applyEffects() {
+    public void applyEffectsEveryTick() {
         // No lasting effects
         
     }
@@ -36,8 +36,11 @@ public class HealthPotion extends Potion {
 
     @Override
     public String getTypeAsString() {
-        // TODO Auto-generated method stub
         return HealthPotion.STRING_TYPE;
+    }
+
+    @Override
+    public void onDrink() {
     }
     
 }

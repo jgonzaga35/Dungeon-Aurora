@@ -26,7 +26,8 @@ public class InvincibilityPotion extends Potion {
     public InvincibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.maxDuration = InvincibilityPotion.MAX_DURATION;
-        this.battleStrategy = new WinAllBattleStrategy(10);
+        if (this.dungeon.getGameMode() != GameMode.HARD)
+            this.battleStrategy = new WinAllBattleStrategy(10);
     }
 
     @Override
@@ -39,7 +40,8 @@ public class InvincibilityPotion extends Potion {
         if (this.dungeon.getGameMode() == GameMode.HARD) return;
 
         affectedEntities.keySet().stream().forEach(e -> {
-            e.removeMovementBehaviour(affectedEntities.get(e));
+            boolean removed = e.removeMovementBehaviour(affectedEntities.get(e));
+            assert removed;
         });
 
         this.dungeon.removeBattleStrategy(battleStrategy);
@@ -48,7 +50,14 @@ public class InvincibilityPotion extends Potion {
     }
 
     @Override
-    public void applyEffects() {
+    public void onDrink() {
+        if (this.dungeon.getGameMode() == GameMode.HARD) return;
+
+        this.dungeon.addBattleStrategy(battleStrategy);
+    }
+
+    @Override
+    public void applyEffectsEveryTick() {
         if (this.dungeon.getGameMode() == GameMode.HARD) return;
 
         dungeon.getMap().allEntities().stream()

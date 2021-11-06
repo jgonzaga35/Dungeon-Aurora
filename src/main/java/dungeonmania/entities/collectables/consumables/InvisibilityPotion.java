@@ -19,7 +19,7 @@ public class InvisibilityPotion extends Potion {
     public static String STRING_TYPE = "invisibility_potion";
     public static final int MAX_DURATION = 10;
 
-    private Map<MovingEntity, MovementBehaviour> affectedEntities = new HashMap<>();
+    private Map<MovingEntity, MovementBehaviour> affectedEntities = new HashMap<>();;
 
     public InvisibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -28,7 +28,7 @@ public class InvisibilityPotion extends Potion {
     }
 
     @Override
-    public void applyEffects() {
+    public void applyEffectsEveryTick() {
         dungeon.getMap().allEntities().stream()
             .filter(e -> !affectedEntities.keySet().contains(e))
             .filter(e -> e instanceof Fighter).map(e -> (Fighter) e)
@@ -62,6 +62,11 @@ public class InvisibilityPotion extends Potion {
     @Override
     public String getTypeAsString() {
         return InvisibilityPotion.STRING_TYPE;
+    }
+
+    @Override
+    public void onDrink() {
+        this.dungeon.addBattleStrategy(battleStrategy);
     }
     
 }

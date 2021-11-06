@@ -20,14 +20,15 @@ public abstract class Potion extends CollectableEntity {
      */
     public void drink() {
         this.duration = maxDuration;
-        this.dungeon.addBattleStrategy(battleStrategy);
-        applyEffects();
+        onDrink();
     }
 
     /**
      * Applies the effects of the potion.
      */
-    public abstract void applyEffects();
+    public abstract void applyEffectsEveryTick();
+
+    public abstract void onDrink();
 
 
     /**
@@ -47,7 +48,7 @@ public abstract class Potion extends CollectableEntity {
     @Override
     public void tick() {
         if (duration == 0) expire();
-        else applyEffects();
+        else applyEffectsEveryTick();
         duration--;
     }
 }
