@@ -55,7 +55,6 @@ public class Dungeon {
     private String name;
     private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
-    private Integer tick_count = 0;
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
@@ -214,14 +213,6 @@ public class Dungeon {
         return this.player.getPosition();
     }
 
-    public void incrementTick() {
-        this.tick_count += 1;
-    }
-
-    public Integer getTickCount() {
-        return this.tick_count;
-    }
-
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
@@ -232,7 +223,6 @@ public class Dungeon {
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-        incrementTick();
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
@@ -265,7 +255,7 @@ public class Dungeon {
         }
 
         // Spawn Hydra every 50 ticks and HARD MODE enabled
-        if (getGameMode().equals(GameMode.HARD) && getTickCount() % 5 == 0) {
+        if (getGameMode().equals(GameMode.HARD) && (this.tickCount % Hydra.SPAWN_EVERY_N_TICKS == 0)) {
             Hydra.spawnHydra(this);
         }
 

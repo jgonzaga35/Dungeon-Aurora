@@ -14,6 +14,7 @@ import dungeonmania.Entity;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
+import dungeonmania.entities.movings.Hydra;
 
 /**
  * Overview:
@@ -156,7 +157,6 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @param deaths
      */
     private void performRound(List<Fighter> allies, List<Fighter> enemies, Set<Fighter> deaths) {
-
         // form duels
 
         int baseSize = Math.min(allies.size(), enemies.size());
@@ -199,7 +199,13 @@ public class NormalBattleStrategy implements BattleStrategy {
 
             // the ally attacks the enemy
             // the /5 comes from the spec
+            if (enemy instanceof Hydra) {
+                System.out.println("Heath is " + enemy.getHealth());
+            }
             enemy.setHealth(enemy.getHealth() - this.computeDamage(ally, enemy) / 5);
+            if (enemy instanceof Hydra) {
+                System.out.println("Now Heath is " + enemy.getHealth());
+            }
             ally.usedItemFor(BattleDirection.ATTACK);
             enemy.usedItemFor(BattleDirection.DEFENCE);
 

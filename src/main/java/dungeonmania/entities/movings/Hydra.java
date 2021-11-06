@@ -17,7 +17,8 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 public class Hydra extends MovingEntity implements Fighter{
     
     public static final String STRING_TYPE = "hydra";
-    private float health = 1; // dont know what health should be 
+    public static final int SPAWN_EVERY_N_TICKS = 50;
+    private float health = 4;  
 
     public Hydra(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -52,7 +53,9 @@ public class Hydra extends MovingEntity implements Fighter{
         List<Cell> availableCells = new ArrayList<Cell>();
         for (int y = 0; y < dungeon.getMap().getHeight(); y++) {
             for (int x = 0; x < dungeon.getMap().getWidth(); x++) {
-                availableCells.add(dungeon.getMap().getCell(x, y));
+                if (!dungeon.getMap().getCell(x,y).isBlocking() && !dungeon.getMap().getCell(x,y).hasPlayer()) {
+                    availableCells.add(dungeon.getMap().getCell(x, y));
+                }
             }
         }
 
@@ -83,13 +86,14 @@ public class Hydra extends MovingEntity implements Fighter{
     @Override
     public void setHealth(float h) {
 
-        float damageReceived = getHealth() - h*5; 
+        float damageReceived = this.health - h; 
         Random random = new Random();
-        int x = random.nextInt(1);
-        if (x == 0) {
+        int x = random.nextInt(2);
+    
+        if (x == 1) {
             this.health = h;
-        } else if (x == 1) {
-            this.health += damageReceived;
+        } else if (x == 0) {
+            this.health = this.health + damageReceived;
         }
     }
 
