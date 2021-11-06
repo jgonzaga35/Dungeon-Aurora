@@ -191,6 +191,33 @@ public class TestMercenary {
     
     @Test
     public void testSpawn() {
+        // black box test because we don't need too much control
+
+        DungeonManiaController ctr = new DungeonManiaController();
+        // map in which the player can lock himself in so that we can spawn a
+        // lot of mercenaries and test probability distributions (for assassins)
+        DungeonResponse resp = ctr.newGame("_mercenary_zoo", GameMode.STANDARD.getValue());
+        ctr.setSeed(1);
         
+        // player locks goes and locks himself with the boulder
+        for (int i = 0; i < 3; i++) ctr.tick(null, Direction.RIGHT);
+        for (int i = 0; i < 2; i++) ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.LEFT);
+        ctr.tick(null, Direction.UP);
+
+        int ticks_used = 3 + 2 + 1 + 1;
+        assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
+
+        // tick until a mercenary spawns, so that we line up
+        for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) ctr.tick(null, Direction.NONE);
+
+        // player is now safe (apart from spiders)
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < Mercenary.SPAWN_EVERY_N_TICKS; j++) {
+                resp = ctr.tick(null, Direction.NONE);
+            }
+            assertEquals(1 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
+        }
+
     }
 }
