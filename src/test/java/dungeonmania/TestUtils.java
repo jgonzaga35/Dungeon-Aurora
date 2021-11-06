@@ -56,7 +56,7 @@ public class TestUtils {
     public static void lockWithBoulders(Dungeon dungeon, Pos2d center) {
         DungeonMap map = dungeon.getMap();
         for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx < 1; dx++) {
+            for (int dx = -1; dx <= 1; dx++) {
                 if (dx == 0 && dy == 0) continue;
 
                 Pos2d curr = center.plus(new Pos2d(dx, dy));
