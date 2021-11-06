@@ -252,11 +252,7 @@ public class Dungeon {
 
         this.spawnSpiders();
         this.spawnMercenaries();
-
-        // Spawn Hydra every 50 ticks and HARD MODE enabled
-        if (getGameMode().equals(GameMode.HARD) && (this.tickCount % Hydra.SPAWN_EVERY_N_TICKS == 0)) {
-            Hydra.spawnHydra(this);
-        }
+        this.spawnHydras();
 
         // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
@@ -463,4 +459,15 @@ public class Dungeon {
             }
         }
     }
+
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnHydras() {
+        // Spawn Hydra every 50 ticks and HARD MODE enabled
+        if (getGameMode().equals(GameMode.HARD) && (this.tickCount % Hydra.SPAWN_EVERY_N_TICKS == 0)) {
+            Hydra.spawnHydra(this);
+        }
+    }
+
 }
