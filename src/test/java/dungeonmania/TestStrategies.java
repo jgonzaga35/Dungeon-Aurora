@@ -147,62 +147,7 @@ public class TestStrategies {
         // back to normal
         this.noPotionActive();
 
-        this.nobodyMoved();
-    }
-
-    /**
-     * make sure that nothing moves, even when ticking
-     * it's in this file because the other (main) test depends on it,
-     * and it's probably going to break again (looking at the quality
-     * of the movement code)
-     */
-    @Test
-    public void testNoMovement() {
-        m = new DungeonMap(20, 20);
-        d = new Dungeon("manual", this.mode, m, new ExitGoal());
-        d.getRandom().setSeed(1);
-        Cell cell;
-
-        // SETUP THE MAP
-        // each entity has a ring of boulders around it so that it cannot move
-
-        cell = m.getCell(2, 0);
-        player = new Player(d, cell.getPosition());
-        d.setPlayer(player);
-        cell.addOccupant(player);
-        d.tick(null, Direction.DOWN);
-        d.tick(null, Direction.DOWN);
-        TestUtils.lockWithBoulders(d, player.getPosition());
-        // move down because the mercenaries would otherwise spawn on the player
-
-        cell = m.getCell(10, 10);
-        zombieToast = new ZombieToast(d, cell.getPosition());
-        cell.addOccupant(zombieToast);
-        TestUtils.lockWithBoulders(d, cell.getPosition());
-
-        cell = m.getCell(4, 5);
-        mercenary = new Mercenary(d, cell.getPosition());
-        cell.addOccupant(mercenary);
-        TestUtils.lockWithBoulders(d, cell.getPosition());
-
-        cell = m.getCell(14, 5);
-        bribedMercenary = new Mercenary(d, cell.getPosition());
-        bribedMercenary.bribe();
-        cell.addOccupant(bribedMercenary);
-        TestUtils.lockWithBoulders(d, cell.getPosition());
-
-        cell = m.getCell(15, 15);
-        spider = new Spider(d, cell.getPosition());
-        cell.addOccupant(spider);
-        TestUtils.lockWithBoulders(d, cell.getPosition());
-        
-        // SETUP FINISHED: now we can tick without having to worry about someone getting killed
-        this.nobodyMoved();
-        this.noPotionActive();
-
-        for (int i = 0; i < 100; i++)
-            d.tick(null, Direction.NONE);
-        this.nobodyMoved();
+        this.nobodyMoved(); // make sure that none of the potions let any of the entities move
     }
 
     private void noPotionActive() {
