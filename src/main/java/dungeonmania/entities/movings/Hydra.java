@@ -88,7 +88,7 @@ public class Hydra extends MovingEntity implements Fighter{
     public void setHealth(float h) {
 
         float damageReceived = this.health - h; 
-        Random random = new Random();
+        Random random = this.dungeon.getRandom();
         int x = random.nextInt(2);
     
         if (x == 1) {
