@@ -314,14 +314,21 @@ public class DungeonMap {
                     result += PLAYER;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Wall)) {
                     result += WALL;
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
+                    result += " EM";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
+                    result += " ES";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
+                    result += " EZ";
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof MovingEntity)) {
                     result += ENEMY;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    int num = cell.getPlayerDistance();
-                    if (num < 10) result += " " + num + " ";
-                    else result += " " + num;
+                    result += "   ";
+                    // int num = cell.getPlayerDistance();
+                    // if (num < 10) result += " " + num + " ";
+                    // else result += " " + num;
                 }
             }
             result += "\n";
