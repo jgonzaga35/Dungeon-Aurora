@@ -1,6 +1,7 @@
 package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
+import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
