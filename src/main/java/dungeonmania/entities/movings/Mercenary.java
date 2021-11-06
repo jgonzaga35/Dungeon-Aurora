@@ -24,7 +24,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.followMovementBehaviour = new FollowMovementBehaviour(
-            -5, 
+            0, 
             dungeon.getMap(), 
             dungeon.getMap().getCell(position)
         );
@@ -38,9 +38,9 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     public void bribe() {
         relationship = FighterRelation.ALLY;
-        // TODO: remove FollowMovementBehaviour
-        // this.removeMovementBehaviour(this.followMovementBehaviour);
+        // order matters! add first, then remove
         this.addMovementBehaviour(this.friendlyMovementBehaviour);
+        this.removeMovementBehaviour(this.followMovementBehaviour);
     }
 
     @Override

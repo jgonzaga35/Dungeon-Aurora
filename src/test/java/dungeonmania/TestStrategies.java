@@ -101,6 +101,7 @@ public class TestStrategies {
         d.tick(null, Direction.NONE); // player picks up the potion
         d.tick(invis.getId(), Direction.NONE);
 
+        // invisibility potion active
         assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
         assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);

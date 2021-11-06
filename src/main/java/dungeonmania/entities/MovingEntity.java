@@ -52,6 +52,10 @@ public abstract class MovingEntity extends Entity {
         return removed;
     }
 
+    public MovementBehaviour getCurrentMovementBehaviour() {
+        return this.movementBehaviours.peek();
+    }
+
     /**
      * Moves to wherever the movement behaviour tells it to
      * @return the cell the entity is now on

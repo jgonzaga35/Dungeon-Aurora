@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
@@ -41,5 +42,27 @@ public class TestUtils {
 
     public static long countEntitiesOfType(DungeonResponse resp, String type) {
         return resp.getEntities().stream().filter(e -> Objects.equals(e.getType(), type)).count();
+    }
+    
+    /**
+     * puts boulders all around the position so that the damn thing can't move
+     * and it makes testing easier
+     * 
+     * Can only be used in white box testing
+     * 
+     * @param map
+     * @param center position that is going to be locked
+     */
+    public static void lockWithBoulders(Dungeon dungeon, Pos2d center) {
+        DungeonMap map = dungeon.getMap();
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx < 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+
+                Pos2d curr = center.plus(new Pos2d(dx, dy));
+
+                map.getCell(curr).addOccupant(new Boulder(dungeon, curr));
+            }
+        }
     }
 }

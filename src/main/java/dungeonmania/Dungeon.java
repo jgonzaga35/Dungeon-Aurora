@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
+import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.MovingEntity;
@@ -77,8 +78,12 @@ public class Dungeon {
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
 
-        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecedence() - b.getPrecedence());
-        this.battleStrategies.add(new NormalBattleStrategy(0));
+        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> b.getPrecedence() - a.getPrecedence());
+        if (mode == GameMode.PEACEFUL) {
+            this.battleStrategies.add(new NoBattleStrategy(0));
+        } else {
+            this.battleStrategies.add(new NormalBattleStrategy(0));
+        }
 
         Dungeon.nextDungeonId++;
     }
@@ -309,7 +314,7 @@ public class Dungeon {
      * for the player in the entire map
      * @param player
      */
-    private void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -470,4 +475,8 @@ public class Dungeon {
         }
     }
 
+    
+    public BattleStrategy getBattleStrategy() {
+        return this.battleStrategies.peek();
+    }
 }
