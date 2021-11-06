@@ -35,6 +35,7 @@
         "zombie": "images/tileset/entities/zombie_00.png",
         "zombie toast spawner": "images/tileset/entities/zombie_spawner.png",
         "portal": "images/tileset/entities/portal_00.png",
-        "hydra": "images/tileset/entities/hydra.png"
+        "hydra": "images/tileset/entities/hydra.png",
+        "anduril": "images/tileset/items/anduril.png"
     }
 }
