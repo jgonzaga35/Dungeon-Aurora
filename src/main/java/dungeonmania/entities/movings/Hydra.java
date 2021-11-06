@@ -53,7 +53,8 @@ public class Hydra extends MovingEntity implements Fighter{
         List<Cell> availableCells = new ArrayList<Cell>();
         for (int y = 0; y < dungeon.getMap().getHeight(); y++) {
             for (int x = 0; x < dungeon.getMap().getWidth(); x++) {
-                if (!dungeon.getMap().getCell(x,y).isBlocking() && !dungeon.getMap().getCell(x,y).hasPlayer()) {
+                if (!dungeon.getMap().getCell(x,y).isBlocking() 
+                && !dungeon.getMap().getCell(x,y).hasPlayer()) {
                     availableCells.add(dungeon.getMap().getCell(x, y));
                 }
             }

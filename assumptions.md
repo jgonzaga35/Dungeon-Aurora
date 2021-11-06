@@ -33,3 +33,6 @@
 
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.
+
+## Hydras
+- Hydras can't spawn on blocking cells or on the player.
