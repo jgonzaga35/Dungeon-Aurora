@@ -3,7 +3,6 @@ package dungeonmania;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -12,12 +11,6 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 
 public class TestHydra {
-    
-    @BeforeEach
-    public void setSeed() {
-        Utils.setSeed(1);
-    }
-
 
     @Test
     public void testHydraSpawn() {
