@@ -57,7 +57,7 @@ public class Spider extends MovingEntity implements Fighter {
         super(dungeon, position);
         addMovementBehaviour(
             new CircleMovementBehaviour(
-                4,
+                -4,
                 dungeon.getMap(),
                 dungeon.getMap().getCell(position)
             )

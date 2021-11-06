@@ -33,10 +33,13 @@ public class DungeonMap {
 
     private Pos2d entry = null;
     
-    DungeonMap(JSONObject json) {
-        this.width = json.getInt("width");
-        this.height = json.getInt("height");
-        
+    public DungeonMap(JSONObject json) {
+        this(json.getInt("width"), json.getInt("height"));
+    }
+
+    public DungeonMap(int width, int height) {
+        this.width = width;
+        this.height = height;
         // a grid of empty cells
         for (int y = 0; y < height; y++) {
             ArrayList<Cell> row = new ArrayList<>();

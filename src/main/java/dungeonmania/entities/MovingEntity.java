@@ -25,7 +25,7 @@ public abstract class MovingEntity extends Entity {
     public MovingEntity(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
 
-        this.movementBehaviours = new PriorityQueue<>(3, (a,b) -> a.getPrecendence() - b.getPrecendence());
+        this.movementBehaviours = new PriorityQueue<>(3, (a,b) -> b.getPrecendence() - a.getPrecendence());
     }
 
     /**
