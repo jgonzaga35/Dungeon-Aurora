@@ -26,6 +26,7 @@ import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -53,7 +54,7 @@ public class Dungeon {
     private String name;
     private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
-
+    private Integer tick_count = 0;
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
@@ -196,6 +197,14 @@ public class Dungeon {
         return this.player.getPosition();
     }
 
+    public void incrementTick() {
+        this.tick_count += 1;
+    }
+
+    public Integer getTickCount() {
+        return this.tick_count;
+    }
+
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
@@ -205,7 +214,7 @@ public class Dungeon {
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-        
+        incrementTick();
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
@@ -231,6 +240,11 @@ public class Dungeon {
             .filter(e -> e instanceof Spider).count();
         if (spiderPopulation < Spider.MAX_SPIDERS) {
             Spider.spawnSpider(this);
+        }
+
+        // Spawn Hydra every 50 ticks and HARD MODE enabled
+        if (getGameMode().equals(GameMode.HARD) && getTickCount() % 50 == 0) {
+            Hydra.spawnHydra(this);
         }
 
         this.battleStrategies.peek().findAndPerformBattles(this);

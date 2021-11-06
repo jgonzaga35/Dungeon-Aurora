@@ -11,6 +11,7 @@ import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -87,6 +88,21 @@ public class TestBattle {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
             }
         }
+    }
+
+    @Test
+    public void testSimpleHydraBattle() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_force_hydra_attack", GameMode.HARD.getValue());
+
+        // spawn the hydra
+        for (int i = 0; i < 50; i++) {
+            resp = ctr.tick(null, Direction.NONE);
+        }
+        assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Hydra.STRING_TYPE)));
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
+        resp = ctr.tick(null, Direction.NONE);
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
     }
 
     /**
