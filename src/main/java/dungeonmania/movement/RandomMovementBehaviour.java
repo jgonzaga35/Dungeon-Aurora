@@ -21,8 +21,13 @@ public class RandomMovementBehaviour extends MovementBehaviour {
         List<Cell> availableCells = this.map.getCellsAround(getCurrentCell())
             .filter(cell -> !cell.isBlocking())
             .collect(Collectors.toList());
-            nextCell = Utils.choose(availableCells);
-            setCurrentCell(nextCell);
+
+        if (availableCells.size() == 0) {
+            return getCurrentCell();
+        }
+
+        nextCell = Utils.choose(availableCells);
+        setCurrentCell(nextCell);
 
         return nextCell;
     }

@@ -2,6 +2,7 @@ package dungeonmania.movement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
