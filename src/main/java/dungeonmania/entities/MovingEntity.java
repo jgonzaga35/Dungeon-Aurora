@@ -36,7 +36,9 @@ public abstract class MovingEntity extends Entity {
      * @param ms
      */
     public void addMovementBehaviour(MovementBehaviour ms) {
+        Cell curr = this.getCell();
         this.movementBehaviours.add(ms);
+        this.movementBehaviours.peek().setCurrentCell(curr);
     }
 
     /**
@@ -44,7 +46,10 @@ public abstract class MovingEntity extends Entity {
      * @return true if the movement strategy was present.
      */
     public boolean removeMovementBehaviour(MovementBehaviour ms) {
-        return this.movementBehaviours.remove(ms);
+        Cell curr = this.getCell();
+        boolean removed = this.movementBehaviours.remove(ms);
+        this.movementBehaviours.peek().setCurrentCell(curr);
+        return removed;
     }
 
     /**

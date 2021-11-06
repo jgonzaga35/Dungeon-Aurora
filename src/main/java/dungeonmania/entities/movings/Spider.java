@@ -11,6 +11,7 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.CircleMovementBehaviour;
+import dungeonmania.movement.MovementBehaviour;
 
 public class Spider extends MovingEntity implements Fighter {
 
@@ -20,6 +21,11 @@ public class Spider extends MovingEntity implements Fighter {
 
     private float health = 1;
     
+    private MovementBehaviour circleMovementBehaviour = new CircleMovementBehaviour(
+        -4,
+        dungeon.getMap(),
+        dungeon.getMap().getCell(position)
+    );
 
     /**
      * Generates a random location for the Spider to spawn.
@@ -55,13 +61,7 @@ public class Spider extends MovingEntity implements Fighter {
 
     public Spider(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        addMovementBehaviour(
-            new CircleMovementBehaviour(
-                -4,
-                dungeon.getMap(),
-                dungeon.getMap().getCell(position)
-            )
-        );
+        this.addMovementBehaviour(this.circleMovementBehaviour);
     }
 
     @Override

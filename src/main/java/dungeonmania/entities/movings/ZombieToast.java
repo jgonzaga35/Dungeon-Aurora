@@ -6,6 +6,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.movement.RandomMovementBehaviour;
 
 public class ZombieToast extends MovingEntity implements Fighter {
@@ -13,9 +14,11 @@ public class ZombieToast extends MovingEntity implements Fighter {
     public static final String STRING_TYPE = "zombie";
     private float health = 4;
 
+    private MovementBehaviour randoMovementBehaviour = new RandomMovementBehaviour(-4, dungeon.getMap(), dungeon.getMap().getCell(position));
+
     public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.addMovementBehaviour(new RandomMovementBehaviour(-4, dungeon.getMap(), dungeon.getMap().getCell(position)));
+        this.addMovementBehaviour(randoMovementBehaviour);
     }
 
     @Override
