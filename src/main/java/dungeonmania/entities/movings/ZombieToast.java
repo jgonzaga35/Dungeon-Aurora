@@ -39,7 +39,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamage(Fighter target) {
         return 1;
     }
 

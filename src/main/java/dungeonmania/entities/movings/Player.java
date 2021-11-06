@@ -81,13 +81,13 @@ public class Player extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
-        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK);
+    public float getAttackDamage(Fighter target) {
+        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK, target);
     }
 
     @Override
     public float getDefenceCoef() {
-        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE);
+        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE, null);
     }
 
     @Override
@@ -104,4 +104,5 @@ public class Player extends MovingEntity implements Fighter {
     public Entity getEntity() {
         return this;
     }
+
 }

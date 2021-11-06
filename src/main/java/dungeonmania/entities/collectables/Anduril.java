@@ -4,18 +4,20 @@ package dungeonmania.entities.collectables;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.movings.Boss;
+import dungeonmania.entities.movings.bosses.Hydra;
 
-public class Sword extends CollectableEntity implements BattleItem {
+public class Anduril extends Sword {
 
-    public static String STRING_TYPE = "sword";
+    public static String STRING_TYPE = "anduril";
+    public static int BASE_DAMAGE = 6;
 
     public static int INITIAL_DURABILITY = 20;
 
     public int durability;
 
-    public Sword(Dungeon dungeon, Pos2d position) {
+    public Anduril(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durability = INITIAL_DURABILITY;
     }
@@ -56,6 +58,13 @@ public class Sword extends CollectableEntity implements BattleItem {
 
     @Override
     public float getAttackDamageBonus(Fighter target) {
-        return 2; // attacking with a sword is a lot better than with your fists!
+        if (target instanceof Boss) {
+            if (target instanceof Hydra) {
+                ((Hydra) target).cripple();
+            }
+            return Anduril.BASE_DAMAGE * 3;
+        } 
+        
+        return Anduril.BASE_DAMAGE; // attacking with a sword is a lot better than with your fists!
     }
 }

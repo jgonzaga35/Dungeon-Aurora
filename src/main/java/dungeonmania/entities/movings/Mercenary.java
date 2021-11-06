@@ -58,7 +58,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamage(Fighter target) {
         return 1;
     }
 

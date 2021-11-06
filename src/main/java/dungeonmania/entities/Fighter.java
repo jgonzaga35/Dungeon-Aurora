@@ -27,9 +27,11 @@ public interface Fighter {
     public void setHealth(float h);
 
     /**
-     * @return the damage done by the fighter
+     * @param defender
+     * @return the fighter's attack damage to the target 
+     * (returns base attack damage if no target specified)
      */
-    public float getAttackDamage();
+    public float getAttackDamage(Fighter target);
     /**
      * @return the attack damage of the attacker will be divided by this
      * coefficient

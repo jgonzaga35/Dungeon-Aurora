@@ -14,7 +14,6 @@ import dungeonmania.Entity;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
-import dungeonmania.entities.movings.Hydra;
 
 /**
  * Overview:
@@ -51,7 +50,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             int v;
             v = Utils.compareFloat(a.getHealth() - b.getHealth());
             if (v != 0) return v;
-            v = Utils.compareFloat(a.getAttackDamage() - b.getAttackDamage());
+            v = Utils.compareFloat(a.getAttackDamage(null) - b.getAttackDamage(null));
             if (v != 0) return v;
             v = a.getEntity().getId().compareTo(b.getEntity().getId());
             assert v != 0 : "duplicate id break a lot of things, including battles";
@@ -199,13 +198,7 @@ public class NormalBattleStrategy implements BattleStrategy {
 
             // the ally attacks the enemy
             // the /5 comes from the spec
-            if (enemy instanceof Hydra) {
-                System.out.println("Heath is " + enemy.getHealth());
-            }
             enemy.setHealth(enemy.getHealth() - this.computeDamage(ally, enemy) / 5);
-            if (enemy instanceof Hydra) {
-                System.out.println("Now Heath is " + enemy.getHealth());
-            }
             ally.usedItemFor(BattleDirection.ATTACK);
             enemy.usedItemFor(BattleDirection.DEFENCE);
 
@@ -227,8 +220,8 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @param defencer
      * @return damage to be done
      */
-    private float computeDamage(Fighter attacker, Fighter defencer) {
-        return attacker.getHealth() * attacker.getAttackDamage() / defencer.getDefenceCoef();
+    private float computeDamage(Fighter attacker, Fighter defender) {
+        return attacker.getHealth() * attacker.getAttackDamage(defender) / defender.getDefenceCoef();
     }
 
     @Override

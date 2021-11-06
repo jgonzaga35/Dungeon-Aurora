@@ -5,6 +5,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.Fighter;
 
 public class Armour extends CollectableEntity implements BattleItem {
 
@@ -36,7 +37,7 @@ public class Armour extends CollectableEntity implements BattleItem {
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 0;
     }
 
