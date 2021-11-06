@@ -12,7 +12,7 @@ import dungeonmania.entities.movings.bosses.Hydra;
 public class Anduril extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "anduril";
-    public static int BASE_DAMAGE = 6;
+    public static int BASE_DAMAGE = 7;
 
     public static int INITIAL_DURABILITY = 20;
 

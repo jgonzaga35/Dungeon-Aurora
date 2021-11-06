@@ -18,7 +18,7 @@ public class Hydra extends Boss {
     
     public static final String STRING_TYPE = "hydra";
     public static final int SPAWN_EVERY_N_TICKS = 50;
-    private float health = 4;  
+    private float health = 20;  
     private boolean crippled = false;
 
     public Hydra(Dungeon dungeon, Pos2d position) {

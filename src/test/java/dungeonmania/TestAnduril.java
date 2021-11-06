@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.bosses.Hydra;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -15,7 +17,7 @@ import dungeonmania.response.models.ItemResponse;
 public class TestAnduril {
 
     @Test
-    public void testLoadingSword() {
+    public void testLoadingAnduril() {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_andurilExample", GameMode.PEACEFUL.getValue());
@@ -54,8 +56,25 @@ public class TestAnduril {
             }
         }
         assertEquals(true, itemRemoved);
+    }
 
-        //Initiating Fight with Sword
-        //TODO
+    @Test
+    public void testFightHydra() {
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+
+        DungeonResponse resp = ctr.newGame("_andurilHydra", GameMode.HARD.getValue());
+        resp = ctr.tick(null, Direction.NONE);
+
+        // Down 2 Units to Anduril at Coord (1, 2)
+        resp = ctr.tick(null, Direction.DOWN);
+        
+        // Down to Hydra
+        resp = ctr.tick(null, Direction.DOWN);
+
+        // If they fight, Anduril should do 21 damage instead of 7 and so player should one shot
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+    
     }
 }
