@@ -22,17 +22,17 @@ public class TestAnduril {
         resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
-        // Down 2 Units to the Sword at Coord (1, 3)
+        // Down 2 Units to Anduril at Coord (1, 3)
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking If Sword was Collected
+        //Checking If Anduril was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
         for (ItemResponse item : curr_inventory) {
             curr_type = item.getType();
-            if (curr_type == "sword") {
+            if (curr_type == "anduril") {
                 found = true;
             }
         }
@@ -49,7 +49,7 @@ public class TestAnduril {
             Position currPosition = currEntity.getPosition();
             currPositionX = currPosition.getX();
             currPositionY = currPosition.getY();
-            if (curr_type == "sword" && currPositionX == 1 && currPositionY == 3) {
+            if (curr_type == "anduril" && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }

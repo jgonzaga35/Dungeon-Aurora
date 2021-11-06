@@ -28,6 +28,7 @@
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
+        "anduril": "images/tileset/items/anduril.png",
         "sword": "images/tileset/items/sword_silver.png",
         "door": "images/tileset/walls/wooden/door_locked_silver.png",
         "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png",
@@ -35,7 +36,6 @@
         "zombie": "images/tileset/entities/zombie_00.png",
         "zombie toast spawner": "images/tileset/entities/zombie_spawner.png",
         "portal": "images/tileset/entities/portal_00.png",
-        "hydra": "images/tileset/entities/hydra.png",
-        "anduril": "images/tileset/items/anduril.png"
+        "hydra": "images/tileset/entities/hydra.png"
     }
 }
