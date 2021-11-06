@@ -1,11 +1,14 @@
 package dungeonmania;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.battlestrategies.NoBattleStrategy;
+import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.battlestrategies.WinAllBattleStrategy;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -44,6 +47,8 @@ public class TestStrategies {
         // actually makes it harder to debug, this is easier
 
         this.testMode(GameMode.PEACEFUL);
+        this.testMode(GameMode.STANDARD);
+        this.testMode(GameMode.HARD);
     }
 
     public void testMode(GameMode _mode) {
@@ -51,6 +56,7 @@ public class TestStrategies {
 
         m = new DungeonMap(20, 20);
         d = new Dungeon("manual", this.mode, m, new ExitGoal());
+        d.getRandom().setSeed(1);
         Cell cell;
 
         // SETUP THE MAP
@@ -87,7 +93,8 @@ public class TestStrategies {
         TestUtils.lockWithBoulders(d, cell.getPosition());
         
         // SETUP FINISHED: now we can tick without having to worry about someone getting killed
-        
+        this.nobodyMoved();
+
         this.noPotionActive();
 
         InvincibilityPotion invinc = new InvincibilityPotion(d, player.getPosition());
@@ -139,38 +146,114 @@ public class TestStrategies {
 
         // back to normal
         this.noPotionActive();
+
+        this.nobodyMoved();
+    }
+
+    /**
+     * make sure that nothing moves, even when ticking
+     * it's in this file because the other (main) test depends on it,
+     * and it's probably going to break again (looking at the quality
+     * of the movement code)
+     */
+    @Test
+    public void testNoMovement() {
+        m = new DungeonMap(20, 20);
+        d = new Dungeon("manual", this.mode, m, new ExitGoal());
+        d.getRandom().setSeed(1);
+        Cell cell;
+
+        // SETUP THE MAP
+        // each entity has a ring of boulders around it so that it cannot move
+
+        cell = m.getCell(2, 0);
+        player = new Player(d, cell.getPosition());
+        d.setPlayer(player);
+        cell.addOccupant(player);
+        d.tick(null, Direction.DOWN);
+        d.tick(null, Direction.DOWN);
+        TestUtils.lockWithBoulders(d, player.getPosition());
+        // move down because the mercenaries would otherwise spawn on the player
+
+        cell = m.getCell(10, 10);
+        zombieToast = new ZombieToast(d, cell.getPosition());
+        cell.addOccupant(zombieToast);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        cell = m.getCell(4, 5);
+        mercenary = new Mercenary(d, cell.getPosition());
+        cell.addOccupant(mercenary);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        cell = m.getCell(14, 5);
+        bribedMercenary = new Mercenary(d, cell.getPosition());
+        bribedMercenary.bribe();
+        cell.addOccupant(bribedMercenary);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        cell = m.getCell(15, 15);
+        spider = new Spider(d, cell.getPosition());
+        cell.addOccupant(spider);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+        
+        // SETUP FINISHED: now we can tick without having to worry about someone getting killed
+        this.nobodyMoved();
+        this.noPotionActive();
+
+        for (int i = 0; i < 100; i++)
+            d.tick(null, Direction.NONE);
+        this.nobodyMoved();
     }
 
     private void noPotionActive() {
-        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
-        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
-        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FollowMovementBehaviour);
-        assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
-        assertTrue(d.getBattleStrategy() instanceof NoBattleStrategy); // because peaceful mode
+        assertInstanceOf(FriendlyMovementBehaviour.class, bribedMercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(RandomMovementBehaviour.class, zombieToast.getCurrentMovementBehaviour());
+        assertInstanceOf(FollowMovementBehaviour.class, mercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(CircleMovementBehaviour.class, spider.getCurrentMovementBehaviour());
+        if (this.mode == GameMode.PEACEFUL) 
+            assertInstanceOf(NoBattleStrategy.class, d.getBattleStrategy());
+        else
+            assertInstanceOf(NormalBattleStrategy.class, d.getBattleStrategy());
     }
 
     private void justInvicibilityPotionActive() {
-        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
-        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
-        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
-        assertTrue(spider.getCurrentMovementBehaviour() instanceof FleeMovementBehaviour);
-        assertTrue(d.getBattleStrategy() instanceof WinAllBattleStrategy);
+        if (this.mode == GameMode.HARD) { // invincibility potion doesn't do anything in hard mode
+            this.noPotionActive();
+            return;
+        }
+
+        assertInstanceOf(FriendlyMovementBehaviour.class, bribedMercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(FleeMovementBehaviour.class, zombieToast.getCurrentMovementBehaviour());
+        assertInstanceOf(FleeMovementBehaviour.class, mercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(FleeMovementBehaviour.class, spider.getCurrentMovementBehaviour());
+        assertInstanceOf(WinAllBattleStrategy.class, d.getBattleStrategy());
     }
 
     private void justInvisibilityPotionActive() {
-        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour); // allies can see the player when invisible
-        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
-        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
-        assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
-        assertTrue(d.getBattleStrategy() instanceof NoBattleStrategy);
+        assertInstanceOf(FriendlyMovementBehaviour.class, bribedMercenary.getCurrentMovementBehaviour()); // allies can see the player even when it's invisible
+        assertInstanceOf(RandomMovementBehaviour.class, zombieToast.getCurrentMovementBehaviour());
+        assertInstanceOf(RandomMovementBehaviour.class, mercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(CircleMovementBehaviour.class, spider.getCurrentMovementBehaviour());
+        assertInstanceOf(NoBattleStrategy.class, d.getBattleStrategy());
     }
 
     private void invincibilityPlusInvisibilityActive() {
-        assertTrue(bribedMercenary.getCurrentMovementBehaviour() instanceof FriendlyMovementBehaviour);
-        assertTrue(zombieToast.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
-        assertTrue(mercenary.getCurrentMovementBehaviour() instanceof RandomMovementBehaviour);
-        assertTrue(spider.getCurrentMovementBehaviour() instanceof CircleMovementBehaviour);
-        assertTrue(d.getBattleStrategy() instanceof WinAllBattleStrategy);
+        assertInstanceOf(FriendlyMovementBehaviour.class, bribedMercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(RandomMovementBehaviour.class, zombieToast.getCurrentMovementBehaviour());
+        assertInstanceOf(RandomMovementBehaviour.class, mercenary.getCurrentMovementBehaviour());
+        assertInstanceOf(CircleMovementBehaviour.class, spider.getCurrentMovementBehaviour());
+        if (this.mode == GameMode.HARD)
+            assertInstanceOf(NoBattleStrategy.class, d.getBattleStrategy());
+        else
+            assertInstanceOf(WinAllBattleStrategy.class, d.getBattleStrategy());
 
+    }
+
+    private void nobodyMoved() {
+        assertEquals(new Pos2d(2, 2), player.getPosition());
+        assertEquals(new Pos2d(10, 10), zombieToast.getPosition(), "zombie toast out of position");
+        assertEquals(new Pos2d(4, 5), mercenary.getPosition());
+        assertEquals(new Pos2d(14, 5), bribedMercenary.getPosition());
+        assertEquals(new Pos2d(15, 15), spider.getPosition());
     }
 }
