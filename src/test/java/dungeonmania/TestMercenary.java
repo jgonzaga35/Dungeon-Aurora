@@ -249,7 +249,7 @@ public class TestMercenary {
     @Test
     public void testNoSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_mercenary_zoo", GameMode.STANDARD.getValue());
+        DungeonResponse resp = ctr.newGame("_mercenary_no_spawn", GameMode.STANDARD.getValue());
         ctr.setSeed(1);
         for (int i = 0; i < 1000; i++) {
             // move down as far as we can so that the mercenary doesn't spawn

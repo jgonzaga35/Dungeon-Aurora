@@ -14,6 +14,7 @@ import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
@@ -60,6 +61,8 @@ public class Dungeon {
     public static int nextDungeonId = 1;
     
     private int tickCount = 0;
+
+    private boolean hadEnemiesAtStartOfDungeon = false;
 
     /**
      * make sure to seed before each test
@@ -167,15 +170,16 @@ public class Dungeon {
             else {
                 throw new Error("unhandled entity type: " + type);
             }
-
         }
 
         if (player == null) {
             throw new Error("the player's position wasn't specified");
         }
         map.setEntry(player.getPosition());
-
         dungeon.setPlayer(player);
+
+        dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
+            .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
         return dungeon;
     }
@@ -429,7 +433,12 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (!this.hadEnemiesAtStartOfDungeon)
+            return;
+
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
+            return;
+
         Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
         this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
