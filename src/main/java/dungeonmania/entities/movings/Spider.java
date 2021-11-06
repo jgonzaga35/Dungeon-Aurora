@@ -16,7 +16,7 @@ public class Spider extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "spider";
     public static final int MAX_SPIDERS = 5;
-    public static final int SPAWN_EVERY_N_TICKS = 10;
+    public static final int SPAWN_EVERY_N_TICKS = 50;
 
     private float health = 1;
     

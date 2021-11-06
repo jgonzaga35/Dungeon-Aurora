@@ -12,6 +12,8 @@ import dungeonmania.movement.FriendlyMovementBehaviour;
 public class Mercenary extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "mercenary";
+    public static final int SPAWN_EVERY_N_TICKS = 50;
+
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
 
