@@ -192,7 +192,7 @@ public class Dungeon {
 
             //Update Position and Set the Bombs is_placed status to be True so Bomb cannot be re-picked up
             removedBomb.setIsPlaced();
-            removedBomb.updatePosition(playerXCoord, playerYCoord);
+            removedBomb.setPosition(playerXCoord, playerYCoord);
 
             //Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb does not Explode
             //if Placed Next to an Already Active Floor Switch

@@ -36,15 +36,15 @@ public abstract class Entity {
         return position;
     }
 
-    private void setPosition(int XCoord, int YCoord) {
+    public void setPosition(int XCoord, int YCoord) {
         this.position.setX(XCoord);
         this.position.setY(YCoord);
     }
 
-    public void updatePosition(int XCoord, int YCoord) {
+    /*public void updatePosition(int XCoord, int YCoord) {
         setPosition(XCoord, YCoord);
         return;
-    }
+    }*/
     public Cell inspectCell(Direction d) {
         return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
     }
