@@ -194,8 +194,15 @@ public class Dungeon {
             removedBomb.setIsPlaced();
             removedBomb.updatePosition(playerXCoord, playerYCoord);
 
+            //Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb does not Explode
+            //if Placed Next to an Already Active Floor Switch
+            removedBomb.resetPrevTriggered();
+
             //Placing this Bomb on the Player's Cell
             playerCell.addOccupant(removedBomb);
+
+            //Run the Check if ALready Triggered Check
+            removedBomb.checkIfAlreadyTriggered();
             
             itemPlaced = true;
         }

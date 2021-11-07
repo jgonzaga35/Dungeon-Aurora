@@ -27,6 +27,8 @@ public class Bomb extends CollectableEntity {
 
     public boolean isPlaced = false;
 
+    private boolean prevTriggered = false;
+
     public Bomb(Dungeon dungeon, Pos2d position, boolean isPlaced) {
         super(dungeon, position);
         this.isPlaced = isPlaced;
@@ -40,6 +42,22 @@ public class Bomb extends CollectableEntity {
         return isPlaced;
     }
 
+    /**
+     * This check is always run after the object is created to ensure that if the bomb is placed next
+     * to an already activated floor switch it does not explode.
+     */
+    public void checkIfAlreadyTriggered() {
+        bombCheckCardinalAdjacency(true);
+    }
+
+    /**
+     * Resets the previously triggered flag to false if the item is picked up and then placed again.
+     */
+    public void resetPrevTriggered() {
+        prevTriggered = false;
+        return; 
+    }
+    
     /**
      * Finds the Square Search Area within the Map
      * @return Hashtable<String, Integer> : Format 
@@ -145,7 +163,7 @@ public class Bomb extends CollectableEntity {
     /**
      * Checks whether the bomb is Cardinally Adjacent to any Floor Switch
      */
-    private boolean bombCheckCardinalAdjacency() {
+    private boolean bombCheckCardinalAdjacency(boolean firstCheckAfterCreation) {
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
 
@@ -180,7 +198,23 @@ public class Bomb extends CollectableEntity {
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
                         if (currOccupant.getTypeAsString().equals(FloorSwitch.STRING_TYPE)) {
-                            return true;
+                            //Confirmed Occupant is a Floor Switch
+                            FloorSwitch currentSwitch = (FloorSwitch) currOccupant;
+                            //If Switch is Triggered and Was Previously Not Triggered
+                            if (currentSwitch.isTriggered() == true && prevTriggered == false) {
+                                if (firstCheckAfterCreation) {
+                                    prevTriggered = true;
+                                    return false;
+                                }
+                                return true;
+                            }
+                            //If Switch is Triggered and Was Previously Triggered (Switch must be triggered
+                            //only after the bomb is placed next to it to explode (Assumption))
+                            if (currentSwitch.isTriggered() == true && prevTriggered == true) {
+                                return false;
+                            }
+                            //Switch Not Triggered
+                            return false;
                         }
                     }
                 }
@@ -210,7 +244,7 @@ public class Bomb extends CollectableEntity {
      */
     @Override
     public void tick() {
-        if (bombCheckCardinalAdjacency()) {
+        if (bombCheckCardinalAdjacency(false)) {
             explode();
         }
     }
