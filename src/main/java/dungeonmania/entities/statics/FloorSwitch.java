@@ -6,7 +6,7 @@ import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
 public class FloorSwitch extends StaticEntity{
-    public static final String STRING_TYPE = "floor switch";
+    public static String STRING_TYPE = "switch";
     private boolean triggered = false;
 
     public FloorSwitch(Dungeon dungeon, Pos2d position) {
@@ -38,7 +38,7 @@ public class FloorSwitch extends StaticEntity{
 
     @Override
     public String getTypeAsString() {
-        return STRING_TYPE;
+        return FloorSwitch.STRING_TYPE;
     }
 
 
