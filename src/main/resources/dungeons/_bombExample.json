@@ -35,7 +35,7 @@
     {
       "x": 6,
       "y": 3,
-      "type": "switch"
+      "type": "floor switch"
     }
   ],
   "goal-condition": {
