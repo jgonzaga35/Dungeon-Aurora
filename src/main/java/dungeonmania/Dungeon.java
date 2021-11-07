@@ -247,16 +247,9 @@ public class Dungeon {
      * Runs Every Tick, After the Player Has Moved
      */ 
     private void pickupCollectableEntities(String itemUsed) {
-        dungeonMap.flood();
-
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
-            return;
-        }
-
-        //If No Items in Player's Cell Then there are No Items to Pickup
-        if (playerCell.getOccupants() == null) {
             return;
         }
 
