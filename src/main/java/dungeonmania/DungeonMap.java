@@ -326,7 +326,4 @@ public class DungeonMap {
         return result;
     }
 
-    public boolean bombCheckCardinalAdjacency() {
-        return false;
-    }
 }
