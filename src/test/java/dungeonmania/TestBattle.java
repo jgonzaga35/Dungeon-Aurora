@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -11,6 +13,7 @@ import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -85,6 +88,38 @@ public class TestBattle {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, Spider.STRING_TYPE));
             }
         }
+    }
+
+    @Test
+    public void testSimpleHydraBattle() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_force_hydra_attack", GameMode.HARD.getValue());
+        
+        // spawn the hydra
+        for (int i = 0; i < Hydra.SPAWN_EVERY_N_TICKS; i++) {
+            resp = ctr.tick(null, Direction.NONE);
+        }
+        Position p = resp.getEntities().stream().filter(er -> er.getType().equals(Hydra.STRING_TYPE)).findFirst().get().getPosition();
+        assertEquals(0, p.getX());
+        assertEquals(1, p.getY());
+
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+        // In this tick, the hydra moves onto the player at (0,2)
+        resp = ctr.tick(null, Direction.NONE);
+        
+        // Now the hydra should be on the player's cell
+        try {
+            p = resp.getEntities().stream().filter(er -> er.getType().equals(Hydra.STRING_TYPE)).findFirst().get().getPosition();
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
+            assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+        } catch (NoSuchElementException e) {
+            // if there is no hydra it means, the player has killed it successfully
+            assertEquals(0, TestUtils.countEntitiesOfType(resp, Hydra.STRING_TYPE));
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+        }
+        
     }
 
     /**

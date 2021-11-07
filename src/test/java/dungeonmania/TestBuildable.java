@@ -82,9 +82,9 @@ public class TestBuildable {
     }
 
     @Test
-    public void testUnkonwnBuildable() {
+    public void testUnknownBuildable() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_buildable", GameMode.PEACEFUL.getValue());
+        ctr.newGame("_buildable", GameMode.PEACEFUL.getValue());
         assertThrows(IllegalArgumentException.class, () -> {
             ctr.build("foobar");
         });

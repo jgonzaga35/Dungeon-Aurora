@@ -28,6 +28,7 @@ import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -55,7 +56,6 @@ public class Dungeon {
     private String name;
     private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
-
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
@@ -151,6 +151,8 @@ public class Dungeon {
                 cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
+                cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -228,7 +230,6 @@ public class Dungeon {
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-        
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
@@ -251,6 +252,7 @@ public class Dungeon {
 
         this.spawnSpiders();
         this.spawnMercenaries();
+        this.spawnHydras();
 
         // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
@@ -457,4 +459,15 @@ public class Dungeon {
             }
         }
     }
+
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnHydras() {
+        // Spawn Hydra every 50 ticks and HARD MODE enabled
+        if (getGameMode().equals(GameMode.HARD) && (this.tickCount % Hydra.SPAWN_EVERY_N_TICKS == 0)) {
+            Hydra.spawnHydra(this);
+        }
+    }
+
 }

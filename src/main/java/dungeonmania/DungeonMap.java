@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -79,13 +80,11 @@ public class DungeonMap {
      */
     public Integer countMercenaries() {
         int count = 0;
-        // for (List<Cell> row : dungeonMap) {
-        //     for (Cell cell : row) {
-        //         // if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
-        //         //     count++;
-        //         // } 
-        //     }
-        // }
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                count += cell.getOccupants().stream().filter(e -> e instanceof Mercenary).count();
+            }
+        }
         return count;
     }
 
