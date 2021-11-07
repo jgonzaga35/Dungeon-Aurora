@@ -2,8 +2,6 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -16,7 +14,6 @@ public class TestDoor {
     public void rightKeyRightDoor() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp;
-        Position p;
         ctr.newGame("_door_maze", GameMode.PEACEFUL.getValue());
 
         // move the player to pick up key 1

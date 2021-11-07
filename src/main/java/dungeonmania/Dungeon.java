@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +14,7 @@ import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
@@ -26,6 +28,7 @@ import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -61,10 +64,18 @@ public class Dungeon {
     private String name;
     private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
-
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
+    
+    private int tickCount = 0;
+
+    private boolean hadEnemiesAtStartOfDungeon = false;
+
+    /**
+     * make sure to seed before each test
+     */
+    private Random r = new Random(1);
 
     public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
@@ -79,6 +90,15 @@ public class Dungeon {
 
         Dungeon.nextDungeonId++;
     }
+
+    /**
+     * All source of randomness should come from here, so that we can seed it.
+     * 
+     * to seed: dungeon.getRandom().setSeed(1);
+     */
+    public Random getRandom() {
+        return this.r;
+    } 
 
     /**
      * Creates a Dungeon instance from the JSON file's content
@@ -132,7 +152,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
-                cell.addOccupant(Spider.spawnSpider(dungeon));
+                cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
@@ -141,6 +161,8 @@ public class Dungeon {
                 cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
+                cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -160,14 +182,16 @@ public class Dungeon {
             else {
                 throw new Error("unhandled entity type: " + type);
             }
-
         }
 
         if (player == null) {
             throw new Error("the player's position wasn't specified");
         }
-
+        map.setEntry(player.getPosition());
         dungeon.setPlayer(player);
+
+        dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
+            .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
         return dungeon;
     }
@@ -266,12 +290,12 @@ public class Dungeon {
             throws IllegalArgumentException, InvalidActionException {
 
         assert this.battleStrategies.size() > 0;
+        this.tickCount++;
 
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
         //           and *only* then call tick on them all
-        
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
@@ -294,13 +318,11 @@ public class Dungeon {
         //Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 
-        
-        long spiderPopulation = this.dungeonMap.allEntities().stream()
-            .filter(e -> e instanceof Spider).count();
-        if (spiderPopulation < Spider.MAX_SPIDERS) {
-            Spider.spawnSpider(this);
-        }
+        this.spawnSpiders();
+        this.spawnMercenaries();
+        this.spawnHydras();
 
+        // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
     }
 
@@ -473,4 +495,48 @@ public class Dungeon {
     public boolean removeBattleStrategy(BattleStrategy bs) {
         return this.battleStrategies.remove(bs);
     }
+
+    /**
+     * These helper functions should only be called by Dungeon::tick
+     */
+    
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnMercenaries() {
+        if (!this.hadEnemiesAtStartOfDungeon)
+            return;
+
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
+            return;
+
+        Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
+        this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
+    }
+
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnSpiders() {
+        long spiderPopulation = this.dungeonMap.allEntities().stream()
+            .filter(e -> e instanceof Spider).count();
+
+        if (spiderPopulation < Spider.MAX_SPIDERS && (this.tickCount % Spider.SPAWN_EVERY_N_TICKS == 0)) {
+            Cell c = Spider.getRandomPosition(this);
+            if (c != null) {
+                c.addOccupant(new Spider(this, c.getPosition()));
+            }
+        }
+    }
+
+    /**
+     * helper function that is called once per tick
+     */
+    private void spawnHydras() {
+        // Spawn Hydra every 50 ticks and HARD MODE enabled
+        if (getGameMode().equals(GameMode.HARD) && (this.tickCount % Hydra.SPAWN_EVERY_N_TICKS == 0)) {
+            Hydra.spawnHydra(this);
+        }
+    }
+
 }

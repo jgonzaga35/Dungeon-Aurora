@@ -17,7 +17,7 @@ public class TestSaveLoadGame {
     public void testSaveGame() {
         DungeonManiaController ctr = new DungeonManiaController();
         ctr.newGame("_boulder_simple", GameMode.PEACEFUL.getValue());
-        DungeonResponse resp = ctr.saveGame("g1");
+        ctr.saveGame("g1");
         assertTrue(ctr.allGames().contains("g1"));
         assertThrows(IllegalArgumentException.class, () -> ctr.saveGame("g1"));
     }

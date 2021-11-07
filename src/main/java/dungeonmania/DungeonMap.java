@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
@@ -29,6 +30,8 @@ public class DungeonMap {
     private List<List<Cell>> dungeonMap = new ArrayList<>();
     private int width;
     private int height;
+
+    private Pos2d entry = null;
     
     DungeonMap(JSONObject json) {
         this.width = json.getInt("width");
@@ -77,13 +80,11 @@ public class DungeonMap {
      */
     public Integer countMercenaries() {
         int count = 0;
-        // for (List<Cell> row : dungeonMap) {
-        //     for (Cell cell : row) {
-        //         // if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
-        //         //     count++;
-        //         // } 
-        //     }
-        // }
+        for (List<Cell> row : dungeonMap) {
+            for (Cell cell : row) {
+                count += cell.getOccupants().stream().filter(e -> e instanceof Mercenary).count();
+            }
+        }
         return count;
     }
 
@@ -326,4 +327,21 @@ public class DungeonMap {
         return result;
     }
 
+    /**
+     * Should only be called once, during construction
+     * @param pos the entry position (see .getEntry())
+     */
+    public void setEntry(Pos2d pos) {
+        assert this.entry == null : "set entry should only be called once, during construction";
+        this.entry = pos;
+    }
+
+    /**
+     * the entry of the map is where the player spawns (and the cell on which
+     * mercenaries later spawn)
+     * @return readonly entry position
+     */
+    public Pos2d getEntry() {
+        return this.entry;
+    }
 }
