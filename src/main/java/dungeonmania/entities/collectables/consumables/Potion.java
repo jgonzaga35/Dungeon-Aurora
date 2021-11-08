@@ -17,8 +17,10 @@ public abstract class Potion extends CollectableEntity {
     
     /**
      * Gives the potion some duration and applies it's effects.
+     * 
+     * Calls the potion's onDrink method (template pattern)
      */
-    public void drink() {
+    public final void drink() {
         this.duration = maxDuration;
         onDrink();
     }
