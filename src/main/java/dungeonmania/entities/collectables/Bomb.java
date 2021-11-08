@@ -27,7 +27,7 @@ public class Bomb extends CollectableEntity {
 
     public boolean isPlaced = false;
 
-    private boolean prevTriggered = false;
+    private Hashtable<String, Boolean> adjacentSwitchStatus = new Hashtable<String, Boolean>();
 
     public Bomb(Dungeon dungeon, Pos2d position, boolean isPlaced) {
         super(dungeon, position);
@@ -47,14 +47,14 @@ public class Bomb extends CollectableEntity {
      * to an already activated floor switch it does not explode.
      */
     public void checkIfAlreadyTriggered() {
-        bombCheckCardinalAdjacency(true);
+        bombCheckCardinalAdjacency();
     }
 
     /**
      * Resets the previously triggered flag to false if the item is picked up and then placed again.
      */
-    public void resetPrevTriggered() {
-        prevTriggered = false;
+    public void resetAdjacentSwitchRecords() {
+        adjacentSwitchStatus = new Hashtable<String, Boolean>();
         return; 
     }
 
@@ -161,9 +161,38 @@ public class Bomb extends CollectableEntity {
     }
     
     /**
+     * Checks if the inputted switch has been activated after bomb was placed.
+     * @return Boolean  
+     */
+    private boolean checkSwitchNewlyActivated(Entity currOccupant) {
+        //Confirmed Occupant is a Floor Switch
+        FloorSwitch currentSwitch = (FloorSwitch) currOccupant;
+
+        //Adding Switch to the Dictionary
+        String currId = currentSwitch.getId();
+        Boolean currSwitchActivated = currentSwitch.isTriggered();
+
+        if (adjacentSwitchStatus.containsKey(currId) == false) {
+            //If this switch has not yet been checked
+            adjacentSwitchStatus.put(currId, currSwitchActivated); 
+        } else {
+            //If switch has already been checked
+            if (adjacentSwitchStatus.get(currId) == false) {
+                //If the current switch was previously not activated
+                adjacentSwitchStatus.put(currId, currSwitchActivated);
+                if (currSwitchActivated == true) {
+                    return true;
+                }
+            }  
+        }
+
+        return false;
+    }
+
+    /**
      * Checks whether the bomb is Cardinally Adjacent to any Floor Switch
      */
-    private boolean bombCheckCardinalAdjacency(boolean firstCheckAfterCreation) {
+    private boolean bombCheckCardinalAdjacency() {
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
 
@@ -195,23 +224,9 @@ public class Bomb extends CollectableEntity {
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
                         if (currOccupant.getTypeAsString().equals(FloorSwitch.STRING_TYPE)) {
-                            //Confirmed Occupant is a Floor Switch
-                            FloorSwitch currentSwitch = (FloorSwitch) currOccupant;
-                            //If Switch is Triggered and Was Previously Not Triggered
-                            if (currentSwitch.isTriggered() == true && prevTriggered == false) {
-                                if (firstCheckAfterCreation) {
-                                    prevTriggered = true;
-                                    return false;
-                                }
+                            if (checkSwitchNewlyActivated(currOccupant) == true) {
                                 return true;
                             }
-                            //If Switch is Triggered and Was Previously Triggered (Switch must be triggered
-                            //only after the bomb is placed next to it to explode (Assumption))
-                            if (currentSwitch.isTriggered() == true && prevTriggered == true) {
-                                return false;
-                            }
-                            //Switch Not Triggered
-                            return false;
                         }
                     }
                 }
@@ -241,7 +256,7 @@ public class Bomb extends CollectableEntity {
      */
     @Override
     public void tick() {
-        if (bombCheckCardinalAdjacency(false)) {
+        if (bombCheckCardinalAdjacency()) {
             explode();
         }
     }

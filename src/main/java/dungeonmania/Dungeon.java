@@ -220,7 +220,7 @@ public class Dungeon {
 
             //Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb does not Explode
             //if Placed Next to an Already Active Floor Switch
-            removedBomb.resetPrevTriggered();
+            removedBomb.resetAdjacentSwitchRecords();
 
             //Placing this Bomb on the Player's Cell
             playerCell.addOccupant(removedBomb);
