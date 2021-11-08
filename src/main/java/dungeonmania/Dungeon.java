@@ -22,6 +22,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.rare.OneRing;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
@@ -149,6 +150,9 @@ public class Dungeon {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
                 cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
+            } else if (Objects.equals(type, OneRing.STRING_TYPE)) {
+                System.out.println("Attempted Making One Ring");
+                cell.addOccupant(new OneRing(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {

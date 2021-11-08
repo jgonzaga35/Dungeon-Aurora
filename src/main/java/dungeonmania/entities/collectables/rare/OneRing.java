@@ -1,5 +1,5 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
-package dungeonmania.entities.collectables;
+package dungeonmania.entities.collectables.rare;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
@@ -13,12 +13,22 @@ import java.util.List;
 import dungeonmania.DungeonMap;
 
 
-public class OneRing extends CollectableEntity {
+public class OneRing extends Rare {
 
     public static String STRING_TYPE = "one_ring";
 
     public OneRing(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+    }
+
+    @Override
+    public void applyEffects() {
+        return;
+    }
+
+    @Override
+    public void expire() {
+        return;
     }
 
     public void effectStarted() {
@@ -39,7 +49,7 @@ public class OneRing extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return OneRing.STRING_TYPE;
+        return STRING_TYPE;
     }
 
     @Override
@@ -49,6 +59,6 @@ public class OneRing extends CollectableEntity {
 
     @Override
     public void tick() {
-
+        System.out.println("One Ring tick ran");
     }
 }
