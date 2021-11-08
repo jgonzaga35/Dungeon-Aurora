@@ -23,15 +23,6 @@ public class OneRing extends Rare {
 
     @Override
     public void applyEffects() {
-        return;
-    }
-
-    @Override
-    public void expire() {
-        return;
-    }
-
-    public void effectStarted() {
         //Increase Health
         Dungeon dungeon = this.dungeon;
         DungeonMap map = dungeon.getMap();
@@ -44,6 +35,11 @@ public class OneRing extends Rare {
             }
         }
 
+        return;
+    }
+
+    @Override
+    public void expire() {
         return;
     }
 

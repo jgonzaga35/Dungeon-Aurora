@@ -11,6 +11,7 @@ import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.rare.Rare;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.consumables.Potion;
@@ -81,11 +82,16 @@ public class Inventory {
 
         if (itemUsed == null) throw new InvalidActionException("Item not in inventory");
 
-        if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb)) throw new IllegalArgumentException("Item not useable");
+        if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb) && !(itemUsed instanceof Rare)) throw new IllegalArgumentException("Item not useable");
         
         if (itemUsed instanceof Potion) {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
+        }
+
+        if (itemUsed instanceof Rare) {
+            Rare rareActivated = (Rare) itemUsed;
+            rareActivated.applyEffects();
         }
         
 
