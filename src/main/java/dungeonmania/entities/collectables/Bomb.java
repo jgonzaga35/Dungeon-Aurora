@@ -57,7 +57,7 @@ public class Bomb extends CollectableEntity {
         prevTriggered = false;
         return; 
     }
-    
+
     /**
      * Finds the Square Search Area within the Map
      * @return Hashtable<String, Integer> : Format 
@@ -188,9 +188,6 @@ public class Bomb extends CollectableEntity {
 
         //Iterate Through These Cardinally Adjacent Cells and Check if Any
         //Contain a Floor Switch
-        if (adjacentCells == null) {
-            return false;
-        }
 
         for (Cell currentCell : adjacentCells) {
             if (currentCell.getOccupants() != null) {
