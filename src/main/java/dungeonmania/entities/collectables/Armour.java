@@ -1,7 +1,7 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
 package dungeonmania.entities.collectables;
 
-import dungeonmania.Dungeon;
+import dungeonmania.Dungeon; 
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;

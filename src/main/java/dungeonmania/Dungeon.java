@@ -40,6 +40,14 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
@@ -135,6 +143,8 @@ public class Dungeon {
                 cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
+                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
@@ -187,33 +197,89 @@ public class Dungeon {
     }
 
     /**
+     * Places a Bomb that is Currently in Player Inventory onto Map &
+     * Ensures that Player is Unable to Pick it Up Again
+     */
+    private void placeBomb(String itemUsed, CollectableEntity currCollectable) {
+        //Get Player Positions & Collectables
+        Cell playerCell = dungeonMap.getPlayerCell();
+        Pos2d playerPosition = playerCell.getPosition();
+        int playerXCoord = playerPosition.getX();
+        int playerYCoord = playerPosition.getY();
+        boolean itemPlaced = false;
+        
+        //Check the Collectable Passed to this Function is a Bomb and that the ID matches
+        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
+            //Retreive Bomb Removed from Collectables that is To Be Placed
+            CollectableEntity collectableRemoved = currCollectable;
+            Bomb removedBomb = (Bomb) collectableRemoved;
+
+            //Update Position and Set the Bombs is_placed status to be True so Bomb cannot be re-picked up
+            removedBomb.setIsPlaced();
+            removedBomb.setPosition(playerXCoord, playerYCoord);
+
+            //Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb does not Explode
+            //if Placed Next to an Already Active Floor Switch
+            removedBomb.resetAdjacentSwitchRecords();
+
+            //Placing this Bomb on the Player's Cell
+            playerCell.addOccupant(removedBomb);
+
+            //Run the Check if ALready Triggered Check
+            removedBomb.checkIfAlreadyTriggered();
+            
+            itemPlaced = true;
+        }
+        
+    }
+    
+    /**
+     * Removes the item from cell if player picked it up. 
+     */
+    private void pickupCollectablesRemoveFromCell(Cell playerCell) {
+        //Getting Occupants of Player's Cell
+        List<Entity> playerCellOccupants = playerCell.getOccupants();
+      
+
+        //If No Items In Player's Cell, There are No Items to Pickup
+        if (playerCellOccupants.size() == 0) {
+            return;
+        }
+
+        //Removing Any Collectable Occupants from Current Cell as they Are Picked Up
+        Entity removedOccupant = playerCellOccupants.get(0);
+        boolean ifOccupantRemoved = false;
+        for (Entity occupant : playerCellOccupants) {
+            if (occupant instanceof CollectableEntity) {
+                //Assign the Current Collectable Occupant in Cell to be Removed
+                CollectableEntity collectableOccupant = (CollectableEntity)occupant;
+                if (this.inventory.add(collectableOccupant)) {
+                    ifOccupantRemoved = true;
+                    removedOccupant = collectableOccupant;
+                }
+                
+            }
+        }
+        if (ifOccupantRemoved == true) {
+            //Remove the Assigned Collectable in Cell
+            playerCell.removeOccupant(removedOccupant);
+        }
+    }
+
+    /**
      * Picks Up the Collectable Entities that Are in the Player's Square
      * Runs Every Tick, After the Player Has Moved
-     * If any collectables are in the player's square this function will remove
-     * the collectable item from the cell and add it to the player's inventory.
-     */
-    private void pickupCollectableEntities() {
+     */ 
+    private void pickupCollectableEntities(String itemUsed) {
         //Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
             return;
         }
 
-        //Check if Collectibles in the Player's Cell
-        if (playerCell.getOccupants() == null) {
-            return;
-        }
-        List<Entity> playerCellOccupants = playerCell.getOccupants();
-        List<CollectableEntity> toRemove = new ArrayList<>();
-        for (Entity occupant : playerCellOccupants) {
-            if (occupant instanceof CollectableEntity) {
-                CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                if (this.inventory.add(collectableOccupant))
-                    toRemove.add(collectableOccupant);
-            }
-        }
-        for (CollectableEntity occupant : toRemove)
-            playerCell.removeOccupant(occupant);
+        //Remove Collectable From Cell
+        pickupCollectablesRemoveFromCell(playerCell);
+
     }
     
     public Pos2d getPlayerPosition() {
@@ -237,6 +303,7 @@ public class Dungeon {
         CollectableEntity item = null;
         if (itemUsed != null) item = inventory.useItem(itemUsed);
         if (item instanceof Potion) activePotions.add((Potion)item);
+        if (item instanceof Bomb) placeBomb(itemUsed, item);
         
         // make sure all potion effects are applied and remove inactive potions.
         List<Potion> activePotionCpy = new ArrayList<>(activePotions);
@@ -248,7 +315,8 @@ public class Dungeon {
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
         
-        pickupCollectableEntities();
+        //Dealing With Picking Up or Placing Collectable Entities
+        pickupCollectableEntities(itemUsed);
 
         this.spawnSpiders();
         this.spawnMercenaries();
@@ -370,6 +438,7 @@ public class Dungeon {
         return this.inventory.asItemResponses();
     }
 
+    
     /**
      * Attempts to bribe the map's mercenary raises an InvalidActionException
      * when:

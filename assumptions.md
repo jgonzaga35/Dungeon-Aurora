@@ -37,3 +37,8 @@
 
 ## Hydras
 - Hydras can't spawn on blocking cells or on the player.
+
+## Bombs
+- Blast radius is set to 2
+- A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
+  (will not explode if placed next to an already activated switch)
