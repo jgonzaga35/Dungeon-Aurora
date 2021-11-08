@@ -8,6 +8,7 @@ import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
+import dungeonmania.movement.MovementBehaviour;
 
 public class Mercenary extends MovingEntity implements Fighter {
 
@@ -17,26 +18,29 @@ public class Mercenary extends MovingEntity implements Fighter {
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
 
+    private MovementBehaviour followMovementBehaviour;
+    private MovementBehaviour friendlyMovementBehaviour;
+
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.addMovementBehaviour(
-            new FollowMovementBehaviour(
-                5, 
-                dungeon.getMap(), 
-                dungeon.getMap().getCell(position)
-            )
+        this.followMovementBehaviour = new FollowMovementBehaviour(
+            0, 
+            dungeon.getMap(), 
+            dungeon.getMap().getCell(position)
         );
+        this.friendlyMovementBehaviour = new FriendlyMovementBehaviour(
+            0, 
+            dungeon.getMap(), 
+            getCell()
+        );
+        this.addMovementBehaviour(this.followMovementBehaviour);
     }
 
     public void bribe() {
         relationship = FighterRelation.ALLY;
-        addMovementBehaviour(
-            new FriendlyMovementBehaviour(
-                0, 
-                dungeon.getMap(), 
-                getCell()
-            )
-        );
+        // order matters! add first, then remove
+        this.addMovementBehaviour(this.friendlyMovementBehaviour);
+        this.removeMovementBehaviour(this.followMovementBehaviour);
     }
 
     @Override
