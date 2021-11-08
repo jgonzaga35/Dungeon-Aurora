@@ -9,12 +9,14 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.DungeonMap;
 
 public class Inventory {
     private List<CollectableEntity> collectables = new ArrayList<>();
@@ -29,7 +31,15 @@ public class Inventory {
         if (c instanceof Key && hasKey()) {
             // Player cannot pickup a second key
             return false;
-        } else return this.collectables.add(c);
+        } 
+        if (c instanceof Bomb) {
+            // Player cannot pickup bomb already placed
+            Bomb bomb = (Bomb) c;
+            if (bomb.getIsPlaced() == true) {
+                return false;
+            }
+        } 
+        return this.collectables.add(c);
     }
 
     /**
@@ -71,15 +81,13 @@ public class Inventory {
 
         if (itemUsed == null) throw new InvalidActionException("Item not in inventory");
 
-        //TODO: add bomb
-        if (!(itemUsed instanceof Potion)) throw new IllegalArgumentException("Item not useable");
+        if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb)) throw new IllegalArgumentException("Item not useable");
         
         if (itemUsed instanceof Potion) {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
         }
-
-        //TODO: add bomb
+        
 
         collectables.remove(itemUsed);
         
