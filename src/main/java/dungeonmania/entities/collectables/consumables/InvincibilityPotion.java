@@ -1,13 +1,11 @@
 package dungeonmania.entities.collectables.consumables;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.WinAllBattleStrategy;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.Fighter.FighterRelation;
@@ -23,6 +21,7 @@ public class InvincibilityPotion extends Potion {
     public InvincibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.maxDuration = 5;
+        this.battleStrategy = new WinAllBattleStrategy(-2);
     }
 
     @Override
@@ -35,6 +34,8 @@ public class InvincibilityPotion extends Potion {
         affectedEntities.keySet().stream().forEach(e -> {
             e.removeMovementBehaviour(affectedEntities.get(e));
         });
+
+        this.dungeon.removeBattleStrategy(battleStrategy);
 
         affectedEntities.clear();
     }

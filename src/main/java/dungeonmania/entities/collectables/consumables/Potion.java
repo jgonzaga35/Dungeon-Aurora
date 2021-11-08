@@ -2,12 +2,14 @@ package dungeonmania.entities.collectables.consumables;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 
 public abstract class Potion extends CollectableEntity {
     // Inactive potions have -1 duration
     protected Integer duration = -1;
     protected Integer maxDuration;
+    protected BattleStrategy battleStrategy;
 
     public Potion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -18,6 +20,7 @@ public abstract class Potion extends CollectableEntity {
      */
     public void drink() {
         this.duration = maxDuration;
+        this.dungeon.addBattleStrategy(battleStrategy);
         applyEffects();
     }
 

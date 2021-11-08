@@ -1,0 +1,11 @@
+{
+    "width": 1,
+    "height": 3,
+    "entities": [
+        {"type": "wall", "x": 0, "y": 0},
+        {"type": "player", "x": 0, "y": 2}
+    ],
+    "goal-condition": {
+      "goal": "exit"
+    }
+}

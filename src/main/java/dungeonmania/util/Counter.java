@@ -3,6 +3,7 @@ package dungeonmania.util;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Equivalent of the python class collections.Counter
@@ -17,6 +18,10 @@ public class Counter<T> {
             this.counts.put(item, count);
         }
         counts.equals(null);
+    }
+
+    public Stream<Integer> values() {
+        return this.counts.values().stream();
     }
 
     @Override

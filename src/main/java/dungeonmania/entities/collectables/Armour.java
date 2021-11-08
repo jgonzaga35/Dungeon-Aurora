@@ -3,37 +3,41 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 
-public class Armour extends CollectableEntity {
+public class Armour extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "armour";
 
-    public static int INITIAL_DURABILITY = 10;
-
-    public int durabilityLeft;
+    public static int INITIAL_DURABILITY = 30;
+    public int durability;
 
     public Armour(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.durabilityLeft = INITIAL_DURABILITY;
+        this.durability = INITIAL_DURABILITY;
     }
 
-    /**
-     * 
-     * @return Remaining Durability (int)
-     */
+    @Override
     public int getDurability() {
-        return durabilityLeft;
+        return this.durability;
     }
 
-    /**
-     * 
-     * @param numTimes : int (Number of Times Sword Used)
-     * @return Remaining Durability (int)
-     */
-    public int used(int numTimes) {
-        durabilityLeft = durabilityLeft - numTimes;
-        return durabilityLeft;
+    @Override
+    public void usedForBattleRound(BattleDirection d) {
+        if (d == BattleDirection.DEFENCE) {
+            this.durability--;
+        }
+    }
+
+    @Override
+    public float getDefenceCoefBonus() {
+        return 2; // armour multiplies defence by 2
+    }
+
+    @Override
+    public float getAttackDamageBonus() {
+        return 0;
     }
 
     @Override
@@ -49,4 +53,5 @@ public class Armour extends CollectableEntity {
     @Override
     public void tick() {
     }
+
 }

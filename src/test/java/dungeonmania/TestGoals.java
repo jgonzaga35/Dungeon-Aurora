@@ -2,9 +2,11 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.movings.Spider;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -117,7 +119,7 @@ public class TestGoals {
 
         int player_kills_n_spiders = 16;
         
-        for (int j = 0; j < player_kills_n_spiders; j++) {
+        for (int j = 0; j < player_kills_n_spiders * Spider.SPAWN_EVERY_N_TICKS; j++) {
             resp = ctr.tick(null, Direction.NONE);
             resp.getEntities().forEach(e -> System.out.println(e.getType() + " " + e.getPosition()));
         }
