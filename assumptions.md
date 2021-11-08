@@ -21,7 +21,6 @@
 
 ## Mercenaries
 - players can't bribe mercenaries through walls.
-- There can only be one mercenary on a map at a time.
 - New mercenaries spawn every 50 ticks on maps with at least one enemy present
   at the *start of the map.*
 - IllegalArgumentException when the player bribes a friendly mercenary.
