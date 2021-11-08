@@ -25,6 +25,11 @@
 - New mercenaries spawn every 50 ticks on maps with at least one enemy present
   at the *start of the map.*
 - IllegalArgumentException when the player bribes a friendly mercenary.
+- One treasure is the price to bribe a mercenary
+
+## Assassins
+- Assassins just deal more damage by simply having more health than assassins.
+- There is a 25% chance for a assassin to spawn in the place of a mercenary.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.

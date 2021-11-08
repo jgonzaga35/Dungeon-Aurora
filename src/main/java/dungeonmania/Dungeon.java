@@ -29,6 +29,7 @@ import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -166,6 +167,8 @@ public class Dungeon {
                 cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Assassin.STRING_TYPE)) {
+                cell.addOccupant(new Assassin(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
                 cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
