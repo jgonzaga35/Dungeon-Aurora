@@ -30,26 +30,24 @@ public class TestMercenaryBattles {
         List.of(player, ally, zombie).forEach(e -> map.getCell(e.getPosition()).addOccupant(e));
         dungeon.setPlayer(player);
 
-        Pos2d battlePosition = new Pos2d(5, 6);
+        Pos2d battlePosition = new Pos2d(6, 5);
 
         // the ally has to fight
         assertTrue(ally.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
 
-        float prevPlayerHealth = player.getHealth();
         float prevAllyHealth = ally.getHealth();
+        float prevPlayerHealth = player.getHealth();
 
-        map.getCell(5, 5).getOccupants().forEach(e -> System.out.println(e));
         dungeon.tick(null, Direction.RIGHT);
-        map.getCell(5, 5).getOccupants().forEach(e -> System.out.println(e));
 
-        assertEquals(player.getHealth(), prevPlayerHealth, Utils.eps); // mercenary should fight for the player
         assertTrue(Utils.isDead(zombie));
-        assertTrue(ally.getHealth() < prevAllyHealth);
-        assertEquals(player.getPosition(), battlePosition);
+        assertTrue(ally.getHealth() < prevAllyHealth); // make sure the mercenary fought
+        assertTrue(player.getHealth() < prevPlayerHealth); // make sure the player fought
 
         // make sure that the mercenary goes back to where he was after the
         // battle, because he fought from a distance
         assertTrue(ally.getPosition().squareDistance(new Pos2d(5, 7)) <= 1);
+        assertEquals(player.getPosition(), battlePosition);
     }
 
 }

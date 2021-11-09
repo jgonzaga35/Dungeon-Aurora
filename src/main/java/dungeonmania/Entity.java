@@ -67,7 +67,7 @@ public abstract class Entity {
     @Override
     public String toString()
     {
-        return getTypeAsString();
+        return String.format("%s[pos=%s]", getTypeAsString(), getPosition());
     }
 
     public abstract boolean isInteractable();
