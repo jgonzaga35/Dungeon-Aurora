@@ -521,7 +521,11 @@ public class Dungeon {
         if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
             return;
 
-        Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
+        // spawn an assassin 25% of the time.
+        Mercenary m;
+        if (r.nextInt(100) < Assassin.SPAWN_PERCENTAGE) m = new Assassin(this, this.dungeonMap.getEntry());
+        else m = new Mercenary(this, this.dungeonMap.getEntry());
+
         this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
 
