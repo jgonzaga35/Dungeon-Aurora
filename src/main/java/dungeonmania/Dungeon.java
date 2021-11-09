@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import org.eclipse.jetty.util.Scanner.ScanCycleListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.buildables.Bow;
+import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
@@ -342,6 +344,10 @@ public class Dungeon {
             }
         } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
             if (!Bow.craft(this.inventory)) {
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            }
+        } else if (Objects.equals(buildable, Sceptre.STRING_TYPE)) {
+            if (!Sceptre.craft(this.inventory)) {
                 throw new InvalidActionException("not enough resources to build " + buildable);
             }
         } else {
