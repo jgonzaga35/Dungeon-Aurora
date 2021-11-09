@@ -57,17 +57,22 @@ public class Shield extends BuildableEntity implements BattleItem {
      * @return true if the item was succesfully crafted
      */
     public static boolean craft(Inventory inventory) {
-        if (!inventory.useItems(List.of(
+        List<String> materials = List.of(
             Wood.STRING_TYPE,
             Wood.STRING_TYPE,
             Treasure.STRING_TYPE
-        )) && !inventory.useItems(List.of(
+        );
+
+        List<String> materialsAlt = List.of(
             Wood.STRING_TYPE,
             Wood.STRING_TYPE,
             Key.STRING_TYPE
-        ))) {
+        );
+
+        if (!inventory.useItems(materials) && !inventory.useItems(materialsAlt)) {
             return false;
         }
+        
         inventory.add(new Shield(null, null));
         return true;
     }

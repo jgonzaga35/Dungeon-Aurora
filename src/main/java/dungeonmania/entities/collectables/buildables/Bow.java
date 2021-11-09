@@ -56,14 +56,17 @@ public class Bow extends BuildableEntity implements BattleItem {
      * @return true if the item was succesfully crafted
      */
     public static boolean craft(Inventory inventory) {
-        if (!inventory.useItems(List.of(
+        List<String> materials = List.of(
             Wood.STRING_TYPE,
             Arrow.STRING_TYPE,
             Arrow.STRING_TYPE,
             Arrow.STRING_TYPE
-        ))) {
+        );
+        
+        if (!inventory.useItems(materials)) {
             return false;
         }
+        
         inventory.add(new Bow(null, null));
         return true;
     }
