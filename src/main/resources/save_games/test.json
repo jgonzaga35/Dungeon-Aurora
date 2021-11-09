@@ -1,0 +1,78 @@
+{
+    "width": 9,
+    "height": 9,
+    "id": "dungeon-1",
+    "tick_count": 12,
+    "enemies_at_start": true,
+    "goal-condition": {
+        "goal": "exit"
+    },
+    "battle_strategies": [
+        {
+            "precedence": 4,
+            "type": "win-all"
+        },
+        {
+            "precedence": 4,
+            "type": "no-battle"
+        },
+        {
+            "precedence": 4,
+            "type": "normal"
+        }
+    ],
+    "game_mode": "Standard",
+    "name": "Advanced",
+    "potions": [
+        {
+            "type": "invincibility_potion",
+            "pos": {"x": 0, "y": 0},
+            "duration": 3
+        },
+        {
+            "type": "invisibility_potion",
+            "pos": {"x": 0, "y": 0},
+            "duration": 6
+        }
+    ],
+    "entities": [
+        {
+            "type": "player",
+            "pos": {"x": 0, "y": 0},
+            "health": 4
+        },
+        {
+            "type": "spider",
+            "pos": {"x": 0, "y": 0},
+            "movement": [
+                {
+                    "type": "circle",
+                    "step": 2,
+                    "direction": -1,
+                    "pos": {"x": 0, "y": 0},
+                    "precedence": 4
+                },
+                {
+                    "type": "circle",
+                    "step": 2,
+                    "direction": -1,
+                    "pos": {"x": 0, "y": 0},
+                    "precedence": 4
+                }
+            ],
+            "health": 4
+        }
+    ],
+    "inventory": {
+        "items": [
+            {
+                "type": "one_ring",
+                "pos": {"x": 0, "y": 0}
+            },
+            {
+                "type": "treasure",
+                "pos": {"x": 0, "y": 0}
+            }
+        ]
+    }
+}

@@ -356,17 +356,4 @@ public class DungeonMap {
         return this.entry;
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.put("width", width);
-        json.put("height", height);
-        
-        JSONArray entities = new JSONArray();
-        allEntities().stream().forEach(e -> entities.put(e.toJSON()));
-
-        json.put("entities", entities);
-
-        return json;
-    }
 }

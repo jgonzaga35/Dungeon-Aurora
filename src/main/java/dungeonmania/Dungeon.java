@@ -41,13 +41,6 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.Armour;
-import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
@@ -556,11 +549,15 @@ public class Dungeon {
 
         JSONArray potions = new JSONArray();
         JSONArray battleStrats = new JSONArray();
+        JSONArray entities = new JSONArray();
         potions.putAll(activePotions);
         battleStrats.putAll(battleStrategies);
+        dungeonMap.allEntities().stream().forEach(e -> entities.put(e.toJSON()));
 
-        json.put("dungeonId", id);
-        json.put("map", dungeonMap.toJSON());
+        json.put("width", dungeonMap.getWidth());
+        json.put("height", dungeonMap.getHeight());
+        json.put("entities", entities);
+        json.put("id", id);
         json.put("inventory", inventory.toJSON());
         json.put("tick_count", tickCount);
         json.put("enemies_at_start", hadEnemiesAtStartOfDungeon);

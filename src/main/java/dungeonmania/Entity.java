@@ -85,8 +85,7 @@ public abstract class Entity {
 
         json.put("type", getTypeAsString());
         json.put("EntityId", id);
-        json.put("x", position.getX());
-        json.put("y", position.getY());
+        json.put("pos", position.toJSON());
 
         return json;
     }

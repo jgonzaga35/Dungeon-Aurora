@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import org.json.JSONObject;
+
 import dungeonmania.util.Position;
 
 public class Pos2d {
@@ -54,6 +56,13 @@ public class Pos2d {
         Pos2d checkPos = (Pos2d) obj;
 
         return x == checkPos.getX() && y == checkPos.getY();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("x", x);
+        json.put("y", y);
+        return json;
     }
 
 }
