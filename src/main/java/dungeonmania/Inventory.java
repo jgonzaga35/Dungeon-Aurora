@@ -55,14 +55,22 @@ public class Inventory {
      * 
      * @return true if the inventory had something removed
      */
-    public boolean pay(Class<? extends CollectableEntity> t) {
-        CollectableEntity price = (CollectableEntity) collectables.stream()
-            .filter(c -> c.getClass().equals(t))
-            .findFirst().orElse(null);
+    public boolean pay(List<Class<? extends CollectableEntity>> cost) {
+        List<CollectableEntity> price = new ArrayList<>();
 
-        collectables.remove(price);
+        cost.stream().forEach(t -> {
+            CollectableEntity item = (CollectableEntity) collectables.stream()
+                .filter(c -> c.getClass().equals(t))
+                .findFirst().orElse(null);
+    
+            price.add(item);
+        });
+        
+        if (price.stream().anyMatch(i -> i == null)) return false;
+        
+        price.stream().forEach(i -> collectables.remove(i));
 
-        return price != null;
+        return true;
     }
 
     /**
