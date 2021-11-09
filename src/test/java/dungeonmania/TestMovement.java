@@ -363,7 +363,7 @@ public class TestMovement {
         Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
-        MovementBehaviour movement = new RandomMovementBehaviour(0, map, cell);
+        MovementBehaviour movement = new RandomMovementBehaviour(0, d, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
 
         for (int i = 0; i < 10; i++)

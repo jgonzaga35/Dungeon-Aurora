@@ -9,10 +9,10 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.Utils;
+import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.RandomMovementBehaviour;
-import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 
 public class Hydra extends MovingEntity implements Fighter{
     
@@ -24,7 +24,7 @@ public class Hydra extends MovingEntity implements Fighter{
         super(dungeon, position);
 
         // Hydras are limited by the same movement constraints as Zombie Toasts
-        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon.getMap(), dungeon.getMap().getCell(position)));
+        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon, dungeon.getMap().getCell(position)));
     }
 
     /**
@@ -65,7 +65,7 @@ public class Hydra extends MovingEntity implements Fighter{
         }
 
         // choose a random cell
-        Cell cell = Utils.choose(availableCells);
+        Cell cell = Utils.choose(availableCells, dungeon.getRandom());
         return cell;
     }
 
