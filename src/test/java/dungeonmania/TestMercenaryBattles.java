@@ -50,4 +50,35 @@ public class TestMercenaryBattles {
         assertEquals(player.getPosition(), battlePosition);
     }
 
+    @Test
+    public void testAllyMercenaryOutOfRange() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        dungeon.getRandom().setSeed(1);
+
+        Player player = new Player(dungeon, new Pos2d(5, 5));
+        Mercenary ally = new Mercenary(dungeon, new Pos2d(5, 9));
+        ally.bribe();
+        // two cell right of the player. The zombie is then going to move
+        ZombieToast zombie = new ZombieToast(dungeon, new Pos2d(7, 5));
+        List.of(player, ally, zombie).forEach(e -> map.getCell(e.getPosition()).addOccupant(e));
+        dungeon.setPlayer(player);
+
+        Pos2d battlePosition = new Pos2d(6, 5);
+
+        // the ally has to fight
+        assertTrue(ally.getPosition().squareDistance(battlePosition) > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
+
+        float prevAllyHealth = ally.getHealth();
+        float prevPlayerHealth = player.getHealth();
+
+        dungeon.tick(null, Direction.RIGHT);
+
+        assertTrue(Utils.isDead(zombie));
+        assertEquals(prevAllyHealth, ally.getHealth(), Utils.eps); // make sure the mercenary did NOT fight
+        assertTrue(player.getHealth() < prevPlayerHealth); // make sure the player fought
+
+        assertEquals(player.getPosition(), battlePosition);
+        assertTrue(ally.getPosition().squareDistance(new Pos2d(5, 9)) <= 1); // make sure the mercenary didn't teleport
+    }
 }
