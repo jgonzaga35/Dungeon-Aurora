@@ -1,5 +1,6 @@
 package dungeonmania.entities.collectables.buildables;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Dungeon;
@@ -35,18 +36,54 @@ public class Sceptre extends BuildableEntity {
      * @return true if the item was succesfully crafted
      */
     public static boolean craft(Inventory inventory) {
-        List<String> materials = List.of(
-            Wood.STRING_TYPE,
-            Arrow.STRING_TYPE,
+        List<String> materials = new ArrayList<>();
+
+        // Search for Sun Stone
+        List<String> sunstone = List.of(
+            SunStone.STRING_TYPE
+        );
+
+        if (inventory.findItems(sunstone) != null) {
+            materials.addAll(sunstone);
+        } else return false; // no Sun Stone
+
+        // Search for Wood/Arrows
+        List<String> wood = List.of(
+            Wood.STRING_TYPE
+        );
+
+        List<String> arrows = List.of(
             Arrow.STRING_TYPE,
             Arrow.STRING_TYPE
         );
         
+        if (inventory.findItems(wood) != null) {
+            materials.addAll(wood);
+        } else if (inventory.findItems(arrows) != null){
+            materials.addAll(arrows);
+        } else return false; // no wood or arrows
+
+        // Search for Key/Treasure
+        List<String> key = List.of(
+            Key.STRING_TYPE
+        );
+
+        List<String> treature = List.of(
+            Treasure.STRING_TYPE
+        );
+
+        if (inventory.findItems(key) != null) {
+            materials.addAll(key);
+        } else if (inventory.findItems(treature) != null){
+            materials.addAll(treature);
+        } else return false; // no key or treature
+        
+        // Craft the Sceptre
         if (!inventory.useItems(materials)) {
             return false;
         }
         
-        inventory.add(new Bow(null, null));
+        inventory.add(new Sceptre(null, null));
         return true;
     }
 }
