@@ -99,6 +99,7 @@ public class NormalBattleStrategy implements BattleStrategy {
     private void prepareBattle(Dungeon dungeon, Cell cell, List<Fighter> allies, List<Fighter> enemies) {
         DungeonMap map = dungeon.getMap();
 
+        // add all the allies and the enemies on the current cell
         for (Entity entity : cell.getOccupants()) {
             if (entity instanceof Fighter) {
                 Fighter fighter = (Fighter) entity;
@@ -110,6 +111,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             }
         }
 
+        // add all the mercenary allies from other cells
         Pos2d pos = cell.getPosition();
         // check all the cells around for mercenaries
         for (int y = -Mercenary.BATTLE_RADIUS; y <= Mercenary.BATTLE_RADIUS; y++) {
