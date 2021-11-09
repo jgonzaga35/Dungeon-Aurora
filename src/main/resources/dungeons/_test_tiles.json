@@ -1,0 +1,13 @@
+{
+    "width": 9,
+    "height": 9,
+    "entities": [
+        { "x": 5, "y": 5, "type": "player" },
+        { "x": 6, "y": 5, "type": "invisibility_potion" },
+        { "x": 7, "y": 5, "type": "invincibility_potion" },
+        { "x": 8, "y": 3, "type": "exit" }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
