@@ -69,11 +69,12 @@ public class NormalBattleStrategy implements BattleStrategy {
         List<Fighter> enemies = new ArrayList<>();
 
         this.prepareBattle(dungeon, cell, allies, enemies);
+        assert allies.size() >= 1;
 
         Collections.sort(allies, sort);
         Collections.sort(enemies, sort);
 
-        System.out.println(allies + " " + enemies);
+        if (enemies.size() == 0) return; // there is no one to fight
 
         Set<Fighter> deaths = this.performBattle(allies, enemies);
 
@@ -119,6 +120,7 @@ public class NormalBattleStrategy implements BattleStrategy {
                 // battle radius is a circle, if you're not completely in the circle, you're skiped
                 if (x * x + y * y > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS) continue;
                 Cell c = map.getCell(x + pos.getX(), y + pos.getY());
+                if (c == null) continue; // coordinate is outside the map
 
                 c.getOccupants().stream()
                     .filter(e -> e instanceof Mercenary)
