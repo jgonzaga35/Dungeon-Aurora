@@ -20,6 +20,7 @@ import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
@@ -141,6 +142,8 @@ public class Dungeon {
                 cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
                 cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, OneRing.STRING_TYPE)) {
+                cell.addOccupant(new OneRing(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
