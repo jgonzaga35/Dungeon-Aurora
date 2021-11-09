@@ -42,6 +42,10 @@ public class TestAssassin {
         dungeon.getMap().flood();
     }
 
+    /**
+     * Testing that the assassin move correctly and follows the player 
+     * They fight and the assassin should kill the player.
+     */
     @Test
     public void testHostileMovement() {
         DungeonResponse resp;
@@ -80,6 +84,10 @@ public class TestAssassin {
         assertEquals(new Pos2d(7, 0), assassin.getPosition());
     }
 
+    /**
+     * Test that the assassin stays one square away from the player when it is 
+     * friendly.
+     */
     @Test
     public void testFriendlyMovement() {
         Integer dist = assassin.getCell().getPlayerDistance();
@@ -141,6 +149,14 @@ public class TestAssassin {
         // player pos (6, 0)
     }
 
+    /**
+     * Test various edge cases for bribing
+     * - out of range
+     * - no gold
+     * - no ring
+     * - successful bribe 
+     * - and trying to bribe a friendly assassin.
+     */
     @Test
     public void testBribe() {
         Integer dist = assassin.getCell().getPlayerDistance();
@@ -204,7 +220,7 @@ public class TestAssassin {
     }
     
     /**
-     * Makes sure mercenaries spawn, and at the right place!
+     * Makes sure assassins spawn at the right frequencies.
      */
     @Test
     public void testSpawn() {
@@ -247,6 +263,9 @@ public class TestAssassin {
         );
     }
 
+    /**
+     * Test that assassins don't spawn on empty maps.
+     */
     @Test
     public void testNoSpawn() {
         DungeonManiaController ctr = new DungeonManiaController();

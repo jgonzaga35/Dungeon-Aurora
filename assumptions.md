@@ -27,7 +27,7 @@
 - One treasure is the price to bribe a mercenary
 
 ## Assassins
-- Assassins just deal more damage by simply having more health than assassins.
+- Assassins just deal more damage by simply having more health than assassins (3x more).
 - There is a 25% chance for a assassin to spawn in the place of a mercenary.
 
 ## Battles
@@ -35,7 +35,6 @@
    https://edstem.org/au/courses/7065/discussion/660682
 
 ## Potions
-
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.
 
