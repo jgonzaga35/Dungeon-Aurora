@@ -23,6 +23,14 @@ public abstract class Entity {
         Entity.nextEntityId++;
     }
 
+    public Entity(Dungeon dungeon, JSONObject json) {
+        this.id = json.getString("EntityId");
+        this.dungeon = dungeon;
+        this.position = new Pos2d(json.getInt("x"), json.getInt("y"));
+        
+        Entity.nextEntityId++;
+    }
+
     public String getId() {
         return this.id;
     }
