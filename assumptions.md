@@ -24,16 +24,10 @@
 - New mercenaries spawn every 50 ticks on maps with at least one enemy present
   at the *start of the map.*
 - IllegalArgumentException when the player bribes a friendly mercenary.
-- One treasure is the price to bribe a mercenary
 - Mercenaries don't start their own battles (they wait for the player to
   initiate them)
 - Battle radius is a circle, and the mercenary needs to be completely within
-  that circle.
-- Battle radius of mercenaries is 3 cells
-
-## Assassins
-- Assassins just deal more damage by simply having more health than assassins (3x more).
-- There is a 25% chance for a assassin to spawn in the place of a mercenary.
+that circle.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
