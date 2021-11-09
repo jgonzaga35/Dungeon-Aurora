@@ -6,10 +6,16 @@ import java.util.Random;
 import dungeonmania.entities.Fighter;
 
 public class Utils {
+    private static Random r = new Random(1); // always start with a seed of 1 for consistency
+
     /**
      * Everything smaller than that is zero
      */
     public static float eps = 0.001f;
+
+    public static void setSeed(long s) {
+        r.setSeed(s);
+    }
 
     /**
      * @param <T> any
