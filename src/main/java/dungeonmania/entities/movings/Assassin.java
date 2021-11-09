@@ -1,7 +1,12 @@
 package dungeonmania.entities.movings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.OneRing;
 
 public class Assassin extends Mercenary {
 
@@ -11,6 +16,7 @@ public class Assassin extends Mercenary {
     public Assassin(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.setHealth(18);
+        this.price.add(OneRing.class);
     }
 
     @Override

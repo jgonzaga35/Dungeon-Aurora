@@ -462,10 +462,7 @@ public class Dungeon {
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!inventory.pay(Treasure.class)) throw new InvalidActionException("The player can't pay the price");
-        if (merc instanceof Assassin) {
-            if (!inventory.pay(OneRing.class)) throw new InvalidActionException("The player can't pay the price");   
-        }
+        if (!inventory.pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
             
         merc.bribe();
     }
