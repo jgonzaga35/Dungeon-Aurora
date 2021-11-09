@@ -221,7 +221,7 @@ public class TestMercenary {
         assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
         for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) resp = ctr.tick(null, Direction.NONE);
         assertTrue(
-            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 |
+            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 ||
             TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) == 1
         );
 
@@ -244,7 +244,7 @@ public class TestMercenary {
 
             // make sure new mercenaries spawn on the player's starting position
             List<EntityResponse> newMerc = resp.getEntities().stream()
-                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE) | e.getType().equals(Assassin.STRING_TYPE))
+                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE) || e.getType().equals(Assassin.STRING_TYPE))
                 .filter(e -> !knownMercIds.contains(e.getId()))
                 .collect(Collectors.toList());
 

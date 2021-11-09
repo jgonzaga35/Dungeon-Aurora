@@ -227,7 +227,7 @@ public class TestAssassin {
         assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
         for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) resp = ctr.tick(null, Direction.NONE);
         assertTrue(
-            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 |
+            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 ||
             TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) == 1
         );
 
@@ -238,7 +238,11 @@ public class TestAssassin {
             }
         }
 
-        assertTrue(TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) > 0);
+        // Probability of this failing should be 0.033
+        assertTrue(
+            6 <= TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) &&
+            TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) <= 20
+        );
     }
 
     @Test
