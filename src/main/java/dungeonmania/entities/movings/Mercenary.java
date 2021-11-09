@@ -18,7 +18,6 @@ public class Mercenary extends MovingEntity implements Fighter {
     public static final String STRING_TYPE = "mercenary";
     public static final int SPAWN_EVERY_N_TICKS = 50;
 
-    private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
 
     private MovementBehaviour followMovementBehaviour;
@@ -26,6 +25,7 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        health = 6.0f;
         this.followMovementBehaviour = new FollowMovementBehaviour(
             0, 
             dungeon.getMap(), 
@@ -37,6 +37,24 @@ public class Mercenary extends MovingEntity implements Fighter {
             getCell()
         );
         this.addMovementBehaviour(this.followMovementBehaviour);
+    }
+    
+    public Mercenary(Dungeon dungeon, JSONObject json) {
+        super(dungeon, json);
+        if (Float.compare(health, -1f) == 0) health = 6.0f;
+        
+        this.followMovementBehaviour = new FollowMovementBehaviour(
+            0, 
+            dungeon.getMap(), 
+            dungeon.getMap().getCell(position)
+        );
+        this.friendlyMovementBehaviour = new FriendlyMovementBehaviour(
+            0, 
+            dungeon.getMap(), 
+            getCell()
+        );
+        this.addMovementBehaviour(this.followMovementBehaviour);
+        if (json.getBoolean("ally")) this.bribe();
     }
 
     public void bribe() {

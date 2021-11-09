@@ -114,6 +114,9 @@ public class Dungeon {
 
         DungeonMap map = new DungeonMap(obj);
 
+        if (obj.has("name")) name = obj.getString("name");
+        if (obj.has("game_mode")) mode = GameMode.valueOf(obj.getString("game_mode"));
+
         Dungeon dungeon = new Dungeon(name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");

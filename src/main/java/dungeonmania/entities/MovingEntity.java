@@ -2,11 +2,14 @@ package dungeonmania.entities;
 
 import java.util.PriorityQueue;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
 public abstract class MovingEntity extends Entity {
@@ -15,6 +18,8 @@ public abstract class MovingEntity extends Entity {
      * @see MovementBehaviour
      */
     PriorityQueue<MovementBehaviour> movementBehaviours;
+
+    protected Float health = -1f;
 
     /**
      * Each moving entity should set, in their constructor, their default
@@ -26,6 +31,13 @@ public abstract class MovingEntity extends Entity {
         super(dungeon, position);
 
         this.movementBehaviours = new PriorityQueue<>(3, (a,b) -> b.getPrecendence() - a.getPrecendence());
+    }
+    
+    public MovingEntity(Dungeon dungeon, JSONObject json) {
+        super(dungeon, new Pos2d(json.getInt("x"), json.getInt("y")));
+        
+        this.movementBehaviours = new PriorityQueue<>(3, (a,b) -> b.getPrecendence() - a.getPrecendence());
+        if (json.has("health")) health = json.getFloat("health");
     }
 
     /**
@@ -108,5 +120,17 @@ public abstract class MovingEntity extends Entity {
     @Override
     public LayerLevel getLayerLevel() {
         return LayerLevel.MOVING_ENTITY;
+    }
+    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+        if (movementBehaviours.peek() instanceof CircleMovementBehaviour) {
+            CircleMovementBehaviour mb = (CircleMovementBehaviour) movementBehaviours.peek();
+            json.put("movement", mb.toJSON());
+        }
+        json.put("health", health);
+
+        return json;
     }
 }

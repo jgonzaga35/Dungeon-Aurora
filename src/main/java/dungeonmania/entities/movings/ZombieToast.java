@@ -1,5 +1,7 @@
 package dungeonmania.entities.movings;
 
+import org.json.JSONObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
@@ -15,6 +17,13 @@ public class ZombieToast extends MovingEntity implements Fighter {
 
     public ZombieToast(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        health = 4f;
+        this.addMovementBehaviour(new RandomMovementBehaviour(0, dungeon.getMap(), dungeon.getMap().getCell(position)));
+    }
+
+    public ZombieToast(Dungeon dungeon, JSONObject json) {
+        super(dungeon, json);
+        if (Float.compare(health, -1f) == 0) health = 4f;
         this.addMovementBehaviour(new RandomMovementBehaviour(0, dungeon.getMap(), dungeon.getMap().getCell(position)));
     }
 

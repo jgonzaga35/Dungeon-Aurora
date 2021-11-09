@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.util.Direction;
@@ -18,10 +21,12 @@ public class CircleMovementBehaviour extends MovementBehaviour {
     private List<Pos2d> movementCycle = new ArrayList<>();
     private int step = 0;
     private int direction = 1;
+    Pos2d centre;
 
     public CircleMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
     {
         super(precedence, initialCell);
+        centre = initialCell.getPosition();
         this.map = map;
         int initialX = initialCell.getPosition().getX();
         int initialY = initialCell.getPosition().getY();
@@ -58,6 +63,16 @@ public class CircleMovementBehaviour extends MovementBehaviour {
             initialX - 1, 
             initialY - 1
         ));
+    }
+
+    public static CircleMovementBehaviour fromJSON(int precedence, DungeonMap map, JSONObject json) {
+        Cell initialcell = map.getCell(json.getInt("x"), json.getInt("y"));
+        
+        CircleMovementBehaviour mb = new CircleMovementBehaviour(precedence, map, initialcell);
+        mb.setDirection(json.getInt("direction"));
+        mb.setStep(json.getInt("step"));
+
+        return mb;
     }
 
     public Cell move()
@@ -116,6 +131,27 @@ public class CircleMovementBehaviour extends MovementBehaviour {
             pos.setX(pos.getX() - xDiff);
             pos.setY(pos.getY() - yDiff);
         });
+        centre.setX(centre.getX() - xDiff);
+        centre.setY(centre.getY() - yDiff);
+    }
+
+    private void setStep(int step) {
+        this.step = step;
+    }
+
+    private void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("x", centre.getX());
+        json.put("y", centre.getY());
+        json.put("direction", direction);
+        json.put("step", step);
+
+        return json;
     }
     
 }

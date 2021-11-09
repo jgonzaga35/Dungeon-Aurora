@@ -2,6 +2,8 @@ package dungeonmania.entities.movings;
 
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
@@ -18,8 +20,6 @@ public class Spider extends MovingEntity implements Fighter {
     public static final String STRING_TYPE = "spider";
     public static final int MAX_SPIDERS = 5;
     public static final int SPAWN_EVERY_N_TICKS = 50;
-
-    private float health = 1;
     
     private MovementBehaviour circleMovementBehaviour = new CircleMovementBehaviour(
         -4,
@@ -62,6 +62,14 @@ public class Spider extends MovingEntity implements Fighter {
     public Spider(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.addMovementBehaviour(this.circleMovementBehaviour);
+        health = 1f;
+    }
+
+    public Spider(Dungeon dungeon, JSONObject json) {
+        super(dungeon, json);
+        this.addMovementBehaviour(this.circleMovementBehaviour);
+        if (Float.compare(health, -1f) == 0) health = 1f;
+        if (json.has("movement")) addMovementBehaviour(CircleMovementBehaviour.fromJSON(-4, dungeon.getMap(), json));
     }
 
     @Override
@@ -107,5 +115,13 @@ public class Spider extends MovingEntity implements Fighter {
     @Override
     public Entity getEntity() {
         return this;
+    }
+    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+        json.put("health", health);
+
+        return json;
     }
 }

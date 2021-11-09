@@ -1,5 +1,7 @@
 package dungeonmania.entities.movings;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
@@ -13,11 +15,15 @@ import dungeonmania.util.Direction;
 public class Player extends MovingEntity implements Fighter {
 
     public static String STRING_TYPE = "player";
-
-    private float health = 10;
     
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        health = 10.0f;
+    }
+    
+    public Player(Dungeon dungeon, JSONObject json) {
+        super(dungeon, json);
+        if (Float.compare(health, -1f) == 0) health = 10.0f;
     }
 
     /**

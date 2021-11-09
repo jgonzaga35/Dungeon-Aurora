@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
@@ -18,11 +20,19 @@ public class Hydra extends MovingEntity implements Fighter{
     
     public static final String STRING_TYPE = "hydra";
     public static final int SPAWN_EVERY_N_TICKS = 50;
-    private float health = 4;  
 
     public Hydra(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
 
+        health = 4.0f;
+        // Hydras are limited by the same movement constraints as Zombie Toasts
+        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon.getMap(), dungeon.getMap().getCell(position)));
+    }
+    
+    public Hydra(Dungeon dungeon, JSONObject json) {
+        super(dungeon, json);
+        
+        if (Float.compare(health, -1f) == 0) health = 4.0f;
         // Hydras are limited by the same movement constraints as Zombie Toasts
         this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon.getMap(), dungeon.getMap().getCell(position)));
     }
