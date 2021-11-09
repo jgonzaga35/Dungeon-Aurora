@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.BattleItem;
@@ -227,6 +230,16 @@ public class Inventory {
 
     public boolean hasKey() {
         return collectables.stream().anyMatch(c -> c instanceof Key);
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        JSONArray items = new JSONArray();
+        collectables.forEach(c -> items.put(c.toJSON()));
+        json.put("collectables", items);
+
+        return json;
     }
 
 }

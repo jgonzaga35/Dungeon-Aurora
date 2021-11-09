@@ -2,6 +2,8 @@ package dungeonmania;
 
 import java.util.stream.Stream;
 
+import org.json.JSONObject;
+
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.util.Direction;
 
@@ -68,6 +70,17 @@ public abstract class Entity {
     public String toString()
     {
         return getTypeAsString();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("type", getTypeAsString());
+        json.put("EntityId", id);
+        json.put("x", position.getX());
+        json.put("y", position.getY());
+
+        return json;
     }
 
     public abstract boolean isInteractable();

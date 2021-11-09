@@ -3,6 +3,8 @@ package dungeonmania.battlestrategies;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
@@ -46,6 +48,16 @@ public class WinAllBattleStrategy implements BattleStrategy {
     @Override
     public int getPrecedence() {
         return this.precedence;
+    }
+        
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("strategy", "win-all-battle");
+        json.put("precedence", getPrecedence());
+
+        return json;
     }
     
 }

@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
@@ -234,6 +236,16 @@ public class NormalBattleStrategy implements BattleStrategy {
     @Override
     public int getPrecedence() {
         return this.precendence;
+    }
+    
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("strategy", "normal-battle");
+        json.put("precedence", getPrecedence());
+
+        return json;
     }
     
 }

@@ -1,5 +1,7 @@
 package dungeonmania.battlestrategies;
 
+import org.json.JSONObject;
+
 import dungeonmania.Dungeon;
 
 /**
@@ -18,5 +20,7 @@ public interface BattleStrategy {
     public void findAndPerformBattles(Dungeon dungeon);
 
     public int getPrecedence();
+
+    public JSONObject toJSON();
 
 }

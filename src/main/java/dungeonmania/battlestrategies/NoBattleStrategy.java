@@ -1,5 +1,7 @@
 package dungeonmania.battlestrategies;
 
+import org.json.JSONObject;
+
 import dungeonmania.Dungeon;
 
 /**
@@ -21,6 +23,16 @@ public class NoBattleStrategy implements BattleStrategy {
     @Override
     public int getPrecedence() {
         return this.precedence;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("strategy", "no-battle");
+        json.put("precedence", precedence);
+
+        return json;
     }
     
 }

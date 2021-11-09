@@ -1,5 +1,8 @@
 package dungeonmania.entities.movings;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
@@ -91,5 +94,14 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public boolean isInteractable() {
         return relationship == FighterRelation.ENEMY;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+        if (relationship == FighterRelation.ALLY) json.put("ally", true);
+        else json.put("ally", false);
+
+        return json;
     }
 }

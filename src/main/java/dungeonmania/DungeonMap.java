@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.entities.MovingEntity;
@@ -353,5 +354,19 @@ public class DungeonMap {
      */
     public Pos2d getEntry() {
         return this.entry;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("width", width);
+        json.put("height", height);
+        
+        JSONArray entities = new JSONArray();
+        allEntities().stream().forEach(e -> entities.put(e.toJSON()));
+
+        json.put("entities", entities);
+
+        return json;
     }
 }

@@ -1,5 +1,7 @@
 package dungeonmania.entities.collectables.consumables;
 
+import org.json.JSONObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy;
@@ -52,5 +54,14 @@ public abstract class Potion extends CollectableEntity {
         if (duration == 0) expire();
         else applyEffectsEveryTick();
         duration--;
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = super.toJSON();
+
+        json.put("duration", duration);
+
+        return json;
     }
 }
