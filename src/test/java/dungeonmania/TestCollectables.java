@@ -594,4 +594,71 @@ public class TestCollectables {
         
 
     }
+
+     /** 
+     * TEST: Ensure Bomb is Collected  
+     */
+    
+    @Test
+    public void testLoadingSunStone() {
+        //Item Coords: Player(1,1), SunStone(1,3), Boulder (7,2), Switch(7,3)
+        //New Game
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_sunStoneExample", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick(null, Direction.NONE);
+        Boolean found = false;
+
+        // Down 2 Units to the Bomb at Coord (1, 3)
+        ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.DOWN);
+
+        //Checking If Bomb was Collected
+        found = false;
+        String curr_type = "";
+        List<ItemResponse> curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type.equals(Bomb.STRING_TYPE)) {
+                found = true;
+            }
+        }
+        assertEquals(true, found);
+
+        //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
+
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type.equals(Bomb.STRING_TYPE) && currPositionX == 1 && currPositionY == 3) {
+                itemRemoved = false;
+            }
+        }
+        assertEquals(true, itemRemoved);
+
+        //Place Bomb on Ground Cardinally Adjacent to Switch
+        // Right 4 Units to the Coord (5, 3)
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.RIGHT);
+
+        //Get ID for Bomb
+        curr_type = "";
+        String bombId = "";
+        curr_inventory = resp.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type.equals("bomb")) {
+                bombId = item.getId();
+            }
+        }
+        //Place bomb onto (5,3)
+        resp = ctr.tick(bombId, Direction.NONE);
+    }
 }

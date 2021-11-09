@@ -58,7 +58,7 @@ public class Inventory {
         Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
             .findFirst().orElse(null);
 
-        collectables.remove(coin);
+        collectables.remove(coin); 
 
         return coin != null;
     }
