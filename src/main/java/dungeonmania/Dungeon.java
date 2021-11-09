@@ -544,8 +544,29 @@ public class Dungeon {
         }
     }
 
-    
     public BattleStrategy getBattleStrategy() {
         return this.battleStrategies.peek();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        JSONArray potions = new JSONArray();
+        JSONArray battleStrats = new JSONArray();
+        potions.putAll(activePotions);
+        battleStrats.putAll(battleStrategies);
+
+        json.put("dungeonId", id);
+        json.put("map", dungeonMap.toJSON());
+        json.put("inventory", inventory.toJSON());
+        json.put("tick_count", tickCount);
+        json.put("enemies_at_start", hadEnemiesAtStartOfDungeon);
+        json.put("goal-condition", new JSONObject(String.format("{\"goal\": %s}", goal.asString())));
+        json.put("game_mode", mode.getValue());
+        json.put("name", name);
+        json.put("potions", potions);
+        json.put("battle_strategies", battleStrats); // TODO: Battle strategies won't expire after load I think.
+
+        return json;
     }
 }
