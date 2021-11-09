@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.exceptions.InvalidActionException;
@@ -219,21 +220,31 @@ public class TestMercenary {
         int ticks_used = 3 + 2 + 1 + 1;
         assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
         for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) resp = ctr.tick(null, Direction.NONE);
-        assertEquals(1, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE));
+        assertTrue(
+            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 |
+            TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) == 1
+        );
 
         Set<String> knownMercIds = new HashSet<>();
         knownMercIds.add(resp.getEntities().stream().filter(e -> e.getType().equals(Mercenary.STRING_TYPE)).findFirst().get().getId());
 
         for (int i = 0; i < 10; i++) { // every loop, we spawn a new zombie
             for (int j = 0; j < Mercenary.SPAWN_EVERY_N_TICKS; j++) {
-                assertEquals(1 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
+                assertEquals(
+                    1 + i, 
+                    TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE),
+                    "on " + i + "th");
                 resp = ctr.tick(null, Direction.NONE);
             }
-            assertEquals(2 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE), "on " + i + "th");
+            assertEquals(
+                2 + i, 
+                TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE),
+                "on " + i + "th"
+            );
 
             // make sure new mercenaries spawn on the player's starting position
             List<EntityResponse> newMerc = resp.getEntities().stream()
-                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE))
+                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE) | e.getType().equals(Assassin.STRING_TYPE))
                 .filter(e -> !knownMercIds.contains(e.getId()))
                 .collect(Collectors.toList());
 
