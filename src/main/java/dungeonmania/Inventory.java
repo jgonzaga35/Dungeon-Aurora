@@ -7,13 +7,9 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.BattleItem;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.collectables.*;
+import dungeonmania.entities.collectables.buildables.*;
+import dungeonmania.entities.collectables.consumables.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.DungeonMap;
@@ -94,6 +90,24 @@ public class Inventory {
         return itemUsed;
     }
 
+    /**
+     * finds the items from the inventory
+     * @param entities
+     * @return null if inventory does not contain all the items, else return the list of items
+     */
+    public List<CollectableEntity> findItems(List<String> itemsStringType) {
+        List<CollectableEntity> found = new ArrayList<>();
+        for (String itemStringType : itemsStringType) {
+            Optional<CollectableEntity> itemOpt = this.collectables.stream()
+                // find an item of the right type that isn't already used
+                .filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
+                .findFirst();
+
+            if (itemOpt.isEmpty()) return null;
+            else found.add(itemOpt.get());
+        }
+        return found;
+    }
 
     /**
      * if all the entities (items) are in the inventory, it uses them all
@@ -103,22 +117,11 @@ public class Inventory {
      * succesfully removed
      */
     public boolean useItems(List<String> itemsStringType) {
-
-        List<CollectableEntity> toRemove = new ArrayList<>();
-        for (String itemStringType : itemsStringType) {
-            Optional<CollectableEntity> itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used
-                .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
-                .findFirst();
-
-            if (itemOpt.isEmpty())
-                return false;
-            else 
-                toRemove.add(itemOpt.get());
-        }
-        this.collectables.removeAll(toRemove);
-        return true;
-
+        List<CollectableEntity> items = findItems(itemsStringType);
+        if (items != null) {
+            this.collectables.removeAll(items);
+            return true;
+        } else return false;
     }
 
     /**
