@@ -456,12 +456,16 @@ public class Dungeon {
      * - The player is not in range to bribe the mercenary
      * - The player does not have any gold.
      * 
-     * removes a coin from the inventory on success.
+     * removes a coin from the inventory on success. Also removes the OneRing if 
+     * bribing an assassin.
      */
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
+        if (!inventory.pay(Treasure.class)) throw new InvalidActionException("The player can't pay the price");
+        if (merc instanceof Assassin) {
+            if (!inventory.pay(OneRing.class)) throw new InvalidActionException("The player can't pay the price");   
+        }
             
         merc.bribe();
     }
