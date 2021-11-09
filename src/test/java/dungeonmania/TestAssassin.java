@@ -74,8 +74,10 @@ public class TestAssassin {
         // player pos (7, 0)
         // assassin pos (7, 0)
         // battle should happen
-        assertEquals(0, TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE));
-        assertEquals(new Pos2d(7, 0), player.getPosition());
+        // Assassin should kill the player
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE));
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+        assertEquals(new Pos2d(7, 0), assassin.getPosition());
     }
 
     @Test
