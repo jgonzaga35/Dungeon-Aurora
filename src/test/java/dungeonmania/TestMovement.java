@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ public class TestMovement {
     public void setStartingPostition() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
         startingCell = dungeon.getMap().getCell(new Pos2d(2, 2));
     }
@@ -156,7 +157,7 @@ public class TestMovement {
     public void testCircleBoulderInteraction() throws IOException
     {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(2, 2));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -206,7 +207,7 @@ public class TestMovement {
     public void testBoulderEdgeSeven() throws IOException
     {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder2.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(2, 1));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -265,7 +266,7 @@ public class TestMovement {
     public void testBoulderEdgeZero() throws IOException
     {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder2.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(1, 1));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -323,7 +324,7 @@ public class TestMovement {
     @Test
     public void testBlockedCircleMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new CircleMovementBehaviour(0, map, cell);
@@ -336,7 +337,7 @@ public class TestMovement {
     @Test
     public void testBlockedFleeMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FleeMovementBehaviour(0, map, cell);
@@ -349,7 +350,7 @@ public class TestMovement {
     @Test
     public void testBlockedFriendlyMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FriendlyMovementBehaviour(0, map, cell);
@@ -362,7 +363,7 @@ public class TestMovement {
     @Test
     public void testBlockedRandomMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new RandomMovementBehaviour(0, d, cell);
@@ -375,7 +376,7 @@ public class TestMovement {
     @Test
     public void testBlockedFollowMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FollowMovementBehaviour(0, map, cell);

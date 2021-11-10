@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +24,7 @@ import dungeonmania.util.FileLoader;
 public class DungeonManiaController {
     private Dungeon dungeon;
     private Map<String, Dungeon> savedGames = new HashMap<>();
+    private Random r = new Random();
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
@@ -94,7 +96,7 @@ public class DungeonManiaController {
     }
 
     public void setSeed(long s) {
-        this.dungeon.getRandom().setSeed(s);
+        r.setSeed(s);
     }
 
     /**
@@ -114,7 +116,7 @@ public class DungeonManiaController {
             throw new IllegalArgumentException("Could not load dungeon map: " + e.getMessage());
         }
 
-        this.dungeon = Dungeon.fromJSONObject(dungeonName, gameMode, new JSONObject(content));
+        this.dungeon = Dungeon.fromJSONObject(r, dungeonName, gameMode, new JSONObject(content));
 
         return this.makeDungeonResponse();
     }
@@ -181,7 +183,7 @@ public class DungeonManiaController {
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
         GameMode mode = parseGameMode(gameMode);
-        this.dungeon = Dungeon.generateDungeon(new Pos2d(xStart, yStart), new Pos2d(xEnd, yEnd), mode);
+        this.dungeon = Dungeon.generateDungeon(r, new Pos2d(xStart, yStart), new Pos2d(xEnd, yEnd), mode);
         return this.makeDungeonResponse();
     }
 
