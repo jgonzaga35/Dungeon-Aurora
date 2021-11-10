@@ -11,6 +11,7 @@ import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
+import dungeonmania.entities.statics.Swamp;
 import dungeonmania.util.Direction;
 
 public class Cell {
@@ -83,12 +84,15 @@ public class Cell {
      * @return
      */
     public Portal hasPortal() {
-        for (Entity occupant: this.occupants) {
-            if (occupant instanceof Portal) {
-                return (Portal) occupant;
-            }
-        }
-        return null;
+        return (Portal) occupants.stream().filter(o -> o instanceof Portal).findFirst().orElse(null);
+    }
+
+    /**
+     * Return swamp_tile if cell has a swamp_tile
+     * @return
+     */
+    public Swamp getSwamp() {
+        return (Swamp) occupants.stream().filter(o -> o instanceof Swamp).findFirst().orElse(null);
     }
 
     public FloorSwitch getFloorSwitch() {

@@ -41,6 +41,7 @@ import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
+import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.collectables.Bomb;
@@ -153,6 +154,8 @@ public class Dungeon {
                 cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
+                cell.addOccupant(new Swamp(dungeon, cell.getPosition(), entity.getInt("movement_factor")));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
@@ -210,7 +213,6 @@ public class Dungeon {
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
-        boolean itemPlaced = false;
         
         //Check the Collectable Passed to this Function is a Bomb and that the ID matches
         if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
@@ -231,8 +233,6 @@ public class Dungeon {
 
             //Run the Check if ALready Triggered Check
             removedBomb.checkIfAlreadyTriggered();
-            
-            itemPlaced = true;
         }
         
     }
