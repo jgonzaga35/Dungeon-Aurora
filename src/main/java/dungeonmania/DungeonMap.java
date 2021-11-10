@@ -33,10 +33,13 @@ public class DungeonMap {
 
     private Pos2d entry = null;
     
-    DungeonMap(JSONObject json) {
-        this.width = json.getInt("width");
-        this.height = json.getInt("height");
-        
+    public DungeonMap(JSONObject json) {
+        this(json.getInt("width"), json.getInt("height"));
+    }
+
+    public DungeonMap(int width, int height) {
+        this.width = width;
+        this.height = height;
         // a grid of empty cells
         for (int y = 0; y < height; y++) {
             ArrayList<Cell> row = new ArrayList<>();
@@ -311,14 +314,21 @@ public class DungeonMap {
                     result += PLAYER;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Wall)) {
                     result += WALL;
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
+                    result += " EM";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
+                    result += " ES";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
+                    result += " EZ";
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof MovingEntity)) {
                     result += ENEMY;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    int num = cell.getPlayerDistance();
-                    if (num < 10) result += " " + num + " ";
-                    else result += " " + num;
+                    result += "   ";
+                    // int num = cell.getPlayerDistance();
+                    // if (num < 10) result += " " + num + " ";
+                    // else result += " " + num;
                 }
             }
             result += "\n";

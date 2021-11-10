@@ -20,6 +20,7 @@ public class FleeMovementBehaviour extends MovementBehaviour {
                 (c1, c2) -> 
                 Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
             ).get();
+        assert nextCell != null;
         
         setCurrentCell(nextCell);
 

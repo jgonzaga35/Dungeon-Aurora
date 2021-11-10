@@ -9,9 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.goal.ExitGoal;
 import dungeonmania.movement.CircleMovementBehaviour;
+import dungeonmania.movement.FleeMovementBehaviour;
+import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
+import dungeonmania.movement.RandomMovementBehaviour;
 import dungeonmania.util.FileLoader;
 
 public class TestMovement {
@@ -312,5 +316,70 @@ public class TestMovement {
 
         spider.move();
         assertEquals(new Pos2d(0, 1), spider.getCurrentCell().getPosition());
+    }
+
+    @Test
+    public void testBlockedCircleMovementBehaviour() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new CircleMovementBehaviour(0, map, cell);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        for (int i = 0; i < 10; i++)
+            assertEquals(cell.getPosition(), movement.move().getPosition());
+    }
+
+    @Test
+    public void testBlockedFleeMovementBehaviour() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new FleeMovementBehaviour(0, map, cell);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        for (int i = 0; i < 10; i++)
+            assertEquals(cell.getPosition(), movement.move().getPosition());
+    }
+
+    @Test
+    public void testBlockedFriendlyMovementBehaviour() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new FriendlyMovementBehaviour(0, map, cell);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        for (int i = 0; i < 10; i++)
+            assertEquals(cell.getPosition(), movement.move().getPosition());
+    }
+
+    @Test
+    public void testBlockedRandomMovementBehaviour() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new RandomMovementBehaviour(0, map, cell);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        for (int i = 0; i < 10; i++)
+            assertEquals(cell.getPosition(), movement.move().getPosition());
+    }
+
+    @Test
+    public void testBlockedFollowMovementBehaviour() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new FollowMovementBehaviour(0, map, cell);
+        TestUtils.lockWithBoulders(d, cell.getPosition());
+
+        for (int i = 0; i < 10; i++)
+            assertEquals(cell.getPosition(), movement.move().getPosition());
     }
 }

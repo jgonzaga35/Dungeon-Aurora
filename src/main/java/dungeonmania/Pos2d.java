@@ -31,6 +31,10 @@ public class Pos2d {
         return (o.getX() - this.getX()) * (o.getX() - this.getX()) + (o.getY() - this.getY()) * (o.getY() - this.getY());
     }
 
+    public Pos2d plus(Pos2d o) {
+        return new Pos2d(o.getX() + this.x, o.getY() + this.y);
+    }
+
     public static Pos2d from(Position pos) {
         return new Pos2d(pos.getX(), pos.getY());
     }

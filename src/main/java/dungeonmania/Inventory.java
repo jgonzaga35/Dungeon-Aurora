@@ -50,18 +50,28 @@ public class Inventory {
     public boolean remove(CollectableEntity c) {
         return this.collectables.remove(c);
     }
+
     /**
-     * Removes one treasure from the inventory.
+     * Removes one of the given class from the inventory.
      * 
-     * @return true if the inventory had a coin removed
+     * @return true if the inventory had something removed
      */
-    public boolean pay() {
-        Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
-            .findFirst().orElse(null);
+    public boolean pay(List<Class<? extends CollectableEntity>> cost) {
+        List<CollectableEntity> price = new ArrayList<>();
 
-        collectables.remove(coin);
+        cost.stream().forEach(t -> {
+            CollectableEntity item = (CollectableEntity) collectables.stream()
+                .filter(c -> c.getClass().equals(t))
+                .findFirst().orElse(null);
+    
+            price.add(item);
+        });
+        
+        if (price.stream().anyMatch(i -> i == null)) return false;
+        
+        price.stream().forEach(i -> collectables.remove(i));
 
-        return coin != null;
+        return true;
     }
 
     /**
