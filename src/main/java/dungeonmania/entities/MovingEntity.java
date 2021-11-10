@@ -63,7 +63,7 @@ public abstract class MovingEntity extends Entity {
      */
     public Cell move() {
         // If we are on a swamp, check if we are waiting and if we are ready to leave.
-        if (this.movementBehaviours.peek().getCurrentCell().getSwamp() != null) {
+        if (this.getCell().getSwamp() != null) {
             if (this.movementBehaviours.peek() instanceof WaitMovementBehaviour) {
                 // We are waiting, can we leave yet?
                 WaitMovementBehaviour wb = (WaitMovementBehaviour) this.movementBehaviours.peek();
