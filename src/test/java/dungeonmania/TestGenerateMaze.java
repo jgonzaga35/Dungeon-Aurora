@@ -19,7 +19,7 @@ public class TestGenerateMaze {
     public void testAlwaysFindPath() {
         Random r = new Random(1);
         Pos2d dim = new Pos2d(50, 50);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             r.setSeed(i); // easier to debug stuff
 
             // x2 to get only odd numbers
@@ -42,6 +42,7 @@ public class TestGenerateMaze {
 
         while (q.size() > 0) {
             Pos2d head = q.poll();
+            if (visited.contains(head)) continue;
             if (head.equals(end)) {
                 return true;
             }
