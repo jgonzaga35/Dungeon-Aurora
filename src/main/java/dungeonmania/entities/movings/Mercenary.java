@@ -77,6 +77,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public void tick() {
         this.move();
+        this.bribeDuration--;
         if (bribeDuration == 0) this.betray();
     }
 
