@@ -9,15 +9,15 @@ public class Swamp extends StaticEntity {
 
     public static String STRING_TYPE = "swamp_tile";
     
-    private Integer movement_factor;
+    private Integer movementFactor;
 
-    public Swamp(Dungeon dungeon, Pos2d position, Integer movement_factor) {
+    public Swamp(Dungeon dungeon, Pos2d position, Integer movementFactor) {
         super(dungeon, position);
-        this.movement_factor = movement_factor;
+        this.movementFactor = movementFactor;
     }
 
     public Integer getMovementFactor() {
-        return this.movement_factor;
+        return this.movementFactor;
     }
 
     @Override
