@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.Spider;
+import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -21,6 +25,40 @@ public class TestUtils {
             }
         }
         throw new Error("player wasn't found");
+    }
+
+    public static Mercenary spawnMercenary(Dungeon dungeon, int x, int y) {
+        Cell mercCell = dungeon.getMap().getCell(x, y);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+
+        return merc;
+    }
+
+    public static Spider spawnSpider(Dungeon dungeon, int x, int y) {
+        Cell spiderCell = dungeon.getMap().getCell(x, y);
+        Spider spider = new Spider(dungeon, spiderCell.getPosition());
+        spiderCell.addOccupant(spider);
+
+        return spider;
+    }
+
+    public static Mercenary getMercenary(Dungeon dungeon) {
+        return (Mercenary) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof Mercenary)
+        .findFirst().orElse(null);
+    }
+
+    public static Player getPlayer(Dungeon dungeon) {
+        return (Player) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof Player)
+        .findFirst().orElse(null);
+    }
+
+    public static ZombieToast getZombieToast(Dungeon dungeon) {
+        return (ZombieToast) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof ZombieToast)
+        .findFirst().orElse(null);
     }
 
     /**
