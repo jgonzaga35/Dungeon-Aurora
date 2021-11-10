@@ -11,9 +11,12 @@ import dungeonmania.entities.movings.Player;
 import java.util.List;
 
 import dungeonmania.DungeonMap;
+import dungeonmania.Utils;
+import dungeonmania.Inventory;
 
 
 public class OneRing extends Rare {
+    public boolean active = true;
 
     public static String STRING_TYPE = "one_ring";
 
@@ -21,21 +24,41 @@ public class OneRing extends Rare {
         super(dungeon, position);
     }
 
+    public void selfDestruct() {
+        Inventory inventory = dungeon.getInventory();
+        inventory.remove(this);
+    }
+
     @Override
     public void applyEffects() {
-        //Increase Health
+        //Increase Health if Player is Dead
         Dungeon dungeon = this.dungeon;
         DungeonMap map = dungeon.getMap();
         Cell playerCell = map.getPlayerCell();
+        if (playerCell == null) {
+            return;
+        }
         List<Entity> occupants = playerCell.getOccupants();
         for (Entity occupant : occupants) {
             if (occupant instanceof Player) {
                 Player player = (Player)occupant;
-                player.setHealth(100); 
+                System.out.println("Ran before dead check");
+                if (Utils.isDead(player) == true) {
+                    System.out.println("Player Dead");
+                    player.setHealth(100);
+                    //Remove The One Ring
+                    active = false;
+                    //selfDestruct();
+                    return;
+                } 
             }
         }
 
         return;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     @Override
@@ -55,6 +78,6 @@ public class OneRing extends Rare {
 
     @Override
     public void tick() {
-        System.out.println("One Ring tick ran");
+        this.applyEffects();
     }
 }
