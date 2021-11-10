@@ -1,0 +1,11 @@
+{
+    "width": 9,
+    "height": 9,
+    "entities": [
+        { "x": 0, "y": 0, "type": "player"},
+        { "x": 4, "y": 4, "type": "swamp_tile", "movement_factor": 10 }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
