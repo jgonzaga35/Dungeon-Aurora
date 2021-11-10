@@ -8,6 +8,7 @@ import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.movement.MovementBehaviour;
+import dungeonmania.movement.WaitMovementBehaviour;
 
 public abstract class MovingEntity extends Entity {
 
@@ -61,6 +62,22 @@ public abstract class MovingEntity extends Entity {
      * @return the cell the entity is now on
      */
     public Cell move() {
+        // If we are on a swamp, check if we are waiting and if we are ready to leave.
+        if (this.movementBehaviours.peek().getCurrentCell().getSwamp() != null) {
+            if (this.movementBehaviours.peek() instanceof WaitMovementBehaviour) {
+                // We are waiting, can we leave yet?
+                WaitMovementBehaviour wb = (WaitMovementBehaviour) this.movementBehaviours.peek();
+                if (!wb.isActive()) this.movementBehaviours.remove(wb);
+            } else {
+                // We just got here and need to start waiting.
+                this.addMovementBehaviour(new WaitMovementBehaviour(
+                    25, 
+                    this.getCell(), 
+                    this.getCell().getSwamp().getMovementFactor()
+                ));
+            }
+        }
+
         assert this.movementBehaviours.size() > 0;
         assert this.position.equals(this.movementBehaviours.peek().getCurrentCell().getPosition());
 
