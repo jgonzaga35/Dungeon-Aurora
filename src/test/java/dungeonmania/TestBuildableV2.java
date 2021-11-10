@@ -163,11 +163,50 @@ public class TestBuildableV2 {
         assertEquals(expected, actual);
         actual.clear();
 
+        assertEquals(List.of(MidnightArmour.STRING_TYPE), resp.getBuildables());
+
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(MidnightArmour.STRING_TYPE);
             actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
         });
 
         assertEquals(List.of(MidnightArmour.STRING_TYPE), actual);
+    }
+
+    @Test
+    public void testBuildableDisplayAll() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_buildable_all", GameMode.STANDARD.getValue());
+
+        assertThrows(InvalidActionException.class, () -> ctr.build(MidnightArmour.STRING_TYPE));
+        assertThrows(InvalidActionException.class, () -> ctr.build(Bow.STRING_TYPE));
+        assertThrows(InvalidActionException.class, () -> ctr.build(Sceptre.STRING_TYPE));
+        assertThrows(InvalidActionException.class, () -> ctr.build(Shield.STRING_TYPE));
+
+        // pick up the materials for ALL buildable entities
+        for (int i = 0; i < 12; i++) {
+            resp = ctr.tick(null, Direction.RIGHT); 
+        }
+
+        List<String> actual = resp.getBuildables();
+        List<String> expected = Arrays.asList(
+            MidnightArmour.STRING_TYPE,
+            Shield.STRING_TYPE,
+            Sceptre.STRING_TYPE,
+            Bow.STRING_TYPE
+        );
+
+        Collections.sort(actual);
+        Collections.sort(expected);
+        
+        assertEquals(expected, actual);
+
+        assertDoesNotThrow(() -> {
+            ctr.build(MidnightArmour.STRING_TYPE);
+            ctr.build(Bow.STRING_TYPE);
+            ctr.build(Sceptre.STRING_TYPE);
+            ctr.build(Shield.STRING_TYPE);
+        });
+
     }
 }
