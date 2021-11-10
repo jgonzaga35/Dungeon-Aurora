@@ -183,6 +183,10 @@ public class DungeonManiaController {
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
         GameMode mode = parseGameMode(gameMode);
+        // xStart = 1;
+        // yStart = 1;
+        // xEnd = 7;
+        // yEnd = 7;
         this.dungeon = Dungeon.generateDungeon(r, new Pos2d(xStart, yStart), new Pos2d(xEnd, yEnd), mode);
         return this.makeDungeonResponse();
     }

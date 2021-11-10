@@ -29,7 +29,39 @@ public class TestGenerateMaze {
             r.setSeed(i); // again, easier to debug
             GenerateMaze gen = new GenerateMaze(r, dim, start, end);
             assertTrue(hasPath(gen.build(), start, end), "iteration=" + i);
-            gen.print();
+        }
+    }
+
+    /**
+     * shouldn't get any wall that isn't connected to another wall
+     * same thing for empty cells
+     */
+    @Test
+    public void testNoSingleWall() {
+        Random r = new Random(1);
+        Pos2d dim = new Pos2d(50, 50);
+        for (int i = 0; i < 100; i++) {
+            r.setSeed(i); // easier to debug stuff
+
+            // x2 to get only odd numbers
+            Pos2d start = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+            Pos2d end = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+
+            r.setSeed(i); // again, easier to debug
+            GenerateMaze gen = new GenerateMaze(r, dim, start, end);
+            List<List<BCell>> maze = gen.build();
+            
+            for (int y = 0; y < dim.getY(); y++) {
+                for (int x = 0; x < dim.getX(); x++) {
+                    // make sure that we have a neighbour of the same type
+                    BCell type = maze.get(0).get(x);
+                    assertTrue(
+                        neighbours(new Pos2d(x, y))
+                        .filter(p -> 0 <= p.getX() && p.getX() < maze.get(0).size() && 0 <= p.getY() && p.getY() < maze.size())
+                        .anyMatch(p -> maze.get(p.getY()).get(p.getX()) == type)
+                    );
+                }
+            }
         }
     }
 
