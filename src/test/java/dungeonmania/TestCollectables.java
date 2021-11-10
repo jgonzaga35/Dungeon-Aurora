@@ -2,7 +2,11 @@ package dungeonmania;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -10,16 +14,20 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.rare.OneRing;
+import dungeonmania.entities.movings.Mercenary;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
+import dungeonmania.util.FileLoader;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 
 
 
 public class TestCollectables {
+    String content = "";
     /** 
      * testLoadingTreasure()
      * Test that Treasure is Collected and that it Triggers Goals  
@@ -324,7 +332,7 @@ public class TestCollectables {
      */
     
     @Test
-    public void testLoadingTheOneRing() {
+    public void testCollectingTheOneRing() {
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_theOneRingExample", GameMode.PEACEFUL.getValue());
@@ -342,30 +350,117 @@ public class TestCollectables {
         List<ItemResponse> curr_inventory = resp.getInventory();
         for (ItemResponse item : curr_inventory) {
             curr_type = item.getType();
-            if (curr_type == "one_ring") {
+            if (curr_type == OneRing.STRING_TYPE) {
                 ringId = item.getId(); 
                 found = true;
             }
         }
         assertEquals(true, found);
 
-        
-        //Use The One Ring 
-        resp = ctr.tick(ringId, Direction.RIGHT);
+        //Check that the Item Was Removed from the Cell
+        int currPositionX = 0;
+        int currPositionY = 0;
+        boolean itemRemoved = true;
+        List<EntityResponse> cellEntities = resp.getEntities();
+        for (EntityResponse currEntity : cellEntities) {
+            curr_type = currEntity.getType();
 
-        //Check it is Removed from Inventory
-        Boolean itemRemoved = true;
-        String curr_id = "";
-        List<ItemResponse> inventory = resp.getInventory();
-        for (ItemResponse currItem : inventory) {
-            curr_type = currItem.getType();
-            curr_id = currItem.getId();
-
-            if ((curr_type == "one_ring") && (curr_id.equals(ringId) == true)) {
+            Position currPosition = currEntity.getPosition();
+            currPositionX = currPosition.getX();
+            currPositionY = currPosition.getY();
+            if (curr_type.equals(OneRing.STRING_TYPE) && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
         assertEquals(true, itemRemoved);
+    }
+
+    @Test
+    public void testTheOneRingEffect() {
+        DungeonManiaController dc;
+        Dungeon dungeon;
+        OneRing oneRing;
+        
+
+        assertDoesNotThrow(() -> {
+            content = FileLoader.loadResourceFile("/dungeons/_theOneRingExample.json");
+        });
+        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon.getMap().flood();
+
+        //Placing One Ring in Cell (5, 4)
+        Cell oneRingCell = dungeon.getMap().getCell(5, 4);
+        oneRing= new OneRing(dungeon, oneRingCell.getPosition());
+        oneRingCell.addOccupant(oneRing);
+        
+        
+        dc = new DungeonManiaController(dungeon);
+        // player in (5, 5) with no inventory
+
+        //Enter Into Battle and Ensure Player Does Not Die
+        dc.tick(null, Direction.UP);
+    
+        
+        // player at 5, 4
+        Cell mercCell = dungeon.getMap().getCell(5, 5);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+        
+        Cell mercCell2 = dungeon.getMap().getCell(5, 3);
+        Mercenary merc2 = new Mercenary(dungeon, mercCell2.getPosition());
+        mercCell2.addOccupant(merc2);
+        
+        Cell mercCell3 = dungeon.getMap().getCell(4, 4);
+        Mercenary merc3 = new Mercenary(dungeon, mercCell3.getPosition());
+        mercCell3.addOccupant(merc3);
+        
+        Cell mercCell4 = dungeon.getMap().getCell(6, 4);
+        Mercenary merc4 = new Mercenary(dungeon, mercCell4.getPosition());
+        mercCell4.addOccupant(merc4);
+        
+        // battle where player would have died.
+        DungeonResponse dr = dc.tick(null, Direction.NONE);
+        
+        assertEquals(1, TestUtils.countEntitiesOfType(dr, "player"));
+        
+        //Ensure The One Ring Now Removed From Inventory as it Has Been
+        //Used
+        Boolean found = false;
+        String curr_type = "";
+        String ringId = "";
+        List<ItemResponse> curr_inventory = dr.getInventory();
+        for (ItemResponse item : curr_inventory) {
+            curr_type = item.getType();
+            if (curr_type == OneRing.STRING_TYPE) {
+                ringId = item.getId(); 
+                found = true;
+            }
+        }
+        assertEquals(false, found);
+        
+        // now player should die
+        
+        Cell mercCell5 = dungeon.getMap().getCell(5, 5);
+        Mercenary merc5 = new Mercenary(dungeon, mercCell5.getPosition());
+        mercCell5.addOccupant(merc5);
+        
+        Cell mercCell6 = dungeon.getMap().getCell(5, 3);
+        Mercenary merc6 = new Mercenary(dungeon, mercCell6.getPosition());
+        mercCell6.addOccupant(merc6);
+        
+        Cell mercCell7 = dungeon.getMap().getCell(4, 4);
+        Mercenary merc7 = new Mercenary(dungeon, mercCell7.getPosition());
+        mercCell7.addOccupant(merc7);
+        
+        Cell mercCell8 = dungeon.getMap().getCell(6, 4);
+        Mercenary merc8 = new Mercenary(dungeon, mercCell8.getPosition());
+        mercCell8.addOccupant(merc8);
+        
+        // battle where player should died.
+        dr = dc.tick(null, Direction.NONE);
+        
+        assertEquals(0, TestUtils.countEntitiesOfType(dr, "player"));
+
     }
 
     /**
@@ -414,8 +509,6 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        //Check that Health is Boosted to 100
-        //TODO
         //Place Bomb on Ground Cardinally Adjacent to Switch
         // Right 4 Units to the Coord (5, 3)
         ctr.tick(null, Direction.RIGHT);

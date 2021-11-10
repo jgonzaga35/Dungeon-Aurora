@@ -3,13 +3,13 @@
   "height": 16,
   "entities": [
     {
-      "x": 1,
-      "y": 1,
+      "x": 5,
+      "y": 5,
       "type": "player"
     },
     {
-      "x": 1,
-      "y": 3,
+      "x": 5,
+      "y": 4,
       "type": "one_ring"
     }
   ],
