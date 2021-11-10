@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import java.util.Objects;
+
 import dungeonmania.util.Position;
 
 public class Pos2d {
@@ -42,6 +44,11 @@ public class Pos2d {
     @Override
     public String toString() {
         return "(" + getX() + ", " + getY() + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
     }
 
     @Override
