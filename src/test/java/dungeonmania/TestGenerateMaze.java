@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Deque;
@@ -61,6 +62,35 @@ public class TestGenerateMaze {
                         .anyMatch(p -> maze.get(p.getY()).get(p.getX()) == type)
                     , "fail on: " + new Pos2d(x, y));
                 }
+            }
+        }
+    }
+
+    /**
+     * make sure that all the walls around
+     */
+    @Test
+    public void cleanBoundary() {
+        Random r = new Random(1);
+        Pos2d dim = new Pos2d(50, 50);
+        for (int i = 0; i < 100; i++) {
+            r.setSeed(i); // easier to debug stuff
+
+            // x2 to get only odd numbers
+            Pos2d start = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+            Pos2d end = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+
+            r.setSeed(i); // again, easier to debug
+            GenerateMaze gen = new GenerateMaze(r, dim, start, end);
+            List<List<BCell>> maze = gen.build();
+            
+            for (int y = 0; y < dim.getY(); y++) {
+                assertEquals(BCell.WALL, maze.get(y).get(0));
+                assertEquals(BCell.WALL, maze.get(y).get(dim.getX() - 1));
+            }
+            for (int x = 0; x < dim.getX(); x++) {
+                assertEquals(BCell.WALL, maze.get(x).get(0));
+                assertEquals(BCell.WALL, maze.get(x).get(dim.getY() - 1));
             }
         }
     }
