@@ -339,9 +339,8 @@ public class TestCollectables {
         resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
-        // Down 2 Units to The One Ring at Coord (1, 3)
-        ctr.tick(null, Direction.DOWN);
-        resp = ctr.tick(null, Direction.DOWN);
+        // Up 1 Unit to The One Ring at Coord (5, 4)
+        resp = ctr.tick(null, Direction.UP);
 
         //Checking If The One Ring was Collected
         found = false;
