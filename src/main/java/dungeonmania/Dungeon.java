@@ -467,7 +467,7 @@ public class Dungeon {
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
         
         if (inventory.hasSceptre()) {
-            merc.mindControl();
+            merc.bribe(10);
             return;
         }
         
