@@ -211,12 +211,13 @@ public class Dungeon {
         Pos2d dims = new Pos2d(50, 50);
         List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
 
-        DungeonMap map = new DungeonMap(50, 50);
+        DungeonMap map = new DungeonMap(dims.getX(), dims.getY());
         Dungeon dungeon = new Dungeon(r, "generated", mode, map, new ExitGoal());
 
         Player player = new Player(dungeon, start);
         map.getCell(start).addOccupant(player);
         map.getCell(end).addOccupant(new Exit(dungeon, end));
+        dungeon.setPlayer(player);
 
         for (int y = 0; y < dims.getY(); y++) {
             for (int x = 0; x < dims.getX(); x++) {
