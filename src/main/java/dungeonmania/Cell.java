@@ -31,6 +31,7 @@ public class Cell {
     }
 
     public Integer getTravelCost() {
+        if (getSwamp() != null) return getSwamp().getMovementFactor();
         return 0;
     }
 
