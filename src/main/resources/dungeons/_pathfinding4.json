@@ -3,7 +3,7 @@
     "height": 9,
     "entities": [
         { "x": 0, "y": 0, "type": "player" },
-        { "x": 8, "y": 8, "type": "mercenary" },
+        { "x": 8, "y": 8, "type": "assassin" },
         { "x": 5, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
         { "x": 6, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
         { "x": 7, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
