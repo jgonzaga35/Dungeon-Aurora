@@ -21,6 +21,8 @@ public class Mercenary extends MovingEntity implements Fighter {
     private MovementBehaviour followMovementBehaviour;
     private MovementBehaviour friendlyMovementBehaviour;
 
+    private int mindControlDuration = 0;
+
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.followMovementBehaviour = new FollowMovementBehaviour(
@@ -37,10 +39,30 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     public void bribe() {
+        mindControlDuration = -1;
         relationship = FighterRelation.ALLY;
         // order matters! add first, then remove
         this.addMovementBehaviour(this.friendlyMovementBehaviour);
         this.removeMovementBehaviour(this.followMovementBehaviour);
+    }
+
+    public void mindControl() {
+        if (mindControlDuration < 0) {
+            return; // already bribed, do nothing
+        } else {
+            bribe();
+            mindControlDuration = 10;
+        }
+    }
+
+    public void useMindControl() {
+        if (mindControlDuration > 0) {
+            mindControlDuration--;
+        } else if (mindControlDuration == 0) {
+            relationship = FighterRelation.ENEMY;
+            this.addMovementBehaviour(this.followMovementBehaviour);
+            this.removeMovementBehaviour(this.friendlyMovementBehaviour);
+        }
     }
 
     @Override
@@ -50,6 +72,7 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     @Override
     public void tick() {
+        useMindControl();
         this.move();
     }
 
