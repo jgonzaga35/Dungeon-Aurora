@@ -86,4 +86,38 @@ public class Sceptre extends BuildableEntity {
         inventory.add(new Sceptre(null, null));
         return true;
     }
+
+    public static boolean craftable(Inventory inventory) {
+        List<String> sunstone = List.of(
+            SunStone.STRING_TYPE
+        );
+
+        if (inventory.findItems(sunstone) == null) return false;
+
+        // Search for Wood/Arrows
+        List<String> wood = List.of(
+            Wood.STRING_TYPE
+        );
+
+        List<String> arrows = List.of(
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE
+        );
+        
+        if (inventory.findItems(wood) == null && inventory.findItems(arrows) == null) return false;
+
+        // Search for Key/Treasure
+        List<String> key = List.of(
+            Key.STRING_TYPE
+        );
+
+        List<String> treature = List.of(
+            Treasure.STRING_TYPE
+        );
+
+        if (inventory.findItems(key) == null && inventory.findItems(treature) == null) return false;
+
+        return true;
+    }
+    
 }

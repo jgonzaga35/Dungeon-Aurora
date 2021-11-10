@@ -71,6 +71,18 @@ public class Bow extends BuildableEntity implements BattleItem {
         return true;
     }
 
+    public static boolean craftable(Inventory inventory) {
+        List<String> materials = List.of(
+            Wood.STRING_TYPE,
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE
+        );
+        
+        if (inventory.findItems(materials) == null) return false;
+        return true;
+    }
+
     @Override
     public float getDefenceCoefBonus() {
         return 3; // shield multiply defence coef by 3

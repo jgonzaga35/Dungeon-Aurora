@@ -25,9 +25,7 @@ import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.buildables.Sceptre;
-import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -54,8 +52,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.ItemResponse;
+import dungeonmania.response.models.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -450,6 +447,10 @@ public class Dungeon {
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
         return this.inventory.asItemResponses();
+    }
+
+    public List<String> getBuildables() {
+        return this.inventory.getBuildables();
     }
 
     

@@ -70,6 +70,15 @@ public class Inventory {
         return sceptre != null;
     }
 
+    public List<String> getBuildables() {
+        List<String> buildables = new ArrayList<>();
+        if (Bow.craftable(this)) buildables.add(Bow.STRING_TYPE);
+        if (Sceptre.craftable(this)) buildables.add(Sceptre.STRING_TYPE);
+        if (Shield.craftable(this)) buildables.add(Shield.STRING_TYPE);
+
+        return buildables;
+    }
+
     /**
      * Use the item specified by the id.
      * Raise an InvalidArgumentException if the item can't be used.

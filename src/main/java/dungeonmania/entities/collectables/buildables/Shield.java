@@ -77,6 +77,24 @@ public class Shield extends BuildableEntity implements BattleItem {
         return true;
     }
 
+    public static boolean craftable(Inventory inventory) {
+        List<String> materials = List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Treasure.STRING_TYPE
+        );
+
+        List<String> materialsAlt = List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Key.STRING_TYPE
+        );
+
+        if (inventory.findItems(materials) == null && inventory.findItems(materialsAlt) == null) return false;
+
+        return true;
+    }
+
     @Override
     public float getDefenceCoefBonus() {
         return 3; // shield multiply defence coef by 3
