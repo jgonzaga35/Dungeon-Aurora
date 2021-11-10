@@ -20,6 +20,7 @@ import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
@@ -29,6 +30,7 @@ import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -41,13 +43,6 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.Armour;
-import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
@@ -140,6 +135,8 @@ public class Dungeon {
                 cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
                 cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, OneRing.STRING_TYPE)) {
+                cell.addOccupant(new OneRing(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
@@ -166,6 +163,8 @@ public class Dungeon {
                 cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Assassin.STRING_TYPE)) {
+                cell.addOccupant(new Assassin(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
                 cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
@@ -450,12 +449,13 @@ public class Dungeon {
      * - The player is not in range to bribe the mercenary
      * - The player does not have any gold.
      * 
-     * removes a coin from the inventory on success.
+     * removes a coin from the inventory on success. Also removes the OneRing if 
+     * bribing an assassin.
      */
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
+        if (!inventory.pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
             
         merc.bribe();
     }
@@ -515,7 +515,11 @@ public class Dungeon {
         if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
             return;
 
-        Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
+        // spawn an assassin 25% of the time.
+        Mercenary m;
+        if (r.nextInt(100) < Assassin.SPAWN_PERCENTAGE) m = new Assassin(this, this.dungeonMap.getEntry());
+        else m = new Mercenary(this, this.dungeonMap.getEntry());
+
         this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
 

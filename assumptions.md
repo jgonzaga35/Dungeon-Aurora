@@ -21,17 +21,20 @@
 
 ## Mercenaries
 - players can't bribe mercenaries through walls.
-- There can only be one mercenary on a map at a time.
 - New mercenaries spawn every 50 ticks on maps with at least one enemy present
   at the *start of the map.*
 - IllegalArgumentException when the player bribes a friendly mercenary.
+- One treasure is the price to bribe a mercenary
+
+## Assassins
+- Assassins just deal more damage by simply having more health than assassins (3x more).
+- There is a 25% chance for a assassin to spawn in the place of a mercenary.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
    https://edstem.org/au/courses/7065/discussion/660682
 
 ## Potions
-
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.
 
