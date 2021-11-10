@@ -24,6 +24,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
+    private Integer bribeDuration = -1;
 
     private MovementBehaviour followMovementBehaviour;
     private MovementBehaviour friendlyMovementBehaviour;
@@ -46,10 +47,22 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     public void bribe() {
+        this.bribeDuration = -1;
         relationship = FighterRelation.ALLY;
         // order matters! add first, then remove
         this.addMovementBehaviour(this.friendlyMovementBehaviour);
         this.removeMovementBehaviour(this.followMovementBehaviour);
+    }
+
+    public void bribe(Integer bribeDuration) {
+        this.bribe();
+        this.bribeDuration = bribeDuration;
+    }
+
+    public void betray() {
+        relationship = FighterRelation.ENEMY;
+        this.addMovementBehaviour(this.followMovementBehaviour);
+        this.removeMovementBehaviour(this.friendlyMovementBehaviour);
     }
 
     public List<Class<? extends CollectableEntity>> getPrice() {
@@ -64,6 +77,8 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public void tick() {
         this.move();
+        this.bribeDuration--;
+        if (bribeDuration == 0) this.betray();
     }
 
     @Override
