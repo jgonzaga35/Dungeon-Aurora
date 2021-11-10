@@ -218,6 +218,19 @@ public class DungeonMap {
     }
 
     /**
+     * Uses Dijkstra's algorithm to find the shortest path between @param from
+     * and @param to. Takes into account cell travel costs due to swamp blocks.
+     * 
+     * @param from the positions to start from
+     * @param to the target position
+     * @return a list of Cells in the order that they should be visited. Return 
+     *  null if no path can be found.
+     */
+    public List<Cell> findPath(Pos2d from, Pos2d to) {
+        return null;
+    }
+
+    /**
      * Direction.NONE returns the given cell
      * 
      * @param cell

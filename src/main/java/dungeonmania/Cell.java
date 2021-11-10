@@ -29,6 +29,10 @@ public class Cell {
         return this.playerDistance;
     }
 
+    public Integer getTravelCost() {
+        return 0;
+    }
+
     public void setPlayerDistance(Integer playerDistance) {
         this.playerDistance = playerDistance;
     }
