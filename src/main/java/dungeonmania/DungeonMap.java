@@ -147,9 +147,7 @@ public class DungeonMap {
     }
     
     public Cell getCell(Pos2d pos) {
-        if (pos.getX() >= width || pos.getX() < 0) return null;
-        if (pos.getY() >= height || pos.getY() < 0) return null;
-        return dungeonMap.get(pos.getY()).get(pos.getX());
+        return this.getCell(pos.getX(), pos.getY());
     }
 
     public List<Entity> allEntities() {
@@ -163,6 +161,9 @@ public class DungeonMap {
     }
 
     public Cell getCell(int x, int y) {
+        if (y < 0 || y >= height) return null;
+        if (x < 0 || x >= width) return null;
+
         return dungeonMap.get(y).get(x);
     }
 

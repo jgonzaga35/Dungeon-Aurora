@@ -19,6 +19,7 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "mercenary";
     public static final int SPAWN_EVERY_N_TICKS = 50;
+    public static final int BATTLE_RADIUS = 3;
 
     protected List<Class<? extends CollectableEntity>> price = new ArrayList<>();
     

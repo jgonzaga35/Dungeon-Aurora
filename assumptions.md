@@ -25,6 +25,11 @@
   at the *start of the map.*
 - IllegalArgumentException when the player bribes a friendly mercenary.
 - One treasure is the price to bribe a mercenary
+- Mercenaries don't start their own battles (they wait for the player to
+  initiate them)
+- Battle radius is a circle, and the mercenary needs to be completely within
+  that circle.
+- Battle radius of mercenaries is 3 cells
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).

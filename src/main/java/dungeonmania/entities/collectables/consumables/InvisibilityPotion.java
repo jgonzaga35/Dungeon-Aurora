@@ -39,7 +39,7 @@ public class InvisibilityPotion extends Potion {
                 if (enemy instanceof Spider) {
                     effect = new CircleMovementBehaviour(20,dungeon.getMap(), enemy.getCell());
                 } else {
-                    effect = new RandomMovementBehaviour(20, dungeon.getMap(), enemy.getCell());
+                    effect = new RandomMovementBehaviour(20, dungeon, enemy.getCell());
                 }
 
                 enemy.addMovementBehaviour(effect);

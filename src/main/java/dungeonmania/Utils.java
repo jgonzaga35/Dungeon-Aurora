@@ -5,25 +5,23 @@ import java.util.Random;
 
 import dungeonmania.entities.Fighter;
 
-/**
- * All randomness should come from this class, so that we can seed it, and have
- * reproducible tests
- */
 public class Utils {
-    private static Random r = new Random(1); // always start with a seed of 1 for consistency
-
-    public static void setSeed(long s) {
-        r.setSeed(s);
-    }
+    /**
+     * Everything smaller than that is zero
+     */
+    public static float eps = 0.001f;
 
     /**
      * @param <T> any
      * @param list
+     * @param r Random instance
      * @return a random item from the list
      */
-    public static <T> T choose(List<T> list) {
+    public static <T> T choose(List<T> list, Random r) {
         return list.get(r.nextInt(list.size()));
     }
+
+
 
 
     /**
@@ -40,7 +38,7 @@ public class Utils {
      * @return true if the fighter is dead
      */
     public static boolean isDead(Fighter fighter) {
-        return fighter.getHealth() < 0;
+        return fighter.getHealth() < Utils.eps;
     }
 
     /**
@@ -56,7 +54,7 @@ public class Utils {
      * @return
      */
     public static int compareFloat(float f) {
-        if (Math.abs(f) < Math.ulp(0)) return 0;
+        if (Math.abs(f) < Utils.eps) return 0;
         else if (f > 0) return 1;
         else return -1;
     }
