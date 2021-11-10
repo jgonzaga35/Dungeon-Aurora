@@ -54,12 +54,12 @@ public class TestGenerateMaze {
             for (int y = 0; y < dim.getY(); y++) {
                 for (int x = 0; x < dim.getX(); x++) {
                     // make sure that we have a neighbour of the same type
-                    BCell type = maze.get(0).get(x);
+                    BCell type = maze.get(y).get(x);
                     assertTrue(
                         neighbours(new Pos2d(x, y))
                         .filter(p -> 0 <= p.getX() && p.getX() < maze.get(0).size() && 0 <= p.getY() && p.getY() < maze.size())
                         .anyMatch(p -> maze.get(p.getY()).get(p.getX()) == type)
-                    );
+                    , "fail on: " + new Pos2d(x, y));
                 }
             }
         }

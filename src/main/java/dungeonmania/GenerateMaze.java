@@ -1,8 +1,10 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,6 +40,11 @@ public class GenerateMaze {
 
         assert this.notOnBoundary(start) : "start is on the boundary";
         assert this.notOnBoundary(end) : "end is on the boundary";
+
+        // coordinates should have the same parity
+        assert start.getX() % 2 == start.getY() % 2;
+        assert end.getX() % 2 == start.getY() % 2;
+        assert end.getY() % 2 == start.getY() % 2;
 
         // full with walls
         rows = new ArrayList<>(dims.getY());
@@ -85,7 +92,7 @@ public class GenerateMaze {
     }
 
     private Pos2d average(Pos2d a, Pos2d b) {
-        return new Pos2d((a.getX() + b.getX()) / 2, (a.getY() + b.getY()) / 2);
+        return new Pos2d(Math.floorDiv(a.getX() + b.getX(), 2), Math.floorDiv(a.getY() + b.getY(), 2));
     }
 
     public List<List<BCell>> build() {
@@ -94,10 +101,9 @@ public class GenerateMaze {
         // three. I understand what Braedon is trying to specify, and that's
         // enough.
 
-
         set(start, BCell.EMPTY);
 
-        List<Pos2d> options = new ArrayList<>();
+        Set<Pos2d> options = new HashSet<>();
         farNeighbours(start)
             .filter(this::isInMaze)
             .filter(this::isWall)
@@ -109,38 +115,47 @@ public class GenerateMaze {
             Pos2d next = Utils.choose(options, r);
             boolean removed = options.remove(next);
             assert removed;
+            assert get(next) == BCell.WALL;
 
             // connect to existing empty cell
-            Pos2d connection = Utils.choose(
-                farNeighbours(next)
+            List<Pos2d> connections = farNeighbours(next)
                     .filter(this::isInMaze)
+                    .filter(this::notOnBoundary)
                     .filter(this::isEmpty)
-                    .collect(Collectors.toList()),
-                r);
+                    .collect(Collectors.toList());
+            assert connections.size() > 0;
+            Pos2d connection = Utils.choose(connections, r);
             
             set(next, BCell.EMPTY);
             set(average(next, connection), BCell.EMPTY); // empty out the cell between connection and next
+            assert get(connection) == BCell.EMPTY;
 
             // new neighbours to explore!
             farNeighbours(next)
                 .filter(this::isInMaze)
+                .filter(this::notOnBoundary)
                 .filter(this::isWall)
+                .filter(p -> !options.contains(p))
                 .forEach(options::add);
         }
 
         return rows;
     }
 
-    public void print() {
+    @Override
+    public String toString() {
+        String s = "";
         for (int y = 0; y < dims.getY(); y++) {
+            s += y + ":";
             for (int x = 0; x < dims.getX(); x++) {
                 if (rows.get(y).get(x) == BCell.EMPTY) {
-                    System.out.print(" ");
+                    s += " ";
                 } else {
-                    System.out.print("#");
+                    s += "#";
                 }
             }
-            System.out.println();
+            s += "\n";
         }
+        return s;
     }
 }

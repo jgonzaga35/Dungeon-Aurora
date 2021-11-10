@@ -199,6 +199,7 @@ public class Dungeon {
     }
     
     public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
+
         Pos2d dims = new Pos2d(50, 50);
         List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
 
