@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import java.util.Objects;
+
 import dungeonmania.util.Position;
 
 public class Pos2d {
@@ -35,6 +37,10 @@ public class Pos2d {
         return new Pos2d(o.getX() + this.x, o.getY() + this.y);
     }
 
+    public Pos2d minus(Pos2d o) {
+        return new Pos2d(-o.getX() + this.x, -o.getY() + this.y);
+    }
+
     public static Pos2d from(Position pos) {
         return new Pos2d(pos.getX(), pos.getY());
     }
@@ -54,6 +60,11 @@ public class Pos2d {
         Pos2d checkPos = (Pos2d) obj;
 
         return x == checkPos.getX() && y == checkPos.getY();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
     }
 
 }
