@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.movement.RandomMovementBehaviour;
+import dungeonmania.util.Counter;
 import dungeonmania.util.FileLoader;
 
 public class TestMovement {
@@ -363,7 +365,7 @@ public class TestMovement {
         Dungeon d = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
         
         Cell cell = map.getCell(4, 4);
-        MovementBehaviour movement = new RandomMovementBehaviour(0, map, cell);
+        MovementBehaviour movement = new RandomMovementBehaviour(0, d, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
 
         for (int i = 0; i < 10; i++)
@@ -381,5 +383,31 @@ public class TestMovement {
 
         for (int i = 0; i < 10; i++)
             assertEquals(cell.getPosition(), movement.move().getPosition());
+    }
+
+    @Test
+    public void testRandomMovementDistribution() {
+        DungeonMap map = new DungeonMap(10, 10);
+        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+
+        Cell cell = map.getCell(4, 4);
+        MovementBehaviour movement = new RandomMovementBehaviour(0, dungeon, cell);
+
+        // Each shift (up, down, right, left) is a key in that counter
+        Counter<Pos2d> counter = new Counter<>();
+        Pos2d prev = cell.getPosition();
+
+        int numMoves = 1000;
+        for (int i = 0; i < numMoves; i++) {
+            Pos2d pos = movement.move().getPosition();
+            Pos2d shift = pos.minus(prev);
+            counter.add(shift, 1);
+            prev = pos;
+        }
+
+        assertEquals(4, counter.values().count(), "should get 4 shifts: up, down, right and left");
+
+        // i'm not going to do the maths, but that should be good enough
+        assertTrue(counter.values().allMatch(n -> Math.abs(numMoves / 4 - n) < 10));
     }
 }

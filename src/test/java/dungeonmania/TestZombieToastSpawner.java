@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Objects;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -20,10 +19,6 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class TestZombieToastSpawner {
-    @BeforeEach
-    public void setSeed() {
-        Utils.setSeed(1);
-    }
 
     /**
      * Makes sure that zombies are indeed spawned
