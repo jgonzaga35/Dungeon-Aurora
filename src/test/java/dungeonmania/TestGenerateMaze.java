@@ -23,9 +23,9 @@ public class TestGenerateMaze {
         for (int i = 0; i < 100; i++) {
             r.setSeed(i); // easier to debug stuff
 
-            // x2 to get only odd numbers
-            Pos2d start = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
-            Pos2d end = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+            int parity = r.nextInt(2);
+            Pos2d start = generatePosition(r, dim, parity);
+            Pos2d end = generatePosition(r, dim, parity);
 
             r.setSeed(i); // again, easier to debug
             GenerateMaze gen = new GenerateMaze(r, dim, start, end);
@@ -44,9 +44,9 @@ public class TestGenerateMaze {
         for (int i = 0; i < 100; i++) {
             r.setSeed(i); // easier to debug stuff
 
-            // x2 to get only odd numbers
-            Pos2d start = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
-            Pos2d end = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+            int parity = r.nextInt(2);
+            Pos2d start = generatePosition(r, dim, parity);
+            Pos2d end = generatePosition(r, dim, parity);
 
             r.setSeed(i); // again, easier to debug
             GenerateMaze gen = new GenerateMaze(r, dim, start, end);
@@ -70,15 +70,15 @@ public class TestGenerateMaze {
      * make sure that all the walls around
      */
     @Test
-    public void cleanBoundary() {
+    public void testCleanBoundary() {
         Random r = new Random(1);
         Pos2d dim = new Pos2d(50, 50);
         for (int i = 0; i < 100; i++) {
             r.setSeed(i); // easier to debug stuff
 
-            // x2 to get only odd numbers
-            Pos2d start = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
-            Pos2d end = new Pos2d(1 + r.nextInt(dim.getX()/2 - 2)*2, 1 + r.nextInt(dim.getY()/2 - 2)*2);
+            int parity = r.nextInt(2);
+            Pos2d start = generatePosition(r, dim, parity);
+            Pos2d end = generatePosition(r, dim, parity);
 
             r.setSeed(i); // again, easier to debug
             GenerateMaze gen = new GenerateMaze(r, dim, start, end);
@@ -93,6 +93,44 @@ public class TestGenerateMaze {
                 assertEquals(BCell.WALL, maze.get(x).get(dim.getY() - 1));
             }
         }
+    }
+
+    @Test
+    public void testDifferentPositionParity() {
+        Random r = new Random(1);
+        Pos2d dim = new Pos2d(50, 50);
+        for (int i = 0; i < 100; i++) {
+            r.setSeed(i); // easier to debug stuff
+
+            // start and end have different parity
+            int parity = r.nextInt(2);
+            Pos2d start = generatePosition(r, dim, parity);
+            Pos2d end = generatePosition(r, dim, parity == 1 ? 0 : 1);
+
+            r.setSeed(i); // again, easier to debug
+            GenerateMaze gen = new GenerateMaze(r, dim, start, end);
+            List<List<BCell>> maze = gen.build();
+            
+            hasPath(maze, start, end);
+        }
+    }
+
+    /**
+     * to have nice mazes, the size of them should be odd, and the starting +
+     * ending positions should also be odd.
+     * 
+     * But, we can't rely on the spec to get this right, so we test for all kinds
+     * of parities.
+     * 
+     * @param r Random source
+     * @param dim dimensions of the maze
+     * @param parity %2 (1 == odd, 0 == even)
+     */
+    private Pos2d generatePosition(Random r, Pos2d dim, int parity) {
+        return new Pos2d(
+            3 - (parity % 2) + r.nextInt(dim.getX()/2 - 4)*2 ,
+            3 - (parity % 2) + r.nextInt(dim.getY()/2 - 4)*2
+        );
     }
 
     private boolean hasPath(List<List<BCell>> maze, Pos2d start, Pos2d end) {
