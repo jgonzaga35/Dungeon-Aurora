@@ -16,6 +16,13 @@ import dungeonmania.util.*;
 
 public class TestBuildableV2 {
     @Test
+    public void testEmptyBuildablesResponseList() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
+        assertEquals(List.of(), resp.getBuildables());
+    }
+
+    @Test
     public void testBuildSceptre1() {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
@@ -36,6 +43,8 @@ public class TestBuildableV2 {
         Collections.sort(expected);
         assertEquals(expected, actual);
         actual.clear();
+
+        assertEquals(List.of(Sceptre.STRING_TYPE), resp.getBuildables());
 
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
@@ -65,6 +74,8 @@ public class TestBuildableV2 {
         Collections.sort(expected);
         assertEquals(expected, actual);
         actual.clear();
+
+        assertEquals(List.of(Sceptre.STRING_TYPE), resp.getBuildables());
 
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
@@ -96,6 +107,8 @@ public class TestBuildableV2 {
         assertEquals(expected, actual);
         actual.clear();
 
+        assertEquals(List.of(Sceptre.STRING_TYPE), resp.getBuildables());
+
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
             actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
@@ -125,6 +138,8 @@ public class TestBuildableV2 {
         Collections.sort(expected);
         assertEquals(expected, actual);
         actual.clear();
+
+        assertEquals(List.of(Sceptre.STRING_TYPE), resp.getBuildables());
 
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
