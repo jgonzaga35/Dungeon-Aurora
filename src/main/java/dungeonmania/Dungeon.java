@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.GenerateMaze.BCell;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
@@ -46,6 +47,7 @@ import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -205,8 +207,26 @@ public class Dungeon {
         return dungeon;
     }
     
-    public static Dungeon generateDungeon(Pos2d start, Pos2d end, GameMode mode) {
-        return null;
+    public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
+        Pos2d dims = new Pos2d(50, 50);
+        List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
+
+        DungeonMap map = new DungeonMap(50, 50);
+        Dungeon dungeon = new Dungeon(r, "generated", mode, map, new ExitGoal());
+
+        Player player = new Player(dungeon, start);
+        map.getCell(start).addOccupant(player);
+        map.getCell(end).addOccupant(new Exit(dungeon, end));
+
+        for (int y = 0; y < dims.getY(); y++) {
+            for (int x = 0; x < dims.getX(); x++) {
+                if (maze.get(y).get(x) == BCell.WALL) {
+                    map.getCell(x, y).addOccupant(new Wall(dungeon, new Pos2d(x, y)));
+                }
+            }
+        }
+
+        return dungeon;
     }
 
     /**
