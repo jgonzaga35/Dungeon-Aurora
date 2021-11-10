@@ -60,6 +60,17 @@ public class Inventory {
     }
 
     /**
+     * 
+     * @return true if the inventory contains a sceptre
+     */
+    public boolean hasSceptre() {
+        Sceptre sceptre = (Sceptre) collectables.stream().filter(c -> c instanceof Sceptre)
+            .findFirst().orElse(null);
+
+        return sceptre != null;
+    }
+
+    /**
      * Use the item specified by the id.
      * Raise an InvalidArgumentException if the item can't be used.
      * Raise an InvalidActionException if the item is not in the inventory.

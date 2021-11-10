@@ -464,6 +464,12 @@ public class Dungeon {
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
+        
+        if (inventory.hasSceptre()) {
+            merc.mindControl();
+            return;
+        }
+        
         if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
             
         merc.bribe();
