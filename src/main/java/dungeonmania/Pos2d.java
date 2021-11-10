@@ -51,6 +51,11 @@ public class Pos2d {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == this) return true;

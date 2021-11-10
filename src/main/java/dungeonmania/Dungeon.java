@@ -19,6 +19,7 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
@@ -44,7 +45,6 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
@@ -201,6 +201,10 @@ public class Dungeon {
             .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
         return dungeon;
+    }
+    
+    public static Dungeon generateDungeon(Pos2d start, Pos2d end, GameMode mode) {
+        return null;
     }
 
     /**

@@ -179,6 +179,13 @@ public class DungeonManiaController {
         return this.makeDungeonResponse();
     }
 
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
+        GameMode mode = parseGameMode(gameMode);
+        this.dungeon = Dungeon.generateDungeon(new Pos2d(xStart, yStart), new Pos2d(xEnd, yEnd), mode);
+        return this.makeDungeonResponse();
+    }
+
+
     /**
      * Every endpoint has to return a DungeonResponse, so we just use this
      * helper function
