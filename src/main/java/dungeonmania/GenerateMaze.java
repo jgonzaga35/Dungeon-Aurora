@@ -41,11 +41,6 @@ public class GenerateMaze {
         assert this.notOnBoundary(start) : "start is on the boundary";
         assert this.notOnBoundary(end) : "end is on the boundary";
 
-        // coordinates should have the same parity
-        assert start.getX() % 2 == start.getY() % 2;
-        assert end.getX() % 2 == start.getY() % 2;
-        assert end.getY() % 2 == start.getY() % 2;
-
         // full with walls
         rows = new ArrayList<>(dims.getY());
         for (int y = 0; y < dims.getY(); y++) {
@@ -137,6 +132,14 @@ public class GenerateMaze {
                 .filter(this::isWall)
                 .filter(p -> !options.contains(p))
                 .forEach(options::add);
+        }
+
+        // if start and end don't have the same parity, then we won't have a
+        // path between the two. So we forcefully make it.
+        if (get(end) == BCell.WALL) {
+            // this is enough to connect, because there cannot exists 3 walls in
+            // a row (every wall has a neighbouring empty cell and vice versa)
+            set(end, BCell.EMPTY);
         }
 
         return rows;
