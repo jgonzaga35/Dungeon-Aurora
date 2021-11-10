@@ -388,9 +388,10 @@ public class TestMovement {
     @Test
     public void testRandomMovementDistribution() {
         DungeonMap map = new DungeonMap(10, 10);
+        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
 
         Cell cell = map.getCell(4, 4);
-        MovementBehaviour movement = new RandomMovementBehaviour(0, map, cell);
+        MovementBehaviour movement = new RandomMovementBehaviour(0, dungeon, cell);
 
         // Each shift (up, down, right, left) is a key in that counter
         Counter<Pos2d> counter = new Counter<>();
