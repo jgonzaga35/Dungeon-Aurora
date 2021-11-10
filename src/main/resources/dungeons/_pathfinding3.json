@@ -1,0 +1,43 @@
+{
+    "width": 9,
+    "height": 9,
+    "entities": [
+        { "x": 0, "y": 0, "type": "player" },
+        { "x": 8, "y": 8, "type": "mercenary" },
+        { "x": 1, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 2, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 3, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 4, "y": 7, "type": "swamp_tile", "movement_factor": 8 },
+        { "x": 5, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 6, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 7, "y": 7, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 8, "y": 7, "type": "swamp_tile", "movement_factor": 18 },
+        { "x": 1, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 2, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 3, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 4, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 5, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 6, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 7, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 0, "y": 5, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 1, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 2, "y": 3, "type": "swamp_tile", "movement_factor": 4 },
+        { "x": 3, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 4, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 5, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 6, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 7, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 8, "y": 3, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 1, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 2, "y": 1, "type": "swamp_tile", "movement_factor": 14 },
+        { "x": 3, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 4, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 5, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 6, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 7, "y": 1, "type": "swamp_tile", "movement_factor": 48 },
+        { "x": 0, "y": 1, "type": "swamp_tile", "movement_factor": 48 }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
