@@ -36,76 +36,72 @@ public class TestSwamp {
 
     @Test
     public void testMultipleEnemies() {
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.DOWN); // move player horizontal to the swamp
-
         // spawn mercenaries staggered horizontal to the swamp.
-        Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 6, 4);
-        Mercenary merc2 = TestUtils.spawnMercenary(dungeon, 8, 4);
+        Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 6, 2);
+        Mercenary merc2 = TestUtils.spawnMercenary(dungeon, 8, 2);
         
         for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc1 gets stuck 10 ticks left
 
         for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc2 gets stuck merc1 8 ticks left
-        assertEquals(new Pos2d(4, 4), merc1.getPosition());
-        assertEquals(new Pos2d(4, 4), merc2.getPosition());
+        assertEquals(new Pos2d(4, 2), merc1.getPosition());
+        assertEquals(new Pos2d(4, 2), merc2.getPosition());
         
         for (int i = 0; i < 8; i++) dc.tick(null, Direction.NONE); // merc1 can move on the next tick merc2 2 ticks left
-        assertEquals(new Pos2d(4, 4), merc1.getPosition());
-        assertEquals(new Pos2d(4, 4), merc2.getPosition());
+        assertEquals(new Pos2d(4, 2), merc1.getPosition());
+        assertEquals(new Pos2d(4, 2), merc2.getPosition());
         
         for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc1 has moved merc2 can move next tick
-        assertEquals(new Pos2d(2, 4), merc1.getPosition());
-        assertEquals(new Pos2d(4, 4), merc2.getPosition());
+        assertEquals(new Pos2d(2, 2), merc1.getPosition());
+        assertEquals(new Pos2d(4, 2), merc2.getPosition());
         
         dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(1, 4), merc1.getPosition());
-        assertEquals(new Pos2d(3, 4), merc2.getPosition());
+        assertEquals(new Pos2d(1, 2), merc1.getPosition());
+        assertEquals(new Pos2d(3, 2), merc2.getPosition());
     }
     
     @Test
     public void testSpiderPreservesCircle() {
-        Spider spider = TestUtils.spawnSpider(dungeon, 3, 4);
+        Spider spider = TestUtils.spawnSpider(dungeon, 3, 2);
         
         for (int i = 0; i < 3; i++) dc.tick(null, Direction.NONE); // steps in swamp after this 10 ticks to go
-        assertEquals(new Pos2d(4, 4), spider.getPosition());
+        assertEquals(new Pos2d(4, 2), spider.getPosition());
         
         for (int i = 0; i < 10; i++) dc.tick(null, Direction.NONE); // can move on next tick
-        assertEquals(new Pos2d(4, 4), spider.getPosition());
+        assertEquals(new Pos2d(4, 2), spider.getPosition());
         
         // Make sure spider still follows the circle
         dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(4, 5), spider.getPosition());
+        assertEquals(new Pos2d(4, 3), spider.getPosition());
         dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(3, 5), spider.getPosition());
-        dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(2, 5), spider.getPosition());
-        dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(2, 4), spider.getPosition());
+        assertEquals(new Pos2d(3, 3), spider.getPosition());
         dc.tick(null, Direction.NONE);
         assertEquals(new Pos2d(2, 3), spider.getPosition());
         dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(3, 3), spider.getPosition());
+        assertEquals(new Pos2d(2, 2), spider.getPosition());
+        dc.tick(null, Direction.NONE);
+        assertEquals(new Pos2d(2, 1), spider.getPosition());
+        dc.tick(null, Direction.NONE);
+        assertEquals(new Pos2d(3, 1), spider.getPosition());
     }
 
     @Test
-    public void testPlayerGetsStuck() {
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.DOWN);
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.RIGHT); // (4, 4) should now be stuck for 10 more ticks.
+    public void testPlayerNotGetStuck() {
+        for (int i = 0; i < 4; i++) dc.tick(null, Direction.RIGHT);
         
         for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE);
-        assertEquals(new Pos2d(4, 4), player.getPosition());
-        for (int i = 0; i < 2; i++) dc.tick(null, Direction.DOWN);
-        assertEquals(new Pos2d(4, 4), player.getPosition());
+        assertEquals(new Pos2d(4, 2), player.getPosition());
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.RIGHT);
+        assertEquals(new Pos2d(6, 2), player.getPosition());
         for (int i = 0; i < 2; i++) dc.tick(null, Direction.LEFT);
-        assertEquals(new Pos2d(4, 4), player.getPosition());
-        for (int i = 0; i < 2; i++) dc.tick(null, Direction.UP);
-        assertEquals(new Pos2d(4, 4), player.getPosition());
-        for (int i = 0; i < 2; i++) dc.tick(null, Direction.RIGHT); // should now be able to move on the next tick
-        assertEquals(new Pos2d(4, 4), player.getPosition());
-        
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.UP);
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.LEFT); 
-        
-        assertEquals(new Pos2d(0, 0), player.getPosition());
+        assertEquals(new Pos2d(4, 2), player.getPosition());
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.LEFT);
+        assertEquals(new Pos2d(2, 2), player.getPosition());
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.RIGHT); 
+        assertEquals(new Pos2d(4, 2), player.getPosition());
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.RIGHT); 
+        assertEquals(new Pos2d(6, 2), player.getPosition());
+        for (int i = 0; i < 6; i++) dc.tick(null, Direction.LEFT); 
+        assertEquals(new Pos2d(0, 2), player.getPosition());
     }
 
     @Test
