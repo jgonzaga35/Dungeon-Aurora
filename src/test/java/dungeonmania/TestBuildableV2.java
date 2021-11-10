@@ -132,4 +132,42 @@ public class TestBuildableV2 {
         });
         assertEquals(List.of(Sceptre.STRING_TYPE), actual);
     }
+
+    @Test
+    public void testBuildMidnightArmour() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_buildable_midnight", GameMode.STANDARD.getValue());
+        assertThrows(InvalidActionException.class, () -> {
+            ctr.build(MidnightArmour.STRING_TYPE);
+        });
+
+        // pick up the materials - Sun Stone, armour
+        resp = ctr.tick(null, Direction.LEFT); 
+        resp = ctr.tick(null, Direction.LEFT); 
+
+        // invalid when there is a zombie on the map
+        assertThrows(InvalidActionException.class, () -> {
+            ctr.build(MidnightArmour.STRING_TYPE);
+        });
+
+        // ensure the zombie is killed
+        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.RIGHT);
+        
+        List<String> actual = resp.getInventory().stream().map(item -> item.getType()).collect(Collectors.toList());
+        List<String> expected = Arrays.asList(Armour.STRING_TYPE, SunStone.STRING_TYPE);
+        Collections.sort(actual);
+        Collections.sort(expected);
+        assertEquals(expected, actual);
+        actual.clear();
+
+        assertDoesNotThrow(() -> {
+            DungeonResponse r = ctr.build(MidnightArmour.STRING_TYPE);
+            actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
+        });
+
+        assertEquals(List.of(MidnightArmour.STRING_TYPE), actual);
+    }
 }

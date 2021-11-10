@@ -346,6 +346,13 @@ public class Dungeon {
             if (!Sceptre.craft(this.inventory)) {
                 throw new InvalidActionException("not enough resources to build " + buildable);
             }
+        } else if (Objects.equals(buildable, MidnightArmour.STRING_TYPE)) {
+            if (this.dungeonMap.countZombieToasts() > 0) {
+                throw new InvalidActionException("cannot build midnight armour when there are zombies");
+            }
+            if (!MidnightArmour.craft(this.inventory)) {
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            }
         } else {
             throw new IllegalArgumentException("unknown buildable: " + buildable);
         }
@@ -449,7 +456,11 @@ public class Dungeon {
     }
 
     public List<String> getBuildables() {
-        return this.inventory.getBuildables();
+        List<String> buildables = this.inventory.getBuildables();
+        if (this.dungeonMap.countZombieToasts() > 0) {
+            buildables.remove("midnight_armour");
+        }
+        return buildables;
     }
 
     

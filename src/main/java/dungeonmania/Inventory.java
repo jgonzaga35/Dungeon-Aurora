@@ -85,6 +85,7 @@ public class Inventory {
         if (Bow.craftable(this)) buildables.add(Bow.STRING_TYPE);
         if (Sceptre.craftable(this)) buildables.add(Sceptre.STRING_TYPE);
         if (Shield.craftable(this)) buildables.add(Shield.STRING_TYPE);
+        if (MidnightArmour.craftable(this)) buildables.add(MidnightArmour.STRING_TYPE);
 
         return buildables;
     }

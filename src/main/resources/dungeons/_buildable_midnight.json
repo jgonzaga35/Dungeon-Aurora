@@ -1,0 +1,14 @@
+{
+    "width": 5,
+    "height": 1,
+    "entities": [
+        {"type": "player", "x": 2, "y": 0},
+        {"type": "sun_stone", "x": 1, "y": 0},
+        {"type": "armour", "x": 0, "y": 0},
+        {"type": "zombie", "x": 4, "y": 0}
+        
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
