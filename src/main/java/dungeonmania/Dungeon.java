@@ -155,7 +155,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
-                cell.addOccupant(new Swamp(dungeon, cell.getPosition()));
+                cell.addOccupant(new Swamp(dungeon, cell.getPosition(), entity.getInt("movement_factor")));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
