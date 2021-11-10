@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class TestMap {
 
         assertDoesNotThrow(() -> {
             String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
-            Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+            Dungeon dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
 
             System.out.println(dungeon.getMap().toString());
         });
@@ -26,7 +27,7 @@ public class TestMap {
     @Test
     public void testMapFlood() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
-        Dungeon dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
 
         dungeon.getMap().flood();
 

@@ -69,15 +69,17 @@ public class Dungeon {
     /**
      * make sure to seed before each test
      */
-    private Random r = new Random(1);
+    private Random r;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
+    public Dungeon(Random r, String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
         this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
+
+        this.r = r;
 
         this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> b.getPrecedence() - a.getPrecedence());
         if (mode == GameMode.PEACEFUL) {
@@ -101,13 +103,13 @@ public class Dungeon {
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
-    public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
+    public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
         
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goal);
+        Dungeon dungeon = new Dungeon(r, name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
