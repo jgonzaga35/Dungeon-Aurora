@@ -3,19 +3,22 @@ package dungeonmania;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.SunStone;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+
 
 
 
@@ -600,34 +603,27 @@ public class TestCollectables {
      */
     
     @Test
-    public void testLoadingSunStone() {
+    public void testSunStoneOpeningDoor() {
         //Item Coords: Player(1,1), SunStone(1,3), Boulder (7,2), Switch(7,3)
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_sunStoneExample", GameMode.PEACEFUL.getValue());
+        DungeonResponse resp = ctr.newGame("_door_maze_sun_stone", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
         Boolean found = false;
 
-        // Down 2 Units to the Bomb at Coord (1, 3)
+        // Down 2 Units to the SunStone at Coord (1, 3)
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking If Bomb was Collected
-        found = false;
-        String curr_type = "";
-        List<ItemResponse> curr_inventory = resp.getInventory();
-        for (ItemResponse item : curr_inventory) {
-            curr_type = item.getType();
-            if (curr_type.equals(Bomb.STRING_TYPE)) {
-                found = true;
-            }
-        }
-        assertEquals(true, found);
+        // check that the Sun Stone is in player inventory
+        // Checking that the Item has Been Added to Inventory
+        assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals(SunStone.STRING_TYPE)));
 
         //Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
+        String curr_type = "";
         List<EntityResponse> cellEntities = resp.getEntities();
         for (EntityResponse currEntity : cellEntities) {
             curr_type = currEntity.getType();
@@ -635,30 +631,64 @@ public class TestCollectables {
             Position currPosition = currEntity.getPosition();
             currPositionX = currPosition.getX();
             currPositionY = currPosition.getY();
-            if (curr_type.equals(Bomb.STRING_TYPE) && currPositionX == 1 && currPositionY == 3) {
+            if (curr_type.equals(SunStone.STRING_TYPE) && currPositionX == 1 && currPositionY == 3) {
                 itemRemoved = false;
             }
         }
         assertEquals(true, itemRemoved);
 
-        //Place Bomb on Ground Cardinally Adjacent to Switch
-        // Right 4 Units to the Coord (5, 3)
-        ctr.tick(null, Direction.RIGHT);
-        ctr.tick(null, Direction.RIGHT);
-        ctr.tick(null, Direction.RIGHT);
-        ctr.tick(null, Direction.RIGHT);
+        
 
-        //Get ID for Bomb
-        curr_type = "";
-        String bombId = "";
-        curr_inventory = resp.getInventory();
-        for (ItemResponse item : curr_inventory) {
-            curr_type = item.getType();
-            if (curr_type.equals("bomb")) {
-                bombId = item.getId();
-            }
-        }
-        //Place bomb onto (5,3)
-        resp = ctr.tick(bombId, Direction.NONE);
+        // using Sun Stone to open door 2 
+        resp = ctr.tick(null, Direction.RIGHT);
+        Position p1 = TestUtils.getPlayerPosition(resp);
+        
+        resp = ctr.tick(null, Direction.DOWN);
+        Position p2 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p1, p2);
+
+        // using Sun Stone to open door 1 (should succeed)
+        resp = ctr.tick(null, Direction.RIGHT);
+        Position p3 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p3, p2);
+
+        // moving right
+        resp = ctr.tick(null, Direction.RIGHT);
+
+        // using Sun Stone to open Door 3
+        Position p4 = TestUtils.getPlayerPosition(resp);
+        
+        resp = ctr.tick(null, Direction.RIGHT);
+        Position p5 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p4, p5);
+
+        // attempt to walk through door 1, which is already opened
+        resp = ctr.tick(null, Direction.LEFT);
+        Position p6 = TestUtils.getPlayerPosition(resp);
+        
+        resp = ctr.tick(null, Direction.LEFT);
+        Position p7 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p6, p7);
+
+        // using Sun Stone to open door 2 (should succeed)
+        resp = ctr.tick(null, Direction.LEFT);
+        Position p8 = TestUtils.getPlayerPosition(resp);
+        resp = ctr.tick(null, Direction.DOWN);
+        Position p9 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p8, p9);
+
+        // using Sun Stone to open door 3 
+        resp = ctr.tick(null, Direction.UP);
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
+
+        // using Sun Stone to open door 3 (should succeed)
+        Position p10 = TestUtils.getPlayerPosition(resp);
+        resp = ctr.tick(null, Direction.RIGHT);
+        Position p11 = TestUtils.getPlayerPosition(resp);
+        assertNotEquals(p10, p11);
+        // check the Sun Stone is still in inventory
+        assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("sun_stone")));
     }
 }
