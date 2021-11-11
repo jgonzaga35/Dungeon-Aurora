@@ -37,7 +37,7 @@ public class TestGenerateMazeDungeon {
             p = TestUtils.getPlayerPosition(resp);
             positions.add(new Pos2d(p.getX(), p.getY()));
         }
-        assertTrue(positions.size() <= 1, "the player wasn't able to move in any direction");
+        assertTrue(positions.size() > 1, "the player wasn't able to move in any direction");
     }
     
 }
