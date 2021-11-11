@@ -68,6 +68,10 @@ public abstract class Entity {
     @Override
     public String toString()
     {
+        if (this instanceof Fighter) {
+            Fighter f = (Fighter) this;
+            return String.format("%s[pos=%s health=%f]", getTypeAsString(), getPosition(), f.getHealth());
+        }
         return String.format("%s[pos=%s]", getTypeAsString(), getPosition());
     }
 

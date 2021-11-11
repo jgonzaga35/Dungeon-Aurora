@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ public class TestAssassin {
     public void setStartingPostition() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_assassin_test.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = (Player) dungeon.getMap().allEntities().stream()
             .filter(e -> e instanceof Player)

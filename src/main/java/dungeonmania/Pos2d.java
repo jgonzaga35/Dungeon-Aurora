@@ -67,9 +67,4 @@ public class Pos2d {
         return x == checkPos.getX() && y == checkPos.getY();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.x, this.y);
-    }
-
 }

@@ -69,11 +69,12 @@ public class NormalBattleStrategy implements BattleStrategy {
         List<Fighter> enemies = new ArrayList<>();
 
         this.prepareBattle(dungeon, cell, allies, enemies);
+        assert allies.size() >= 1;
 
         Collections.sort(allies, sort);
         Collections.sort(enemies, sort);
 
-        System.out.println(allies + " " + enemies);
+        if (enemies.size() == 0) return; // there is no one to fight
 
         Set<Fighter> deaths = this.performBattle(allies, enemies);
 
@@ -99,6 +100,7 @@ public class NormalBattleStrategy implements BattleStrategy {
     private void prepareBattle(Dungeon dungeon, Cell cell, List<Fighter> allies, List<Fighter> enemies) {
         DungeonMap map = dungeon.getMap();
 
+        // add all the allies and the enemies on the current cell
         for (Entity entity : cell.getOccupants()) {
             if (entity instanceof Fighter) {
                 Fighter fighter = (Fighter) entity;
@@ -110,6 +112,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             }
         }
 
+        // add all the mercenary allies from other cells
         Pos2d pos = cell.getPosition();
         // check all the cells around for mercenaries
         for (int y = -Mercenary.BATTLE_RADIUS; y <= Mercenary.BATTLE_RADIUS; y++) {
@@ -117,6 +120,7 @@ public class NormalBattleStrategy implements BattleStrategy {
                 // battle radius is a circle, if you're not completely in the circle, you're skiped
                 if (x * x + y * y > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS) continue;
                 Cell c = map.getCell(x + pos.getX(), y + pos.getY());
+                if (c == null) continue; // coordinate is outside the map
 
                 c.getOccupants().stream()
                     .filter(e -> e instanceof Mercenary)

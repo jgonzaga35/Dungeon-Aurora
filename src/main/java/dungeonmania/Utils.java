@@ -7,16 +7,10 @@ import java.util.Set;
 import dungeonmania.entities.Fighter;
 
 public class Utils {
-    private static Random r = new Random(1); // always start with a seed of 1 for consistency
-
     /**
      * Everything smaller than that is zero
      */
     public static float eps = 0.001f;
-
-    public static void setSeed(long s) {
-        r.setSeed(s);
-    }
 
     /**
      * @pre {@code list.size() > 0}
@@ -43,6 +37,8 @@ public class Utils {
         assert set.size() > 0;
         return set.stream().skip(r.nextInt(set.size())).findFirst().get();
     }
+
+
 
 
 
