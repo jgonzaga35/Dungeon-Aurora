@@ -22,6 +22,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
@@ -153,6 +154,8 @@ public class Dungeon {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
