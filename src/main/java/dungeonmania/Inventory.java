@@ -12,6 +12,7 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
@@ -58,7 +59,8 @@ public class Inventory {
         Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
             .findFirst().orElse(null);
 
-        collectables.remove(coin); 
+        //Remove coin from inventory but not Sun Stone
+        if (!(coin instanceof SunStone)) collectables.remove(coin); 
 
         return coin != null;
     }
