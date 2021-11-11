@@ -641,8 +641,6 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        
-
         // using Sun Stone to open door 2 
         resp = ctr.tick(null, Direction.RIGHT);
         Position p1 = TestUtils.getPlayerPosition(resp);
@@ -700,6 +698,7 @@ public class TestCollectables {
     public void testSunStoneMercenaryBribe() throws IOException {
         DungeonManiaController dc;
         Dungeon dungeon;
+        DungeonResponse resp;
         Player player;
         Mercenary merc;
         String content = FileLoader.loadResourceFile("/dungeons/_sun_stone_merc_test.json");
@@ -761,5 +760,10 @@ public class TestCollectables {
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact(merc.getId());
         });
+
+        resp = dc.tick(null, Direction.NONE);
+
+        // check the Sun Stone is still in inventory after bribe
+        assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("sun_stone")));
     }
 }
