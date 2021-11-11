@@ -6,11 +6,6 @@
       "x": 5,
       "y": 5,
       "type": "player"
-    },
-    {
-      "x": 5,
-      "y": 4,
-      "type": "one_ring"
     }
   ],
   "goal-condition": {
