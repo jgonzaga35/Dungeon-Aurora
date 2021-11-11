@@ -1,16 +1,20 @@
 package dungeonmania;
 
 import java.util.List;
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
+import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.util.FileLoader;
+import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.collectables.SunStone;
 
 import dungeonmania.response.models.DungeonResponse;
@@ -599,7 +603,7 @@ public class TestCollectables {
     }
 
      /** 
-     * TEST: Ensure Bomb is Collected  
+     * TEST: Ensure Sun Stone is Collected & Opens Doors & Is Not Removed  
      */
     
     @Test
@@ -690,5 +694,72 @@ public class TestCollectables {
         assertNotEquals(p10, p11);
         // check the Sun Stone is still in inventory
         assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("sun_stone")));
+    }
+
+    @Test
+    public void testSunStoneMercenaryBribe() throws IOException {
+        DungeonManiaController dc;
+        Dungeon dungeon;
+        Player player;
+        Mercenary merc;
+        String content = FileLoader.loadResourceFile("/dungeons/_sun_stone_merc_test.json");
+        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dc = new DungeonManiaController(dungeon);
+        player = (Player) dungeon.getMap().allEntities().stream()
+            .filter(e -> e instanceof Player)
+            .findFirst().get();
+        merc = (Mercenary) dungeon.getMap().allEntities().stream()
+            .filter(e -> e instanceof Mercenary)
+            .findFirst().get();
+
+        dungeon.getMap().flood();
+        Integer dist = merc.getCell().getPlayerDistance();
+
+        // Try bribing invalid id
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact("invalid");
+        });
+        
+        
+        // Try bribing with no money
+        assertThrows(InvalidActionException.class, () -> {
+            dc.interact(merc.getId());
+        });
+        
+        for (int i = 0; i < 2; i++) {
+            dc.tick(null, Direction.RIGHT);
+            
+            assertTrue(merc.getCell().getPlayerDistance() == dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 5)
+        // Try bribing outside of range
+        assertThrows(InvalidActionException.class, () -> {
+            dc.interact(merc.getId());
+        });
+        
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.UP);
+            assertTrue(merc.getCell().getPlayerDistance() <= dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
+        
+        for (int i = 0; i < 4; i++) {
+            dc.tick(null, Direction.NONE);
+            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
+            assertTrue(merc.getCell().getPlayerDistance() < dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+        // player pos (7, 0)
+        // merc pos (5, 0)
+        // two cardinal squares away, bribe possible
+        
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));    
+        
+        // Try bribing friendly
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact(merc.getId());
+        });
     }
 }
