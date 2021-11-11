@@ -16,6 +16,8 @@ import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.movings.Hydra;
 
+import dungeonmania.entities.collectables.rare.OneRing;
+
 /**
  * Overview:
  *  A battle is a series of "rounds".

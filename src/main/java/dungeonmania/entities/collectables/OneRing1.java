@@ -4,7 +4,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
-public class OneRing extends CollectableEntity {
+public class OneRing1 extends CollectableEntity {
 
     ///////////////////////////////////////////////////////////////
     // TODO: Delete this class. only created for testing assassins.
@@ -12,7 +12,7 @@ public class OneRing extends CollectableEntity {
 
     public static final String STRING_TYPE = "one_ring";
 
-    public OneRing(Dungeon dungeon, Pos2d position) {
+    public OneRing1(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         //TODO Auto-generated constructor stub
     }

@@ -2,7 +2,7 @@ package dungeonmania.entities.movings;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
-import dungeonmania.entities.collectables.OneRing;
+import dungeonmania.entities.collectables.rare.OneRing;
 
 public class Assassin extends Mercenary {
 

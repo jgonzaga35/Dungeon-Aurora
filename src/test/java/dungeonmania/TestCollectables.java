@@ -25,9 +25,14 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 
 
+import java.io.IOException;
+
+
+
+
 
 public class TestCollectables {
-    String content = "";
+    //String content = "";
     /** 
      * testLoadingTreasure()
      * Test that Treasure is Collected and that it Triggers Goals  
@@ -375,22 +380,20 @@ public class TestCollectables {
     }
 
     @Test
-    public void testTheOneRingEffect() {
+    public void testTheOneRingEffect() throws IOException {
         DungeonManiaController dc;
         Dungeon dungeon;
         OneRing oneRing;
         
 
-        assertDoesNotThrow(() -> {
-            content = FileLoader.loadResourceFile("/dungeons/_theOneRingExample.json");
-        });
+        String content = FileLoader.loadResourceFile("/dungeons/_theOneRingExample.json");
         dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
 
         //Placing One Ring in Cell (5, 4)
-        Cell oneRingCell = dungeon.getMap().getCell(5, 4);
+        /*Cell oneRingCell = dungeon.getMap().getCell(5, 4);
         oneRing= new OneRing(dungeon, oneRingCell.getPosition());
-        oneRingCell.addOccupant(oneRing);
+        oneRingCell.addOccupant(oneRing);*/
         
         
         dc = new DungeonManiaController(dungeon);

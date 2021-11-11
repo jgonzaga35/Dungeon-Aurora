@@ -213,6 +213,19 @@ public class Inventory {
     }
 
     /**
+     * Helper Function to see if at least one of the specified item type is in the inventory.
+     * @param string_type The JSON string for the item type to be searched.
+     */
+    public boolean hasItemType(String string_type) {
+        for (CollectableEntity item : this.collectables) {
+            if (string_type.equals(item.getTypeAsString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @usage for example, {@code inventory.itemsOfType(Shield).forEach(shield -> foobar)}
      * @param <T> type
      * @param type type

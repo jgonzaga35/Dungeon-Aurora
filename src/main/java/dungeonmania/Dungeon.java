@@ -6,6 +6,9 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -320,7 +323,7 @@ public class Dungeon {
             if (!pot.isActive()) activePotions.remove(pot);
         });
         dungeonMap.allEntities().stream()
-            .filter(e -> !(e instanceof Potion))
+            .filter(e -> !((e instanceof Potion) || (e instanceof OneRing)))
             .forEach(entity -> entity.tick());
         
         //Dealing With Picking Up or Placing Collectable Entities
@@ -332,6 +335,16 @@ public class Dungeon {
 
         // perform battles
         this.battleStrategies.peek().findAndPerformBattles(this);
+
+        //apply the effects of any One Ring to ensure that if character kills, they respawn
+        List<OneRing> activeOneRings = inventory.itemsOfType(OneRing.class).collect(Collectors.toList());
+        List<OneRing> activeOneRingscpy = new ArrayList<>(activeOneRings);
+        if (activeOneRingscpy != null) {
+            activeOneRingscpy.stream().forEach(oneRing -> {
+                oneRing.tick();
+                if (!oneRing.isActive()) inventory.remove(oneRing);
+            });
+        }
     }
 
     public void build(String buildable) throws InvalidActionException {
