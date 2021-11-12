@@ -38,9 +38,6 @@ public class GenerateMaze {
         this.start = start;
         this.end = end;
 
-        assert this.notOnBoundary(start) : "start is on the boundary";
-        assert this.notOnBoundary(end) : "end is on the boundary";
-
         // full with walls
         rows = new ArrayList<>(dims.getY());
         for (int y = 0; y < dims.getY(); y++) {
@@ -65,11 +62,9 @@ public class GenerateMaze {
     }
 
     private boolean isWall(Pos2d pos) {
-        assert isInMaze(pos);
         return get(pos) == BCell.WALL;
     }
     private boolean isEmpty(Pos2d pos) {
-        assert isInMaze(pos);
         return get(pos) == BCell.EMPTY;
     }
 
@@ -78,7 +73,6 @@ public class GenerateMaze {
     }
 
     private void set(Pos2d pos, BCell v) {
-        assert rows != null;
         rows.get(pos.getY()).set(pos.getX(), v);
     }
 
@@ -108,9 +102,7 @@ public class GenerateMaze {
         
         while (options.size() > 0) {
             Pos2d next = Utils.choose(options, r);
-            boolean removed = options.remove(next);
-            assert removed;
-            assert get(next) == BCell.WALL;
+            options.remove(next);
 
             // connect to existing empty cell
             List<Pos2d> connections = farNeighbours(next)
@@ -118,12 +110,10 @@ public class GenerateMaze {
                     .filter(this::notOnBoundary)
                     .filter(this::isEmpty)
                     .collect(Collectors.toList());
-            assert connections.size() > 0;
             Pos2d connection = Utils.choose(connections, r);
             
             set(next, BCell.EMPTY);
             set(average(next, connection), BCell.EMPTY); // empty out the cell between connection and next
-            assert get(connection) == BCell.EMPTY;
 
             // new neighbours to explore!
             farNeighbours(next)
