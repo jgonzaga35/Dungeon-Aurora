@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Player;
-import dungeonmania.entities.movings.bosses.Hydra;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
