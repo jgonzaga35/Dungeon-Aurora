@@ -322,6 +322,7 @@ public class Dungeon {
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
         
+
         //Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 

@@ -15,12 +15,8 @@ import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
-<<<<<<< HEAD
-=======
-import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
->>>>>>> fcc04204ba0a6a71428fd5a8ca35727941441da7
 
 /**
  * Overview:
