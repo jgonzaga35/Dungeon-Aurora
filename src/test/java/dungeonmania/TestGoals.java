@@ -2,6 +2,7 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -16,7 +17,7 @@ public class TestGoals {
         DungeonManiaController ctr = new DungeonManiaController();
 
         DungeonResponse resp = assertDoesNotThrow(() -> {
-            return ctr.newGame("maze", "Peaceful");
+            return ctr.newGame("maze", GameMode.PEACEFUL.getValue());
         });
 
         assertEquals("get to an exit", resp.getGoals());
@@ -28,7 +29,7 @@ public class TestGoals {
         DungeonManiaController ctr = new DungeonManiaController();
 
         DungeonResponse resp = assertDoesNotThrow(() -> {
-            return ctr.newGame("complex_maze", "Peaceful");
+            return ctr.newGame("complex_maze", GameMode.PEACEFUL.getValue());
         });
 
         assertEquals("destroy all enemies and spawners AND get to an exit", resp.getGoals());

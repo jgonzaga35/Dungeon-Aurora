@@ -38,7 +38,7 @@ public class DungeonManiaController {
     }
 
     public enum GameMode {
-        STANDARD("Standard"), PEACEFUL("Peaceful"), HARD("Hard");
+        STANDARD("standard"), PEACEFUL("peaceful"), HARD("hard");
 
         private final String value;
 
@@ -113,11 +113,11 @@ public class DungeonManiaController {
      * @throws IllegalArgumentException
      */
     private GameMode parseGameMode(String gameMode) throws IllegalArgumentException {
-        if (Objects.equals(gameMode, "Standard"))
+        if (Objects.equals(gameMode, GameMode.STANDARD.getValue()))
             return GameMode.STANDARD;
-        if (Objects.equals(gameMode, "Hard"))
+        if (Objects.equals(gameMode, GameMode.HARD.getValue()))
             return GameMode.HARD;
-        if (Objects.equals(gameMode, "Peaceful"))
+        if (Objects.equals(gameMode, GameMode.PEACEFUL.getValue()))
             return GameMode.PEACEFUL;
         throw new IllegalArgumentException(String.format("Game mode %s is invalid", gameMode));
     }

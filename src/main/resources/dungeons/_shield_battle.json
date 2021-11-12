@@ -6,7 +6,7 @@
         {"type": "wood", "x": 1, "y": 0},
         {"type": "wood", "x": 2, "y": 0},
         {"type": "treasure", "x": 3, "y": 0},
-        {"type": "zombie toast spawner", "x": 5, "y": 0}
+        {"type": "zombie_toast_spawner", "x": 5, "y": 0}
     ],
     "goal-condition": {
         "goal": "exit"

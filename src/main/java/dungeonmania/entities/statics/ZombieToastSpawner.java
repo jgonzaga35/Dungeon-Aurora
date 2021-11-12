@@ -18,7 +18,7 @@ import dungeonmania.util.Semy.Observer;
 
 public class ZombieToastSpawner extends StaticEntity {
 
-    public static String STRING_TYPE = "zombie toast spawner";
+    public static String STRING_TYPE = "zombie_toast_spawner";
     private int tickCount = 0;
 
     private Semy<ZombieToast> onZombieSpawnSemy = new Semy<>();

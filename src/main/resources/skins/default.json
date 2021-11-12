@@ -32,9 +32,8 @@
         "door": "images/tileset/walls/wooden/door_locked_silver.png",
         "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png",
         "key": "images/tileset/items/key_silver.png",
-        "zombie": "images/tileset/entities/zombie_00.png",
-        "zombie toast spawner": "images/tileset/entities/zombie_spawner.png",
-        "floor switch": "images/tileset/entities/floor_switch.png",
+        "zombie_toast": "images/tileset/entities/zombie_00.png",
+        "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png",
         "portal": "images/tileset/entities/portal_00.png"
     }
 }
