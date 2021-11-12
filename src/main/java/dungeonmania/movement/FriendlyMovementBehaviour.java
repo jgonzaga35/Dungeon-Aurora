@@ -1,6 +1,7 @@
 package dungeonmania.movement;
 
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
@@ -20,15 +21,17 @@ public class FriendlyMovementBehaviour extends MovementBehaviour {
         Cell nextCell;
         if (currentCell.getPlayerDistance() == 1) return currentCell;
 
-        Stream<Cell> neighbors = map.getNeighbors(currentCell).stream();
-        if (neighbors.anyMatch(c -> c.getPlayerDistance() == 1)) {
+        List<Cell> neighbours = map.getNeighbors(currentCell).stream()
+            .filter(c -> !c.isBlocking()).collect(Collectors.toList());
+
+        if (neighbours.stream().anyMatch(c -> c.getPlayerDistance() == 1)) {
             // Stay one away if possible.
-            nextCell = map.getNeighbors(currentCell).stream()
+            nextCell = neighbours.stream()
                 .filter(c -> c.getPlayerDistance() == 1)
                 .findAny().get();
         } else {
             // else get as close as possible
-            nextCell = map.getNeighbors(currentCell).stream().min(
+            nextCell = neighbours.stream().min(
                     (c1, c2) -> 
                     Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
                 ).get();

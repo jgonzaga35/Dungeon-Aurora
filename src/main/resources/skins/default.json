@@ -24,15 +24,22 @@
         "exit": "images/tileset/entities/stairs_down.png",
         "treasure": "images/tileset/items/treasure_0.png",
         "wall": "images/tileset/walls/wooden/wood_bottom.png",
+        "swamp_tile": "images/tileset/misc/swamp_tile.png",
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
+<<<<<<< HEAD
         "anduril": "images/tileset/items/anduril.png",
+=======
+        "invisibility_potion": "images/tileset/items/potion_2.png",
+        "armour": "images/tileset/items/armour.png",
+>>>>>>> fcc04204ba0a6a71428fd5a8ca35727941441da7
         "sword": "images/tileset/items/sword_silver.png",
         "door": "images/tileset/walls/wooden/door_locked_silver.png",
         "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png",
         "key": "images/tileset/items/key_silver.png",
+        "assassin": "images/tileset/entities/assassin.png",
         "zombie": "images/tileset/entities/zombie_00.png",
         "zombie toast spawner": "images/tileset/entities/zombie_spawner.png",
         "portal": "images/tileset/entities/portal_00.png",

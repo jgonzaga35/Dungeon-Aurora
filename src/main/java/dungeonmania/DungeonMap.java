@@ -30,11 +30,16 @@ public class DungeonMap {
     private List<List<Cell>> dungeonMap = new ArrayList<>();
     private int width;
     private int height;
+
+    private Pos2d entry = null;
     
-    DungeonMap(JSONObject json) {
-        this.width = json.getInt("width");
-        this.height = json.getInt("height");
-        
+    public DungeonMap(JSONObject json) {
+        this(json.getInt("width"), json.getInt("height"));
+    }
+
+    public DungeonMap(int width, int height) {
+        this.width = width;
+        this.height = height;
         // a grid of empty cells
         for (int y = 0; y < height; y++) {
             ArrayList<Cell> row = new ArrayList<>();
@@ -142,9 +147,7 @@ public class DungeonMap {
     }
     
     public Cell getCell(Pos2d pos) {
-        if (pos.getX() >= width || pos.getX() < 0) return null;
-        if (pos.getY() >= height || pos.getY() < 0) return null;
-        return dungeonMap.get(pos.getY()).get(pos.getX());
+        return this.getCell(pos.getX(), pos.getY());
     }
 
     public List<Entity> allEntities() {
@@ -158,6 +161,9 @@ public class DungeonMap {
     }
 
     public Cell getCell(int x, int y) {
+        if (y < 0 || y >= height) return null;
+        if (x < 0 || x >= width) return null;
+
         return dungeonMap.get(y).get(x);
     }
 
@@ -309,19 +315,44 @@ public class DungeonMap {
                     result += PLAYER;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Wall)) {
                     result += WALL;
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
+                    result += " EM";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
+                    result += " ES";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
+                    result += " EZ";
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof MovingEntity)) {
                     result += ENEMY;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    int num = cell.getPlayerDistance();
-                    if (num < 10) result += " " + num + " ";
-                    else result += " " + num;
+                    result += "   ";
+                    // int num = cell.getPlayerDistance();
+                    // if (num < 10) result += " " + num + " ";
+                    // else result += " " + num;
                 }
             }
             result += "\n";
         }
 
         return result;
+    }
+
+    /**
+     * Should only be called once, during construction
+     * @param pos the entry position (see .getEntry())
+     */
+    public void setEntry(Pos2d pos) {
+        assert this.entry == null : "set entry should only be called once, during construction";
+        this.entry = pos;
+    }
+
+    /**
+     * the entry of the map is where the player spawns (and the cell on which
+     * mercenaries later spawn)
+     * @return readonly entry position
+     */
+    public Pos2d getEntry() {
+        return this.entry;
     }
 }

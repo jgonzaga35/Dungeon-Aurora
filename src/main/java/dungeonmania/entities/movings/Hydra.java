@@ -1,4 +1,4 @@
-package dungeonmania.entities.movings.bosses;
+package dungeonmania.entities.movings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,10 @@ import dungeonmania.Utils;
 import dungeonmania.movement.RandomMovementBehaviour;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
-import dungeonmania.entities.movings.Boss;
+import dungeonmania.entities.MovingEntity;
 
-public class Hydra extends Boss {
+
+public class Hydra extends MovingEntity implements Fighter {
     
     public static final String STRING_TYPE = "hydra";
     public static final int SPAWN_EVERY_N_TICKS = 50;
@@ -25,7 +26,7 @@ public class Hydra extends Boss {
         super(dungeon, position);
 
         // Hydras are limited by the same movement constraints as Zombie Toasts
-        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon.getMap(), dungeon.getMap().getCell(position)));
+        this.addMovementBehaviour(new RandomMovementBehaviour(4, dungeon, dungeon.getMap().getCell(position)));
     }
 
     /**
@@ -66,7 +67,7 @@ public class Hydra extends Boss {
         }
 
         // choose a random cell
-        Cell cell = Utils.choose(availableCells);
+        Cell cell = Utils.choose(availableCells, dungeon.getRandom());
         return cell;
     }
 
@@ -93,7 +94,7 @@ public class Hydra extends Boss {
     public void setHealth(float h) {
 
         float damageReceived = this.health - h; 
-        Random random = new Random();
+        Random random = this.dungeon.getRandom();
         int x = random.nextInt(2);
     
         // if not crippled by Anduril, hydra has 50% chance of gaining health

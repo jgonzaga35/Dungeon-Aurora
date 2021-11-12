@@ -6,6 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.movings.Spider;
+import dungeonmania.entities.movings.ZombieToast;
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.response.models.DungeonResponse;
@@ -20,6 +25,40 @@ public class TestUtils {
             }
         }
         throw new Error("player wasn't found");
+    }
+
+    public static Mercenary spawnMercenary(Dungeon dungeon, int x, int y) {
+        Cell mercCell = dungeon.getMap().getCell(x, y);
+        Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+
+        return merc;
+    }
+
+    public static Spider spawnSpider(Dungeon dungeon, int x, int y) {
+        Cell spiderCell = dungeon.getMap().getCell(x, y);
+        Spider spider = new Spider(dungeon, spiderCell.getPosition());
+        spiderCell.addOccupant(spider);
+
+        return spider;
+    }
+
+    public static Mercenary getMercenary(Dungeon dungeon) {
+        return (Mercenary) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof Mercenary)
+        .findFirst().orElse(null);
+    }
+
+    public static Player getPlayer(Dungeon dungeon) {
+        return (Player) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof Player)
+        .findFirst().orElse(null);
+    }
+
+    public static ZombieToast getZombieToast(Dungeon dungeon) {
+        return (ZombieToast) dungeon.getMap().allEntities().stream()
+        .filter(e -> e instanceof ZombieToast)
+        .findFirst().orElse(null);
     }
 
     /**
@@ -41,5 +80,27 @@ public class TestUtils {
 
     public static long countEntitiesOfType(DungeonResponse resp, String type) {
         return resp.getEntities().stream().filter(e -> Objects.equals(e.getType(), type)).count();
+    }
+    
+    /**
+     * puts boulders all around the position so that the damn thing can't move
+     * and it makes testing easier
+     * 
+     * Can only be used in white box testing
+     * 
+     * @param map
+     * @param center position that is going to be locked
+     */
+    public static void lockWithBoulders(Dungeon dungeon, Pos2d center) {
+        DungeonMap map = dungeon.getMap();
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+
+                Pos2d curr = center.plus(new Pos2d(dx, dy));
+
+                map.getCell(curr).addOccupant(new Boulder(dungeon, curr));
+            }
+        }
     }
 }

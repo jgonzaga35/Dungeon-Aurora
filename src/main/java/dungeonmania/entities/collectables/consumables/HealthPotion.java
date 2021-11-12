@@ -14,16 +14,7 @@ public class HealthPotion extends Potion {
     }
 
     @Override
-    public void drink() {
-        Player player = (Player) dungeon.getMap()
-            .allEntities().stream()
-            .filter(e -> e instanceof Player).findFirst().get();
-        
-        player.setHealth(10);
-    }
-
-    @Override
-    public void applyEffects() {
+    public void applyEffectsEveryTick() {
         // No lasting effects
         
     }
@@ -36,8 +27,16 @@ public class HealthPotion extends Potion {
 
     @Override
     public String getTypeAsString() {
-        // TODO Auto-generated method stub
         return HealthPotion.STRING_TYPE;
+    }
+
+    @Override
+    public void onDrink() {
+        Player player = (Player) dungeon.getMap()
+            .allEntities().stream()
+            .filter(e -> e instanceof Player).findFirst().get();
+        
+        player.setHealth(10);
     }
     
 }

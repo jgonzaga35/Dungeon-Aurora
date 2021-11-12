@@ -42,7 +42,7 @@ public abstract class MovementBehaviour {
     /**
      * Moves to the next position.
      * 
-     * @return the next Cell that the entity should move to.
+     * @return the next Cell that the entity has moved to.
      */
     public abstract Cell move();
 

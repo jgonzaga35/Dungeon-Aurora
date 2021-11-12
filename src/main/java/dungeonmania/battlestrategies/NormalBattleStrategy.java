@@ -11,9 +11,16 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
+<<<<<<< HEAD
+=======
+import dungeonmania.entities.movings.Hydra;
+import dungeonmania.entities.movings.Mercenary;
+import dungeonmania.entities.movings.Player;
+>>>>>>> fcc04204ba0a6a71428fd5a8ca35727941441da7
 
 /**
  * Overview:
@@ -37,16 +44,18 @@ public class NormalBattleStrategy implements BattleStrategy {
     public void findAndPerformBattles(Dungeon dungeon) {
         DungeonMap map = dungeon.getMap();
 
-        // buffer (to not allocate a list every time. I like useless optimisations)
-        List<Fighter> allies = new ArrayList<>();
-        List<Fighter> enemies = new ArrayList<>();
-        Set<Fighter> deaths = new HashSet<>();
 
         // this is important to form duels in a reproducible way (see
         // performRound for more details). Sort by health, attack damage and
         // then id (id last because it's the one that might change the most
         // randomly).
         Comparator<Fighter> sort = (a, b) -> {
+            // player should be last
+            if (a instanceof Player) {
+                return 1;
+            } else if (b instanceof Player) {
+                return -1;
+            }
             int v;
             v = Utils.compareFloat(a.getHealth() - b.getHealth());
             if (v != 0) return v;
@@ -57,35 +66,28 @@ public class NormalBattleStrategy implements BattleStrategy {
             return v;
         };
 
-        for (int y = 0; y < map.getHeight(); y++) {
-            for (int x = 0; x < map.getWidth(); x++) {
-                allies.clear();
-                enemies.clear();
-                deaths.clear();
+        Cell cell = map.getCell(dungeon.getPlayerPosition());
 
-                this.prepareBattle(map.getCell(x, y), allies, enemies);
+        List<Fighter> allies = new ArrayList<>();
+        List<Fighter> enemies = new ArrayList<>();
 
-                // no one's going the fight on that cell
-                if (allies.size() == 0 || enemies.size() == 0) continue;
+        this.prepareBattle(dungeon, cell, allies, enemies);
+        assert allies.size() >= 1;
 
-                Collections.sort(allies, sort);
-                Collections.sort(enemies, sort);
+        Collections.sort(allies, sort);
+        Collections.sort(enemies, sort);
 
-                this.performBattle(
-                    allies,
-                    enemies,
-                    deaths
-                );
+        if (enemies.size() == 0) return; // there is no one to fight
 
-                for (Fighter dead: deaths) {
-                    // TODO: check if dead is player. This should be weird
-                    Entity e = dead.getEntity();
-                    
-                    boolean result = map.getCell(e.getPosition()).removeOccupant(e);
-                    if (result == false) {
-                        throw new Error("couldn't remove dead entity");
-                    }
-                }
+        Set<Fighter> deaths = this.performBattle(allies, enemies);
+
+        for (Fighter dead: deaths) {
+            // TODO: check if dead is player. This should be weird
+            Entity e = dead.getEntity();
+            
+            boolean result = map.getCell(e.getPosition()).removeOccupant(e);
+            if (result == false) {
+                throw new Error("couldn't remove dead entity");
             }
         }
     }
@@ -93,11 +95,15 @@ public class NormalBattleStrategy implements BattleStrategy {
     /**
      * Populates the allies and enemies list with the appropriate fighters
      * (based on FighterRelation)
+     * 
      * @param cell
-     * @param allies
-     * @param enemies
+     * @param allies (written)
+     * @param enemies (written)
      */
-    private void prepareBattle(Cell cell, List<Fighter> allies, List<Fighter> enemies) {
+    private void prepareBattle(Dungeon dungeon, Cell cell, List<Fighter> allies, List<Fighter> enemies) {
+        DungeonMap map = dungeon.getMap();
+
+        // add all the allies and the enemies on the current cell
         for (Entity entity : cell.getOccupants()) {
             if (entity instanceof Fighter) {
                 Fighter fighter = (Fighter) entity;
@@ -106,6 +112,24 @@ public class NormalBattleStrategy implements BattleStrategy {
                 } else {
                     enemies.add(fighter);
                 }
+            }
+        }
+
+        // add all the mercenary allies from other cells
+        Pos2d pos = cell.getPosition();
+        // check all the cells around for mercenaries
+        for (int y = -Mercenary.BATTLE_RADIUS; y <= Mercenary.BATTLE_RADIUS; y++) {
+            for (int x = -Mercenary.BATTLE_RADIUS; x <= Mercenary.BATTLE_RADIUS; x++) {
+                // battle radius is a circle, if you're not completely in the circle, you're skiped
+                if (x * x + y * y > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS) continue;
+                Cell c = map.getCell(x + pos.getX(), y + pos.getY());
+                if (c == null) continue; // coordinate is outside the map
+
+                c.getOccupants().stream()
+                    .filter(e -> e instanceof Mercenary)
+                    .map(e -> (Mercenary) e)
+                    .filter(m -> m.getFighterRelation() == FighterRelation.ALLY)
+                    .forEach(allies::add);
             }
         }
     }
@@ -119,18 +143,20 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @pre deaths.size() == 0
      * @param allies
      * @param enemies
-     * @param deaths
+     * @return deaths
      */
-    private void performBattle(List<Fighter> allies, List<Fighter> enemies, Set<Fighter> deaths) {
+    private Set<Fighter> performBattle(List<Fighter> allies, List<Fighter> enemies) {
         assert allies.size() > 0;
         assert enemies.size() > 0;
-        assert deaths.size() == 0;
+
+        Set<Fighter> deaths = new HashSet<>();
 
         // fight until death!
         while (allies.size() > 0 && enemies.size() > 0) {
             this.performRound(allies, enemies, deaths);
         }
 
+        return deaths;
     }
 
     /**

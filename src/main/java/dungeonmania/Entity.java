@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.stream.Stream;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.Fighter;
 import dungeonmania.util.Direction;
 
 public abstract class Entity {
@@ -36,6 +37,15 @@ public abstract class Entity {
         return position;
     }
 
+    public void setPosition(int XCoord, int YCoord) {
+        this.position.setX(XCoord);
+        this.position.setY(YCoord);
+    }
+
+    /*public void updatePosition(int XCoord, int YCoord) {
+        setPosition(XCoord, YCoord);
+        return;
+    }*/
     public Cell inspectCell(Direction d) {
         return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
     }
@@ -58,7 +68,11 @@ public abstract class Entity {
     @Override
     public String toString()
     {
-        return getTypeAsString();
+        if (this instanceof Fighter) {
+            Fighter f = (Fighter) this;
+            return String.format("%s[pos=%s health=%f]", getTypeAsString(), getPosition(), f.getHealth());
+        }
+        return String.format("%s[pos=%s]", getTypeAsString(), getPosition());
     }
 
     public abstract boolean isInteractable();

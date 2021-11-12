@@ -58,7 +58,7 @@ public class TestSpider {
         DungeonResponse resp = ctr.newGame("_simple", GameMode.PEACEFUL.getValue());
         ctr.setSeed(1);
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < Spider.SPAWN_EVERY_N_TICKS; i++)
             resp = ctr.tick(null, Direction.NONE);
         assertTrue(resp.getEntities().stream().anyMatch(x -> x.getType().equals(Spider.STRING_TYPE)));
 

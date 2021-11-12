@@ -64,7 +64,7 @@ public class ZombieToastSpawner extends StaticEntity {
             return; // don't spawn anything
 
         // choose a random cell
-        Cell cell = Utils.choose(availableCells);
+        Cell cell = Utils.choose(availableCells, this.dungeon.getRandom());
         ZombieToast zombieToast = new ZombieToast(this.dungeon, cell.getPosition());
         cell.addOccupant(zombieToast);
         cell.onWalked(this.position, cell.getPosition());

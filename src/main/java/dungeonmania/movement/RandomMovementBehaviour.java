@@ -4,25 +4,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.Cell;
-import dungeonmania.DungeonMap;
+import dungeonmania.Dungeon;
 import dungeonmania.Utils;
 
 public class RandomMovementBehaviour extends MovementBehaviour {
-    private DungeonMap map;
+    private Dungeon dungeon;
 
-    public RandomMovementBehaviour(int precedence, DungeonMap map, Cell initialCell)
+    public RandomMovementBehaviour(int precedence, Dungeon dungeon, Cell initialCell)
     {
         super(precedence, initialCell);
-        this.map = map;
+        this.dungeon = dungeon;
     }
 
     public Cell move() {
         Cell nextCell;
-        List<Cell> availableCells = this.map.getCellsAround(getCurrentCell())
+        List<Cell> availableCells = this.dungeon.getMap().getCellsAround(getCurrentCell())
             .filter(cell -> !cell.isBlocking())
             .collect(Collectors.toList());
-            nextCell = Utils.choose(availableCells);
-            setCurrentCell(nextCell);
+
+        if (availableCells.size() == 0) {
+            return getCurrentCell();
+        }
+
+        nextCell = Utils.choose(availableCells, this.dungeon.getRandom());
+        setCurrentCell(nextCell);
 
         return nextCell;
     }
