@@ -144,21 +144,4 @@ public class GenerateMaze {
 
         return rows;
     }
-
-    @Override
-    public String toString() {
-        String s = "";
-        for (int y = 0; y < dims.getY(); y++) {
-            s += y + ":";
-            for (int x = 0; x < dims.getX(); x++) {
-                if (rows.get(y).get(x) == BCell.EMPTY) {
-                    s += " ";
-                } else {
-                    s += "#";
-                }
-            }
-            s += "\n";
-        }
-        return s;
-    }
 }
