@@ -362,21 +362,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
-            if (!Shield.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
-            if (!Bow.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Sceptre.STRING_TYPE)) {
-            if (!Sceptre.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else {
-            throw new IllegalArgumentException("unknown buildable: " + buildable);
-        }
+        this.inventory.build(buildable);
     }
 
     public String getId() {

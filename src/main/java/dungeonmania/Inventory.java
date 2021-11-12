@@ -69,6 +69,40 @@ public class Inventory {
         return true;
     }
 
+    public void build(String buildable) throws InvalidActionException {
+        List<CollectableEntity> items;
+        switch (buildable) {
+            case "shield":
+                items = buildable(Shield.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Shield(null, null));
+                return;
+            case "sceptre":
+                items = buildable(Sceptre.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Sceptre(null, null));
+                return;
+            case "bow":
+                items = buildable(Bow.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Bow(null, null));
+                return;
+            default:
+                throw new IllegalArgumentException("unknown buildable: " + buildable);
+        }
+    }
+
+    public List<CollectableEntity> buildable(List<List<String>> recipes) {
+        for (List<String> recipe : recipes) {
+            List<CollectableEntity> items = findItems(recipe);
+            if (items != null) return items;
+        }
+        return null;
+    }
+
     /**
      * 
      * @return true if the inventory contains a sceptre
@@ -82,9 +116,9 @@ public class Inventory {
 
     public List<String> getBuildables() {
         List<String> buildables = new ArrayList<>();
-        if (Bow.craftable(this)) buildables.add(Bow.STRING_TYPE);
-        if (Sceptre.craftable(this)) buildables.add(Sceptre.STRING_TYPE);
-        if (Shield.craftable(this)) buildables.add(Shield.STRING_TYPE);
+        if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
+        if (buildable(Sceptre.RECIPES) != null) buildables.add(Sceptre.STRING_TYPE);
+        if (buildable(Shield.RECIPES) != null) buildables.add(Shield.STRING_TYPE);
 
         return buildables;
     }
@@ -113,7 +147,6 @@ public class Inventory {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
         }
-        
 
         collectables.remove(itemUsed);
         
@@ -122,7 +155,7 @@ public class Inventory {
 
     /**
      * finds the items from the inventory
-     * @param entities
+     * @param itemsStringType list of String
      * @return null if inventory does not contain all the items, else return the list of items
      */
     public List<CollectableEntity> findItems(List<String> itemsStringType) {
@@ -137,21 +170,6 @@ public class Inventory {
             else found.add(itemOpt.get());
         }
         return found;
-    }
-
-    /**
-     * if all the entities (items) are in the inventory, it uses them all
-     * (removes from the inventory). Otherwise it just returns false;
-     * @param entities
-     * @return true if all the items were in the inventory, and they were
-     * succesfully removed
-     */
-    public boolean useItems(List<String> itemsStringType) {
-        List<CollectableEntity> items = findItems(itemsStringType);
-        if (items != null) {
-            this.collectables.removeAll(items);
-            return true;
-        } else return false;
     }
 
     /**
@@ -252,7 +270,6 @@ public class Inventory {
         }
         return outputListItemResponses;
     }
-    
 
     public List<CollectableEntity> getCollectables() {
         return this.collectables;
