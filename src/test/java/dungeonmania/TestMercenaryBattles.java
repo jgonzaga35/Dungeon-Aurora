@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ public class TestMercenaryBattles {
     @Test
     public void testAllyMercenaryInRange() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
@@ -53,7 +54,7 @@ public class TestMercenaryBattles {
     @Test
     public void testAllyMercenaryOutOfRange() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
@@ -88,7 +89,7 @@ public class TestMercenaryBattles {
     @Test
     public void testEnemyMercenaryInRange() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
@@ -121,7 +122,7 @@ public class TestMercenaryBattles {
     @Test
     public void testMultipleAllyMercenariesInRange() {
         DungeonMap map = new DungeonMap(10, 10);
-        Dungeon dungeon = new Dungeon("manual", GameMode.STANDARD, map, new ExitGoal());
+        Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
