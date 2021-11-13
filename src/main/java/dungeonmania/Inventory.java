@@ -54,15 +54,20 @@ public class Inventory {
     public boolean pay(List<Class<? extends CollectableEntity>> cost) {
         List<CollectableEntity> price = new ArrayList<>();
 
+        System.out.println("Cost check 2");
         cost.stream().forEach(t -> {
             CollectableEntity item = (CollectableEntity) collectables.stream()
-                .filter(c -> c.getClass().equals(t))
+                .filter(c -> t.isInstance(c))
                 .findFirst().orElse(null);
+            System.out.println("Cost Check");
+            System.out.println("Cost:");
+            System.out.println(t);
+            System.out.println("Item Added to Price:");
             System.out.println(item);
             price.add(item);
         });
         
-        //.filter(t.getClass()::isInstance)
+        //.filter(c -> t.isInstance(c))
         //.filter(c -> c.getClass().equals(t))
 
         if (price.stream().anyMatch(i -> i == null)) return false;
