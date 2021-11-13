@@ -249,7 +249,7 @@ public class DungeonMap {
                     .stream().map(v -> v.getData()).collect(Collectors.toList());
             }
 
-            getNeighbors(current).stream().forEach(n -> {
+            getNeighbors(current).stream().filter(n -> !n.isBlocking()).forEach(n -> {
                 Integer newCost = visited.get(current) + n.getTravelCost() + 1;
                 if (visited.keySet().contains(n)) {
                     // resolve duplicate
