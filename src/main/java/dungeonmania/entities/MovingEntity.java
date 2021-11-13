@@ -73,7 +73,7 @@ public abstract class MovingEntity extends Entity {
                 this.addMovementBehaviour(new WaitMovementBehaviour(
                     25, 
                     this.getCell(), 
-                    this.getCell().getSwamp().getMovementFactor()
+                    this.getCell().getTravelCost() - 1
                 ));
             }
         }

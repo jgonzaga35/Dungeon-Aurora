@@ -31,9 +31,8 @@ public class Cell {
     }
 
     public Integer getTravelCost() {
-        Integer cost = 1;
-        if (getSwamp() != null) cost += getSwamp().getMovementFactor();
-        return cost;
+        if (getSwamp() != null) return getSwamp().getMovementFactor();
+        return 1;
     }
 
     public void setPlayerDistance(Integer playerDistance) {

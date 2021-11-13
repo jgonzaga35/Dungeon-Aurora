@@ -4,14 +4,14 @@
     "entities": [
         { "x": 0, "y": 0, "type": "player" },
         { "x": 8, "y": 8, "type": "assassin" },
-        { "x": 1, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 2, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 3, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 4, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 5, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 6, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 7, "y": 7, "type": "swamp_tile", "movement_factor": 1 },
-        { "x": 8, "y": 7, "type": "swamp_tile", "movement_factor": 1 }
+        { "x": 1, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 2, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 3, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 4, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 5, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 6, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 7, "y": 7, "type": "swamp_tile", "movement_factor": 2 },
+        { "x": 8, "y": 7, "type": "swamp_tile", "movement_factor": 2 }
     ],
     "goal-condition": {
         "goal": "exit"
