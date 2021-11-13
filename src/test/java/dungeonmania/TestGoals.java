@@ -18,7 +18,7 @@ public class TestGoals {
         DungeonManiaController ctr = new DungeonManiaController();
 
         DungeonResponse resp = assertDoesNotThrow(() -> {
-            return ctr.newGame("maze", "Peaceful");
+            return ctr.newGame("maze", "peaceful");
         });
 
         assertEquals("get to an exit", resp.getGoals());
@@ -30,7 +30,7 @@ public class TestGoals {
         DungeonManiaController ctr = new DungeonManiaController();
 
         DungeonResponse resp = assertDoesNotThrow(() -> {
-            return ctr.newGame("complex_maze", "Peaceful");
+            return ctr.newGame("complex_maze", "peaceful");
         });
 
         assertEquals("destroy all enemies and spawners AND get to an exit", resp.getGoals());
