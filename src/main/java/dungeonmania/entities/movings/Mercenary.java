@@ -93,7 +93,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamage(Fighter target) {
         return 1;
     }
 
@@ -120,5 +120,10 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public boolean isInteractable() {
         return relationship == FighterRelation.ENEMY;
+    }
+
+    @Override
+    public boolean isBoss() {
+        return false;
     }
 }

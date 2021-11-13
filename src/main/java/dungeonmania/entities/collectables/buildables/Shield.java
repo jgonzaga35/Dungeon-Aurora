@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Dungeon;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.Fighter;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.BuildableEntity;
@@ -78,7 +79,7 @@ public class Shield extends BuildableEntity implements BattleItem {
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 0;
     }
     
