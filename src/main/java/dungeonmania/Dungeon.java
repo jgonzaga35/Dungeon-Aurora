@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.GenerateMaze.BCell;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
@@ -20,6 +21,7 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
@@ -45,8 +47,8 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
@@ -73,15 +75,17 @@ public class Dungeon {
     /**
      * make sure to seed before each test
      */
-    private Random r = new Random(1);
+    private Random r;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
+    public Dungeon(Random r, String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
         this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
+
+        this.r = r;
 
         this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> b.getPrecedence() - a.getPrecedence());
         if (mode == GameMode.PEACEFUL) {
@@ -105,13 +109,13 @@ public class Dungeon {
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
-    public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
+    public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
         
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goal);
+        Dungeon dungeon = new Dungeon(r, name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -202,6 +206,30 @@ public class Dungeon {
 
         dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
             .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
+
+        return dungeon;
+    }
+    
+    public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
+
+        Pos2d dims = new Pos2d(50, 50);
+        List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
+
+        DungeonMap map = new DungeonMap(dims.getX(), dims.getY());
+        Dungeon dungeon = new Dungeon(r, "generated", mode, map, new ExitGoal());
+
+        Player player = new Player(dungeon, start);
+        map.getCell(start).addOccupant(player);
+        map.getCell(end).addOccupant(new Exit(dungeon, end));
+        dungeon.setPlayer(player);
+
+        for (int y = 0; y < dims.getY(); y++) {
+            for (int x = 0; x < dims.getX(); x++) {
+                if (maze.get(y).get(x) == BCell.WALL) {
+                    map.getCell(x, y).addOccupant(new Wall(dungeon, new Pos2d(x, y)));
+                }
+            }
+        }
 
         return dungeon;
     }

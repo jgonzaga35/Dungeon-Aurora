@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ public class TestSwamp {
     public void setStartingPosition() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_test_swamp_blank.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = TestUtils.getPlayer(dungeon);
 
@@ -107,7 +108,7 @@ public class TestSwamp {
     @Test
     public void testZombieSpawnInSwamp() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_test_swamp_zombie.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
 
         ZombieToast zom = TestUtils.getZombieToast(dungeon);
@@ -122,7 +123,7 @@ public class TestSwamp {
     @Test
     public void testStuckAfterBribe() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_test_swamp.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         
         Mercenary merc =  TestUtils.getMercenary(dungeon);

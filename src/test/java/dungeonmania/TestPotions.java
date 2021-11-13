@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ public class TestPotions {
     @BeforeEach
     public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_test_potions.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
 
         Cell invincibleCell = dungeon.getMap().getCell(5, 4);
@@ -268,7 +269,7 @@ public class TestPotions {
     @Test
     public void testInvisibilityNoBattles() throws IOException{
         String content = FileLoader.loadResourceFile("/dungeons/_force_battle.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
         
         Cell invisibleCell = dungeon.getMap().getCell(0, 1);

@@ -43,7 +43,7 @@ public class Portal extends StaticEntity {
 
     @Override
     public String getTypeAsString() {
-        return Portal.STRING_TYPE;
+        return Portal.STRING_TYPE + "_" + colour;
     }
 
     @Override
