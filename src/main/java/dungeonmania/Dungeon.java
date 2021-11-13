@@ -16,6 +16,7 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
@@ -146,6 +147,8 @@ public class Dungeon {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
                 cell.addOccupant(new Wood(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Anduril.STRING_TYPE)) {
+                cell.addOccupant(new Anduril(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Sword.STRING_TYPE)) {
                 cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
@@ -347,6 +350,7 @@ public class Dungeon {
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
         
+
         //Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 

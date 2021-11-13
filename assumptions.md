@@ -47,6 +47,15 @@
 
 ## Hydras
 - Hydras can't spawn on blocking cells or on the player.
+- Hydras have 20 health points.
+- Hydras health has a 50% chance of increasing instead of decreasing
+by the attack damage amount when attacked
+
+## Anduril
+- Anduril has an initial durability of 20
+- Anduril has base damage of 7
+- Anduril causes Hydra to lose health when it is attacked and
+removes the possibility of regaining health
 
 ## Bombs
 - Blast radius is set to 2
