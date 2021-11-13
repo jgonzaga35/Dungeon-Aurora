@@ -67,7 +67,7 @@ public class TestAssassin {
         }
         // player pos (7, 0)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             resp = dc.tick(null, Direction.NONE);
             assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
@@ -109,7 +109,7 @@ public class TestAssassin {
         }
         // player pos (7, 0) pick up ring
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
@@ -188,13 +188,6 @@ public class TestAssassin {
         for (int i = 0; i < 4; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(assassin.getCell().getPlayerDistance() <= dist);
-            dist = assassin.getCell().getPlayerDistance();
-        }
-        // player pos (7, 1)
-        
-        for (int i = 0; i < 4; i++) {
-            dc.tick(null, Direction.NONE);
-            assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
         }
         // player pos (7, 1)

@@ -30,6 +30,11 @@ public class Cell {
         return this.playerDistance;
     }
 
+    public Integer getTravelCost() {
+        if (getSwamp() != null) return getSwamp().getMovementFactor();
+        return 1;
+    }
+
     public void setPlayerDistance(Integer playerDistance) {
         this.playerDistance = playerDistance;
     }
@@ -156,5 +161,11 @@ public class Cell {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String str = "[pos: " + position.toString() + ", Tcost: " + getTravelCost() + "]";
+        return str;
     }
 }
