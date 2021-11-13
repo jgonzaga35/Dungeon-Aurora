@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Graph",
+            "request": "launch",
+            "mainClass": "dungeonmania.util.Graph",
+            "projectName": "project"
+        },
+        {
+            "type": "java",
             "name": "Launch DungeonManiaController",
             "request": "launch",
             "mainClass": "dungeonmania.DungeonManiaController",
