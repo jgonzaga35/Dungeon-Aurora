@@ -65,6 +65,7 @@ public class Graph<T> {
         Vertex<T> cur = start;
         while (cur.getDistance() != 0) {
             path.add(cur);
+            // make a copy of cur to avoid concurrent modification
             Vertex<T> curCopy = new Vertex<T>(cur.getData(), cur.getDistance());
             cur = adjacencyList.keySet().stream().filter(v -> adjacencyList.get(v).contains(curCopy)).findFirst().get();
         }
