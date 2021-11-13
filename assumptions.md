@@ -31,6 +31,7 @@
   that circle.
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
+- When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
