@@ -171,7 +171,8 @@ public class Inventory {
         for (String itemStringType : itemsStringType) {
             Optional<CollectableEntity> itemOpt = this.collectables.stream()
                 // find an item of the right type that isn't already used
-                .filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
+                .filter(item -> ((item.getTypeAsString().equals(itemStringType) || 
+                (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) && !found.contains(item))
                 .findFirst();
 
             if (itemOpt.isEmpty()) return null;
@@ -179,7 +180,7 @@ public class Inventory {
         }
         return found;
     }
-
+    //.filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
     /**
      * decreases the items' durability
      * @param d
