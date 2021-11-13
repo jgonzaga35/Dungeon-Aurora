@@ -608,7 +608,7 @@ public class TestCollectables {
     
     @Test
     public void testSunStoneOpeningDoor() {
-        //Item Coords: Player(1,1), SunStone(1,3), Boulder (7,2), Switch(7,3)
+        //Item Coords: Player(1,1), SunStone(1,3), Door 1 (2,4), Door 2 (3,3), Door 3 (6, 3)
         //New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_door_maze_sun_stone", GameMode.PEACEFUL.getValue());
@@ -641,15 +641,16 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        // using Sun Stone to open door 2 
+        // using Sun Stone to open Door 2 
         resp = ctr.tick(null, Direction.RIGHT);
         Position p1 = TestUtils.getPlayerPosition(resp);
-        
+
         resp = ctr.tick(null, Direction.DOWN);
         Position p2 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p1, p2);
 
-        // using Sun Stone to open door 1 (should succeed)
+        // using Sun Stone to open Door 1 
+        ctr.tick(null, Direction.UP);
         resp = ctr.tick(null, Direction.RIGHT);
         Position p3 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p3, p2);
@@ -664,7 +665,7 @@ public class TestCollectables {
         Position p5 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p4, p5);
 
-        // attempt to walk through door 1, which is already opened
+        // walking back through Door 1
         resp = ctr.tick(null, Direction.LEFT);
         Position p6 = TestUtils.getPlayerPosition(resp);
         
@@ -672,28 +673,32 @@ public class TestCollectables {
         Position p7 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p6, p7);
 
-        // using Sun Stone to open door 2 (should succeed)
+        // using Sun Stone to open Door 2
         resp = ctr.tick(null, Direction.LEFT);
         Position p8 = TestUtils.getPlayerPosition(resp);
         resp = ctr.tick(null, Direction.DOWN);
         Position p9 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p8, p9);
 
-        // using Sun Stone to open door 3 
+        // using Sun Stone to open Door 3 
         resp = ctr.tick(null, Direction.UP);
         resp = ctr.tick(null, Direction.RIGHT);
         resp = ctr.tick(null, Direction.RIGHT);
         resp = ctr.tick(null, Direction.RIGHT);
 
-        // using Sun Stone to open door 3 (should succeed)
+        // using Sun Stone to open Door 3 
         Position p10 = TestUtils.getPlayerPosition(resp);
         resp = ctr.tick(null, Direction.RIGHT);
         Position p11 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p10, p11);
-        // check the Sun Stone is still in inventory
+
+        // Check the Sun Stone is Still in Inventory (Should Not Be Discarded as Per Spec)
         assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("sun_stone")));
     }
 
+    /**
+     * Test Bribing Mercenary with Sun Stone
+     */
     @Test
     public void testSunStoneMercenaryBribe() throws IOException {
         DungeonManiaController dc;
