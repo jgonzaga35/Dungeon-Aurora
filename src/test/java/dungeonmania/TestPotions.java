@@ -1,9 +1,11 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +32,7 @@ public class TestPotions {
     @BeforeEach
     public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_test_potions.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
 
         Cell invincibleCell = dungeon.getMap().getCell(5, 4);
@@ -267,7 +269,7 @@ public class TestPotions {
     @Test
     public void testInvisibilityNoBattles() throws IOException{
         String content = FileLoader.loadResourceFile("/dungeons/_force_battle.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
         
         Cell invisibleCell = dungeon.getMap().getCell(0, 1);
@@ -304,13 +306,33 @@ public class TestPotions {
         // battle should damage player;
         for (int i = 0; i < 5; i++) dc.tick(null, Direction.NONE);
 
+        float healthBeforePotion = player.getHealth();
         assertTrue(player.getHealth() < 10);
 
         // use pot
         dc.tick(healthPot.getId(), Direction.NONE);
 
         assertTrue(player.getHealth() - 10 < 0.01);
-        
+        assertTrue(player.getHealth() > healthBeforePotion);
+    }
+
+    @Test
+    public void testPotionEffectiveOnConsumption() {
+        // player is at position (5,5)
+        Cell cell = dungeon.getMap().getCell(4, 5);
+        Spider spider = new Spider(dungeon, cell.getPosition());
+        cell.addOccupant(spider); 
+
+        dc.tick(null, Direction.UP); // go up to pick up the potion
+
+        assertEquals(new Pos2d(5, 4), dungeon.getPlayerPosition());
+        assertEquals(new Pos2d(4, 4), spider.getPosition());
+
+        // use the invincibility potion. Instead of moving right (onto the
+        // player and get killed), the spider should flee
+        dc.tick(invincibilityPot.getId(), Direction.NONE);
+
+        assertFalse(Utils.isDead(spider));
     }
 }
         

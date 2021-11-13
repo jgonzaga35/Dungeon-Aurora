@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -19,12 +18,6 @@ import dungeonmania.util.Direction;
 
 public class TestZombieToastMovement {
     
-    @BeforeEach
-    public void setSeed() {
-        Utils.setSeed(1);
-    }
-
-
     /**
      * makes sure that if there is no unblocked cell around the spawner, no
      * zombies are spawned

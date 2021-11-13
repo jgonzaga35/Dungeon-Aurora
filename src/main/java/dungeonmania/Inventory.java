@@ -7,14 +7,9 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.BattleItem;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.SunStone;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.collectables.*;
+import dungeonmania.entities.collectables.buildables.*;
+import dungeonmania.entities.collectables.consumables.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.DungeonMap;
@@ -50,19 +45,84 @@ public class Inventory {
     public boolean remove(CollectableEntity c) {
         return this.collectables.remove(c);
     }
+
     /**
-     * Removes one treasure from the inventory.
+     * Removes one of the given class from the inventory.
      * 
-     * @return true if the inventory had a coin removed
+     * @return true if the inventory had something removed
      */
-    public boolean pay() {
-        Treasure coin = (Treasure) collectables.stream().filter(c -> c instanceof Treasure)
+    public boolean pay(List<Class<? extends CollectableEntity>> cost) {
+        List<CollectableEntity> price = new ArrayList<>();
+
+        cost.stream().forEach(t -> {
+            CollectableEntity item = (CollectableEntity) collectables.stream()
+                .filter(c -> c.getClass().equals(t))
+                .findFirst().orElse(null);
+    
+            price.add(item);
+        });
+        
+        if (price.stream().anyMatch(i -> i == null)) return false;
+        
+        price.stream().forEach(i -> collectables.remove(i));
+
+        return true;
+    }
+
+    public void build(String buildable) throws InvalidActionException {
+        List<CollectableEntity> items;
+        switch (buildable) {
+            case "shield":
+                items = buildable(Shield.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Shield(null, null));
+                return;
+            case "sceptre":
+                items = buildable(Sceptre.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Sceptre(null, null));
+                return;
+            case "bow":
+                items = buildable(Bow.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new Bow(null, null));
+                return;
+            default:
+                throw new IllegalArgumentException("unknown buildable: " + buildable);
+        }
+    }
+
+    public List<CollectableEntity> buildable(List<List<String>> recipes) {
+        for (List<String> recipe : recipes) {
+            List<CollectableEntity> items = findItems(recipe);
+            if (items != null) return items;
+        }
+        return null;
+    }
+
+    /**
+     * 
+     * @return true if the inventory contains a sceptre
+     */
+    public boolean hasSceptre() {
+        Sceptre sceptre = (Sceptre) collectables.stream().filter(c -> c instanceof Sceptre)
             .findFirst().orElse(null);
 
         //Remove coin from inventory but not Sun Stone
-        if (!(coin instanceof SunStone)) collectables.remove(coin); 
+        /*if (!(coin instanceof SunStone)) collectables.remove(coin); */
+        return sceptre != null;
+    }
 
-        return coin != null;
+    public List<String> getBuildables() {
+        List<String> buildables = new ArrayList<>();
+        if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
+        if (buildable(Sceptre.RECIPES) != null) buildables.add(Sceptre.STRING_TYPE);
+        if (buildable(Shield.RECIPES) != null) buildables.add(Shield.STRING_TYPE);
+
+        return buildables;
     }
 
     /**
@@ -89,38 +149,29 @@ public class Inventory {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
         }
-        
 
         collectables.remove(itemUsed);
         
         return itemUsed;
     }
 
-
     /**
-     * if all the entities (items) are in the inventory, it uses them all
-     * (removes from the inventory). Otherwise it just returns false;
-     * @param entities
-     * @return true if all the items were in the inventory, and they were
-     * succesfully removed
+     * finds the items from the inventory
+     * @param itemsStringType list of String
+     * @return null if inventory does not contain all the items, else return the list of items
      */
-    public boolean useItems(List<String> itemsStringType) {
-
-        List<CollectableEntity> toRemove = new ArrayList<>();
+    public List<CollectableEntity> findItems(List<String> itemsStringType) {
+        List<CollectableEntity> found = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
             Optional<CollectableEntity> itemOpt = this.collectables.stream()
                 // find an item of the right type that isn't already used
-                .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
+                .filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
                 .findFirst();
 
-            if (itemOpt.isEmpty())
-                return false;
-            else 
-                toRemove.add(itemOpt.get());
+            if (itemOpt.isEmpty()) return null;
+            else found.add(itemOpt.get());
         }
-        this.collectables.removeAll(toRemove);
-        return true;
-
+        return found;
     }
 
     /**
@@ -221,7 +272,6 @@ public class Inventory {
         }
         return outputListItemResponses;
     }
-    
 
     public List<CollectableEntity> getCollectables() {
         return this.collectables;

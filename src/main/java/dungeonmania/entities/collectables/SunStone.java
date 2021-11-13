@@ -7,23 +7,24 @@ import dungeonmania.entities.CollectableEntity;
 
 public class SunStone extends Treasure {
 
-    public static String STRING_TYPE = "sun_stone";
+    public static final String STRING_TYPE = "sun_stone";
 
     public SunStone(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
     }
 
     @Override
+    public void tick() {
+    }
+
+    @Override
     public String getTypeAsString() {
-        return SunStone.STRING_TYPE;
+        return this.STRING_TYPE;
     }
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false; 
     }
-
-    @Override
-    public void tick() {
-    }
+    
 }

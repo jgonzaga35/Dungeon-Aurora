@@ -6,29 +6,37 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import org.eclipse.jetty.util.Scanner.ScanCycleListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.GenerateMaze.BCell;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
+import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.collectables.SunStone;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.buildables.Shield;
+//import dungeonmania.entities.collectables.buildables.Bow;
+//import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -39,20 +47,13 @@ import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
+import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.Armour;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.ItemResponse;
+import dungeonmania.response.models.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -76,9 +77,9 @@ public class Dungeon {
     /**
      * make sure to seed before each test
      */
-    private Random r = new Random(1);
+    private Random r;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
+    public Dungeon(Random r, String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
@@ -86,8 +87,14 @@ public class Dungeon {
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
 
-        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> a.getPrecedence() - b.getPrecedence());
-        this.battleStrategies.add(new NormalBattleStrategy(0));
+        this.r = r;
+
+        this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> b.getPrecedence() - a.getPrecedence());
+        if (mode == GameMode.PEACEFUL) {
+            this.battleStrategies.add(new NoBattleStrategy(0));
+        } else {
+            this.battleStrategies.add(new NormalBattleStrategy(0));
+        }
 
         Dungeon.nextDungeonId++;
     }
@@ -104,13 +111,13 @@ public class Dungeon {
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
-    public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
+    public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
         
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goal);
+        Dungeon dungeon = new Dungeon(r, name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -136,6 +143,8 @@ public class Dungeon {
                 cell.addOccupant(new ZombieToast(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Treasure.STRING_TYPE)) {
                 cell.addOccupant(new Treasure(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, OneRing.STRING_TYPE)) {
+                cell.addOccupant(new OneRing(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Arrow.STRING_TYPE)) {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
@@ -152,6 +161,8 @@ public class Dungeon {
                 cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
+                cell.addOccupant(new Swamp(dungeon, cell.getPosition(), entity.getInt("movement_factor")));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
@@ -164,8 +175,12 @@ public class Dungeon {
                 cell.addOccupant(new InvisibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Mercenary.STRING_TYPE)) {
                 cell.addOccupant(new Mercenary(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Assassin.STRING_TYPE)) {
+                cell.addOccupant(new Assassin(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
                 cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -198,6 +213,30 @@ public class Dungeon {
 
         return dungeon;
     }
+    
+    public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
+
+        Pos2d dims = new Pos2d(50, 50);
+        List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
+
+        DungeonMap map = new DungeonMap(dims.getX(), dims.getY());
+        Dungeon dungeon = new Dungeon(r, "generated", mode, map, new ExitGoal());
+
+        Player player = new Player(dungeon, start);
+        map.getCell(start).addOccupant(player);
+        map.getCell(end).addOccupant(new Exit(dungeon, end));
+        dungeon.setPlayer(player);
+
+        for (int y = 0; y < dims.getY(); y++) {
+            for (int x = 0; x < dims.getX(); x++) {
+                if (maze.get(y).get(x) == BCell.WALL) {
+                    map.getCell(x, y).addOccupant(new Wall(dungeon, new Pos2d(x, y)));
+                }
+            }
+        }
+
+        return dungeon;
+    }
 
     /**
      * Places a Bomb that is Currently in Player Inventory onto Map &
@@ -209,7 +248,6 @@ public class Dungeon {
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
-        boolean itemPlaced = false;
         
         //Check the Collectable Passed to this Function is a Bomb and that the ID matches
         if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
@@ -230,8 +268,6 @@ public class Dungeon {
 
             //Run the Check if ALready Triggered Check
             removedBomb.checkIfAlreadyTriggered();
-            
-            itemPlaced = true;
         }
         
     }
@@ -331,17 +367,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
-            if (!Shield.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
-            if (!Bow.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else {
-            throw new IllegalArgumentException("unknown buildable: " + buildable);
-        }
+        this.inventory.build(buildable);
     }
 
     public String getId() {
@@ -380,7 +406,7 @@ public class Dungeon {
      * for the player in the entire map
      * @param player
      */
-    private void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -441,6 +467,10 @@ public class Dungeon {
         return this.inventory.asItemResponses();
     }
 
+    public List<String> getBuildables() {
+        return this.inventory.getBuildables();
+    }
+
     
     /**
      * Attempts to bribe the map's mercenary raises an InvalidActionException
@@ -448,12 +478,19 @@ public class Dungeon {
      * - The player is not in range to bribe the mercenary
      * - The player does not have any gold.
      * 
-     * removes a coin from the inventory on success.
+     * removes a coin from the inventory on success. Also removes the OneRing if 
+     * bribing an assassin.
      */
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!inventory.pay()) throw new InvalidActionException("The player has nothing to bribe with.");
+        
+        if (inventory.hasSceptre()) {
+            merc.bribe(10);
+            return;
+        }
+        
+        if (!inventory.pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
             
         merc.bribe();
     }
@@ -513,7 +550,11 @@ public class Dungeon {
         if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
             return;
 
-        Mercenary m = new Mercenary(this, this.dungeonMap.getEntry());
+        // spawn an assassin 25% of the time.
+        Mercenary m;
+        if (r.nextInt(100) < Assassin.SPAWN_PERCENTAGE) m = new Assassin(this, this.dungeonMap.getEntry());
+        else m = new Mercenary(this, this.dungeonMap.getEntry());
+
         this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
 
@@ -542,4 +583,8 @@ public class Dungeon {
         }
     }
 
+    
+    public BattleStrategy getBattleStrategy() {
+        return this.battleStrategies.peek();
+    }
 }

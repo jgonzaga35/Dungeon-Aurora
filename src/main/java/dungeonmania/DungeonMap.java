@@ -9,8 +9,10 @@ import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -33,10 +35,13 @@ public class DungeonMap {
 
     private Pos2d entry = null;
     
-    DungeonMap(JSONObject json) {
-        this.width = json.getInt("width");
-        this.height = json.getInt("height");
-        
+    public DungeonMap(JSONObject json) {
+        this(json.getInt("width"), json.getInt("height"));
+    }
+
+    public DungeonMap(int width, int height) {
+        this.width = width;
+        this.height = height;
         // a grid of empty cells
         for (int y = 0; y < height; y++) {
             ArrayList<Cell> row = new ArrayList<>();
@@ -76,56 +81,23 @@ public class DungeonMap {
     }
 
     /**
-     * Counts all the mercenaries remaining on the map
+     * Count all entities that are either ZombieToastSpawners or have an ENEMY fighter relation.
+     * @return
      */
-    public Integer countMercenaries() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof Mercenary).count();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts all spiders remaining on the map
-     */
-    public Integer countSpiders() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof Spider).count();
-            }
-        }
-        return count;
+    public Integer countEnemies() {
+        int movingEnemyCount = (int) allEntities().stream().filter(e -> e instanceof MovingEntity && 
+                                    ((Fighter) e).getFighterRelation() == FighterRelation.ENEMY).count();
+        int enemyStructureCount = countSpawners();
+    
+        return movingEnemyCount + enemyStructureCount;
     }
 
 
     /**
-     * Counts all cells with zombie toasts remaining on the map
-     */
-    public Integer countZombieToasts() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToast).count();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts all cells with enemies remaining on the map
+     * Counts all cells with spawners remaining on the map
      */
     public Integer countSpawners() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToastSpawner).count();
-            }
-        }
-        return count;
+        return (int) allEntities().stream().filter(e -> e instanceof ZombieToastSpawner).count();
     }
 
     /**
@@ -144,9 +116,7 @@ public class DungeonMap {
     }
     
     public Cell getCell(Pos2d pos) {
-        if (pos.getX() >= width || pos.getX() < 0) return null;
-        if (pos.getY() >= height || pos.getY() < 0) return null;
-        return dungeonMap.get(pos.getY()).get(pos.getX());
+        return this.getCell(pos.getX(), pos.getY());
     }
 
     public List<Entity> allEntities() {
@@ -160,6 +130,9 @@ public class DungeonMap {
     }
 
     public Cell getCell(int x, int y) {
+        if (y < 0 || y >= height) return null;
+        if (x < 0 || x >= width) return null;
+
         return dungeonMap.get(y).get(x);
     }
 
@@ -311,14 +284,21 @@ public class DungeonMap {
                     result += PLAYER;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Wall)) {
                     result += WALL;
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Mercenary)) {
+                    result += " EM";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof Spider)) {
+                    result += " ES";
+                } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof ZombieToast)) {
+                    result += " EZ";
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof MovingEntity)) {
                     result += ENEMY;
                 } else if (cell.getOccupants().stream().anyMatch(e -> e instanceof StaticEntity)) {
                     result += STATIC;
                 } else {
-                    int num = cell.getPlayerDistance();
-                    if (num < 10) result += " " + num + " ";
-                    else result += " " + num;
+                    result += "   ";
+                    // int num = cell.getPlayerDistance();
+                    // if (num < 10) result += " " + num + " ";
+                    // else result += " " + num;
                 }
             }
             result += "\n";

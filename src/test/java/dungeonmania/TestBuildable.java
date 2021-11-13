@@ -43,6 +43,8 @@ public class TestBuildable {
         Collections.sort(expected);
         assertEquals(expected, actual);
 
+        assertEquals(List.of(Shield.STRING_TYPE), resp.getBuildables());
+
         actual.clear();
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Shield.STRING_TYPE);
@@ -72,6 +74,8 @@ public class TestBuildable {
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(expected, actual);
+
+        assertEquals(List.of(Shield.STRING_TYPE), resp.getBuildables());
 
         actual.clear();
         assertDoesNotThrow(() -> {
