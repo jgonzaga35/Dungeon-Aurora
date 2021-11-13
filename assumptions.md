@@ -30,6 +30,7 @@
 - Battle radius is a circle, and the mercenary needs to be completely within
   that circle.
 - Battle radius of mercenaries is 3 cells
+- When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
