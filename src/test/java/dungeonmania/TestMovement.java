@@ -1,6 +1,5 @@
 package dungeonmania;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.goal.ExitGoal;
 import dungeonmania.movement.CircleMovementBehaviour;
@@ -59,8 +57,10 @@ public class TestMovement {
 
         // define expected path
         List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(0, 0),
-            new Pos2d(0, 1)
+            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+            new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8),
+            new Pos2d(0, 7), new Pos2d(0, 6), new Pos2d(0, 5), new Pos2d(0, 4),
+            new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(0, 1), new Pos2d(0, 0)
         );
 
         assertEquals(expectedPath.size(), followedPath.size());
@@ -88,8 +88,18 @@ public class TestMovement {
 
         // define expected path
         List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(0, 0),
-            new Pos2d(0, 1)
+            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+            new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8),
+            new Pos2d(0, 7), new Pos2d(0, 6), new Pos2d(1, 6), new Pos2d(2, 6),
+            new Pos2d(3, 6), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6),
+            new Pos2d(7, 6), new Pos2d(8, 6), new Pos2d(8, 5), new Pos2d(8, 4),
+            new Pos2d(7, 4), new Pos2d(6, 4), new Pos2d(5, 4), new Pos2d(4, 4),
+            new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(1, 4), new Pos2d(0, 4),
+            new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(1, 2), new Pos2d(2, 2),
+            new Pos2d(3, 2), new Pos2d(4, 2), new Pos2d(5, 2), new Pos2d(6, 2),
+            new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
+            new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0),
+            new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0)
         );
 
         assertEquals(expectedPath.size(), followedPath.size());
@@ -117,8 +127,15 @@ public class TestMovement {
 
         // define expected path
         List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(0, 0),
-            new Pos2d(0, 1)
+            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+            new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6),
+            new Pos2d(7, 6), new Pos2d(8, 6), new Pos2d(8, 5), new Pos2d(8, 4),
+            new Pos2d(7, 4), new Pos2d(6, 4), new Pos2d(5, 4), new Pos2d(4, 4),
+            new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(2, 3), new Pos2d(2, 2),
+            new Pos2d(3, 2), new Pos2d(4, 2), new Pos2d(5, 2), new Pos2d(6, 2),
+            new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
+            new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0),
+            new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0)
         );
 
         assertEquals(expectedPath.size(), followedPath.size());
@@ -146,8 +163,12 @@ public class TestMovement {
 
         // define expected path
         List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(0, 0),
-            new Pos2d(0, 1)
+            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+            new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(4, 5), new Pos2d(4, 4),
+            new Pos2d(5, 4), new Pos2d(5, 3), new Pos2d(5, 2), new Pos2d(6, 2),
+            new Pos2d(7, 2), new Pos2d(7, 1), new Pos2d(7, 0), new Pos2d(6, 0),
+            new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0),
+            new Pos2d(1, 0), new Pos2d(0, 0)
         );
 
         assertEquals(expectedPath.size(), followedPath.size());
