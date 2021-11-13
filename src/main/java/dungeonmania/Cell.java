@@ -12,6 +12,7 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
+import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.Direction;
 
 public class Cell {
@@ -157,4 +158,26 @@ public class Cell {
         }
         return false;
     }
+
+    public boolean hasTriggeredFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isTriggered()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasActivatedEntity() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isTriggered()) {
+                return true;
+            }
+            if (occupant instanceof Wire && ((Wire) occupant).isActivated()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

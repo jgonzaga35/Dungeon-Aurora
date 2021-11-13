@@ -1,26 +1,42 @@
 package dungeonmania.entities.statics;
 
+import java.util.stream.Stream;
+
+import dungeonmania.Cell;
 import dungeonmania.Dungeon;
+import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 
 public class Wire extends StaticEntity {
+    public static String STRING_TYPE = "wire";
 
     public Wire(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        //TODO Auto-generated constructor stub
+    }
+
+    public Integer countAdjacentSwitches() {
+        Cell base = this.dungeon.getMap().getCell(this.position);
+        Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(base);
+        int count = (int) adjacentCells.filter(e -> e.hasTriggeredFloorSwitch()).count();
+        return count;
+    }
+
+    public boolean isActivated() {
+        if (countAdjacentSwitches() > 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean isInteractable() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public String getTypeAsString() {
-        // TODO Auto-generated method stub
-        return null;
+        return Wire.STRING_TYPE;
     }
 
     @Override

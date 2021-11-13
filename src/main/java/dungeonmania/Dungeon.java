@@ -42,9 +42,11 @@ import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.Wire;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.ExitGoal;
@@ -189,6 +191,17 @@ public class Dungeon {
                     correspondingPortal.setCorrespondingPortal(portal);
                 }
                 cell.addOccupant(portal);
+            } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.ON)) {
+                String logic = entity.getString("logic");
+                
+                LightBulb lBulb = new LightBulb(dungeon, cell.getPosition(), logic);
+                lBulb.switchOn();
+                cell.addOccupant(lBulb);
+            } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.OFF)) {
+                String logic = entity.getString("logic");
+                cell.addOccupant(new LightBulb(dungeon, cell.getPosition(), logic));
+            } else if (Objects.equals(type, Wire.STRING_TYPE)) {
+                cell.addOccupant(new Wire(dungeon, cell.getPosition()));
             } 
             else {
                 throw new Error("unhandled entity type: " + type);
