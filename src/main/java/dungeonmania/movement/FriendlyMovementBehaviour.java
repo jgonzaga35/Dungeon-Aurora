@@ -20,25 +20,28 @@ public class FriendlyMovementBehaviour extends MovementBehaviour {
         Cell currentCell = getCurrentCell();
         Cell nextCell;
         if (currentCell.getPlayerDistance() == 1) return currentCell;
-
-        List<Cell> neighbours = map.getNeighbors(currentCell).stream()
-            .filter(c -> !c.isBlocking()).collect(Collectors.toList());
-
-        if (neighbours.stream().anyMatch(c -> c.getPlayerDistance() == 1)) {
-            // Stay one away if possible.
-            nextCell = neighbours.stream()
-                .filter(c -> c.getPlayerDistance() == 1)
+        if (currentCell.getPlayerDistance() == 0) {
+            // move one cell away.
+            return map.getNeighbors(currentCell).stream()
+                .filter(c -> !c.isBlocking() && c.getPlayerDistance() == 1)
                 .findAny().get();
-        } else {
-            // else get as close as possible
-            nextCell = neighbours.stream().min(
-                    (c1, c2) -> 
-                    Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
-                ).get();
         }
 
+        // Get second cell of the path
+        if (map.findPath(getCurrentCell(), map.getPlayerCell()) != null) 
+            nextCell = map.findPath(getCurrentCell(), map.getPlayerCell()).get(1);
+        else 
+            nextCell = map.getNeighbors(getCurrentCell()).stream()
+                .filter(cell -> !cell.isBlocking())
+                .min(
+                    (c1, c2) -> 
+                    Integer.compare(c1.getTravelCost(), c2.getTravelCost())
+                ).get();
+
+        assert nextCell != null;
+
         setCurrentCell(nextCell);
-        
+
         return nextCell;
     }
     
