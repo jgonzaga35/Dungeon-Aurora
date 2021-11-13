@@ -14,16 +14,22 @@ public class FollowMovementBehaviour extends MovementBehaviour {
 
     public Cell move()
     {
-        Cell nextCell = map.getNeighbors(getCurrentCell()).stream()
-            .filter(cell -> !cell.isBlocking())
-            .min(
-                (c1, c2) -> 
-                Integer.compare(c1.getPlayerDistance(), c2.getPlayerDistance())
-            ).get();
-        assert nextCell != null;
+        // Get second cell of the path
+        Cell next;
+        if (map.findPath(getCurrentCell(), map.getPlayerCell()) != null) 
+            next = map.findPath(getCurrentCell(), map.getPlayerCell()).get(1);
+        else 
+            next = map.getNeighbors(getCurrentCell()).stream()
+                .filter(cell -> !cell.isBlocking())
+                .min(
+                    (c1, c2) -> 
+                    Integer.compare(c1.getTravelCost(), c2.getTravelCost())
+                ).get();
 
-        setCurrentCell(nextCell);
-        
-        return nextCell;
+        assert next != null;
+
+        setCurrentCell(next);
+
+        return next;
     }
 }
