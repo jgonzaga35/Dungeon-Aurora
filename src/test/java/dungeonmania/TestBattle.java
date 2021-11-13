@@ -329,4 +329,37 @@ public class TestBattle {
             }
         }
     }
+
+    public void testZombieBattleWithOneRing() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_force_zombie_attack_with_one_ring", GameMode.STANDARD.getValue());
+
+        // there are no spiders because the map is too small
+
+        ctr.tick(null, Direction.NONE);
+
+        // doing the maths to compute that number is a pain because of the damage formula
+        int player_kills_n_zombies = 10 * 2; // double, because the player respawns
+        
+        for (int j = 0; j < player_kills_n_zombies; j++) { 
+            for (int i = 0; i < 19; i++) {
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                resp = ctr.tick(null, Direction.NONE);
+            }
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+            // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            resp = ctr.tick(null, Direction.NONE);
+
+            if (j == player_kills_n_zombies - 1) {
+                // the player has been killed
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+            } else {
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " zombies");
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            }
+        }
+    }
 }
