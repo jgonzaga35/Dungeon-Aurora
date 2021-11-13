@@ -51,6 +51,11 @@ public class Pos2d {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         if (obj == this) return true;
@@ -60,11 +65,6 @@ public class Pos2d {
         Pos2d checkPos = (Pos2d) obj;
 
         return x == checkPos.getX() && y == checkPos.getY();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.x, this.y);
     }
 
 }

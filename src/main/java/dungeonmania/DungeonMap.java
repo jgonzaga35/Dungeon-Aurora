@@ -12,8 +12,10 @@ import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -84,56 +86,23 @@ public class DungeonMap {
     }
 
     /**
-     * Counts all the mercenaries remaining on the map
+     * Count all entities that are either ZombieToastSpawners or have an ENEMY fighter relation.
+     * @return
      */
-    public Integer countMercenaries() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof Mercenary).count();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts all spiders remaining on the map
-     */
-    public Integer countSpiders() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof Spider).count();
-            }
-        }
-        return count;
+    public Integer countEnemies() {
+        int movingEnemyCount = (int) allEntities().stream().filter(e -> e instanceof MovingEntity && 
+                                    ((Fighter) e).getFighterRelation() == FighterRelation.ENEMY).count();
+        int enemyStructureCount = countSpawners();
+    
+        return movingEnemyCount + enemyStructureCount;
     }
 
 
     /**
-     * Counts all cells with zombie toasts remaining on the map
-     */
-    public Integer countZombieToasts() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToast).count();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts all cells with enemies remaining on the map
+     * Counts all cells with spawners remaining on the map
      */
     public Integer countSpawners() {
-        int count = 0;
-        for (List<Cell> row : dungeonMap) {
-            for (Cell cell : row) {
-                count += cell.getOccupants().stream().filter(e -> e instanceof ZombieToastSpawner).count();
-            }
-        }
-        return count;
+        return (int) allEntities().stream().filter(e -> e instanceof ZombieToastSpawner).count();
     }
 
     /**

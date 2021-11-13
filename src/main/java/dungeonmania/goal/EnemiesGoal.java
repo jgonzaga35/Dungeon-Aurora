@@ -14,7 +14,7 @@ public class EnemiesGoal extends Goal {
     public boolean isCompleted(Dungeon dungeon) {
         // Count all enemies and spawners
         DungeonMap map = dungeon.getMap();
-        if (map.countSpiders() == 0 && map.countZombieToasts() == 0 && map.countSpawners() == 0 && map.countMercenaries() == 0) {
+        if (map.countSpawners() == 0 && map.countEnemies() == 0) {
             return true;
         }
 

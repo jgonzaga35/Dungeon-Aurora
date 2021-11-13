@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -55,7 +57,7 @@ public class TestStrategies {
         this.mode = _mode;
 
         m = new DungeonMap(20, 20);
-        d = new Dungeon("manual", this.mode, m, new ExitGoal());
+        d = new Dungeon(new Random(1), "manual", this.mode, m, new ExitGoal());
         d.getRandom().setSeed(1);
         Cell cell;
 

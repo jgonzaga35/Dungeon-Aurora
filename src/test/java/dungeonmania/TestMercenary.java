@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class TestMercenary {
     public void setStartingPostition() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_merc_test.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = (Player) dungeon.getMap().allEntities().stream()
             .filter(e -> e instanceof Player)

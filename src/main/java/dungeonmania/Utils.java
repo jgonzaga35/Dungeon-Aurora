@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import dungeonmania.entities.Fighter;
 
@@ -12,14 +13,32 @@ public class Utils {
     public static float eps = 0.001f;
 
     /**
+     * @pre {@code list.size() > 0}
+     * 
      * @param <T> any
      * @param list
      * @param r Random instance
      * @return a random item from the list
      */
     public static <T> T choose(List<T> list, Random r) {
+        assert list.size() > 0;
         return list.get(r.nextInt(list.size()));
     }
+
+    /**
+     * @pre {@code set.size() > 0}
+     * 
+     * @param <T> any
+     * @param set
+     * @param r Random instance
+     * @return a random item from the set
+     */
+    public static <T> T choose(Set<T> set, Random r) {
+        assert set.size() > 0;
+        return set.stream().skip(r.nextInt(set.size())).findFirst().get();
+    }
+
+
 
 
 
@@ -58,4 +77,5 @@ public class Utils {
         else if (f > 0) return 1;
         else return -1;
     }
+
 }
