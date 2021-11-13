@@ -13,10 +13,10 @@ import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.buildables.Bow;
 import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
-import dungeonmania.entities.movings.Hydra;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -302,7 +302,7 @@ public class TestBattle {
         });
 
         // more than the player can kill without a bow
-        int player_kills_n_zombies = 29;
+        int player_kills_n_zombies = 15;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 3 : 0); i++) {
