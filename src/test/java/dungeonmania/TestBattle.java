@@ -16,7 +16,7 @@ import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
 import dungeonmania.entities.movings.ZombieToast;
-import dungeonmania.entities.movings.bosses.Hydra;
+import dungeonmania.entities.movings.Hydra;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;

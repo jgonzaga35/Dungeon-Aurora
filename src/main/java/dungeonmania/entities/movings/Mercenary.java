@@ -121,4 +121,9 @@ public class Mercenary extends MovingEntity implements Fighter {
     public boolean isInteractable() {
         return relationship == FighterRelation.ENEMY;
     }
+
+    @Override
+    public boolean isBoss() {
+        return false;
+    }
 }

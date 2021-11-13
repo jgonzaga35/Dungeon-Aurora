@@ -26,5 +26,10 @@ public class Assassin extends Mercenary {
     public String getTypeAsString() {
         return Assassin.STRING_TYPE;
     }
+
+    @Override 
+    public boolean isBoss() {
+        return true;
+    }
     
 }

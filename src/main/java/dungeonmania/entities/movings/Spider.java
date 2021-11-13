@@ -108,4 +108,9 @@ public class Spider extends MovingEntity implements Fighter {
     public Entity getEntity() {
         return this;
     }
+
+    @Override
+    public boolean isBoss() {
+        return false;
+    }
 }

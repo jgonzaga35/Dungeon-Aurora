@@ -105,4 +105,9 @@ public class Player extends MovingEntity implements Fighter {
         return this;
     }
 
+    @Override
+    public boolean isBoss() {
+        return false;
+    }
+
 }

@@ -14,7 +14,6 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 
-
 public class Hydra extends MovingEntity implements Fighter {
     
     public static final String STRING_TYPE = "hydra";
@@ -130,4 +129,9 @@ public class Hydra extends MovingEntity implements Fighter {
         return this;
     }
 
+
+    @Override
+    public boolean isBoss() {
+        return true;
+    }
 }

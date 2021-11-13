@@ -52,6 +52,10 @@ public interface Fighter {
      */
     public FighterRelation getFighterRelation();
 
+    /**
+     * @return if the fighter is a Boss
+     */
+    public boolean isBoss();
 
     public Entity getEntity();
 }
