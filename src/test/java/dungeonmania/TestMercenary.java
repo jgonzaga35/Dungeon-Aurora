@@ -66,9 +66,11 @@ public class TestMercenary {
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)
+        // merc pos (5, 0)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             resp = dc.tick(null, Direction.NONE);
+            System.out.println(merc.getCell().getPlayerDistance());
             assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -102,7 +104,7 @@ public class TestMercenary {
         }
         // player pos (7, 0)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
@@ -173,14 +175,6 @@ public class TestMercenary {
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
-            dist = merc.getCell().getPlayerDistance();
-        }
-        // player pos (7, 0)
-        
-        for (int i = 0; i < 4; i++) {
-            dc.tick(null, Direction.NONE);
-            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
-            assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)
