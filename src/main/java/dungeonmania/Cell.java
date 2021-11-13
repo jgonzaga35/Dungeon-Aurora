@@ -162,4 +162,10 @@ public class Cell {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        String str = "[pos: " + position.toString() + ", Tcost: " + getTravelCost() + "]";
+        return str;
+    }
 }

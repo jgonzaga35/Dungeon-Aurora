@@ -65,7 +65,7 @@ public class TestMovement {
 
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
-            assertEquals(expectedPath.get(i), followedPath.get(i));
+            assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
         }
     }
 
@@ -104,7 +104,7 @@ public class TestMovement {
 
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
-            assertEquals(expectedPath.get(i), followedPath.get(i));
+            assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
         }
     }
 
@@ -138,12 +138,13 @@ public class TestMovement {
             new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0)
         );
 
+        
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
-            assertEquals(expectedPath.get(i), followedPath.get(i));
+            assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
         }
     }
-
+    
     @Test
     public void testPathFinding4() throws IOException 
     {
@@ -153,14 +154,14 @@ public class TestMovement {
         Mercenary assassin = TestUtils.getMercenary(dungeon);
 
         List<Pos2d> followedPath = new ArrayList<>();
-
+        
         // let the assassin find it's path
         while (!assassin.getPosition().equals(new Pos2d(0, 0))) {
             dc.tick(null, Direction.NONE);
             if (!followedPath.stream().anyMatch(p -> p.equals(assassin.getPosition())))
-                followedPath.add(assassin.getPosition());
+            followedPath.add(assassin.getPosition());
         }
-
+        
         // define expected path
         List<Pos2d> expectedPath = Arrays.asList(
             new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
@@ -170,10 +171,10 @@ public class TestMovement {
             new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0),
             new Pos2d(1, 0), new Pos2d(0, 0)
         );
-
+            
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
-            assertEquals(expectedPath.get(i), followedPath.get(i));
+            assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
         }
     }
 
