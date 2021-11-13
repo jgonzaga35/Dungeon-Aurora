@@ -31,6 +31,11 @@ public class Graph<T> {
         this.adjacencyList = new HashMap<Vertex<T>,List<Vertex<T>>>();
     }
 
+    private Vertex<T> getRoot() {
+        return this.adjacencyList.keySet().stream()
+            .filter(v -> v.getDistance() == 0).findAny().orElse(null);
+    }
+
     public void addVertex(Vertex<T> vertex) {
         adjacencyList.putIfAbsent(vertex, new ArrayList<>());
         // vertices.putIfAbsent(new Vertex<T>(vertex), new ArrayList<>());
@@ -114,6 +119,12 @@ public class Graph<T> {
      */
     public List<Vertex<T>> tracebackFrom(Vertex<T> start) {
         List<Vertex<T>> path = new ArrayList<>();
+
+        // check for merc spawning on top of player
+        if (start.getData().equals(getRoot().getData())) {
+            path.add(start);
+            return path;
+        }
 
         Vertex<T> cur = start;
         while (cur.getDistance() != 0) {
