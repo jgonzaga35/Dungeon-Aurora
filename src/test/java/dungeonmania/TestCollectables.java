@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.FileLoader;
 import org.json.JSONObject;
+import java.util.Random;
 
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.statics.FloorSwitch;
@@ -706,8 +707,9 @@ public class TestCollectables {
         DungeonResponse resp;
         Player player;
         Mercenary merc;
+
         String content = FileLoader.loadResourceFile("/dungeons/_sun_stone_merc_test.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = (Player) dungeon.getMap().allEntities().stream()
             .filter(e -> e instanceof Player)

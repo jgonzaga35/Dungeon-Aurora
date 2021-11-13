@@ -58,13 +58,16 @@ public class Inventory {
             CollectableEntity item = (CollectableEntity) collectables.stream()
                 .filter(c -> c.getClass().equals(t))
                 .findFirst().orElse(null);
-    
+            System.out.println(item);
             price.add(item);
         });
         
+        //.filter(t.getClass()::isInstance)
+        //.filter(c -> c.getClass().equals(t))
+
         if (price.stream().anyMatch(i -> i == null)) return false;
         
-        price.stream().forEach(i -> collectables.remove(i));
+        price.stream().filter(e -> !(e instanceof SunStone)).forEach(i -> collectables.remove(i));
 
         return true;
     }
@@ -111,8 +114,6 @@ public class Inventory {
         Sceptre sceptre = (Sceptre) collectables.stream().filter(c -> c instanceof Sceptre)
             .findFirst().orElse(null);
 
-        //Remove coin from inventory but not Sun Stone
-        /*if (!(coin instanceof SunStone)) collectables.remove(coin); */
         return sceptre != null;
     }
 
