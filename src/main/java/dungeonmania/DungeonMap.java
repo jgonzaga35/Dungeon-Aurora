@@ -250,7 +250,7 @@ public class DungeonMap {
             }
 
             getNeighbors(current).stream().filter(n -> !n.isBlocking()).forEach(n -> {
-                Integer newCost = visited.get(current) + n.getTravelCost() + 1;
+                Integer newCost = visited.get(current) + n.getTravelCost();
                 if (visited.keySet().contains(n)) {
                     // resolve duplicate
                     if (newCost < visited.get(n)) {
