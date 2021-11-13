@@ -5,8 +5,8 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
-public class FloorSwitch extends StaticEntity{
-    public static String STRING_TYPE = "floor switch";
+public class FloorSwitch extends StaticEntity {
+    public static String STRING_TYPE = "switch";
     private boolean triggered = false;
 
     public FloorSwitch(Dungeon dungeon, Pos2d position) {
