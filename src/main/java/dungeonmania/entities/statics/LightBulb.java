@@ -47,15 +47,67 @@ public class LightBulb extends StaticEntity {
      */
     @Override
     public String getTypeAsString() {
-        if (this.switchedOn) {
+        if (switchedOn) {
             return LightBulb.STRING_TYPE + LightBulb.ON;
         }
         return LightBulb.STRING_TYPE + LightBulb.OFF;
     }
 
+    public Integer countAdjacentSwitches(DungeonMap map) { 
+        return 0;
+    }
+
     @Override
     public void tick() {
-         
+        if (Objects.equals(logic,Logic.AND)) {
+            andActivation();
+        } else if (Objects.equals(logic, Logic.OR)) {
+            orActivation();
+        } else if (Objects.equals(logic, Logic.XOR)) {
+            xorActivation();
+        } else if (Objects.equals(logic, Logic.NOT)) {
+            notActivation();
+        } else if (Objects.equals(logic, Logic.CO_AND)) {
+            co_andActivation();
+        }
+    }
+
+    // TODO: fix
+    public void co_andActivation() {
+
+    }
+
+    public void notActivation() {
+        if (countAdjacentActivations(dungeon.getMap()) == 0) {
+            this.switchOn();
+        }
+    }
+
+    public void xorActivation() {
+        if (countAdjacentActivations(dungeon.getMap()) == 1) {
+            this.switchOn();
+        }
+    }
+
+    public void orActivation() {
+        if (countAdjacentActivations(dungeon.getMap()) >= 1) {
+            this.switchOn();
+        }
+    }
+
+    public void andActivation() {
+        // Entity only activates if there are 2 or more adjacent activated switches
+        // If there are more than two switches adjacent, all must be activated. 
+        int adjacentSwitchCount = countAdjacentActivations(dungeon.getMap());
+        if (adjacentSwitchCount > 2) {
+            if (countAdjacentActivations(dungeon.getMap()) == adjacentSwitchCount ) { 
+                this.switchOn();
+            }
+        } else {
+            if (countAdjacentActivations(dungeon.getMap()) >= 2) { 
+                this.switchOn();
+            }           
+        }
     }
 
     public enum Logic {

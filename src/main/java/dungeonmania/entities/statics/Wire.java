@@ -1,5 +1,7 @@
 package dungeonmania.entities.statics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import dungeonmania.Cell;
@@ -9,9 +11,29 @@ import dungeonmania.entities.StaticEntity;
 
 public class Wire extends StaticEntity {
     public static String STRING_TYPE = "wire";
+    private List<StaticEntity> connectedEntities = new ArrayList<StaticEntity>();
 
     public Wire(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        addConnectedEntities();        
+    }
+
+    public List<StaticEntity> getConnectedEntities() {
+        return this.connectedEntities;
+    }
+
+    /**
+     * Add all entities that are either switches or interact via switches
+     */
+    public void addConnectedEntities() {
+        Cell base = this.dungeon.getMap().getCell(this.position);
+        Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(base);
+        // adjacentCells.forEach(e -> {
+        //     if () {
+
+        //     }
+        // }));
+
     }
 
     public Integer countAdjacentSwitches() {

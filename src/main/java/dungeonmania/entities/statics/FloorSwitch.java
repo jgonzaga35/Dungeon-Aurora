@@ -13,8 +13,16 @@ public class FloorSwitch extends StaticEntity {
         super(dungeon, position);
     }
 
+    /**
+     * Sets a floor switch's trigger status.
+     * If a floor switch adjacent to a wire is triggered,
+     * activate all other interactable entities adjacent 
+     * to the wire.
+     * @param bool
+     */
     public void setTriggered(boolean bool) {
         this.triggered = bool;
+
     }
 
     public boolean isTriggered() {
