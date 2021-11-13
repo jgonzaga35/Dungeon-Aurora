@@ -43,6 +43,7 @@
 ## Potions
 - Allies can see the player when invisible.
 - Potions take effect immediately upon usage, affecting enemies in the same tick that it has been used.
+- When enemies are fleeing from an invincible player, they do not plan their path but simply run in the cardinal direction that maximizes the distance between them and the player. They do not try to avoid hindrances like swamps.
 
 ## Hydras
 - Hydras can't spawn on blocking cells or on the player.
