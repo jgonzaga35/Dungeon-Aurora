@@ -541,11 +541,9 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon)
-            return;
-
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
-            return;
+        if (!this.hadEnemiesAtStartOfDungeon) return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;
