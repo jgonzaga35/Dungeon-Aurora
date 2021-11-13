@@ -30,7 +30,7 @@ public class Boulder extends StaticEntity {
             // Trigger floor switch if exists
             FloorSwitch sourceSwitch = from.getFloorSwitch();
             if (sourceSwitch != null) {
-                sourceSwitch.setTriggered(false);            
+                sourceSwitch.deactivate();;            
             }
     
             from.removeOccupant(this);
@@ -38,7 +38,7 @@ public class Boulder extends StaticEntity {
     
             FloorSwitch targetSwitch = target.getFloorSwitch();
             if (targetSwitch != null) {
-                targetSwitch.setTriggered(true);
+                targetSwitch.activate();;
             }
     
             this.position = target.getPosition();

@@ -27,6 +27,14 @@ public abstract class Entity {
     }
 
     /**
+     * 
+     * @return
+     */
+    public boolean canConnect() {
+        return false;
+    }
+
+    /**
      * @return the cell this entity is on
      */
     public Cell getCell() {

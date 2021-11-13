@@ -72,7 +72,7 @@ public class DungeonMap {
     public boolean allFloorSwitchesTriggered()  {
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
-                if (cell.hasUntriggeredFloorSwitch()) {
+                if (cell.hasDeactivatedFloorSwitch()) {
                     return false;
                 } 
             }

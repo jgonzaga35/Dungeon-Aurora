@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -45,6 +46,7 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
+import dungeonmania.entities.statics.SwitchDoor;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.Wire;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -135,7 +137,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, FloorSwitch.STRING_TYPE)) {
-                cell.addOccupant(new FloorSwitch(dungeon, cell.getPosition()));
+                cell.addOccupant(new FloorSwitch(dungeon, cell.getPosition(), getLogicString(entity)));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
@@ -153,7 +155,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
-                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
+                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false, getLogicString(entity)));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
@@ -192,17 +194,16 @@ public class Dungeon {
                 }
                 cell.addOccupant(portal);
             } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.ON)) {
-                String logic = entity.getString("logic");
-
-                LightBulb lBulb = new LightBulb(dungeon, cell.getPosition(), logic);
-                lBulb.switchOn();
+                LightBulb lBulb = new LightBulb(dungeon, cell.getPosition(), getLogicString(entity));
+                lBulb.activate();
                 cell.addOccupant(lBulb);
             } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.OFF)) {
-                String logic = entity.getString("logic");
-                cell.addOccupant(new LightBulb(dungeon, cell.getPosition(), logic));
+                cell.addOccupant(new LightBulb(dungeon, cell.getPosition(), getLogicString(entity)));
             } else if (Objects.equals(type, Wire.STRING_TYPE)) {
                 cell.addOccupant(new Wire(dungeon, cell.getPosition()));
-            } 
+            } else if (Objects.equals(type, SwitchDoor.STRING_TYPE)) {
+                cell.addOccupant(new SwitchDoor(dungeon, cell.getPosition(), entity.getInt("id"), getLogicString(entity)));
+            }
             else {
                 throw new Error("unhandled entity type: " + type);
             }
@@ -218,6 +219,15 @@ public class Dungeon {
             .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
         return dungeon;
+    }
+
+    public static String getLogicString(JSONObject entity) {
+        try {
+            String logic = entity.getString("logic");
+            return logic;
+        } catch (JSONException e) {
+            return null;
+        }
     }
     
     public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
@@ -329,6 +339,10 @@ public class Dungeon {
     
     public Pos2d getPlayerPosition() {
         return this.player.getPosition();
+    }
+
+    public Integer getTickCount() {
+        return this.tickCount;
     }
 
     public void tick(String itemUsed, Direction movementDirection)

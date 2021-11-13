@@ -150,18 +150,18 @@ public class Cell {
         // }
     }
 
-    public boolean hasUntriggeredFloorSwitch() {
+    public boolean hasDeactivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
+            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isActivated()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean hasTriggeredFloorSwitch() {
+    public boolean hasActivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isTriggered()) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
                 return true;
             }
         }
@@ -170,7 +170,7 @@ public class Cell {
 
     public boolean hasActivatedEntity() {
         for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isTriggered()) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
                 return true;
             }
             if (occupant instanceof Wire && ((Wire) occupant).isActivated()) {
