@@ -61,3 +61,23 @@ removes the possibility of regaining health
 - Blast radius is set to 2
 - A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
   (will not explode if placed next to an already activated switch)
+
+## Battles
+
+| Entity       | Health | Attack Damage | Spawns Every        |
+| ------------ | ------ | ------------- | ------------------- |
+| Player       | 10     | 1             | n/a                 |
+| Zombie Toast | 4      | 1             | 20 or 15            |
+| Mercenary    | 6      | 1             | 50                  |
+| Assassin     | 18     | 1             | 25% chance every 50 |
+| Hydra        | 20     | 1             | 50                  |
+
+Mercenary battle radius: 3
+Assassin battle radius: 3
+
+| Item   | Damage Bonus | Defence Bonus | Durability |
+| ------ | ------------ | ------------- | ---------- |
+| Bow    | 1            | 3             | 100        |
+| Shield | 0            | 3             | 20         |
+| Sword  | 2            | 1             | 20         |
+| Armour | 0            | 2             | 30         |

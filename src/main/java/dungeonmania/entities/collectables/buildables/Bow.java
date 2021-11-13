@@ -71,7 +71,7 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     @Override
     public float getDefenceCoefBonus() {
-        return 3; // shield multiply defence coef by 3
+        return 1;
     }
 
     @Override
