@@ -35,6 +35,35 @@ public class TestSwamp {
     }
 
     @Test
+    public void testAllies() {
+        Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 1, 2);
+        merc1.bribe();
+        
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.RIGHT);
+            assertEquals(1, merc1.getCell().getPlayerDistance());
+        }
+        // merc stuck for 10 ticks
+        
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.RIGHT);
+        assertEquals(4, merc1.getCell().getPlayerDistance());
+        // 7 more ticks left
+        
+        for (int i = 0; i < 7; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(4, merc1.getCell().getPlayerDistance());
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(3 - i, merc1.getCell().getPlayerDistance());
+        }
+        
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.LEFT);
+        assertEquals(1, merc1.getCell().getPlayerDistance());
+    }
+
+    @Test
     public void testMultipleEnemies() {
         // spawn mercenaries staggered horizontal to the swamp.
         Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 6, 2);
