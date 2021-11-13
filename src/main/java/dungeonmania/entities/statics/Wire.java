@@ -4,7 +4,6 @@ import java.util.stream.Stream;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
-import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 

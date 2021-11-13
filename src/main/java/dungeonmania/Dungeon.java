@@ -193,7 +193,7 @@ public class Dungeon {
                 cell.addOccupant(portal);
             } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.ON)) {
                 String logic = entity.getString("logic");
-                
+
                 LightBulb lBulb = new LightBulb(dungeon, cell.getPosition(), logic);
                 lBulb.switchOn();
                 cell.addOccupant(lBulb);

@@ -2,7 +2,6 @@ package dungeonmania.entities.statics;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
-import dungeonmania.entities.StaticEntity;
 
 public class SwitchDoor extends Door {
 
