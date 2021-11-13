@@ -72,8 +72,22 @@ public class Inventory {
 
         if (price.stream().anyMatch(i -> i == null)) return false;
         
-        price.stream().filter(e -> !(e instanceof SunStone)).forEach(i -> collectables.remove(i));
-
+        //SunStone Takes Priority Over Treasure
+        if (price.stream().filter(o -> ((o instanceof SunStone) && ((o instanceof Treasure) || (o instanceof Key)) &&
+         ((o instanceof Wood) || ((o instanceof Arrow) && (o instanceof Arrow))))).findFirst().isPresent()) {
+            //Sceptre is only item which includes both Treasure and OneRing in its Crafting 
+            //Consists of Wood, 2x Arrows, Key or Treasure, Sun Stone
+            System.out.println("Ran Sceptre");
+            price.stream().filter(e -> !(e instanceof SunStone)).forEach(i -> collectables.remove(i));
+        } else if (price.stream().filter(o -> o.getClass().equals(SunStone.class)).findFirst().isPresent()) {
+            //If Inventory Contains SunStone, No Need to Remove the Treasure or the SunStone
+            System.out.println("Ran Treasure/SunStone");
+            price.stream().filter(e -> !((e instanceof SunStone) || (e instanceof Treasure))).forEach(i -> collectables.remove(i));
+        } else {
+            //Inventory Does Not Contain SunStone, Treasure is Used to Pay
+            price.stream().forEach(i -> collectables.remove(i));
+            System.out.println("Neither of SunStone/Treasure");
+        }
         return true;
     }
 
@@ -170,11 +184,13 @@ public class Inventory {
         List<CollectableEntity> found = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
             Optional<CollectableEntity> itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used
-                .filter(item -> ((item.getTypeAsString().equals(itemStringType) || 
-                (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) && !found.contains(item))
+                // find an item of the right type that isn't already used, except
+                // if Treasure is required in the recipe then the SunStone can be used even if it has been previously used
+                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) || 
+                (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) )
                 .findFirst();
-
+            System.out.println("Collectables Stream");
+            System.out.println(itemOpt);
             if (itemOpt.isEmpty()) return null;
             else found.add(itemOpt.get());
         }
