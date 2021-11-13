@@ -43,7 +43,7 @@ public class TestMovement {
     public void testPathFinding1() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding1.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
 
@@ -74,7 +74,7 @@ public class TestMovement {
     public void testPathFinding2() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding2.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
 
@@ -113,7 +113,7 @@ public class TestMovement {
     public void testPathFinding3() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding3.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
 
@@ -150,7 +150,7 @@ public class TestMovement {
     public void testPathFinding4() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding4.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
 
