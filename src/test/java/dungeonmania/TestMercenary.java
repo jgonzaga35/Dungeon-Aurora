@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -33,17 +34,12 @@ public class TestMercenary {
     Mercenary merc;
 
     @BeforeEach
-    public void setStartingPostition() throws IOException 
-    {
+    public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_merc_test.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
-        player = (Player) dungeon.getMap().allEntities().stream()
-            .filter(e -> e instanceof Player)
-            .findFirst().get();
-        merc = (Mercenary) dungeon.getMap().allEntities().stream()
-            .filter(e -> e instanceof Mercenary)
-            .findFirst().get();
+        player = TestUtils.getPlayer(dungeon);
+        merc = TestUtils.getMercenary(dungeon);
 
         dungeon.getMap().flood();
     }
@@ -60,7 +56,7 @@ public class TestMercenary {
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 5)
-        
+
         for (int i = 0; i < 5; i++) {
             resp = dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
@@ -68,7 +64,7 @@ public class TestMercenary {
         }
         // player pos (7, 0)
         // merc pos (5, 0)
-        
+
         for (int i = 0; i < 1; i++) {
             resp = dc.tick(null, Direction.NONE);
             System.out.println(merc.getCell().getPlayerDistance());
@@ -77,7 +73,7 @@ public class TestMercenary {
         }
         // player pos (7, 0)
         // merc pos (6, 0)
-        
+
         resp = dc.tick(null, Direction.UP);
         // player pos (7, 0)
         // merc pos (7, 0)
@@ -97,14 +93,14 @@ public class TestMercenary {
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 5)
-        
+
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)
-        
+
         for (int i = 0; i < 1; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(merc.getCell().getPlayerDistance() < dist);
@@ -112,35 +108,32 @@ public class TestMercenary {
         }
         // player pos (7, 0)
         // merc pos (6, 0)
-        
+
         dc.interact(merc.getId());
         dc.tick(null, Direction.UP);
         // player pos (7, 0)
         assertEquals(new Pos2d(6, 0), merc.getPosition());
         assertEquals(new Pos2d(7, 0), player.getPosition());
-        
+
         dc.tick(null, Direction.LEFT);
-        assertTrue(
-            merc.getPosition().equals(new Pos2d(5, 0)) || 
-            merc.getPosition().equals(new Pos2d(6, 1)) ||
-            merc.getPosition().equals(new Pos2d(7, 0))
-        );
+        assertTrue(merc.getPosition().equals(new Pos2d(5, 0)) || merc.getPosition().equals(new Pos2d(6, 1))
+                || merc.getPosition().equals(new Pos2d(7, 0)));
         // player pos (6, 0)
-        
+
         dc.tick(null, Direction.LEFT);
-        
+
         dc.tick(null, Direction.LEFT);
         assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (5, 0)
-        
+
         dc.tick(null, Direction.RIGHT);
         assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 0)
-        
+
         dc.tick(null, Direction.DOWN);
         assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 1)
-        
+
         dc.tick(null, Direction.UP);
         assertTrue(merc.getCell().getPlayerDistance() == 1);
         // player pos (6, 0)
@@ -154,16 +147,15 @@ public class TestMercenary {
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact("invalid");
         });
-        
-        
+
         // Try bribing with no money
         assertThrows(InvalidActionException.class, () -> {
             dc.interact(merc.getId());
         });
-        
+
         for (int i = 0; i < 2; i++) {
             dc.tick(null, Direction.RIGHT);
-            
+
             assertTrue(merc.getCell().getPlayerDistance() == dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -172,7 +164,7 @@ public class TestMercenary {
         assertThrows(InvalidActionException.class, () -> {
             dc.interact(merc.getId());
         });
-        
+
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
@@ -181,15 +173,50 @@ public class TestMercenary {
         // player pos (7, 0)
         // merc pos (5, 0)
         // two cardinal squares away, bribe possible
-        
-        assertDoesNotThrow(() -> dc.interact(merc.getId()));    
-        
+
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));
+
         // Try bribing friendly
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact(merc.getId());
         });
     }
-    
+
+    @Test
+    public void testScepter() {
+        TestUtils.spawnScepter(dungeon, 5, 5);
+
+        Integer dist = merc.getCell().getPlayerDistance();
+
+        DungeonResponse r = null;
+
+        while (merc.getCell().getPlayerDistance() != 1) {
+            r = dc.tick(null, Direction.NONE);
+            assertTrue(merc.getCell().getPlayerDistance() < dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+
+        assertEquals(1, TestUtils.countInventoryOfType(r, Sceptre.STRING_TYPE));
+
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));
+
+        // Try bribing friendly
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact(merc.getId());
+        });
+
+        // Stays an ally for 10 ticks
+        for (int i = 0; i < 10; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(1, merc.getCell().getPlayerDistance());
+        }
+
+        // Should fight next tick
+        r = dc.tick(null, Direction.NONE);
+
+        assertEquals(0, TestUtils.countEntitiesOfType(r, Mercenary.STRING_TYPE));
+    }
+
     /**
      * Makes sure mercenaries spawn, and at the right place!
      */
@@ -203,51 +230,47 @@ public class TestMercenary {
         DungeonResponse resp = ctr.newGame("_mercenary_zoo", GameMode.STANDARD.getValue());
         ctr.setSeed(1);
         assertEquals(0, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE));
-        
+
         // player locks goes and locks himself with the boulder
-        for (int i = 0; i < 3; i++) ctr.tick(null, Direction.RIGHT);
-        for (int i = 0; i < 2; i++) ctr.tick(null, Direction.DOWN);
+        for (int i = 0; i < 3; i++)
+            ctr.tick(null, Direction.RIGHT);
+        for (int i = 0; i < 2; i++)
+            ctr.tick(null, Direction.DOWN);
         ctr.tick(null, Direction.LEFT);
         ctr.tick(null, Direction.UP);
         // player is now safe (apart from spiders)
 
         // tick until a mercenary spawns, so that we line up with the tick count
         int ticks_used = 3 + 2 + 1 + 1;
-        assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS; 
-        for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++) resp = ctr.tick(null, Direction.NONE);
-        assertTrue(
-            TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1 ||
-            TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) == 1
-        );
+        assert ticks_used <= Mercenary.SPAWN_EVERY_N_TICKS;
+        for (int i = ticks_used; i < Mercenary.SPAWN_EVERY_N_TICKS; i++)
+            resp = ctr.tick(null, Direction.NONE);
+        assertTrue(TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) == 1
+                || TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE) == 1);
 
         Set<String> knownMercIds = new HashSet<>();
-        knownMercIds.add(resp.getEntities().stream().filter(e -> e.getType().equals(Mercenary.STRING_TYPE)).findFirst().get().getId());
+        knownMercIds.add(resp.getEntities().stream().filter(e -> e.getType().equals(Mercenary.STRING_TYPE)).findFirst()
+                .get().getId());
 
         for (int i = 0; i < 10; i++) { // every loop, we spawn a new zombie
             for (int j = 0; j < Mercenary.SPAWN_EVERY_N_TICKS; j++) {
-                assertEquals(
-                    1 + i, 
-                    TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE),
-                    "on " + i + "th");
+                assertEquals(1 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE)
+                        + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE), "on " + i + "th");
                 resp = ctr.tick(null, Direction.NONE);
             }
-            assertEquals(
-                2 + i, 
-                TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE) + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE),
-                "on " + i + "th"
-            );
+            assertEquals(2 + i, TestUtils.countEntitiesOfType(resp, Mercenary.STRING_TYPE)
+                    + TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE), "on " + i + "th");
 
             // make sure new mercenaries spawn on the player's starting position
             List<EntityResponse> newMerc = resp.getEntities().stream()
-                .filter(e -> e.getType().equals(Mercenary.STRING_TYPE) || e.getType().equals(Assassin.STRING_TYPE))
-                .filter(e -> !knownMercIds.contains(e.getId()))
-                .collect(Collectors.toList());
+                    .filter(e -> e.getType().equals(Mercenary.STRING_TYPE) || e.getType().equals(Assassin.STRING_TYPE))
+                    .filter(e -> !knownMercIds.contains(e.getId())).collect(Collectors.toList());
 
             assertEquals(1, newMerc.size());
 
             assertEquals(0, newMerc.get(0).getPosition().getX());
             assertEquals(2, newMerc.get(0).getPosition().getY());
-            
+
             knownMercIds.add(newMerc.get(0).getId());
         }
     }
