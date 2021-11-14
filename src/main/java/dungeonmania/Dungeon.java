@@ -18,6 +18,7 @@ import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
@@ -149,6 +150,8 @@ public class Dungeon {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
                 cell.addOccupant(new Wood(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Anduril.STRING_TYPE)) {
+                cell.addOccupant(new Anduril(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Sword.STRING_TYPE)) {
                 cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
@@ -156,9 +159,9 @@ public class Dungeon {
             } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
                 cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
-                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
@@ -354,6 +357,7 @@ public class Dungeon {
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
         
+
         //Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 
@@ -544,11 +548,9 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon)
-            return;
-
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
-            return;
+        if (!this.hadEnemiesAtStartOfDungeon) return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;

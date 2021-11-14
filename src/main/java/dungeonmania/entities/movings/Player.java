@@ -1,12 +1,18 @@
 package dungeonmania.entities.movings;
 
+import java.util.List;
+
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
+import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.Utils;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
@@ -14,10 +20,11 @@ public class Player extends MovingEntity implements Fighter {
 
     public static String STRING_TYPE = "player";
 
-    private float health = 10;
+    private float health;
     
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+        this.health = this.getStartingHealth();
     }
 
     /**
@@ -69,6 +76,24 @@ public class Player extends MovingEntity implements Fighter {
     public void tick() {
     }
 
+    /**
+     * @return true if the player has been resurected
+     */
+    public boolean onDeath() {
+        DungeonMap map = this.dungeon.getMap();
+        if (
+            Utils.isDead(this) // we dead
+            && this.dungeon.getInventory().itemsOfType(OneRing.class).count() > 0 // we have a ring!
+            && !map.getEntryCell().isBlocking() // we didn't block the entry
+        ) {
+            this.dungeon.getInventory().useItems(List.of(OneRing.STRING_TYPE));
+            this.health = this.getStartingHealth();
+            this.moveTo(map.getEntryCell());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public float getHealth() {
         return this.health;
@@ -81,13 +106,13 @@ public class Player extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
-        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK);
+    public float getAttackDamage(Fighter target) {
+        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK, target);
     }
 
     @Override
     public float getDefenceCoef() {
-        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE);
+        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE, null);
     }
 
     @Override
@@ -104,4 +129,18 @@ public class Player extends MovingEntity implements Fighter {
     public Entity getEntity() {
         return this;
     }
+
+    @Override
+    public boolean isBoss() {
+        return false;
+    }
+
+    private float getStartingHealth() {
+        if (this.dungeon.getGameMode() == GameMode.HARD) {
+            return 8;
+        } else {
+            return 10;
+        }
+    }
+
 }

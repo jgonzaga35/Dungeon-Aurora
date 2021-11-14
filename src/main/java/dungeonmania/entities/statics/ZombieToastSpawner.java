@@ -18,7 +18,7 @@ import dungeonmania.util.Semy.Observer;
 
 public class ZombieToastSpawner extends StaticEntity {
 
-    public static String STRING_TYPE = "zombie toast spawner";
+    public static String STRING_TYPE = "zombie_toast_spawner";
     private int tickCount = 0;
 
     private Semy<ZombieToast> onZombieSpawnSemy = new Semy<>();
@@ -67,7 +67,6 @@ public class ZombieToastSpawner extends StaticEntity {
         Cell cell = Utils.choose(availableCells, this.dungeon.getRandom());
         ZombieToast zombieToast = new ZombieToast(this.dungeon, cell.getPosition());
         cell.addOccupant(zombieToast);
-        cell.onWalked(this.position, cell.getPosition());
         this.onZombieSpawnSemy.emit(zombieToast);
     }
 

@@ -10,9 +10,9 @@ import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.*;
+import dungeonmania.entities.Fighter;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
-import dungeonmania.DungeonMap;
 
 public class Inventory {
     private List<CollectableEntity> collectables = new ArrayList<>();
@@ -251,7 +251,7 @@ public class Inventory {
      * @param d battle direction
      * @return total bonus
      */
-    public float totalBonus(BattleDirection d) {
+    public float totalBonus(BattleDirection d, Fighter target) {
         float bonus = 1;
         if (d == BattleDirection.ATTACK) {
             bonus = 0;
@@ -262,7 +262,7 @@ public class Inventory {
             if (item instanceof BattleItem) {
                 BattleItem bitem = (BattleItem) item;
                 if (d == BattleDirection.ATTACK) {
-                    bonus += bitem.getAttackDamageBonus();
+                    bonus += bitem.getAttackDamageBonus(target);
                 } else if (d == BattleDirection.DEFENCE) {
                     bonus *= bitem.getDefenceCoefBonus();
                 }

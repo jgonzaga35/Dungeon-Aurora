@@ -30,6 +30,11 @@ public class Cell {
         return this.playerDistance;
     }
 
+    public Integer getTravelCost() {
+        if (getSwamp() != null) return getSwamp().getMovementFactor();
+        return 1;
+    }
+
     public void setPlayerDistance(Integer playerDistance) {
         this.playerDistance = playerDistance;
     }
@@ -143,12 +148,6 @@ public class Cell {
         }
     }
 
-    public void onWalked(Pos2d from, Pos2d to) {
-        // for (Entity e: this.occupants) {
-        //     // e.onWalked(from, to);
-        // }
-    }
-
     public boolean hasUntriggeredFloorSwitch() {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
@@ -156,5 +155,11 @@ public class Cell {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String str = "[pos: " + position.toString() + ", Tcost: " + getTravelCost() + "]";
+        return str;
     }
 }

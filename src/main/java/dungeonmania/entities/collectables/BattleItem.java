@@ -1,6 +1,7 @@
 package dungeonmania.entities.collectables;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
+import dungeonmania.entities.Fighter;
 
 public interface BattleItem {
     /**
@@ -29,7 +30,7 @@ public interface BattleItem {
     public float getDefenceCoefBonus();
 
     /**
-     * This bonus will be added to the the attack damange of the fighter
+     * This bonus will be added to the the attack damage of the fighter
      */
-    public float getAttackDamageBonus();
+    public float getAttackDamageBonus(Fighter target);
 }
