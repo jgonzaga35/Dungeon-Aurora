@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.BattleItem;
@@ -27,7 +26,7 @@ import dungeonmania.response.models.ItemResponse;
  * Represents an inventory that contains collectable items.
  */
 public class Inventory {
-    private List<CollectableEntity> collectables = new ArrayList<>();
+    private List<Entity> collectables = new ArrayList<>();
 
     /**
      * Can't pick up more than one key
@@ -35,7 +34,7 @@ public class Inventory {
      * @param c collectable to add
      * @return true if the player was able to pick the collectable up
      */
-    public boolean add(CollectableEntity c) {
+    public boolean add(Entity c) {
         if (c instanceof Key && this.contains(Key.class)) {
             // Player cannot pickup a second key
             return false;
@@ -54,12 +53,12 @@ public class Inventory {
      * @param c collectable to remove
      * @return true if the collectable was in the inventory
      */
-    public boolean remove(CollectableEntity c) {
+    public boolean remove(Entity c) {
         return this.collectables.remove(c);
     }
 
     public boolean remove(String stringType) {
-        for (CollectableEntity item : this.collectables) {
+        for (Entity item : this.collectables) {
             if (item.getTypeAsString() == stringType) {
                 return remove(item);
             }
@@ -72,16 +71,16 @@ public class Inventory {
      * 
      * @return true if the inventory had something removed
      */
-    public boolean pay(List<Class<? extends CollectableEntity>> cost) {
-        List<CollectableEntity> price = new ArrayList<>();
+    public boolean pay(List<Class<? extends Entity>> list) {
+        List<Entity> price = new ArrayList<>();
         
-        cost.stream().forEach(t -> {
-            CollectableEntity item = (CollectableEntity) collectables.stream()
+        list.stream().forEach(t -> {
+            Entity item =  collectables.stream()
                 .filter(c -> t.isInstance(c))
                 .findFirst().orElse(null);
             
             //Only Pay with the Item if There are Not Enough of the Specified Type Already Paid in the Cost
-            if (cost.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count() ) {
+            if (list.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count() ) {
                 price.add(item);
             }
         });
@@ -105,7 +104,7 @@ public class Inventory {
      * @throws InvalidActionException
      */
     public void build(String buildable) throws InvalidActionException {
-        List<CollectableEntity> items;
+        List<Entity> items;
         switch (buildable) {
             case Shield.STRING_TYPE:
                 items = buildable(Shield.RECIPES);
@@ -141,9 +140,9 @@ public class Inventory {
      * @param recipes of the item
      * @return true if item can be built
      */
-    public List<CollectableEntity> buildable(List<List<String>> recipes) {
+    public List<Entity> buildable(List<List<String>> recipes) {
         for (List<String> recipe : recipes) {
-            List<CollectableEntity> items = findItems(recipe);
+            List<Entity> items = findItems(recipe);
             if (items != null) return items;
         }
         return null;
@@ -183,10 +182,10 @@ public class Inventory {
      * @return the entity used.
      * 
      */
-    public CollectableEntity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
+    public Entity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
 
         // find item
-        CollectableEntity itemUsed = collectables.stream()
+        Entity itemUsed = collectables.stream()
             .filter(c -> c.getId().equals(entityId))
             .findFirst().orElse(null);
 
@@ -213,9 +212,9 @@ public class Inventory {
      */
     public boolean useItems(List<String> itemsStringType) {
 
-        List<CollectableEntity> toRemove = new ArrayList<>();
+        List<Entity> toRemove = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
-            Optional<CollectableEntity> itemOpt = this.collectables.stream()
+            Optional<Entity> itemOpt = this.collectables.stream()
                 // find an item of the right type that isn't already used
                 .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
                 .findFirst();
@@ -236,10 +235,10 @@ public class Inventory {
      * @param itemsStringType list of String
      * @return null if inventory does not contain all the items, else return the list of items
      */
-    public List<CollectableEntity> findItems(List<String> itemsStringType) {
-        List<CollectableEntity> found = new ArrayList<>();
+    public List<Entity> findItems(List<String> itemsStringType) {
+        List<Entity> found = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
-            Optional<CollectableEntity> itemOpt = this.collectables.stream()
+            Optional<Entity> itemOpt = this.collectables.stream()
                 // find an item of the right type that isn't already used, except
                 // if Treasure is required in the recipe then the SunStone can be used even if it has been previously used
                 .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) || 
@@ -268,8 +267,8 @@ public class Inventory {
      * @param d
      */
     public void usedItemsForBattle(BattleDirection d) {
-        List<CollectableEntity> deadItems = new ArrayList<>();
-        for (CollectableEntity item : this.collectables) {
+        List<Entity> deadItems = new ArrayList<>();
+        for (Entity item : this.collectables) {
             if (item instanceof BattleItem) {
                 BattleItem bitem = (BattleItem) item;
                 bitem.usedForBattleRound(d);
@@ -289,8 +288,8 @@ public class Inventory {
     public boolean usedItemForBattle(BattleItem bitem, BattleDirection d) {
         bitem.usedForBattleRound(d);
         if (bitem.getDurability() <= 0) {
-            assert bitem instanceof CollectableEntity;
-            this.collectables.remove((CollectableEntity) bitem);
+            assert bitem instanceof Entity;
+            this.collectables.remove((Entity) bitem);
             return true;
         }
         return false;
@@ -326,7 +325,7 @@ public class Inventory {
         } else if (d == BattleDirection.DEFENCE) {
             bonus = 1;
         }
-        for (CollectableEntity item : this.collectables) {
+        for (Entity item : this.collectables) {
             if (item instanceof BattleItem) {
                 BattleItem bitem = (BattleItem) item;
                 if (d == BattleDirection.ATTACK) {
@@ -343,9 +342,9 @@ public class Inventory {
      * @usage for example, {@code inventory.itemsOfType(Shield).forEach(shield -> foobar)}
      * @param <T> type
      * @param type type
-     * @return Stream of CollectableEntities
+     * @return Stream of Entities
      */
-    public <T extends CollectableEntity> Stream<T> itemsOfType(Class<T> type) {
+    public <T extends Entity> Stream<T> itemsOfType(Class<T> type) {
         return this.collectables.stream().filter(e -> type.isInstance(e)).map(e -> {
             @SuppressWarnings("unchecked") T t = (T)e; // bruh
             return t;
@@ -358,7 +357,7 @@ public class Inventory {
      */
     public List<ItemResponse> asItemResponses() {
         List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
-        for (CollectableEntity item : collectables) {
+        for (Entity item : collectables) {
             String id = item.getId();
             String type = item.getTypeAsString();
             ItemResponse currItemResponse = new ItemResponse(id, type);
@@ -371,7 +370,7 @@ public class Inventory {
      * 
      * @return list of stored collectable entities
      */
-    public List<CollectableEntity> getCollectables() {
+    public List<Entity> getCollectables() {
         return this.collectables;
     }
 

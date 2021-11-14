@@ -37,7 +37,7 @@ public class DungeonManiaController {
      * https://stackoverflow.com/a/3990421/6164984
      */
     public enum LayerLevel {
-        STATIC(1), COLLECTABLE(25), MOVING_ENTITY(50), PLAYER(100);
+        STATIC(1), BOULDER(2), COLLECTABLE(25), MOVING_ENTITY(50), PLAYER(100);
 
         private final int value;
 

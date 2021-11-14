@@ -3,20 +3,20 @@ package dungeonmania.entities.collectables;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Hashtable;
-import java.lang.Math;
-
-import dungeonmania.Dungeon;
-import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.movings.Player;
-import dungeonmania.util.Direction;
+import java.util.List;
+import java.util.Objects;
 
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.Pos2d;
+import dungeonmania.entities.LogicalEntity;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.util.Direction;
 
 /**
  * Represents Bomb.
@@ -25,7 +25,7 @@ import dungeonmania.Entity;
  * if a boulder is pushed onto the switch then the bomb explodes, 
  * destroying all entities in the bomb's blast radius, except for the character.
  */
-public class Bomb extends CollectableEntity {
+public class Bomb extends LogicalEntity {
 
     public static String STRING_TYPE = "bomb";
 
@@ -33,11 +33,14 @@ public class Bomb extends CollectableEntity {
 
     public boolean isPlaced = false;
 
+    public Logic logic;
+
     private Hashtable<String, Boolean> adjacentSwitchStatus = new Hashtable<String, Boolean>();
 
-    public Bomb(Dungeon dungeon, Pos2d position, boolean isPlaced) {
-        super(dungeon, position);
+    public Bomb(Dungeon dungeon, Pos2d position, boolean isPlaced, String logic) {
+        super(dungeon, position, logic);
         this.isPlaced = isPlaced;
+        this.logic = parseLogic(logic);
     }
 
     /**
@@ -150,8 +153,8 @@ public class Bomb extends CollectableEntity {
      * Destroys all Entities (excl Player) in blast radius
      * @return void
      */
-    public void explode() {
-
+    @Override
+    public void activate() {
         Hashtable<String, Integer> dimensionDetails = findBlastSearchArea();
 
         //Traversing through Blast Square
@@ -176,7 +179,7 @@ public class Bomb extends CollectableEntity {
 
         //Adding Switch to the Dictionary
         String currId = currentSwitch.getId();
-        Boolean currSwitchActivated = currentSwitch.isTriggered();
+        Boolean currSwitchActivated = currentSwitch.isActivated();
 
         if (adjacentSwitchStatus.containsKey(currId) == false) {
             //If this switch has not yet been checked
@@ -200,6 +203,7 @@ public class Bomb extends CollectableEntity {
      * @return Boolean, true if bomb is adjacent to floor switch
      */
     private boolean bombCheckCardinalAdjacency() {
+
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
 
@@ -230,7 +234,7 @@ public class Bomb extends CollectableEntity {
                 List<Entity> occupants = currentCell.getOccupants();
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
-                        if (currOccupant.getTypeAsString().equals(FloorSwitch.STRING_TYPE)) {
+                        if (currOccupant instanceof FloorSwitch) {
                             if (checkSwitchNewlyActivated(currOccupant) == true) {
                                 return true;
                             }
@@ -245,6 +249,11 @@ public class Bomb extends CollectableEntity {
     @Override
     public String getTypeAsString() {
         return Bomb.STRING_TYPE;
+    }
+
+    @Override
+    public boolean canConnect() {
+        return true;
     }
 
     @Override
@@ -263,8 +272,37 @@ public class Bomb extends CollectableEntity {
      */
     @Override
     public void tick() {
-        if (bombCheckCardinalAdjacency()) {
-            explode();
+        this.getConnectedEntities()
+        .stream()
+        .filter(e -> e instanceof FloorSwitch )
+        .forEach(f -> f.tick());
+
+        if (Objects.isNull(logic)) {
+            if (bombCheckCardinalAdjacency()) {
+                activate();
+            }
+        } else if (Objects.equals(logic, Logic.AND)) {
+            andActivation();
+        } else if (Objects.equals(logic, Logic.OR)) {
+            orActivation();
+        } else if (Objects.equals(logic, Logic.XOR)) {
+            xorActivation();
+        } else if (Objects.equals(logic, Logic.CO_AND)) {
+            co_andActivation();
         }
     }
+
+
+    @Override
+    public LayerLevel getLayerLevel() {
+        return LayerLevel.COLLECTABLE;
+    }
+
+    @Override
+    public void deactivate() {
+
+        
+    }
+
+
 }
