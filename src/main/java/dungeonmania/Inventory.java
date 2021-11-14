@@ -81,19 +81,19 @@ public class Inventory {
     public void build(String buildable) throws InvalidActionException {
         List<CollectableEntity> items;
         switch (buildable) {
-            case "shield":
+            case Shield.STRING_TYPE:
                 items = buildable(Shield.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
                 collectables.add(new Shield(null, null));
                 return;
-            case "sceptre":
+            case Sceptre.STRING_TYPE:
                 items = buildable(Sceptre.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
                 collectables.add(new Sceptre(null, null));
                 return;
-            case "bow":
+            case Bow.STRING_TYPE:
                 items = buildable(Bow.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
