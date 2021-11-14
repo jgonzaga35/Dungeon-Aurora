@@ -10,6 +10,9 @@ import dungeonmania.Dungeon;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+/**
+ * Represents a boolean operator "AND" in the recursive goal structure.
+ */
 public class AndGoal extends Goal {
 
     public static String STRING_TYPE = "AND";

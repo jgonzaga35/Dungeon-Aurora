@@ -5,6 +5,11 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+/**
+ * Represents a treasure.
+ * A treasure can be collected by the player.
+ * Can be used for bribing or building items.
+ */
 public class Treasure extends CollectableEntity {
 
     public static String STRING_TYPE = "treasure";

@@ -7,6 +7,9 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Utils;
 
+/**
+ * Represents a random movement behaviour that follows no pattern.
+ */
 public class RandomMovementBehaviour extends MovementBehaviour {
     private Dungeon dungeon;
 

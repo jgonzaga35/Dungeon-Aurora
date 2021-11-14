@@ -6,6 +6,10 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
+/**
+ * Represents a portal.
+ * Teleports entities to a corresponding portal.
+ */
 public class Portal extends StaticEntity {
 
     public static String STRING_TYPE = "portal";
@@ -48,7 +52,7 @@ public class Portal extends StaticEntity {
 
     @Override
     public boolean isInteractable() {
-        return true; // not too sure what this function does yet but I will figure it out later - justin
+        return true; 
     }
 
     @Override

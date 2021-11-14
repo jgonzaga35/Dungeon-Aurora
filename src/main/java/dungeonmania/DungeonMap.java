@@ -27,6 +27,10 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Graph;
 import dungeonmania.util.Vertex;
 
+/**
+ * Represents the map of the dungeon.
+ * Stores each square of the map as a "Cell" class.
+ */
 public class DungeonMap {
 
     final private String PLAYER = " P ";
@@ -73,11 +77,14 @@ public class DungeonMap {
         return count;
     }
 
-
+    /**
+     * 
+     * @return true if all floor switches on the map have been triggered.
+     */
     public boolean allFloorSwitchesTriggered()  {
         for (List<Cell> row : dungeonMap) {
             for (Cell cell : row) {
-                if (cell.hasUntriggeredFloorSwitch()) {
+                if (cell.hasDeactivatedFloorSwitch()) {
                     return false;
                 } 
             }
@@ -127,10 +134,17 @@ public class DungeonMap {
         }
     }
     
+    /**
+     * @return the Cell that represents the given position
+     */
     public Cell getCell(Pos2d pos) {
         return this.getCell(pos.getX(), pos.getY());
     }
 
+    /**
+     * 
+     * @return list of all entities inside the dungeon
+     */
     public List<Entity> allEntities() {
         List<Entity> all = new ArrayList<Entity>();
         for (List<Cell> row : dungeonMap) {
@@ -141,6 +155,9 @@ public class DungeonMap {
         return all;
     }
 
+    /**
+     * @return the Cell that represents the given position
+     */
     public Cell getCell(int x, int y) {
         if (y < 0 || y >= height) return null;
         if (x < 0 || x >= width) return null;
@@ -282,6 +299,13 @@ public class DungeonMap {
         }
     }
 
+    /**
+     * Direction.NONE returns the given cell
+     * 
+     * @param cell
+     * @param d
+     * @return the cell above, below, left or right of cell, depending on direction
+     */
     public Cell getCellAround(Pos2d position, Direction d) {
         Cell cell = getCell(position);
         return getCellAround(cell, d);
@@ -300,6 +324,11 @@ public class DungeonMap {
             .filter(cell -> cell != null);
     }
 
+    /**
+     * help function to assist in calculating distance from player to cell
+     * @param cell
+     * @return
+     */
     private int propagateFrom(Cell cell) {
         AtomicInteger changesMade = new AtomicInteger(0);
 
@@ -382,12 +411,17 @@ public class DungeonMap {
     /**
      * the entry of the map is where the player spawns (and the cell on which
      * mercenaries later spawn)
-     * @return readonly entry position
+     * @return entry position
      */
     public Pos2d getEntry() {
         return this.entry;
     }
 
+    /**
+     * the entry of the map is where the player spawns (and the cell on which
+     * mercenaries later spawn)
+     * @return Cell that represents the entry position
+     */
     public Cell getEntryCell() {
         return this.getCell(this.getEntry());
     }

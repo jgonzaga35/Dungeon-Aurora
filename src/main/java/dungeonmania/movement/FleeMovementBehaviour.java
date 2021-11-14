@@ -3,6 +3,10 @@ package dungeonmania.movement;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents the flee movement behaviour of enemies when player is invicible.
+ * The flee movement will cause the entity to move away from the player.s
+ */
 public class FleeMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
 

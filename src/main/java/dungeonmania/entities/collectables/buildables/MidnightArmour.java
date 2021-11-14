@@ -3,18 +3,23 @@ package dungeonmania.entities.collectables.buildables;
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.SunStone;
 
+/**
+ * Represents the Midnight Armour.
+ * Midnight Armour grants the player extra attack and defense.
+ */
 public class MidnightArmour extends Shield {
     public static final String STRING_TYPE = "midnight_armour";
     public static int INITIAL_DURABILITY = 40;
 
     private int durability;
 
+    // A list of recipes used to contract the buildable item.
     public static List<List<String>> RECIPES = List.of(
         List.of(
             SunStone.STRING_TYPE,
@@ -22,9 +27,21 @@ public class MidnightArmour extends Shield {
         )
     );
 
+    /**
+     * Constructor for Midnight Armour
+     * @param Dungeon dungeon
+     * @param Pos2d position where Midnight Armour is located
+     */
     public MidnightArmour(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durability = INITIAL_DURABILITY;
+    }
+
+    @Override
+    public void usedForBattleRound(BattleDirection d) {
+        if (d == BattleDirection.DEFENCE) {
+            this.durability--;
+        }
     }
 
     @Override

@@ -16,6 +16,11 @@ import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Semy;
 import dungeonmania.util.Semy.Observer;
 
+/**
+ * Reopresents a zombie toast spawner.
+ * Spawns zombie toasts every 20 ticks in an open square cardinally adjacent to the spawner. 
+ * The character can destroy a zombie spawner if they have a weapon and are cardinally adjacent to the spawner.
+ */
 public class ZombieToastSpawner extends StaticEntity {
 
     public static String STRING_TYPE = "zombie_toast_spawner";

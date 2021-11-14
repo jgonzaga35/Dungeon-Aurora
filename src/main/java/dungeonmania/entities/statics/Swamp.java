@@ -5,6 +5,10 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 
+/**
+ * Represents a swamp tile.
+ * It takes 2 ticks for enemies to traverse the swamp tile.
+ */
 public class Swamp extends StaticEntity {
 
     public static String STRING_TYPE = "swamp_tile";
@@ -31,5 +35,7 @@ public class Swamp extends StaticEntity {
     }
 
     @Override
-    public void tick() {}
+    public void tick() {
+        // Do nothing.
+    }
 }

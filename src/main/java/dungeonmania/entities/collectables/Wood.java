@@ -5,6 +5,10 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+/**
+ * Represents wood.
+ * Wood can be collected by the player and be used for building items.
+ */
 public class Wood extends CollectableEntity {
 
     public static String STRING_TYPE = "wood";

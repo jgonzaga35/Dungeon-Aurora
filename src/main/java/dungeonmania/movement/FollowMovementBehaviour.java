@@ -5,6 +5,10 @@ import java.util.List;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents the follow movement behaviour of an entity following the player.
+ * Entity will follow the movement of the player.
+ */
 public class FollowMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
 
@@ -29,6 +33,10 @@ public class FollowMovementBehaviour extends MovementBehaviour {
                     (c1, c2) -> 
                     Integer.compare(c1.getTravelCost(), c2.getTravelCost())
                 ).get();
+        }
+
+        if (next.getPosition().squareDistance(this.getCurrentCell().getPosition()) > 1) {
+            return this.getCurrentCell();
         }
 
         assert next != null;

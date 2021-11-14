@@ -35,8 +35,6 @@ public class Vertex<T> {
 
         Vertex<?> vert = (Vertex<?>) obj;
 
-        // if (!vert.getDistance().equals(this.distance)) return false;
-
         return vert.getData().equals(this.getData());
     }
 

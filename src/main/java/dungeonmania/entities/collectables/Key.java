@@ -5,6 +5,9 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+/**
+ * Represents a key that can be used to unlock doors.
+ */
 public class Key extends CollectableEntity {
 
     public static String STRING_TYPE = "key";
@@ -31,7 +34,7 @@ public class Key extends CollectableEntity {
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false;
     }
 
     @Override

@@ -9,7 +9,9 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 
-
+/**
+ * Represents a boolean operator "OR" in the recursive goal structure.
+ */
 public class OrGoal extends Goal {
 
     public static String STRING_TYPE = "OR";

@@ -6,5 +6,12 @@
     "cSpell.words": [
         "Anduril",
         "dungeonmania"
+    ],
+    "spellright.language": [
+        "English (Australian)"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex"
     ]
 }

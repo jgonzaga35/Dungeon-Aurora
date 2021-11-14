@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
@@ -29,16 +30,25 @@ public class TestUtils {
         throw new Error("player wasn't found");
     }
 
-    public static void purgeEnemyArmour(Dungeon dungeon) {
+    public static void clearEnemyInventories(Dungeon dungeon) {
         dungeon.getMap().allEntities().stream().forEach(e -> {
-            if (e instanceof Mercenary) {
-                Mercenary merc = (Mercenary) e;
-                merc.removeArmour();
+            if (e instanceof MovingEntity && !(e instanceof Player)) {
+                MovingEntity merc = (MovingEntity) e;
+                merc.clearInventory();
             }
-            if (e instanceof ZombieToast) {
-                ZombieToast zom = (ZombieToast) e;
-                zom.removeArmour();
+            if (e instanceof Player)
+                ((Player) e).getInventory().purgeOneRing();
+        });
+    }
+
+    public static void clearEnemyInventories(Dungeon dungeon, boolean clearRing) {
+        dungeon.getMap().allEntities().stream().forEach(e -> {
+            if (e instanceof MovingEntity && !(e instanceof Player)) {
+                MovingEntity merc = (MovingEntity) e;
+                merc.clearInventory();
             }
+            if (e instanceof Player && clearRing)
+                ((Player) e).getInventory().purgeOneRing();
         });
     }
 

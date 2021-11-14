@@ -3,17 +3,22 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.logicals.FloorSwitch;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
+import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Direction;
 
+/**
+ * Represents a single cell or square of the dungeon map.
+ * Entities occupying a cell are stored inside this class.
+ */
 public class Cell {
     /**
      * all the entities on that cell
@@ -26,10 +31,18 @@ public class Cell {
         this.position = position;
     }
 
+    /**
+     * Calculates the distance between the player and this cell.
+     * @return Integer representing the distance 
+     */
     public Integer getPlayerDistance() {
         return this.playerDistance;
     }
 
+    /**
+     * Calculates the travel cost to traverse the current cell
+     * @return Integer representing the coast 
+     */
     public Integer getTravelCost() {
         if (getSwamp() != null) return getSwamp().getMovementFactor();
         return 1;
@@ -43,17 +56,25 @@ public class Cell {
         return this.position;
     }
 
+    /**
+     * Add an occupent to the current list of occupants in the cell
+     * @param e, an entity
+     */
     public void addOccupant(Entity e) {
         this.occupants.add(e);
     }
 
+    /**
+     * Is there a boulder occupying this cell?
+     * @return boolean, true if there is boulder and false if not
+     */
     public boolean hasBoulder() {
         return occupants.stream().anyMatch(occupant -> occupant instanceof Boulder);
     }
 
     /**
-     * 
-     * @param d
+     * Tries to push the boulder to another cell.
+     * @param d, direction of the push
      * @return true if boulder is successfully pushed
      */
     public boolean pushBoulder(Direction d) {
@@ -68,6 +89,10 @@ public class Cell {
         else return boulder.roll(d);
     }
 
+    /**
+     * Attempts to unlock the door on this cell
+     * @return boolean representing success
+     */
     public boolean unlockDoor() {
         Door door = null;
         for (Entity e : occupants) {
@@ -96,6 +121,10 @@ public class Cell {
         return (Swamp) occupants.stream().filter(o -> o instanceof Swamp).findFirst().orElse(null);
     }
 
+    /**
+     * Return floor switch if cell has a floor switch
+     * @return
+     */
     public FloorSwitch getFloorSwitch() {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof FloorSwitch) {
@@ -105,10 +134,16 @@ public class Cell {
         return null;
     }
     
+    /**
+     * @return boolean, true if the player is on this cell, false otherwise
+     */
     public boolean hasPlayer() {
         return this.occupants.stream().anyMatch(e -> e instanceof Player);
     }
 
+    /**
+     * @return boolean, true if the exit is on this cell, false otherwise
+     */
     public boolean hasExit() {
         return this.occupants.stream().anyMatch(e -> e instanceof Exit);
     }
@@ -120,6 +155,11 @@ public class Cell {
         return occupants;
     }
 
+    /**
+     * Removes an occupant from this cell
+     * @param e, the entity being removed
+     * @return boolean representing success of the removal
+     */
     public boolean removeOccupant(Entity e) {
         return this.occupants.remove(e);
     }
@@ -133,6 +173,11 @@ public class Cell {
                 !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
                     return ((StaticEntity)e).isBlocking();
                 }
+
+            if (e instanceof LogicalEntity && 
+            !((LogicalEntity) e).isBlocking().equals(BlockingReason.NOT)) {
+                return ((LogicalEntity)e).isBlocking();
+            }            
         }
         return BlockingReason.NOT;
     }
@@ -148,9 +193,12 @@ public class Cell {
         }
     }
 
-    public boolean hasUntriggeredFloorSwitch() {
+    /**
+     * @return true if the floor switch on this cell has been triggered
+     */
+    public boolean hasDeactivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
+            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isActivated()) {
                 return true;
             }
         }
