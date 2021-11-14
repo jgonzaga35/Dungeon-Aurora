@@ -18,7 +18,13 @@ import dungeonmania.util.Direction;
 import dungeonmania.Cell;
 import dungeonmania.Entity;
 
-
+/**
+ * Represents Bomb.
+ * Can be collected by the character.
+ * When a character places a bomb cardinally adjacent to a switch, 
+ * if a boulder is pushed onto the switch then the bomb explodes, 
+ * destroying all entities in the bomb's blast radius, except for the character.
+ */
 public class Bomb extends CollectableEntity {
 
     public static String STRING_TYPE = "bomb";

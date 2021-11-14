@@ -3,6 +3,10 @@ package dungeonmania.entities.collectables;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 
+/**
+ * Interface for items that are used in battle, eg. sword & shield.
+ * Each Battle Item has a specific durability that dictates the number of times it can be used before it deteriorates.
+ */
 public interface BattleItem {
     /**
      * decreases the durability by one, if the direction is correct

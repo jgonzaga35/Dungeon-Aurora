@@ -5,6 +5,10 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+/**
+ * Represents arrow that can be picked up by the player.
+ * Used to construct buildable items.
+ */
 public class Arrow extends CollectableEntity {
 
     public static String STRING_TYPE = "arrow";

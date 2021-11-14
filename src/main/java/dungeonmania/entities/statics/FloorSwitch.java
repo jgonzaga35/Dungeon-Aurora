@@ -5,7 +5,13 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
-public class FloorSwitch extends StaticEntity{
+/**
+ * Represents a floor switch.
+ * Switches behave like empty squares, so other entities can appear on top of them. 
+ * When a boulder is pushed onto a floor switch, it is triggered.
+ *  Pushing a boulder off the floor switch untriggers it.
+ */
+public class FloorSwitch extends StaticEntity {
     public static String STRING_TYPE = "switch";
     private boolean triggered = false;
 

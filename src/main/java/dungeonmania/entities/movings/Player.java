@@ -17,6 +17,9 @@ import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
 
+/**
+ * Represents the character that the player controls.
+ */
 public class Player extends MovingEntity implements Fighter {
 
     public static String STRING_TYPE = "player";
@@ -140,6 +143,10 @@ public class Player extends MovingEntity implements Fighter {
         return false;
     }
 
+    /**
+     * Calculates the player's starting health based on the current game mode.
+     * @return
+     */
     private float getStartingHealth() {
         if (this.dungeon.getGameMode() == GameMode.HARD) {
             return 8;

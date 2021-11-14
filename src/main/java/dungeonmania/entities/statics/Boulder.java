@@ -7,6 +7,11 @@ import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Direction;
 
+/**
+ * Represents a boulder.
+ * Acts like a wall in most cases. 
+ * The only difference is that it can be pushed by the character into cardinally adjacent squares. 
+ */
 public class Boulder extends StaticEntity {
     public static final String STRING_TYPE = "boulder";
 

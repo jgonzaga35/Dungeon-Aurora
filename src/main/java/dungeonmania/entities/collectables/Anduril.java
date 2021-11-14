@@ -8,6 +8,9 @@ import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.movings.Hydra;
 
+/**
+ * Represents an Anduril, A very high damage sword which causes triple damage against bosses.
+ */
 public class Anduril extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "anduril";

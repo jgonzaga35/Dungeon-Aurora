@@ -5,6 +5,10 @@ import java.util.List;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents the follow movement behaviour of an entity following the player.
+ * Entity will follow the movement of the player.
+ */
 public class FollowMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
 

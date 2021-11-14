@@ -4,6 +4,9 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 
+/**
+ * Class represents entities that can be built by the player.
+ */
 public abstract class BuildableEntity extends CollectableEntity {
 
     /**

@@ -13,6 +13,12 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
+/**
+ * When the spider spawns, they immediately move the 1 square upwards (towards the top of the screen) 
+ * and then begin 'circling' their spawn spot (see a visual example here). 
+ * Spiders are able to traverse through walls, doors, switches, portals, 
+ * exits (which have no effect), but not boulders, in which case it will reverse direction. 
+ */
 public class Spider extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "spider";

@@ -4,6 +4,12 @@ package dungeonmania.entities.collectables;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 
+/**
+ * Represents a Sun stone.
+ * Can be picked up by the player, 
+ * and can be used to open doors and interchangeably with treasure. 
+ * The player retains the stone after usage. 
+ */
 public class SunStone extends Treasure {
 
     public static final String STRING_TYPE = "sun_stone";

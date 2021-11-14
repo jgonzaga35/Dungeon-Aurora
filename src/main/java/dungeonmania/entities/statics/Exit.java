@@ -6,6 +6,10 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
+/**
+ * Represents an exit on the map.
+ * If the character goes through it, the puzzle is complete.
+ */
 public class Exit extends StaticEntity {
 
     public static String STRING_TYPE = "exit";

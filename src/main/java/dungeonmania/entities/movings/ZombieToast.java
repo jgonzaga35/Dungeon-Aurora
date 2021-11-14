@@ -10,6 +10,12 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.movement.RandomMovementBehaviour;
 
+/**
+ * Represents a zombie toast.
+ * Zombies spawn at zombie spawners and move in random directions. 
+ * Zombies are limited by the same movement constraints as the character, 
+ * except portals have no effect on them.
+ */
 public class ZombieToast extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "zombie_toast";
@@ -84,6 +90,9 @@ public class ZombieToast extends MovingEntity implements Fighter {
         return false;
     }
 
+    /**
+     * Removes the zombie's armour from its inventory.
+     */
     public void removeArmour() {
         inventory.clear();
     }

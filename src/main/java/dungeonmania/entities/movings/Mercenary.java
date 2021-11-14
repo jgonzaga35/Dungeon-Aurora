@@ -17,6 +17,14 @@ import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
+/**\
+ * Represents a mercenary.
+ * On maps with atleast one enemy, mercenaries spawn at the entry location periodically. 
+ * They constantly move towards the character, stopping if they cannot move any closer. 
+ * Mercenaries are limited by the same movement constraints as the character. 
+ * All mercenaries are considered hostile, unless the character can bribe them with a certain amount of gold; 
+ * in which case they become allies. As an ally, once it reaches the player it simply follows the player around.
+ */
 public class Mercenary extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "mercenary";
