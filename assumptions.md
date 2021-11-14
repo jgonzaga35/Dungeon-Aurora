@@ -64,6 +64,9 @@ removes the possibility of regaining health
   has the ring). This creates a nice balance: put a boulder on the entry so that
   mercenaries don't spawn, but be careful because it cancels the one ring
 
+## Midnight Armour
+- Midnight Armour will be displayed as buildable on the frontend once them player has enough resources to build it - even if there are zombies still remaining on the map. When the player tries to build the item while there are zombies the game will display an error.
+
 ## Bombs
 - Blast radius is set to 2
 - A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
