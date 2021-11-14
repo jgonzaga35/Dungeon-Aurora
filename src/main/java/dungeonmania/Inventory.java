@@ -7,10 +7,19 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.*;
-import dungeonmania.entities.collectables.buildables.*;
-import dungeonmania.entities.collectables.consumables.*;
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.collectables.Anduril;
+import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.buildables.Bow;
+import dungeonmania.entities.collectables.buildables.MidnightArmour;
+import dungeonmania.entities.collectables.buildables.Sceptre;
+import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 
@@ -44,6 +53,15 @@ public class Inventory {
      */
     public boolean remove(CollectableEntity c) {
         return this.collectables.remove(c);
+    }
+
+    public boolean remove(String stringType) {
+        for (CollectableEntity item : this.collectables) {
+            if (item.getTypeAsString() == stringType) {
+                return remove(item);
+            }
+        }
+        return false;
     }
 
     /**
@@ -99,6 +117,12 @@ public class Inventory {
                 collectables.removeAll(items);
                 collectables.add(new Bow(null, null));
                 return;
+            case MidnightArmour.STRING_TYPE:
+                items = buildable(MidnightArmour.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new MidnightArmour(null, null));
+                return;
             default:
                 throw new IllegalArgumentException("unknown buildable: " + buildable);
         }
@@ -128,6 +152,7 @@ public class Inventory {
         if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
         if (buildable(Sceptre.RECIPES) != null) buildables.add(Sceptre.STRING_TYPE);
         if (buildable(Shield.RECIPES) != null) buildables.add(Shield.STRING_TYPE);
+        if (buildable(MidnightArmour.RECIPES) != null) buildables.add(MidnightArmour.STRING_TYPE);
 
         return buildables;
     }
@@ -263,7 +288,8 @@ public class Inventory {
         // good enough)
         List<Class<? extends BattleItem>> weapons = List.of(
             Sword.class,
-            Bow.class
+            Bow.class,
+            Anduril.class
         );
         return (BattleItem) this.collectables.stream().filter(e -> weapons.contains(e.getClass())).findFirst().orElse(null);
     }

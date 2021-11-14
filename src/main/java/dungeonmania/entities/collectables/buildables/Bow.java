@@ -18,21 +18,13 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     private int durability;
 
-    public static List<List<String>> RECIPES = List.of(
-        List.of(
-            Wood.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE
-        )
-    );
+    public static List<List<String>> RECIPES = List
+            .of(List.of(Wood.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE));
 
     public Bow(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durability = INITIAL_DURABILITY;
     }
-
-    
 
     @Override
     public int getDurability() {
@@ -65,5 +57,5 @@ public class Bow extends BuildableEntity implements BattleItem {
     public float getAttackDamageBonus(Fighter target) {
         return 1; // player normally does 1 attack damage. This doubles it.
     }
-    
+
 }

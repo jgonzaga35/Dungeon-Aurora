@@ -1,7 +1,5 @@
 package dungeonmania.entities.movings;
 
-import java.util.List;
-
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.GameMode;
@@ -91,7 +89,7 @@ public class Player extends MovingEntity implements Fighter {
             && this.inventory.itemsOfType(OneRing.class).count() > 0 // we have a ring!
             && !map.getEntryCell().isBlocking() // we didn't block the entry
         ) {
-            this.inventory.useItems(List.of(OneRing.STRING_TYPE));
+            this.inventory.remove(OneRing.STRING_TYPE);
             this.health = this.getStartingHealth();
             this.moveTo(map.getEntryCell());
             return true;

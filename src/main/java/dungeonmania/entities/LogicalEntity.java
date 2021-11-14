@@ -10,7 +10,6 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.BlockingReason;

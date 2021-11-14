@@ -23,7 +23,7 @@ public class SunStone extends Treasure {
 
     @Override
     public boolean isInteractable() {
-        return false; 
+        return false;
     }
-    
+
 }

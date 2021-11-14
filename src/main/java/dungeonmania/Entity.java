@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import dungeonmania.DungeonManiaController.LayerLevel;
@@ -9,17 +10,13 @@ import dungeonmania.util.Direction;
 public abstract class Entity {
     private String id;
 
-    private static int nextEntityId = 1;
-
     protected Dungeon dungeon;
     protected Pos2d position;
 
     public Entity(Dungeon dungeon, Pos2d position) {
-        this.id = "Entity-" + Entity.nextEntityId;
+        this.id = "Entity-" + UUID.randomUUID().toString();
         this.dungeon = dungeon;
         this.position = position;
-        
-        Entity.nextEntityId++;
     }
 
     public String getId() {

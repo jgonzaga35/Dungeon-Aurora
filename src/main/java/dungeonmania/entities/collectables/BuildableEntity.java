@@ -1,6 +1,5 @@
 package dungeonmania.entities.collectables;
 
-
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
@@ -14,5 +13,5 @@ public abstract class BuildableEntity extends CollectableEntity {
     @Override
     public void tick() {
     }
-    
+
 }

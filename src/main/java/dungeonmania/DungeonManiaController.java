@@ -24,7 +24,7 @@ import dungeonmania.util.FileLoader;
 public class DungeonManiaController {
     private Dungeon dungeon;
     private Map<String, Dungeon> savedGames = new HashMap<>();
-    private Random r = new Random();
+    private Random r = new Random(0);
 
     /**
      * Standard z values. To get the integer value, call Layers.STATIC.getValue()
