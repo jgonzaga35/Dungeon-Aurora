@@ -30,7 +30,7 @@
 - Battle radius is a circle, and the mercenary needs to be completely within
   that circle.
 - Battle radius of mercenaries is 3 cells
-- When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
+- When there is no path to the player for the mercenary, the mercenary will more to the cell    with the lowest `movement_factor`.
 - When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 - A mercenary that is already bribed cannot be bribed again. If bribed with sceptre, player 
 needs wait until bribe period is over before bribing the mercenary again.
@@ -90,3 +90,6 @@ Assassin battle radius: 3
 | Shield | 0            | 3             | 20         |
 | Sword  | 2            | 1             | 20         |
 | Armour | 0            | 2             | 30         |
+
+## Building items
+- player cannot choose which recipe to use when crafting an item when player has many resources and is able to craft an item with multiple recipes (2 arrows and 1 wood are interchageable). This order of which recipes are considered first is the same every time.
