@@ -3,16 +3,16 @@ package dungeonmania.entities.statics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.Connectable;
 import dungeonmania.entities.StaticEntity;
 
 
-public class LightBulb extends StaticEntity {
+public class LightBulb extends StaticEntity implements Connectable {
 
     public static String STRING_TYPE = "light_bulb";
     public static String ON = "_on";
@@ -26,7 +26,11 @@ public class LightBulb extends StaticEntity {
     public LightBulb(Dungeon dungeon, Pos2d position, String logic) {
         super(dungeon, position);
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
+    }
+
+    @Override
+    public void connectEntities() {
+        addConnectedEntities(this.getCell(), this.connectedId);
     }
 
     /**
@@ -102,26 +106,36 @@ public class LightBulb extends StaticEntity {
      */
     public void addConnectedEntities(Cell cell, List<String> connectedIds) {
         
-        // Get cardinally adjacent cells
-        Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
+        this.dungeon.getMap().getCellsAround(cell).forEach(
+            c -> c.getOccupants().stream()
+                .filter(e -> e.canConnect())
+                .forEach(s -> {
+                    if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                        connectedIds.add(s.getId());
+                    }
+                })
+        );
+
+        // // Get cardinally adjacent cells
+        // Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
         
-        // Add connected entities from adjacent cells 
-        adjacentCells.forEach(c -> {
-            c.getOccupants().stream()
-                            .filter(e -> e.canConnect())
-                            .forEach(s -> {
-                                System.out.println(s.getTypeAsString());
-                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
-                                    connectedId.add(s.getId());
-                                    addConnectedEntities(c, connectedId);
-                                } else {
-                                    if (!connectedEntities.contains(s)) {
-                                            connectedEntities.add(s);
-                                            connectedId.add(s.getId());
-                                    }
-                                }
-                            });
-        });
+        // // Add connected entities from adjacent cells 
+        // adjacentCells.forEach(c -> {
+        //     c.getOccupants().stream()
+        //                     .filter(e -> e.canConnect())
+        //                     .forEach(s -> {
+        //                         System.out.println(s.getTypeAsString());
+        //                         if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+        //                             connectedId.add(s.getId());
+        //                             addConnectedEntities(c, connectedId);
+        //                         } else {
+        //                             if (!connectedEntities.contains(s)) {
+        //                                     connectedEntities.add(s);
+        //                                     connectedId.add(s.getId());
+        //                             }
+        //                         }
+        //                     });
+        // });
     }
 
     @Override

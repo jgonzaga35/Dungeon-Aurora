@@ -120,9 +120,9 @@ public class TestLogicSwitch {
 
         // Now light bulb should be turned off, door locked, switch activate, bomb not exploded
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED)));
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
 
     }
 

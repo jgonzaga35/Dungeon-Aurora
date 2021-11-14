@@ -9,10 +9,11 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.Connectable;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
-public class FloorSwitch extends StaticEntity {
+public class FloorSwitch extends StaticEntity implements Connectable {
     public static String STRING_TYPE = "switch";
     public static String ACTIVATED = "_activated";
     private boolean activated = false;
@@ -24,7 +25,11 @@ public class FloorSwitch extends StaticEntity {
     public FloorSwitch(Dungeon dungeon, Pos2d position, String logic) {
         super(dungeon, position);
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
+    }
+
+    @Override
+    public void connectEntities() {
+        addConnectedEntities(this.getCell(), this.connectedId);
     }
 
     /**

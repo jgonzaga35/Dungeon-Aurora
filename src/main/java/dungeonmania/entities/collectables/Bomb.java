@@ -3,26 +3,25 @@ package dungeonmania.entities.collectables;
 
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import java.util.Hashtable;
-import java.lang.Math;
-
-import dungeonmania.Dungeon;
-import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
-import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.Wire;
-import dungeonmania.entities.movings.Player;
-import dungeonmania.util.Direction;
 
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.Pos2d;
+import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.Connectable;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.Wire;
+import dungeonmania.util.Direction;
 
 
-public class Bomb extends CollectableEntity {
+public class Bomb extends CollectableEntity implements Connectable {
 
     public static String STRING_TYPE = "bomb";
 
@@ -41,9 +40,12 @@ public class Bomb extends CollectableEntity {
         super(dungeon, position);
         this.isPlaced = isPlaced;
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
     }
 
+    @Override
+    public void connectEntities() {
+        addConnectedEntities(this.getCell(), this.connectedId);
+    }
     /**
      * 
      * @return If Item is Placed (boolean)

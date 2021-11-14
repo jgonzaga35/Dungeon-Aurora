@@ -8,16 +8,21 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.Connectable;
 import dungeonmania.entities.StaticEntity;
 
-public class Wire extends StaticEntity {
+public class Wire extends StaticEntity implements Connectable {
     public static String STRING_TYPE = "wire";
     private List<Entity> connectedEntities = new ArrayList<Entity>();
     private List<String> connectedId = new ArrayList<String>();
     
     public Wire(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
+    }
+
+    @Override
+    public void connectEntities() {
+        addConnectedEntities(this.getCell(), this.connectedId);
     }
 
     public List<Entity> getConnectedEntities() {
