@@ -199,6 +199,11 @@
       "type": "boulder"
     },
     {
+      "x": 14,
+      "y": 4,
+      "type": "sword"
+    },
+    {
       "x": 16,
       "y": 4,
       "type": "wall"
