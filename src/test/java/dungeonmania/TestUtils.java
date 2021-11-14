@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.movings.Spider;
@@ -27,12 +28,49 @@ public class TestUtils {
         throw new Error("player wasn't found");
     }
 
+    public static void purgeEnemyArmour(Dungeon dungeon) {
+        dungeon.getMap().allEntities().stream().forEach(e -> {
+            if (e instanceof Mercenary) {
+                Mercenary merc = (Mercenary) e;
+                merc.removeArmour();
+            }
+            if (e instanceof ZombieToast) {
+                ZombieToast zom = (ZombieToast) e;
+                zom.removeArmour();
+            }
+        });
+    }
+
+    public static Wall spawnWall(Dungeon dungeon, int x, int y) {
+        Cell wallCell = dungeon.getMap().getCell(x, y);
+        Wall wall = new Wall(dungeon, wallCell.getPosition());
+        wallCell.addOccupant(wall);
+
+        return wall;
+    }
+
     public static Mercenary spawnMercenary(Dungeon dungeon, int x, int y) {
         Cell mercCell = dungeon.getMap().getCell(x, y);
         Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());
         mercCell.addOccupant(merc);
 
         return merc;
+    }
+
+    public static Assassin spawnAssassin(Dungeon dungeon, int x, int y) {
+        Cell mercCell = dungeon.getMap().getCell(x, y);
+        Assassin merc = new Assassin(dungeon, mercCell.getPosition());
+        mercCell.addOccupant(merc);
+
+        return merc;
+    }
+
+    public static ZombieToast spawnZombieToast(Dungeon dungeon, int x, int y) {
+        Cell zombieCell= dungeon.getMap().getCell(x, y);
+        ZombieToast zombieToast = new ZombieToast(dungeon, zombieCell.getPosition());
+        zombieCell.addOccupant(zombieToast);
+
+        return zombieToast;
     }
 
     public static Spider spawnSpider(Dungeon dungeon, int x, int y) {
@@ -80,6 +118,10 @@ public class TestUtils {
 
     public static long countEntitiesOfType(DungeonResponse resp, String type) {
         return resp.getEntities().stream().filter(e -> Objects.equals(e.getType(), type)).count();
+    }
+
+    public static long countInventoryOfType(DungeonResponse resp, String type) {
+        return resp.getInventory().stream().filter(e -> Objects.equals(e.getType(), type)).count();
     }
     
     /**

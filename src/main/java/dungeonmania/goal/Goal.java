@@ -2,6 +2,7 @@ package dungeonmania.goal;
 
 
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,6 +87,7 @@ public abstract class Goal {
         } else if (goalType.equals(EnemiesGoal.STRING_TYPE)) {
             goal = new EnemiesGoal();
         }
+        assert goal != null : "unknowwn goal type: " + goalType;
 
         return goal;
     }

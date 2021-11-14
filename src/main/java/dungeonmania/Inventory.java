@@ -7,14 +7,10 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.collectables.buildables.*;
+import dungeonmania.entities.collectables.consumables.*;
 import dungeonmania.entities.Fighter;
-import dungeonmania.entities.collectables.BattleItem;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 
@@ -28,7 +24,7 @@ public class Inventory {
      * @return true if the player was able to pick the collectable up
      */
     public boolean add(CollectableEntity c) {
-        if (c instanceof Key && hasKey()) {
+        if (c instanceof Key && this.contains(Key.class)) {
             // Player cannot pickup a second key
             return false;
         } 
@@ -66,38 +62,47 @@ public class Inventory {
      */
     public boolean pay(List<Class<? extends CollectableEntity>> cost) {
         List<CollectableEntity> price = new ArrayList<>();
-
+        
         cost.stream().forEach(t -> {
             CollectableEntity item = (CollectableEntity) collectables.stream()
-                .filter(c -> c.getClass().equals(t))
+                .filter(c -> t.isInstance(c))
                 .findFirst().orElse(null);
-    
-            price.add(item);
+            
+            //Only Pay with the Item if There are Not Enough of the Specified Type Already Paid in the Cost
+            if (cost.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count() ) {
+                price.add(item);
+            }
         });
-        
+
         if (price.stream().anyMatch(i -> i == null)) return false;
         
-        price.stream().forEach(i -> collectables.remove(i));
-
+        //SunStone Takes Priority Over Treasure
+        if (price.stream().filter(o -> o.getClass().equals(SunStone.class)).findFirst().isPresent()) {
+            //If Inventory Contains SunStone, No Need to Remove the Treasure or the SunStone
+            price.stream().filter(e -> !((e instanceof SunStone) || (e instanceof Treasure))).forEach(i -> collectables.remove(i));
+        } else {
+            //Inventory Does Not Contain SunStone, Treasure is Used to Pay
+            price.stream().forEach(i -> collectables.remove(i));
+        }
         return true;
     }
 
     public void build(String buildable) throws InvalidActionException {
         List<CollectableEntity> items;
         switch (buildable) {
-            case "shield":
+            case Shield.STRING_TYPE:
                 items = buildable(Shield.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
                 collectables.add(new Shield(null, null));
                 return;
-            case "sceptre":
+            case Sceptre.STRING_TYPE:
                 items = buildable(Sceptre.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
                 collectables.add(new Sceptre(null, null));
                 return;
-            case "bow":
+            case Bow.STRING_TYPE:
                 items = buildable(Bow.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
@@ -167,6 +172,33 @@ public class Inventory {
     }
 
     /**
+     * if all the entities (items) are in the inventory, it uses them all
+     * (removes from the inventory). Otherwise it just returns false;
+     * @param entities
+     * @return true if all the items were in the inventory, and they were
+     * succesfully removed
+     */
+    public boolean useItems(List<String> itemsStringType) {
+
+        List<CollectableEntity> toRemove = new ArrayList<>();
+        for (String itemStringType : itemsStringType) {
+            Optional<CollectableEntity> itemOpt = this.collectables.stream()
+                // find an item of the right type that isn't already used
+                .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
+                .findFirst();
+
+            if (itemOpt.isEmpty())
+                return false;
+            else 
+                toRemove.add(itemOpt.get());
+        }
+        this.collectables.removeAll(toRemove);
+        return true;
+
+    }
+
+
+    /**
      * finds the items from the inventory
      * @param itemsStringType list of String
      * @return null if inventory does not contain all the items, else return the list of items
@@ -175,16 +207,29 @@ public class Inventory {
         List<CollectableEntity> found = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
             Optional<CollectableEntity> itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used
-                .filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
+                // find an item of the right type that isn't already used, except
+                // if Treasure is required in the recipe then the SunStone can be used even if it has been previously used
+                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) || 
+                (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) )
                 .findFirst();
-
+            
+            // Do Not Treat the Sun Stone as a Type of Treasure If Sceptre is Crafted with Both SunStone and Treasure 
+            // (see Assumptions)
+            
+            if (Sceptre.RECIPES.stream().anyMatch(o -> ((itemsStringType.containsAll(o))))) {
+                itemOpt = this.collectables.stream()
+                // find an item of the right type that isn't already used
+                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) )) )
+                .findFirst();
+            }
+            
             if (itemOpt.isEmpty()) return null;
             else found.add(itemOpt.get());
         }
+        
         return found;
     }
-
+   
     /**
      * decreases the items' durability
      * @param d
@@ -288,8 +333,20 @@ public class Inventory {
         return this.collectables;
     }
 
-    public boolean hasKey() {
-        return collectables.stream().anyMatch(c -> c instanceof Key);
+    /**
+     * Checks for an instance of a class in the inventory.
+     * 
+     * @param type
+     * @return true if an instance of type exists in the inventory.
+     */
+    public boolean contains(Class<?> type) {
+        return collectables.stream().anyMatch(c -> c.getClass().equals(type));
     }
 
+    /**
+     * Remove everything from the inventory.
+     */
+    public void clear() {
+        collectables.clear();
+    }
 }

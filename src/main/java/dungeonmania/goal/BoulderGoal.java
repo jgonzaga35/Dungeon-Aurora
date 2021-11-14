@@ -5,7 +5,7 @@ import dungeonmania.DungeonMap;
 
 public class BoulderGoal extends Goal {
 
-    public static String STRING_TYPE = "boulder";
+    public static String STRING_TYPE = "boulders";
     public BoulderGoal() {
         super();
     }
