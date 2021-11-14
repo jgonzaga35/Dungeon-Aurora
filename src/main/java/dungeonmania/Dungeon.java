@@ -205,9 +205,9 @@ public class Dungeon {
             } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.OFF)) {
                 cell.addOccupant(new LightBulb(dungeon, cell.getPosition(), getLogicString(entity)));
             } else if (Objects.equals(type, Wire.STRING_TYPE)) {
-                cell.addOccupant(new Wire(dungeon, cell.getPosition()));
+                cell.addOccupant(new Wire(dungeon, cell.getPosition(), null));
             } else if (Objects.equals(type, SwitchDoor.STRING_TYPE)) {
-                cell.addOccupant(new SwitchDoor(dungeon, cell.getPosition(), entity.getInt("id"), getLogicString(entity)));
+                cell.addOccupant(new SwitchDoor(dungeon, cell.getPosition(), getLogicString(entity)));
             }
             else {
                 throw new Error("unhandled entity type: " + type);
