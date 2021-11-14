@@ -14,6 +14,9 @@ import dungeonmania.entities.Fighter;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 
+/**
+ * Represents an inventory that contains collectable items.
+ */
 public class Inventory {
     private List<CollectableEntity> collectables = new ArrayList<>();
 
@@ -87,6 +90,11 @@ public class Inventory {
         return true;
     }
 
+    /**
+     * Attempts to build an item with the given string name
+     * @param buildable name of item being built
+     * @throws InvalidActionException
+     */
     public void build(String buildable) throws InvalidActionException {
         List<CollectableEntity> items;
         switch (buildable) {
@@ -119,6 +127,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * 
+     * @param recipes of the item
+     * @return true if item can be built
+     */
     public List<CollectableEntity> buildable(List<List<String>> recipes) {
         for (List<String> recipe : recipes) {
             List<CollectableEntity> items = findItems(recipe);
@@ -138,6 +151,10 @@ public class Inventory {
         return sceptre != null;
     }
 
+    /**
+     * 
+     * @return list of names of currently buildable items.
+     */
     public List<String> getBuildables() {
         List<String> buildables = new ArrayList<>();
         if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
@@ -325,6 +342,10 @@ public class Inventory {
         });
     }
 
+    /**
+     * generates a list of item responses from the current inventory
+     * @return the item responses
+     */
     public List<ItemResponse> asItemResponses() {
         List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
         for (CollectableEntity item : collectables) {
@@ -336,6 +357,10 @@ public class Inventory {
         return outputListItemResponses;
     }
 
+    /**
+     * 
+     * @return list of stored collectable entities
+     */
     public List<CollectableEntity> getCollectables() {
         return this.collectables;
     }

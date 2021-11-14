@@ -2,6 +2,10 @@ package dungeonmania.movement;
 
 import dungeonmania.Cell;
 
+/**
+ * Represents a waiting behaviour.
+ * Entities that implement this strategy will remain at the same spot for a set duration.
+ */
 public class WaitMovementBehaviour extends MovementBehaviour {
 
     Integer duration;

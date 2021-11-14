@@ -27,11 +27,26 @@ public class GenerateMaze {
     private Pos2d end;
     private List<List<BCell>> rows;
 
+    /**
+     * Factory method that makes a new instance of GenerateMaze
+     * @param r
+     * @param dimensions
+     * @param start
+     * @param end
+     * @return
+     */
     public static List<List<BCell>> make(Random r, Pos2d dimensions, Pos2d start, Pos2d end) {
         GenerateMaze rp = new GenerateMaze(r, dimensions, start, end);
         return rp.build();
     }
 
+    /**
+     * Constructor that generates a maze according the the input
+     * @param r
+     * @param dimensions
+     * @param start
+     * @param end
+     */
     public GenerateMaze(Random r, Pos2d dimensions, Pos2d start, Pos2d end) {
         this.r = r;
         this.dims = dimensions;
@@ -48,6 +63,11 @@ public class GenerateMaze {
         }
     }
 
+    /**
+     * helper method to get the coordinates of neighbours that are 2 units away
+     * @param center
+     * @return
+     */
     private static Stream<Pos2d> farNeighbours(Pos2d center) {
         return Stream.of(
             new Pos2d(center.getX(), center.getY()-2),
@@ -57,6 +77,9 @@ public class GenerateMaze {
         );
     }
 
+    /**
+     * algorithm helper function
+     */
     private boolean isInMaze(Pos2d pos) {
         return 0 <= pos.getX() && pos.getX() < dims.getX() && 0 <= pos.getY() && pos.getY() < dims.getY();
     }
@@ -68,22 +91,39 @@ public class GenerateMaze {
         return get(pos) == BCell.EMPTY;
     }
 
+    /**
+     * algorithm helper function
+     */
     private boolean notOnBoundary(Pos2d pos) {
         return 1 <= pos.getX() && pos.getX() < dims.getX() - 1 && 1 <= pos.getY() && pos.getY() < dims.getY() - 1;
     }
 
+    /**
+     * algorithm helper function
+     */
     private void set(Pos2d pos, BCell v) {
         rows.get(pos.getY()).set(pos.getX(), v);
     }
 
+    /**
+     * algorithm helper function
+     */
     private BCell get(Pos2d pos) {
         return rows.get(pos.getY()).get(pos.getX());
     }
 
+    /**
+     * algorithm helper function
+     */
     private Pos2d average(Pos2d a, Pos2d b) {
         return new Pos2d(Math.floorDiv(a.getX() + b.getX(), 2), Math.floorDiv(a.getY() + b.getY(), 2));
     }
 
+    /**
+     * generate dungeons according to the maze generation algorithm 
+     * (which is just a randomised version of Prim's).
+     * @return 2d array of Cells
+     */
     public List<List<BCell>> build() {
         // this doesn't follow the spec to the letter because the spec keeps on
         // changing, being silly, containing typos, or any combinations of the

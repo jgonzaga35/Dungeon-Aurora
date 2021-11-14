@@ -6,6 +6,10 @@ import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.Fighter;
 import dungeonmania.util.Direction;
 
+/**
+ * A superclass that represents all entities inside dungeon.
+ * Each entity has a unique entity id.
+ */
 public abstract class Entity {
     private String id;
 
@@ -108,5 +112,8 @@ public abstract class Entity {
      */
     public abstract String getTypeAsString();
 
+    /**
+     * Triggers the passive effects/behaviours of the entity.
+     */
     public abstract void tick();
 }
