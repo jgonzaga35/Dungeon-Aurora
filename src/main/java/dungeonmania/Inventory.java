@@ -58,9 +58,12 @@ public class Inventory {
             CollectableEntity item = (CollectableEntity) collectables.stream()
                 .filter(c -> t.isInstance(c))
                 .findFirst().orElse(null);
-            price.add(item);
+            
+            //Only Pay with the Item if There are Not Enough of the Specified Type Already Paid in the Cost
+            if (cost.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count() ) {
+                price.add(item);
+            }
         });
-        
 
         if (price.stream().anyMatch(i -> i == null)) return false;
         
