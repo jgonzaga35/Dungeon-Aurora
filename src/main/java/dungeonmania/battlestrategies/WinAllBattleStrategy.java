@@ -21,6 +21,10 @@ public class WinAllBattleStrategy implements BattleStrategy {
         this.precedence = precedence;
     }
 
+    /**
+     * Finds all the battles on the map, and performs them
+     * @param dungeon
+     */
     @Override
     public void findAndPerformBattles(Dungeon dungeon) {
 
@@ -43,6 +47,10 @@ public class WinAllBattleStrategy implements BattleStrategy {
         
     }
 
+    /**
+     * Returns the precedence of the Battle Strategy
+     * @return int Precedence of the Battle Strategy
+     */
     @Override
     public int getPrecedence() {
         return this.precedence;

@@ -32,10 +32,19 @@ import dungeonmania.entities.movings.Player;
 public class NormalBattleStrategy implements BattleStrategy {
 
     private int precendence = -1;
+
+    /**
+     * Constructor for the Normal Battle Strategy
+     * @param int precendence
+     */
     public NormalBattleStrategy(int precendence) {
         this.precendence = precendence;
     }
 
+    /**
+     * Finds all the battles on the map, and performs them
+     * @param dungeon
+     */
     @Override
     public void findAndPerformBattles(Dungeon dungeon) {
         DungeonMap map = dungeon.getMap();
@@ -251,6 +260,10 @@ public class NormalBattleStrategy implements BattleStrategy {
         return attacker.getHealth() * attacker.getAttackDamage(defender) / defender.getDefenceCoef();
     }
 
+    /**
+     * Returns the precedence of the Battle Strategy
+     * @return int Precedence of the Battle Strategy
+     */
     @Override
     public int getPrecedence() {
         return this.precendence;
