@@ -18,7 +18,7 @@ public class OneRing extends CollectableEntity {
 
     @Override
     public String getTypeAsString() {
-        return STRING_TYPE;
+        return OneRing.STRING_TYPE;
     }
 
     @Override
