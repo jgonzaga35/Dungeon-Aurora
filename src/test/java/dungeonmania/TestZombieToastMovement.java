@@ -26,7 +26,8 @@ public class TestZombieToastMovement {
     @Test
     public void testZombiesDontTeleport() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_zombies_maze", GameMode.STANDARD.getValue());
+        DungeonResponse resp = ctr.newGame("_zombies_maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
 
         // zombie id -> position
         Map<String, Pos2d> positions = new HashMap<>();

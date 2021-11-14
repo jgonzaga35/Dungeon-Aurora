@@ -74,6 +74,7 @@ public class TestMercenaryBattles {
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
+        TestUtils.purgeEnemyArmour(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));
@@ -108,6 +109,7 @@ public class TestMercenaryBattles {
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
+        TestUtils.purgeEnemyArmour(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));
@@ -145,6 +147,7 @@ public class TestMercenaryBattles {
         float prevAlly2Health = ally2.getHealth();
         float prevPlayerHealth = player.getHealth();
 
+        TestUtils.purgeEnemyArmour(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));

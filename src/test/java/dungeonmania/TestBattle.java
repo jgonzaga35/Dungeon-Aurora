@@ -220,14 +220,18 @@ public class TestBattle {
     }
 
     @Test
-    public void testSimpleZombieBattleWithSword() {
-        DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_sword_battle", GameMode.STANDARD.getValue());
+    public void testSimpleZombieBattleWithSword() throws IOException {
+        String content = FileLoader.loadResourceFile("/dungeons/_sword_battle.json");
+        Dungeon dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
+        DungeonManiaController ctr = new DungeonManiaController(dungeon);
 
         // there are no spiders because the map is too small
 
+        TestUtils.purgeEnemyArmour(dungeon);
+        DungeonResponse resp = ctr.tick(null, Direction.RIGHT);
+        TestUtils.purgeEnemyArmour(dungeon);
         ctr.tick(null, Direction.RIGHT);
-        ctr.tick(null, Direction.RIGHT);
+        TestUtils.purgeEnemyArmour(dungeon);
         ctr.tick(null, Direction.RIGHT);
 
         // more than the player can kill without a sword
@@ -236,12 +240,14 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 2 : 0); i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                TestUtils.purgeEnemyArmour(dungeon);
                 resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            TestUtils.purgeEnemyArmour(dungeon);
             resp = ctr.tick(null, Direction.NONE);
 
             boolean hasSword = resp.getInventory().stream().anyMatch(ir -> ir.getType().equals(Sword.STRING_TYPE));
@@ -363,6 +369,7 @@ public class TestBattle {
 
         // there are no spiders because the map is too small
 
+        TestUtils.purgeEnemyArmour(dungeon);
         DungeonResponse resp = ctr.tick(null, Direction.NONE);
 
 
@@ -372,12 +379,14 @@ public class TestBattle {
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19; i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                TestUtils.purgeEnemyArmour(dungeon);
                 resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            TestUtils.purgeEnemyArmour(dungeon);
             resp = ctr.tick(null, Direction.NONE);
 
             if (j == player_kills_n_zombies - 1) {
@@ -390,32 +399,38 @@ public class TestBattle {
             }
         }
 
+        TestUtils.purgeEnemyArmour(dungeon);
         resp = ctr.tick(null, Direction.NONE);
 
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE)); // player still alive
         assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // but zombie has moved back down!
 
+        TestUtils.purgeEnemyArmour(dungeon);
         resp = ctr.tick(null, Direction.NONE);
         assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // now the zombie gets killed
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE)); // player still alive
 
         for (int i = 0; i < 17; i++) {
             assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); 
+            TestUtils.purgeEnemyArmour(dungeon);
             resp = ctr.tick(null, Direction.NONE);
         }
         assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // zombie just spawned
+        TestUtils.purgeEnemyArmour(dungeon);
         resp = ctr.tick(null, Direction.NONE); // kill it
         player_kills_n_zombies -= 2; // because we just killed two extra!
 
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19; i++) {
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "j=" + j + "i=" + i);
+                TestUtils.purgeEnemyArmour(dungeon);
                 resp = ctr.tick(null, Direction.NONE);
             }
             assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
             assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
 
             // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            TestUtils.purgeEnemyArmour(dungeon);
             resp = ctr.tick(null, Direction.NONE); // double tick because of the 18 above
 
             if (j == player_kills_n_zombies - 1) {
