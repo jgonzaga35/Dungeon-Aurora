@@ -5,11 +5,13 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
+import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
@@ -26,7 +28,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
     private Integer bribeDuration = -1;
-
+    private Inventory inventory = new Inventory();
     private MovementBehaviour followMovementBehaviour;
     private MovementBehaviour friendlyMovementBehaviour;
 
@@ -45,6 +47,9 @@ public class Mercenary extends MovingEntity implements Fighter {
         );
         this.addMovementBehaviour(this.followMovementBehaviour);
         this.price.add(Treasure.class);
+
+        Integer roll = dungeon.getRandom().nextInt(100);
+        if (roll < 30) inventory.add(new Armour(dungeon, position));
     }
 
     public void bribe() {
@@ -94,12 +99,12 @@ public class Mercenary extends MovingEntity implements Fighter {
 
     @Override
     public float getAttackDamage(Fighter target) {
-        return 1;
+        return 1 + this.inventory.totalBonus(BattleDirection.ATTACK, target);
     }
 
     @Override
     public float getDefenceCoef() {
-        return 1;
+        return 1 * this.inventory.totalBonus(BattleDirection.DEFENCE, null);
     }
 
     @Override
@@ -126,4 +131,20 @@ public class Mercenary extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return false;
     }
+
+    @Override
+    public boolean onDeath() {
+        inventory.getCollectables().stream().forEach(c -> {
+            c.setPosition(getCell().getPosition().getX(), getCell().getPosition().getY());
+            getCell().addOccupant(c);
+        });
+        inventory.clear();
+
+        return false;
+    }
+
+    public void removeArmour() {
+        inventory.clear();
+    }
 }
+

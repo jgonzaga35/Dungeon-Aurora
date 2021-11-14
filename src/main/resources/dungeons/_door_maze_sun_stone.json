@@ -17,20 +17,8 @@
         {
             "x": 1,
             "y": 3,
-            "type": "key",
+            "type": "sun_stone",
             "key": 1
-        },
-        {
-            "x": 4,
-            "y": 3,
-            "type": "key",
-            "key": 2
-        },
-        {
-            "x": 5,
-            "y": 3,
-            "type": "key",
-            "key": 3
         },
         {
             "x": 6,

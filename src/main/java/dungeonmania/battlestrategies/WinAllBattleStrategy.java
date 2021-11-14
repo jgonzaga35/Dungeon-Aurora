@@ -25,7 +25,7 @@ public class WinAllBattleStrategy implements BattleStrategy {
     public void findAndPerformBattles(Dungeon dungeon) {
 
         DungeonMap map = dungeon.getMap();
-        Cell cell = map.getCell(dungeon.getPlayerPosition());
+        Cell cell = map.getCell(dungeon.getPlayer().getPosition());
         List<Fighter> enemies = new ArrayList<>();
 
         for (Entity e : cell.getOccupants()) {

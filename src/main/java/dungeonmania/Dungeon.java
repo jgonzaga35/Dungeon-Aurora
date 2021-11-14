@@ -26,11 +26,10 @@ import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.OneRing;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -67,7 +66,6 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
-    private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -161,15 +159,17 @@ public class Dungeon {
             } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
                 cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false, getLogicString(entity)));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
-                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
                 cell.addOccupant(new Swamp(dungeon, cell.getPosition(), entity.getInt("movement_factor")));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
@@ -182,6 +182,8 @@ public class Dungeon {
                 cell.addOccupant(new Assassin(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
                 cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -319,7 +321,7 @@ public class Dungeon {
             if (occupant instanceof CollectableEntity) {
                 //Assign the Current Collectable Occupant in Cell to be Removed
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                if (this.inventory.add(collectableOccupant)) {
+                if (this.player.getInventory().add(collectableOccupant)) {
                     ifOccupantRemoved = true;
                     removedOccupant = collectableOccupant;
                 }
@@ -348,8 +350,8 @@ public class Dungeon {
 
     }
     
-    public Pos2d getPlayerPosition() {
-        return this.player.getPosition();
+    public Player getPlayer() {
+        return this.player;
     }
 
     public Integer getTickCount() {
@@ -371,7 +373,7 @@ public class Dungeon {
         dungeonMap.flood();
 
         CollectableEntity item = null;
-        if (itemUsed != null) item = inventory.useItem(itemUsed);
+        if (itemUsed != null) item = player.getInventory().useItem(itemUsed);
         if (item instanceof Potion) activePotions.add((Potion)item);
         if (item instanceof Bomb) placeBomb(itemUsed, item);
         
@@ -399,17 +401,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
-            if (!Shield.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
-            if (!Bow.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else {
-            throw new IllegalArgumentException("unknown buildable: " + buildable);
-        }
+        this.player.getInventory().build(buildable);
     }
 
     public String getId() {
@@ -497,16 +489,16 @@ public class Dungeon {
         return dungeonMap;
     }
 
-    public Inventory getInventory() {
-        return this.inventory;
-    }
-
     /**
      * Returns the Inventory in the form of a list of
      * ItemResponse instances. 
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
-        return this.inventory.asItemResponses();
+        return this.player.getInventory().asItemResponses();
+    }
+
+    public List<String> getBuildables() {
+        return this.player.getInventory().getBuildables();
     }
 
     
@@ -522,7 +514,13 @@ public class Dungeon {
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!inventory.pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
+        if (!player.getInventory().pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
+        
+        if (player.getInventory().hasSceptre()) {
+            
+            merc.bribe(10);
+            return;
+        }
             
         merc.bribe();
     }
@@ -536,7 +534,7 @@ public class Dungeon {
         
 
         // check if we have a weapon to destroy the spawner with
-        BattleItem weapon = this.inventory.getOneWeapon();
+        BattleItem weapon = this.player.getInventory().getOneWeapon();
         if (weapon == null) {
             throw new InvalidActionException("no weapons to destroy the spawner");
         }
@@ -546,7 +544,7 @@ public class Dungeon {
         boolean removed = this.dungeonMap.removeEntity(zts);
         assert removed;
 
-        this.inventory.usedItemForBattle(weapon, BattleDirection.ATTACK);
+        this.player.getInventory().usedItemForBattle(weapon, BattleDirection.ATTACK);
     }
 
     /**
@@ -576,11 +574,9 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon)
-            return;
-
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
-            return;
+        if (!this.hadEnemiesAtStartOfDungeon) return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;

@@ -325,7 +325,7 @@ public class TestPotions {
 
         dc.tick(null, Direction.UP); // go up to pick up the potion
 
-        assertEquals(new Pos2d(5, 4), dungeon.getPlayerPosition());
+        assertEquals(new Pos2d(5, 4), dungeon.getPlayer().getPosition());
         assertEquals(new Pos2d(4, 4), spider.getPosition());
 
         // use the invincibility potion. Instead of moving right (onto the

@@ -4,7 +4,7 @@
     "entities": [
         {"type": "player", "x": 0, "y": 0},
         {"type": "armour", "x": 1, "y": 0},
-        {"type": "zombie toast spawner", "x": 5, "y": 0}
+        {"type": "zombie_toast_spawner", "x": 5, "y": 0}
     ],
     "goal-condition": {
         "goal": "exit"

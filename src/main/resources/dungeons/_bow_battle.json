@@ -7,7 +7,7 @@
         {"type": "arrow", "x": 2, "y": 0},
         {"type": "arrow", "x": 3, "y": 0},
         {"type": "arrow", "x": 4, "y": 0},
-        {"type": "zombie toast spawner", "x": 6, "y": 0}
+        {"type": "zombie_toast_spawner", "x": 6, "y": 0}
     ],
     "goal-condition": {
         "goal": "exit"
