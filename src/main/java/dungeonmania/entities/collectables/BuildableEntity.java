@@ -1,6 +1,5 @@
 package dungeonmania.entities.collectables;
 
-import java.util.*;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;

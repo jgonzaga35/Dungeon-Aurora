@@ -3,7 +3,6 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
-import dungeonmania.entities.CollectableEntity;
 
 public class SunStone extends Treasure {
 
@@ -19,7 +18,7 @@ public class SunStone extends Treasure {
 
     @Override
     public String getTypeAsString() {
-        return this.STRING_TYPE;
+        return SunStone.STRING_TYPE;
     }
 
     @Override

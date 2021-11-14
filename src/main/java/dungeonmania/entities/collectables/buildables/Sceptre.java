@@ -1,10 +1,9 @@
 package dungeonmania.entities.collectables.buildables;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.collectables.*;
 
