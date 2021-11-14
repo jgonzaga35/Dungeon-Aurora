@@ -366,6 +366,9 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
+        if (buildable.equals("midnight_armour") && this.dungeonMap.countZombieToasts() > 0) {
+            throw new InvalidActionException("cannot build midnight armour when there are zombies!");
+        }
         this.player.getInventory().build(buildable);
     }
 
@@ -463,7 +466,11 @@ public class Dungeon {
     }
 
     public List<String> getBuildables() {
-        return this.player.getInventory().getBuildables();
+        List<String> buildables = this.player.getInventory().getBuildables();
+        if (this.dungeonMap.countZombieToasts() > 0) {
+            buildables.remove("midnight_armour");
+        }
+        return buildables;
     }
 
     
