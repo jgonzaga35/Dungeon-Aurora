@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.LightBulb;
-import dungeonmania.entities.statics.SwitchDoor;
+import dungeonmania.entities.logicals.Bomb;
+import dungeonmania.entities.logicals.FloorSwitch;
+import dungeonmania.entities.logicals.LightBulb;
+import dungeonmania.entities.logicals.SwitchDoor;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 

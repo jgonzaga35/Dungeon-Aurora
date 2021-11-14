@@ -5,14 +5,14 @@ import java.util.List;
 
 import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.logicals.FloorSwitch;
+import dungeonmania.entities.logicals.Wire;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
-import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
-import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Direction;
 

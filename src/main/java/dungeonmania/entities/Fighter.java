@@ -17,7 +17,8 @@ public interface Fighter {
 
     /**
      * if health <= 0, it means the fighter is dead
-     * @return the health of the fighter. 
+     * 
+     * @return the health of the fighter.
      */
     public float getHealth();
 
@@ -29,21 +30,22 @@ public interface Fighter {
 
     /**
      * @param defender
-     * @return the fighter's attack damage to the target 
-     * (returns base attack damage if no target specified)
+     * @return the fighter's attack damage to the target (returns base attack damage
+     *         if no target specified)
      */
     public float getAttackDamage(Fighter target);
+
     /**
-     * @return the attack damage of the attacker will be divided by this
-     * coefficient
+     * @return the attack damage of the attacker will be divided by this coefficient
      */
     public float getDefenceCoef();
 
     /**
      * Used to keep track of how many times an item has been used.
      * 
-     * For example, when Player::usedItemFor(attack) is called,
-     * the player should decrease his sword's durability, if he has one
+     * For example, when Player::usedItemFor(attack) is called, the player should
+     * decrease his sword's durability, if he has one
+     * 
      * @param d the direction
      */
     public void usedItemFor(BattleDirection d);
@@ -59,11 +61,4 @@ public interface Fighter {
     public boolean isBoss();
 
     public Entity getEntity();
-
-    /**
-     * Method that is called when an entity dies.
-     * 
-     * @return true if the entity should be resurrected else false
-     */
-    public boolean onDeath();
 }

@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.logicals.Bomb;
+import dungeonmania.entities.logicals.FloorSwitch;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
-import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;

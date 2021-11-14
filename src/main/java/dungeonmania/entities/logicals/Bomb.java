@@ -1,5 +1,5 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
-package dungeonmania.entities.collectables;
+package dungeonmania.entities.logicals;
 
 
 import java.util.ArrayList;

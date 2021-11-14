@@ -1,4 +1,4 @@
-package dungeonmania.entities.statics;
+package dungeonmania.entities.logicals;
 
 import java.util.Objects;
 import dungeonmania.Dungeon;

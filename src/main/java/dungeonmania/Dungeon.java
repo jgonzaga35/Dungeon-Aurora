@@ -23,17 +23,22 @@ import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.logicals.Bomb;
+import dungeonmania.entities.logicals.FloorSwitch;
+import dungeonmania.entities.logicals.LightBulb;
+import dungeonmania.entities.logicals.SwitchDoor;
+import dungeonmania.entities.logicals.Wire;
 import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
@@ -43,13 +48,9 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
-import dungeonmania.entities.statics.SwitchDoor;
 import dungeonmania.entities.statics.Wall;
-import dungeonmania.entities.statics.Wire;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.ExitGoal;
@@ -198,6 +199,8 @@ public class Dungeon {
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
+            } else if (Objects.equals(type, Sceptre.STRING_TYPE)) {
+                cell.addOccupant(new Sceptre(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Portal.STRING_TYPE)) {
                 String colour = entity.getString("colour");
 
