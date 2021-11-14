@@ -75,7 +75,7 @@ removes the possibility of regaining health
 ## Sun Stone
 - Sun Stone automatically opens doors as with a key (does not call the tick method to use it)
 - Once the Sun Stone is collected under no circumstances can it be removed including through usage
-- If the Sun Stone is used to build an item it is retained
+- If the Sun Stone is used to build an item it is removed
 - The Sun Stone can be used in place of Treasure and if there is both Treasure and the Sun Stone in inventory
   to build a buildable entity, the Treasure will be ket.
 - The only exception to the above is when crafting the Sceptre buildable entity, in which the Sun Stone cannot be used 
@@ -83,6 +83,15 @@ removes the possibility of regaining health
 
 ## Sceptre
 - When the player has the scepter and a coin available the scepter is used to bribe mercenaries to avoid spending coins. 
+- Triggered through interact.
+- Recipe precedence:
+
+| Order of use | Recipe |
+| --- | --- |
+| 1 | `sun_stone` + `treasure` + `2 * arrow` |
+| 2 | `sun_stone` + `treasure` + `wood` |
+| 3 | `sun_stone` + `key` + `2 * arrow` |
+| 4 | `sun_stone` + `key` + `wood` |
 
 ## Battles
 

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
@@ -180,6 +181,42 @@ public class TestMercenary {
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact(merc.getId());
         });
+    }
+
+    @Test
+    public void testScepterPriority() {
+        TestUtils.spawnScepter(dungeon, 7, 5);
+
+        Integer dist = merc.getCell().getPlayerDistance();
+
+        DungeonResponse r = null;
+
+        while (merc.getCell().getPlayerDistance() != 1) {
+            r = dc.tick(null, Direction.RIGHT);
+            assertTrue(merc.getCell().getPlayerDistance() <= dist);
+            dist = merc.getCell().getPlayerDistance();
+        }
+
+        assertEquals(1, TestUtils.countInventoryOfType(r, Sceptre.STRING_TYPE));
+
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));
+
+        assertEquals(1, TestUtils.countInventoryOfType(r, Treasure.STRING_TYPE));
+        // Try bribing friendly
+        assertThrows(IllegalArgumentException.class, () -> {
+            dc.interact(merc.getId());
+        });
+
+        // Stays an ally for 10 ticks
+        for (int i = 0; i < 10; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(1, merc.getCell().getPlayerDistance());
+        }
+
+        // Should fight next tick
+        r = dc.tick(null, Direction.NONE);
+
+        assertEquals(0, TestUtils.countEntitiesOfType(r, Mercenary.STRING_TYPE));
     }
 
     @Test

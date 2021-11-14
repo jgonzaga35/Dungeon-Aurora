@@ -28,14 +28,14 @@ public class TestBuildableV2 {
         DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
 
         // pick up the materials - Wood, Key, Sun Stone
-        resp = ctr.tick(null, Direction.LEFT); 
-        resp = ctr.tick(null, Direction.UP); 
-        resp = ctr.tick(null, Direction.DOWN); 
-        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.UP);
+        resp = ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.RIGHT);
         assertThrows(InvalidActionException.class, () -> {
             ctr.build(Sceptre.STRING_TYPE);
         });
-        resp = ctr.tick(null, Direction.DOWN); 
+        resp = ctr.tick(null, Direction.DOWN);
 
         List<String> actual = resp.getInventory().stream().map(item -> item.getType()).collect(Collectors.toList());
         List<String> expected = Arrays.asList(Wood.STRING_TYPE, Key.STRING_TYPE, SunStone.STRING_TYPE);
@@ -50,7 +50,7 @@ public class TestBuildableV2 {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
 
             actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
-            
+
         });
 
         assertEquals(List.of(Sceptre.STRING_TYPE), actual);
@@ -63,14 +63,14 @@ public class TestBuildableV2 {
         DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
 
         // pick up the materials - Wood, Treasure, Sun Stone
-        resp = ctr.tick(null, Direction.UP); 
-        resp = ctr.tick(null, Direction.LEFT); 
-        resp = ctr.tick(null, Direction.RIGHT); 
-        resp = ctr.tick(null, Direction.DOWN); 
+        resp = ctr.tick(null, Direction.UP);
+        resp = ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
             ctr.build(Sceptre.STRING_TYPE);
         });
-        resp = ctr.tick(null, Direction.DOWN); 
+        resp = ctr.tick(null, Direction.DOWN);
 
         List<String> actual = resp.getInventory().stream().map(item -> item.getType()).collect(Collectors.toList());
         List<String> expected = Arrays.asList(Wood.STRING_TYPE, Treasure.STRING_TYPE, SunStone.STRING_TYPE);
@@ -94,18 +94,19 @@ public class TestBuildableV2 {
         DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
 
         // pick up the materials - Arrow * 2, Treasure, Sun Stone
-        resp = ctr.tick(null, Direction.UP); 
-        resp = ctr.tick(null, Direction.LEFT); 
-        resp = ctr.tick(null, Direction.RIGHT); 
-        resp = ctr.tick(null, Direction.DOWN); 
+        resp = ctr.tick(null, Direction.UP);
+        resp = ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
             ctr.build(Sceptre.STRING_TYPE);
         });
-        resp = ctr.tick(null, Direction.RIGHT); 
-        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
 
         List<String> actual = resp.getInventory().stream().map(item -> item.getType()).collect(Collectors.toList());
-        List<String> expected = Arrays.asList(Arrow.STRING_TYPE, Arrow.STRING_TYPE, Treasure.STRING_TYPE, SunStone.STRING_TYPE);
+        List<String> expected = Arrays.asList(Arrow.STRING_TYPE, Arrow.STRING_TYPE, Treasure.STRING_TYPE,
+                SunStone.STRING_TYPE);
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(expected, actual);
@@ -126,18 +127,19 @@ public class TestBuildableV2 {
         DungeonResponse resp = ctr.newGame("_buildable_sceptre", GameMode.PEACEFUL.getValue());
 
         // pick up the materials - Arrow * 2, Key, Sun Stone
-        resp = ctr.tick(null, Direction.LEFT); 
-        resp = ctr.tick(null, Direction.UP); 
-        resp = ctr.tick(null, Direction.DOWN); 
-        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.UP);
+        resp = ctr.tick(null, Direction.DOWN);
+        resp = ctr.tick(null, Direction.RIGHT);
         assertThrows(InvalidActionException.class, () -> {
             ctr.build(Sceptre.STRING_TYPE);
         });
-        resp = ctr.tick(null, Direction.RIGHT); 
-        resp = ctr.tick(null, Direction.RIGHT); 
+        resp = ctr.tick(null, Direction.RIGHT);
+        resp = ctr.tick(null, Direction.RIGHT);
 
         List<String> actual = resp.getInventory().stream().map(item -> item.getType()).collect(Collectors.toList());
-        List<String> expected = Arrays.asList(Arrow.STRING_TYPE, Arrow.STRING_TYPE, Key.STRING_TYPE, SunStone.STRING_TYPE);
+        List<String> expected = Arrays.asList(Arrow.STRING_TYPE, Arrow.STRING_TYPE, Key.STRING_TYPE,
+                SunStone.STRING_TYPE);
         Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(expected, actual);
