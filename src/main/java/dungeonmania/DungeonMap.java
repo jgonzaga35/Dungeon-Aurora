@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
-import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -378,5 +378,9 @@ public class DungeonMap {
      */
     public Pos2d getEntry() {
         return this.entry;
+    }
+
+    public Cell getEntryCell() {
+        return this.getCell(this.getEntry());
     }
 }
