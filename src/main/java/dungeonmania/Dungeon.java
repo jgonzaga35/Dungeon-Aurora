@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
@@ -16,6 +17,7 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
@@ -42,9 +44,12 @@ import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
+import dungeonmania.entities.statics.SwitchDoor;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.Wire;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.ExitGoal;
@@ -107,13 +112,13 @@ public class Dungeon {
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
-    public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
+    public static Dungeon fromJSONObject(Random random, String name, GameMode mode, JSONObject obj) {
 
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(r, name, mode, map, goal);
+        Dungeon dungeon = new Dungeon(random, name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -132,7 +137,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Exit.STRING_TYPE)) {
                 cell.addOccupant(new Exit(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, FloorSwitch.STRING_TYPE)) {
-                cell.addOccupant(new FloorSwitch(dungeon, cell.getPosition()));
+                cell.addOccupant(new FloorSwitch(dungeon, cell.getPosition(), getLogicString(entity)));
             } else if (Objects.equals(type, ZombieToastSpawner.STRING_TYPE)) {
                 cell.addOccupant(new ZombieToastSpawner(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, ZombieToast.STRING_TYPE)) {
@@ -152,7 +157,7 @@ public class Dungeon {
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
                 cell.addOccupant(new Armour(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
-                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
+                cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false, getLogicString(entity)));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
                 cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
@@ -194,7 +199,18 @@ public class Dungeon {
                     correspondingPortal.setCorrespondingPortal(portal);
                 }
                 cell.addOccupant(portal);
-            } else {
+            } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.ON)) {
+                LightBulb lBulb = new LightBulb(dungeon, cell.getPosition(), getLogicString(entity));
+                lBulb.activate();
+                cell.addOccupant(lBulb);
+            } else if (Objects.equals(type, LightBulb.STRING_TYPE + LightBulb.OFF)) {
+                cell.addOccupant(new LightBulb(dungeon, cell.getPosition(), getLogicString(entity)));
+            } else if (Objects.equals(type, Wire.STRING_TYPE)) {
+                cell.addOccupant(new Wire(dungeon, cell.getPosition(), null));
+            } else if (Objects.equals(type, SwitchDoor.STRING_TYPE)) {
+                cell.addOccupant(new SwitchDoor(dungeon, cell.getPosition(), getLogicString(entity)));
+            }
+            else {
                 throw new Error("unhandled entity type: " + type);
             }
         }
@@ -208,9 +224,23 @@ public class Dungeon {
         dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
                 .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
+        map.allEntities()
+           .stream()
+           .filter(e -> e instanceof LogicalEntity)
+           .forEach(o -> ((LogicalEntity) o).addConnectedEntities(o.getCell(), ((LogicalEntity) o).getConnectedEntityIds()));
+
         return dungeon;
     }
 
+    public static String getLogicString(JSONObject entity) {
+        try {
+            String logic = entity.getString("logic");
+            return logic;
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+    
     public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
 
         Pos2d dims = new Pos2d(50, 50);
@@ -239,20 +269,17 @@ public class Dungeon {
      * Places a Bomb that is Currently in Player Inventory onto Map & Ensures that
      * Player is Unable to Pick it Up Again
      */
-    private void placeBomb(String itemUsed, CollectableEntity currCollectable) {
-        // Get Player Positions & Collectables
+    private void placeBomb(String itemUsed, Entity currCollectable) {
+        //Get Player Positions & Collectables
         Cell playerCell = dungeonMap.getPlayerCell();
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
-
-        // Check the Collectable Passed to this Function is a Bomb and that the ID
-        // matches
-        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE))
-                && (itemUsed.equals(currCollectable.getId()))) {
-            // Retreive Bomb Removed from Collectables that is To Be Placed
-            CollectableEntity collectableRemoved = currCollectable;
-            Bomb removedBomb = (Bomb) collectableRemoved;
+        
+        //Check the Collectable Passed to this Function is a Bomb and that the ID matches
+        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
+            //Retreive Bomb Removed from Collectables that is To Be Placed
+            Bomb removedBomb = (Bomb) currCollectable;
 
             // Update Position and Set the Bombs is_placed status to be True so Bomb cannot
             // be re-picked up
@@ -291,15 +318,20 @@ public class Dungeon {
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 // Assign the Current Collectable Occupant in Cell to be Removed
-                CollectableEntity collectableOccupant = (CollectableEntity) occupant;
-                if (this.player.getInventory().add(collectableOccupant)) {
+                if (this.player.getInventory().add(occupant)) {
                     ifOccupantRemoved = true;
-                    removedOccupant = collectableOccupant;
+                    removedOccupant = occupant;
                 }
-
+            }
+            if (occupant instanceof Bomb) {
+                // Assign the Current Collectable Occupant in Cell to be Removed
+                if (this.player.getInventory().add(occupant)) {
+                    ifOccupantRemoved = true;
+                    removedOccupant = occupant;
+                }
             }
         }
-        if (ifOccupantRemoved == true) {
+        if (ifOccupantRemoved) {
             // Remove the Assigned Collectable in Cell
             playerCell.removeOccupant(removedOccupant);
         }
@@ -325,6 +357,10 @@ public class Dungeon {
         return this.player;
     }
 
+    public Integer getTickCount() {
+        return this.tickCount;
+    }
+
     public void tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
 
@@ -339,14 +375,11 @@ public class Dungeon {
 
         dungeonMap.flood();
 
-        CollectableEntity item = null;
-        if (itemUsed != null)
-            item = player.getInventory().useItem(itemUsed);
-        if (item instanceof Potion)
-            activePotions.add((Potion) item);
-        if (item instanceof Bomb)
-            placeBomb(itemUsed, item);
-
+        Entity item = null;
+        if (itemUsed != null) item = player.getInventory().useItem(itemUsed);
+        if (item instanceof Potion) activePotions.add((Potion)item);
+        if (item instanceof Bomb) placeBomb(itemUsed, item);
+        
         // make sure all potion effects are applied and remove inactive potions.
         List<Potion> activePotionCpy = new ArrayList<>(activePotions);
         activePotionCpy.stream().forEach(pot -> {

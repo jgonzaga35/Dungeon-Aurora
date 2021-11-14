@@ -7,7 +7,6 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
@@ -22,8 +21,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     public static final int SPAWN_EVERY_N_TICKS = 50;
     public static final int BATTLE_RADIUS = 3;
 
-    protected List<Class<? extends CollectableEntity>> price = new ArrayList<>();
-
+    protected List<Class<? extends Entity>> price = new ArrayList<>();
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
     private Integer bribeDuration = -1;
@@ -62,7 +60,7 @@ public class Mercenary extends MovingEntity implements Fighter {
         this.removeMovementBehaviour(this.friendlyMovementBehaviour);
     }
 
-    public List<Class<? extends CollectableEntity>> getPrice() {
+    public List<Class<? extends Entity>> getPrice() {
         return this.price;
     }
 
