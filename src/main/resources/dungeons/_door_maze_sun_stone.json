@@ -6,25 +6,25 @@
             "x": 3,
             "y": 3,
             "type": "door",
-            "id": 1
+            "key": 1
         },
         {
             "x": 2,
             "y": 4,
             "type": "door",
-            "id": 2
+            "key": 2
         },
         {
             "x": 1,
             "y": 3,
             "type": "sun_stone",
-            "id": 1
+            "key": 1
         },
         {
             "x": 6,
             "y": 3,
             "type": "door",
-            "id": 3
+            "key": 3
         },
       {
         "x": 0,
