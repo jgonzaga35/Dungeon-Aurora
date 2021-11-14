@@ -27,7 +27,7 @@ public class Inventory {
      * @return true if the player was able to pick the collectable up
      */
     public boolean add(CollectableEntity c) {
-        if (c instanceof Key && hasKey()) {
+        if (c instanceof Key && this.contains(Key.class)) {
             // Player cannot pickup a second key
             return false;
         } 
@@ -234,8 +234,13 @@ public class Inventory {
         return this.collectables;
     }
 
-    public boolean hasKey() {
-        return collectables.stream().anyMatch(c -> c instanceof Key);
+    /**
+     * Checks for an instance of a class in the inventory.
+     * 
+     * @param type
+     * @return true if an instance of type exists in the inventory.
+     */
+    public boolean contains(Class<?> type) {
+        return collectables.stream().anyMatch(c -> c.getClass().equals(type));
     }
-
 }
