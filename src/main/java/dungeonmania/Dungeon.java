@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import org.eclipse.jetty.util.Scanner.ScanCycleListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,12 +23,11 @@ import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.OneRing;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -51,7 +49,8 @@ import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
-import dungeonmania.response.models.*;
+import dungeonmania.response.models.EntityResponse;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -367,7 +366,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        this.inventory.build(buildable);
+        this.player.getInventory().build(buildable);
     }
 
     public String getId() {
@@ -464,7 +463,7 @@ public class Dungeon {
     }
 
     public List<String> getBuildables() {
-        return this.inventory.getBuildables();
+        return this.player.getInventory().getBuildables();
     }
 
     
@@ -482,7 +481,8 @@ public class Dungeon {
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
         if (!player.getInventory().pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
         
-        if (inventory.hasSceptre()) {
+        if (player.getInventory().hasSceptre()) {
+            
             merc.bribe(10);
             return;
         }
