@@ -318,15 +318,20 @@ public class Dungeon {
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
                 // Assign the Current Collectable Occupant in Cell to be Removed
-                CollectableEntity collectableOccupant = (CollectableEntity) occupant;
-                if (this.player.getInventory().add(collectableOccupant)) {
+                if (this.player.getInventory().add(occupant)) {
                     ifOccupantRemoved = true;
-                    removedOccupant = collectableOccupant;
+                    removedOccupant = occupant;
                 }
-
+            }
+            if (occupant instanceof Bomb) {
+                // Assign the Current Collectable Occupant in Cell to be Removed
+                if (this.player.getInventory().add(occupant)) {
+                    ifOccupantRemoved = true;
+                    removedOccupant = occupant;
+                }
             }
         }
-        if (ifOccupantRemoved == true) {
+        if (ifOccupantRemoved) {
             // Remove the Assigned Collectable in Cell
             playerCell.removeOccupant(removedOccupant);
         }

@@ -155,12 +155,6 @@ public class Cell {
         }
     }
 
-    public void onWalked(Pos2d from, Pos2d to) {
-        // for (Entity e: this.occupants) {
-        //     // e.onWalked(from, to);
-        // }
-    }
-
     public boolean hasDeactivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isActivated()) {

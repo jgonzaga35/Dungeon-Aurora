@@ -1,7 +1,5 @@
 package dungeonmania.entities.statics;
 
-
-import java.util.Objects;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.LogicalEntity;
@@ -56,23 +54,6 @@ public class FloorSwitch extends LogicalEntity {
             return FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED;
         }
         return FloorSwitch.STRING_TYPE;
-    }
-
-    @Override
-    public void tick() {
-        if (Objects.isNull(logic)) {
-
-        } else if (Objects.equals(logic, Logic.AND)) {
-            andActivation();
-        } else if (Objects.equals(logic, Logic.OR)) {
-            orActivation();
-        } else if (Objects.equals(logic, Logic.XOR)) {
-            xorActivation();
-        } else if (Objects.equals(logic, Logic.NOT)) {
-            notActivation();
-        } else if (Objects.equals(logic, Logic.CO_AND)) {
-            co_andActivation();
-        }
     }
 
     @Override

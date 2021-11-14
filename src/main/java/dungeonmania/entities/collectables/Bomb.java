@@ -198,6 +198,7 @@ public class Bomb extends LogicalEntity {
      * Checks whether the bomb is Cardinally Adjacent to any Floor Switch
      */
     private boolean bombCheckCardinalAdjacency() {
+
         int bombXCoord = this.position.getX();
         int bombYCoord = this.position.getY();
 
@@ -228,7 +229,7 @@ public class Bomb extends LogicalEntity {
                 List<Entity> occupants = currentCell.getOccupants();
                 for (Entity currOccupant: occupants) {
                     if (currOccupant != null) {
-                        if (currOccupant.getTypeAsString().equals(FloorSwitch.STRING_TYPE)) {
+                        if (currOccupant instanceof FloorSwitch) {
                             if (checkSwitchNewlyActivated(currOccupant) == true) {
                                 return true;
                             }
@@ -272,6 +273,7 @@ public class Bomb extends LogicalEntity {
         .forEach(f -> f.tick());
 
         if (Objects.isNull(logic)) {
+            System.out.println("LETS GO");
             if (bombCheckCardinalAdjacency()) {
                 activate();
             }

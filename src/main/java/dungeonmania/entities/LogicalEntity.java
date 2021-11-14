@@ -136,7 +136,19 @@ public abstract class LogicalEntity extends Entity {
 
     @Override
     public void tick() {
+        if (Objects.isNull(logic)) {
 
+        } else if (Objects.equals(logic, Logic.AND)) {
+            andActivation();
+        } else if (Objects.equals(logic, Logic.OR)) {
+            orActivation();
+        } else if (Objects.equals(logic, Logic.XOR)) {
+            xorActivation();
+        } else if (Objects.equals(logic, Logic.NOT)) {
+            notActivation();
+        } else if (Objects.equals(logic, Logic.CO_AND)) {
+            co_andActivation();
+        }
     }
 
     @Override
