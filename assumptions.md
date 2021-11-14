@@ -58,6 +58,12 @@ by the attack damage amount when attacked
 - Anduril causes Hydra to lose health when it is attacked and
 removes the possibility of regaining health
 
+## One Ring
+- the player spawns back on the entry of the map
+- if there is a boulder there, then the player doesn't spawn back (dies even he
+  has the ring). This creates a nice balance: put a boulder on the entry so that
+  mercenaries don't spawn, but be careful because it cancels the one ring
+
 ## Bombs
 - Blast radius is set to 2
 - A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
