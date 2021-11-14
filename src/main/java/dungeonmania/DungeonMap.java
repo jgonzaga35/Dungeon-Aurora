@@ -330,6 +330,7 @@ public class DungeonMap {
         return this.getCell(e.getPosition()).removeOccupant(e);
     }
 
+
     @Override
     public String toString() {
         String result = "";
