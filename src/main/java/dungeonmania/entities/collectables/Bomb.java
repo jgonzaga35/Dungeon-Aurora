@@ -273,7 +273,6 @@ public class Bomb extends LogicalEntity {
         .forEach(f -> f.tick());
 
         if (Objects.isNull(logic)) {
-            System.out.println("LETS GO");
             if (bombCheckCardinalAdjacency()) {
                 activate();
             }

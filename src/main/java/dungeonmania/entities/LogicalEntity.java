@@ -168,7 +168,7 @@ public abstract class LogicalEntity extends Entity {
      * Activates Logical Entity if the co_and condition is satisfied
      */
     public void co_andActivation() {
-        if (countActivatedSwitches() == countCoActivatedSwitches()) {
+        if (countCoActivatedSwitches() >= 2) {
             activate();
         } else {
             deactivate();
