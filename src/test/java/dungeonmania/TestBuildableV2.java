@@ -48,9 +48,13 @@ public class TestBuildableV2 {
 
         assertDoesNotThrow(() -> {
             DungeonResponse r = ctr.build(Sceptre.STRING_TYPE);
+
             actual.addAll(r.getInventory().stream().map(ir -> ir.getType()).collect(Collectors.toList()));
+            
         });
+
         assertEquals(List.of(Sceptre.STRING_TYPE), actual);
+
     }
 
     @Test

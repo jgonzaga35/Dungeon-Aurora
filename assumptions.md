@@ -6,6 +6,7 @@
 ## ZombieToast
 - when zombies move in a random direction, that direction cannot be
   Direction.NONE unless there all the cells around it are blocking.
+- 15% of zombieToasts spawn with armour.
 
 ## ZombieToastSpawners
 
@@ -31,11 +32,13 @@
   that circle.
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
+- 30% of mercenaries spawn with armour.
 - When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
 - There is a 25% chance for a assassin to spawn in the place of a mercenary.
+- 30% of assassins spawn with armour.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
@@ -71,6 +74,15 @@ removes the possibility of regaining health
 - Blast radius is set to 2
 - A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
   (will not explode if placed next to an already activated switch)
+
+## Sun Stone
+- Sun Stone automatically opens doors as with a key (does not call the tick method to use it)
+- Once the Sun Stone is collected under no circumstances can it be removed including through usage
+- If the Sun Stone is used to build an item it is retained
+- The Sun Stone can be used in place of Treasure and if there is both Treasure and the Sun Stone in inventory
+  to build a buildable entity, the Treasure will be ket.
+- The only exception to the above is when crafting the Sceptre buildable entity, in which the Sun Stone cannot be used 
+  interchangably with Treasure when crafting with recipes that include both the Sun Stone and Treasure. 
 
 ## Battles
 
