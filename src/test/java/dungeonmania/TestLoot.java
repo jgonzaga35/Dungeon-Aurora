@@ -39,44 +39,52 @@ public class TestLoot {
     @Test
     public void testZombieDrops() {
         DungeonResponse r = null;
+        Integer armourCount = 0;
+        Integer oldCount = 0;
         for (int i = 0; i < 100; i ++) {
             TestUtils.spawnZombieToast(dungeon, 0, 0);
             r = dc.tick(null, Direction.NONE);
+            if (TestUtils.countInventoryOfType(r, Armour.STRING_TYPE) > oldCount) armourCount++;
+            oldCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
             player.setHealth(20);
         }
 
-        Integer armourCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
+        // Integer armourCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
 
         // Probability of failing on a valid solution = 0.00763 
         assertTrue(armourCount > 5 && armourCount < 25);
     }
-
+    
     @Test
     public void testMercenaryDrops() {
         DungeonResponse r = null;
+        Integer armourCount = 0;
+        Integer oldCount = 0;
         for (int i = 0; i < 100; i ++) {
             TestUtils.spawnMercenary(dungeon, 0, 0);
             r = dc.tick(null, Direction.NONE);
+            if (TestUtils.countInventoryOfType(r, Armour.STRING_TYPE) > oldCount) armourCount++;
+            oldCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
             player.setHealth(20);
         }
-
-        Integer armourCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
-
+        
         // Probability of failing on a valid solution = 0.00149 
         assertTrue(armourCount > 15 && armourCount < 45);
     }
-
+    
     @Test
     public void testAssassinDrops() {
         DungeonResponse r = null;
+        Integer armourCount = 0;
+        Integer oldCount = 0;
         for (int i = 0; i < 100; i ++) {
             TestUtils.spawnAssassin(dungeon, 0, 0);
+            player.setHealth(40);
             r = dc.tick(null, Direction.NONE);
-            player.setHealth(20);
+            if (TestUtils.countInventoryOfType(r, Armour.STRING_TYPE) > oldCount) armourCount++;
+            oldCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
         }
-
-        Integer armourCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
-
+        
         // Probability of failing on a valid solution = 0.00149 
         assertTrue(armourCount > 15 && armourCount < 45);
     }

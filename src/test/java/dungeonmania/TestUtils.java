@@ -28,6 +28,19 @@ public class TestUtils {
         throw new Error("player wasn't found");
     }
 
+    public static void purgeEnemyArmour(Dungeon dungeon) {
+        dungeon.getMap().allEntities().stream().forEach(e -> {
+            if (e instanceof Mercenary) {
+                Mercenary merc = (Mercenary) e;
+                merc.removeArmour();
+            }
+            if (e instanceof ZombieToast) {
+                ZombieToast zom = (ZombieToast) e;
+                zom.removeArmour();
+            }
+        });
+    }
+
     public static Mercenary spawnMercenary(Dungeon dungeon, int x, int y) {
         Cell mercCell = dungeon.getMap().getCell(x, y);
         Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());

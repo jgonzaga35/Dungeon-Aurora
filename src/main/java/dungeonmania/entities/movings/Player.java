@@ -83,9 +83,7 @@ public class Player extends MovingEntity implements Fighter {
     public void tick() {
     }
 
-    /**
-     * @return true if the player has been resurected
-     */
+    @Override
     public boolean onDeath() {
         DungeonMap map = this.dungeon.getMap();
         if (

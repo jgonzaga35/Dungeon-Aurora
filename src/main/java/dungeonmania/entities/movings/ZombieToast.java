@@ -72,4 +72,19 @@ public class ZombieToast extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return false;
     }
+
+    @Override
+    public boolean onDeath() {
+        inventory.getCollectables().stream().forEach(c -> {
+            c.setPosition(getCell().getPosition().getX(), getCell().getPosition().getY());
+            getCell().addOccupant(c);
+        });
+        inventory.clear();
+
+        return false;
+    }
+
+    public void removeArmour() {
+        inventory.clear();
+    }
 }

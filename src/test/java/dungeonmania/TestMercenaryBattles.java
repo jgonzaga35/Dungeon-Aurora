@@ -39,6 +39,7 @@ public class TestMercenaryBattles {
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
+        TestUtils.purgeEnemyArmour(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));

@@ -243,4 +243,11 @@ public class Inventory {
     public boolean contains(Class<?> type) {
         return collectables.stream().anyMatch(c -> c.getClass().equals(type));
     }
+
+    /**
+     * Remove everything from the inventory.
+     */
+    public void clear() {
+        collectables.clear();
+    }
 }
