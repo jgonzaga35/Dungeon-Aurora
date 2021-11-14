@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import org.eclipse.jetty.util.Scanner.ScanCycleListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +28,6 @@ import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -66,7 +64,7 @@ public class Dungeon {
     private PriorityQueue<BattleStrategy> battleStrategies;
 
     public static int nextDungeonId = 1;
-    
+
     private int tickCount = 0;
 
     private boolean hadEnemiesAtStartOfDungeon = false;
@@ -103,13 +101,13 @@ public class Dungeon {
      */
     public Random getRandom() {
         return this.r;
-    } 
+    }
 
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
     public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
-        
+
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
@@ -195,8 +193,7 @@ public class Dungeon {
                     correspondingPortal.setCorrespondingPortal(portal);
                 }
                 cell.addOccupant(portal);
-            } 
-            else {
+            } else {
                 throw new Error("unhandled entity type: " + type);
             }
         }
@@ -208,11 +205,11 @@ public class Dungeon {
         dungeon.setPlayer(player);
 
         dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
-            .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
+                .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
 
         return dungeon;
     }
-    
+
     public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
 
         Pos2d dims = new Pos2d(50, 50);
@@ -238,88 +235,91 @@ public class Dungeon {
     }
 
     /**
-     * Places a Bomb that is Currently in Player Inventory onto Map &
-     * Ensures that Player is Unable to Pick it Up Again
+     * Places a Bomb that is Currently in Player Inventory onto Map & Ensures that
+     * Player is Unable to Pick it Up Again
      */
     private void placeBomb(String itemUsed, CollectableEntity currCollectable) {
-        //Get Player Positions & Collectables
+        // Get Player Positions & Collectables
         Cell playerCell = dungeonMap.getPlayerCell();
         Pos2d playerPosition = playerCell.getPosition();
         int playerXCoord = playerPosition.getX();
         int playerYCoord = playerPosition.getY();
-        
-        //Check the Collectable Passed to this Function is a Bomb and that the ID matches
-        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
-            //Retreive Bomb Removed from Collectables that is To Be Placed
+
+        // Check the Collectable Passed to this Function is a Bomb and that the ID
+        // matches
+        if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE))
+                && (itemUsed.equals(currCollectable.getId()))) {
+            // Retreive Bomb Removed from Collectables that is To Be Placed
             CollectableEntity collectableRemoved = currCollectable;
             Bomb removedBomb = (Bomb) collectableRemoved;
 
-            //Update Position and Set the Bombs is_placed status to be True so Bomb cannot be re-picked up
+            // Update Position and Set the Bombs is_placed status to be True so Bomb cannot
+            // be re-picked up
             removedBomb.setIsPlaced();
             removedBomb.setPosition(playerXCoord, playerYCoord);
 
-            //Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb does not Explode
-            //if Placed Next to an Already Active Floor Switch
+            // Ensure that the Previously Triggered Flag on the Bomb is Set to False so Bomb
+            // does not Explode
+            // if Placed Next to an Already Active Floor Switch
             removedBomb.resetAdjacentSwitchRecords();
 
-            //Placing this Bomb on the Player's Cell
+            // Placing this Bomb on the Player's Cell
             playerCell.addOccupant(removedBomb);
 
-            //Run the Check if ALready Triggered Check
+            // Run the Check if ALready Triggered Check
             removedBomb.checkIfAlreadyTriggered();
         }
-        
+
     }
-    
+
     /**
-     * Removes the item from cell if player picked it up. 
+     * Removes the item from cell if player picked it up.
      */
     private void pickupCollectablesRemoveFromCell(Cell playerCell) {
-        //Getting Occupants of Player's Cell
+        // Getting Occupants of Player's Cell
         List<Entity> playerCellOccupants = playerCell.getOccupants();
-      
 
-        //If No Items In Player's Cell, There are No Items to Pickup
+        // If No Items In Player's Cell, There are No Items to Pickup
         if (playerCellOccupants.size() == 0) {
             return;
         }
 
-        //Removing Any Collectable Occupants from Current Cell as they Are Picked Up
+        // Removing Any Collectable Occupants from Current Cell as they Are Picked Up
         Entity removedOccupant = playerCellOccupants.get(0);
         boolean ifOccupantRemoved = false;
         for (Entity occupant : playerCellOccupants) {
             if (occupant instanceof CollectableEntity) {
-                //Assign the Current Collectable Occupant in Cell to be Removed
-                CollectableEntity collectableOccupant = (CollectableEntity)occupant;
+                // Assign the Current Collectable Occupant in Cell to be Removed
+                CollectableEntity collectableOccupant = (CollectableEntity) occupant;
                 if (this.player.getInventory().add(collectableOccupant)) {
                     ifOccupantRemoved = true;
                     removedOccupant = collectableOccupant;
                 }
-                
+
             }
         }
         if (ifOccupantRemoved == true) {
-            //Remove the Assigned Collectable in Cell
+            // Remove the Assigned Collectable in Cell
             playerCell.removeOccupant(removedOccupant);
         }
     }
 
     /**
-     * Picks Up the Collectable Entities that Are in the Player's Square
-     * Runs Every Tick, After the Player Has Moved
-     */ 
+     * Picks Up the Collectable Entities that Are in the Player's Square Runs Every
+     * Tick, After the Player Has Moved
+     */
     private void pickupCollectableEntities(String itemUsed) {
-        //Retreiving Player's Cell
+        // Retreiving Player's Cell
         Cell playerCell = dungeonMap.getPlayerCell();
         if (playerCell == null) {
             return;
         }
 
-        //Remove Collectable From Cell
+        // Remove Collectable From Cell
         pickupCollectablesRemoveFromCell(playerCell);
 
     }
-    
+
     public Player getPlayer() {
         return this.player;
     }
@@ -333,28 +333,29 @@ public class Dungeon {
         // PROBLEM: if we call tick as we iterate through the cells' entities
         // certain entities could get updated twice if they move down or left
         // SOLUTION: make a list of all the entities on the dungeonMap
-        //           and *only* then call tick on them all
+        // and *only* then call tick on them all
         this.player.handleMoveOrder(movementDirection);
 
         dungeonMap.flood();
 
         CollectableEntity item = null;
-        if (itemUsed != null) item = player.getInventory().useItem(itemUsed);
-        if (item instanceof Potion) activePotions.add((Potion)item);
-        if (item instanceof Bomb) placeBomb(itemUsed, item);
-        
+        if (itemUsed != null)
+            item = player.getInventory().useItem(itemUsed);
+        if (item instanceof Potion)
+            activePotions.add((Potion) item);
+        if (item instanceof Bomb)
+            placeBomb(itemUsed, item);
+
         // make sure all potion effects are applied and remove inactive potions.
         List<Potion> activePotionCpy = new ArrayList<>(activePotions);
         activePotionCpy.stream().forEach(pot -> {
             pot.tick();
-            if (!pot.isActive()) activePotions.remove(pot);
+            if (!pot.isActive())
+                activePotions.remove(pot);
         });
-        dungeonMap.allEntities().stream()
-            .filter(e -> !(e instanceof Potion))
-            .forEach(entity -> entity.tick());
-        
+        dungeonMap.allEntities().stream().filter(e -> !(e instanceof Potion)).forEach(entity -> entity.tick());
 
-        //Dealing With Picking Up or Placing Collectable Entities
+        // Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 
         this.spawnSpiders();
@@ -367,7 +368,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        this.inventory.build(buildable);
+        this.player.getInventory().build(buildable);
     }
 
     public String getId() {
@@ -402,8 +403,9 @@ public class Dungeon {
      * this should only be called exactly once, after the dungeon has been
      * constructed.
      * 
-     * This method is just there so the Dungeon constructor doesn't have to look
-     * for the player in the entire map
+     * This method is just there so the Dungeon constructor doesn't have to look for
+     * the player in the entire map
+     * 
      * @param player
      */
     public void setPlayer(Player player) {
@@ -412,6 +414,7 @@ public class Dungeon {
 
     /**
      * Create an entity response object for each entity in the dungeon
+     * 
      * @return list of entity responses
      */
     public List<EntityResponse> getEntitiesResponse() {
@@ -421,12 +424,8 @@ public class Dungeon {
             for (int x = 0; x < this.dungeonMap.getWidth(); x++) {
                 Cell cell = this.dungeonMap.getCell(x, y);
                 for (Entity entity : cell.getOccupants()) {
-                    entities.add(new EntityResponse(
-                        entity.getId(),
-                        entity.getTypeAsString(),
-                        new Position(x, y, entity.getLayerLevel().getValue()),
-                        entity.isInteractable()
-                    ));
+                    entities.add(new EntityResponse(entity.getId(), entity.getTypeAsString(),
+                            new Position(x, y, entity.getLayerLevel().getValue()), entity.isInteractable()));
                 }
             }
         }
@@ -437,7 +436,7 @@ public class Dungeon {
     public static Portal existsPortal(String colour, DungeonMap map) {
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
-                Cell cell = map.getCell(x,y);
+                Cell cell = map.getCell(x, y);
                 Portal portal = cell.hasPortal();
                 if (portal != null && portal.getColour().equals(colour)) {
                     return portal;
@@ -456,37 +455,36 @@ public class Dungeon {
     }
 
     /**
-     * Returns the Inventory in the form of a list of
-     * ItemResponse instances. 
+     * Returns the Inventory in the form of a list of ItemResponse instances.
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
         return this.player.getInventory().asItemResponses();
     }
 
     public List<String> getBuildables() {
-        return this.inventory.getBuildables();
+        return this.player.getInventory().getBuildables();
     }
 
-    
     /**
-     * Attempts to bribe the map's mercenary raises an InvalidActionException
-     * when:
-     * - The player is not in range to bribe the mercenary
-     * - The player does not have any gold.
+     * Attempts to bribe the map's mercenary raises an InvalidActionException when:
+     * - The player is not in range to bribe the mercenary - The player does not
+     * have any gold.
      * 
-     * removes a coin from the inventory on success. Also removes the OneRing if 
+     * removes a coin from the inventory on success. Also removes the OneRing if
      * bribing an assassin.
      */
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
-            
-        if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
-        if (!player.getInventory().pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
-        
-        if (inventory.hasSceptre()) {
+
+        if (merc.getCell().getPlayerDistance() > 2)
+            throw new InvalidActionException("Too far, the mercenary can't hear you");
+        if (!player.getInventory().pay(merc.getPrice()))
+            throw new InvalidActionException("The player can't pay the price");
+
+        if (player.getInventory().hasSceptre()) {
             merc.bribe(10);
             return;
         }
-            
+
         merc.bribe();
     }
 
@@ -496,7 +494,6 @@ public class Dungeon {
         if (this.player.getPosition().squareDistance(zts.getPosition()) > 1) {
             throw new InvalidActionException("player is too far away from the spawner");
         }
-        
 
         // check if we have a weapon to destroy the spawner with
         BattleItem weapon = this.player.getInventory().getOneWeapon();
@@ -534,19 +531,24 @@ public class Dungeon {
     /**
      * These helper functions should only be called by Dungeon::tick
      */
-    
+
     /**
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon) return;
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
-        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
+        if (!this.hadEnemiesAtStartOfDungeon)
+            return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
+            return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking())
+            return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;
-        if (r.nextInt(100) < Assassin.SPAWN_PERCENTAGE) m = new Assassin(this, this.dungeonMap.getEntry());
-        else m = new Mercenary(this, this.dungeonMap.getEntry());
+        if (r.nextInt(100) < Assassin.SPAWN_PERCENTAGE)
+            m = new Assassin(this, this.dungeonMap.getEntry());
+        else
+            m = new Mercenary(this, this.dungeonMap.getEntry());
 
         this.dungeonMap.getCell(this.dungeonMap.getEntry()).addOccupant(m);
     }
@@ -555,8 +557,7 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnSpiders() {
-        long spiderPopulation = this.dungeonMap.allEntities().stream()
-            .filter(e -> e instanceof Spider).count();
+        long spiderPopulation = this.dungeonMap.allEntities().stream().filter(e -> e instanceof Spider).count();
 
         if (spiderPopulation < Spider.MAX_SPIDERS && (this.tickCount % Spider.SPAWN_EVERY_N_TICKS == 0)) {
             Cell c = Spider.getRandomPosition(this);
@@ -576,7 +577,6 @@ public class Dungeon {
         }
     }
 
-    
     public BattleStrategy getBattleStrategy() {
         return this.battleStrategies.peek();
     }
