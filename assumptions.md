@@ -58,14 +58,15 @@ by the attack damage amount when attacked
 ## Anduril
 - Anduril has an initial durability of 20
 - Anduril has base damage of 7
-- Anduril causes Hydra to lose health when it is attacked and
-removes the possibility of regaining health
+- Anduril causes Hydra to lose health when it is attacked and removes the possibility of regaining health
+- Has a 20% chance of dropping after a mob kill.
 
 ## One Ring
 - the player spawns back on the entry of the map
 - if there is a boulder there, then the player doesn't spawn back (dies even he
   has the ring). This creates a nice balance: put a boulder on the entry so that
   mercenaries don't spawn, but be careful because it cancels the one ring
+- Has a 10% chance of dropping after a mob kill.
 
 ## Bombs
 - Blast radius is set to 2

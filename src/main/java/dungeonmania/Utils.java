@@ -15,9 +15,9 @@ public class Utils {
     /**
      * @pre {@code list.size() > 0}
      * 
-     * @param <T> any
+     * @param <T>  any
      * @param list
-     * @param r Random instance
+     * @param r    Random instance
      * @return a random item from the list
      */
     public static <T> T choose(List<T> list, Random r) {
@@ -30,7 +30,7 @@ public class Utils {
      * 
      * @param <T> any
      * @param set
-     * @param r Random instance
+     * @param r   Random instance
      * @return a random item from the set
      */
     public static <T> T choose(Set<T> set, Random r) {
@@ -38,20 +38,15 @@ public class Utils {
         return set.stream().skip(r.nextInt(set.size())).findFirst().get();
     }
 
-
-
-
-
-
     /**
-     * Because health is a float, we *might* (probably wont) get values smaller
-     * that machine precision. And so, we'll have to do health < eps = 2.2E-16
+     * Because health is a float, we *might* (probably wont) get values smaller that
+     * machine precision. And so, we'll have to do health < eps = 2.2E-16
      * 
      * Just in case, I'm writing a helper so that it's easy to fix.
      * 
-     * (example where this might happen: fire effect. It divides your health by
-     * 2 every second. That geometric serie never reaches 0, where do you draw
-     * the line? This would be the role of this helper)
+     * (example where this might happen: fire effect. It divides your health by 2
+     * every second. That geometric serie never reaches 0, where do you draw the
+     * line? This would be the role of this helper)
      * 
      * @param fighter
      * @return true if the fighter is dead
@@ -62,8 +57,8 @@ public class Utils {
 
     /**
      * Float arithmetic is annoying. x - x can be != 0, because finite machine
-     * precision. Not only is it annoying, but it might not be reproducible. And
-     * I don't want to debug tests between machines because float arithmetic is
+     * precision. Not only is it annoying, but it might not be reproducible. And I
+     * don't want to debug tests between machines because float arithmetic is
      * slightly different.
      * 
      * Allows to do {@code Comparator sort = (a, b) -> Utils.compareFloat(a.v -
@@ -73,9 +68,12 @@ public class Utils {
      * @return
      */
     public static int compareFloat(float f) {
-        if (Math.abs(f) < Utils.eps) return 0;
-        else if (f > 0) return 1;
-        else return -1;
+        if (Math.abs(f) < Utils.eps)
+            return 0;
+        else if (f > 0)
+            return 1;
+        else
+            return -1;
     }
 
 }
