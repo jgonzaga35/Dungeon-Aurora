@@ -31,8 +31,7 @@ public class TestMovement {
     Cell startingCell;
 
     @BeforeEach
-    public void setStartingPostition() throws IOException 
-    {
+    public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dungeon.getMap().flood();
@@ -40,8 +39,7 @@ public class TestMovement {
     }
 
     @Test
-    public void testPathFinding1() throws IOException 
-    {
+    public void testPathFinding1() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding1.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
@@ -57,12 +55,9 @@ public class TestMovement {
         }
 
         // define expected path
-        List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
-            new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8),
-            new Pos2d(0, 7), new Pos2d(0, 6), new Pos2d(0, 5), new Pos2d(0, 4),
-            new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(0, 1), new Pos2d(0, 0)
-        );
+        List<Pos2d> expectedPath = Arrays.asList(new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+                new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8), new Pos2d(0, 7), new Pos2d(0, 6),
+                new Pos2d(0, 5), new Pos2d(0, 4), new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(0, 1), new Pos2d(0, 0));
 
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
@@ -71,8 +66,7 @@ public class TestMovement {
     }
 
     @Test
-    public void testPathFinding2() throws IOException 
-    {
+    public void testPathFinding2() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding2.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
@@ -82,26 +76,22 @@ public class TestMovement {
 
         // let the assassin find it's path
         while (!assassin.getPosition().equals(new Pos2d(0, 0))) {
+            TestUtils.getPlayer(dungeon).setHealth(40);
             dc.tick(null, Direction.NONE);
             if (!followedPath.stream().anyMatch(p -> p.equals(assassin.getPosition())))
                 followedPath.add(assassin.getPosition());
         }
 
         // define expected path
-        List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
-            new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8),
-            new Pos2d(0, 7), new Pos2d(0, 6), new Pos2d(1, 6), new Pos2d(2, 6),
-            new Pos2d(3, 6), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6),
-            new Pos2d(7, 6), new Pos2d(8, 6), new Pos2d(8, 5), new Pos2d(8, 4),
-            new Pos2d(7, 4), new Pos2d(6, 4), new Pos2d(5, 4), new Pos2d(4, 4),
-            new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(1, 4), new Pos2d(0, 4),
-            new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(1, 2), new Pos2d(2, 2),
-            new Pos2d(3, 2), new Pos2d(4, 2), new Pos2d(5, 2), new Pos2d(6, 2),
-            new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
-            new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0),
-            new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0)
-        );
+        List<Pos2d> expectedPath = Arrays.asList(new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+                new Pos2d(3, 8), new Pos2d(2, 8), new Pos2d(1, 8), new Pos2d(0, 8), new Pos2d(0, 7), new Pos2d(0, 6),
+                new Pos2d(1, 6), new Pos2d(2, 6), new Pos2d(3, 6), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6),
+                new Pos2d(7, 6), new Pos2d(8, 6), new Pos2d(8, 5), new Pos2d(8, 4), new Pos2d(7, 4), new Pos2d(6, 4),
+                new Pos2d(5, 4), new Pos2d(4, 4), new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(1, 4), new Pos2d(0, 4),
+                new Pos2d(0, 3), new Pos2d(0, 2), new Pos2d(1, 2), new Pos2d(2, 2), new Pos2d(3, 2), new Pos2d(4, 2),
+                new Pos2d(5, 2), new Pos2d(6, 2), new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
+                new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0),
+                new Pos2d(1, 0), new Pos2d(0, 0));
 
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
@@ -110,8 +100,7 @@ public class TestMovement {
     }
 
     @Test
-    public void testPathFinding3() throws IOException 
-    {
+    public void testPathFinding3() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding3.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
@@ -121,34 +110,29 @@ public class TestMovement {
 
         // let the assassin find it's path
         while (!assassin.getPosition().equals(new Pos2d(0, 0))) {
+            TestUtils.getPlayer(dungeon).setHealth(40);
             dc.tick(null, Direction.NONE);
             if (!followedPath.stream().anyMatch(p -> p.equals(assassin.getPosition())))
                 followedPath.add(assassin.getPosition());
         }
 
         // define expected path
-        List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
-            new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6),
-            new Pos2d(7, 6), new Pos2d(8, 6), new Pos2d(8, 5), new Pos2d(8, 4),
-            new Pos2d(7, 4), new Pos2d(6, 4), new Pos2d(5, 4), new Pos2d(4, 4),
-            new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(2, 3), new Pos2d(2, 2),
-            new Pos2d(3, 2), new Pos2d(4, 2), new Pos2d(5, 2), new Pos2d(6, 2),
-            new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
-            new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0),
-            new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0)
-        );
+        List<Pos2d> expectedPath = Arrays.asList(new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+                new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(5, 6), new Pos2d(6, 6), new Pos2d(7, 6), new Pos2d(8, 6),
+                new Pos2d(8, 5), new Pos2d(8, 4), new Pos2d(7, 4), new Pos2d(6, 4), new Pos2d(5, 4), new Pos2d(4, 4),
+                new Pos2d(3, 4), new Pos2d(2, 4), new Pos2d(2, 3), new Pos2d(2, 2), new Pos2d(3, 2), new Pos2d(4, 2),
+                new Pos2d(5, 2), new Pos2d(6, 2), new Pos2d(7, 2), new Pos2d(8, 2), new Pos2d(8, 1), new Pos2d(8, 0),
+                new Pos2d(7, 0), new Pos2d(6, 0), new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0),
+                new Pos2d(1, 0), new Pos2d(0, 0));
 
-        
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
             assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
         }
     }
-    
+
     @Test
-    public void testPathFinding4() throws IOException 
-    {
+    public void testPathFinding4() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_pathfinding4.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
@@ -156,26 +140,22 @@ public class TestMovement {
         assassin.removeArmour();
 
         List<Pos2d> followedPath = new ArrayList<>();
-        
+
         // let the assassin find it's path
         while (!assassin.getPosition().equals(new Pos2d(0, 0))) {
             // make sure the player does not die
             TestUtils.getPlayer(dungeon).setHealth(40);
             dc.tick(null, Direction.NONE);
             if (!followedPath.stream().anyMatch(p -> p.equals(assassin.getPosition())))
-            followedPath.add(assassin.getPosition());
+                followedPath.add(assassin.getPosition());
         }
-        
+
         // define expected path
-        List<Pos2d> expectedPath = Arrays.asList(
-            new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
-            new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(4, 5), new Pos2d(4, 4),
-            new Pos2d(5, 4), new Pos2d(5, 3), new Pos2d(5, 2), new Pos2d(6, 2),
-            new Pos2d(7, 2), new Pos2d(7, 1), new Pos2d(7, 0), new Pos2d(6, 0),
-            new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0),
-            new Pos2d(1, 0), new Pos2d(0, 0)
-        );
-            
+        List<Pos2d> expectedPath = Arrays.asList(new Pos2d(7, 8), new Pos2d(6, 8), new Pos2d(5, 8), new Pos2d(4, 8),
+                new Pos2d(4, 7), new Pos2d(4, 6), new Pos2d(4, 5), new Pos2d(4, 4), new Pos2d(5, 4), new Pos2d(5, 3),
+                new Pos2d(5, 2), new Pos2d(6, 2), new Pos2d(7, 2), new Pos2d(7, 1), new Pos2d(7, 0), new Pos2d(6, 0),
+                new Pos2d(5, 0), new Pos2d(4, 0), new Pos2d(3, 0), new Pos2d(2, 0), new Pos2d(1, 0), new Pos2d(0, 0));
+
         assertEquals(expectedPath.size(), followedPath.size());
         for (int i = 0; i < followedPath.size(); i++) {
             assertEquals(expectedPath.get(i), followedPath.get(i), "at " + i);
@@ -183,11 +163,10 @@ public class TestMovement {
     }
 
     @Test
-    public void testCircleMovement() 
-    {
+    public void testCircleMovement() {
         DungeonMap map = dungeon.getMap();
         MovementBehaviour spider = new CircleMovementBehaviour(1, map, startingCell);
-        
+
         spider.move();
         assertEquals(new Pos2d(2, 1), spider.getCurrentCell().getPosition());
 
@@ -217,79 +196,76 @@ public class TestMovement {
     }
 
     @Test
-    public void testCircleMovementAgainstBoundary() 
-    {
+    public void testCircleMovementAgainstBoundary() {
         DungeonMap map = dungeon.getMap();
         startingCell = map.getCell(new Pos2d(4, 2));
         MovementBehaviour spider = new CircleMovementBehaviour(1, map, startingCell);
-        
+
         spider.move();
         assertEquals(new Pos2d(4, 1), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(4, 1), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 1), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 2), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 3), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(4, 3), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(4, 3), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 3), spider.getCurrentCell().getPosition());
 
     }
 
     @Test
-    public void testCircleMovementAgainstBoundaryTop() 
-    {
+    public void testCircleMovementAgainstBoundaryTop() {
         DungeonMap map = dungeon.getMap();
         startingCell = map.getCell(new Pos2d(2, 0));
         MovementBehaviour spider = new CircleMovementBehaviour(1, map, startingCell);
-        
+
         spider.move();
         assertEquals(new Pos2d(2, 0), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 0), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 1), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 2), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(2, 2), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(1, 2), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(1, 1), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(1, 0), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(2, 0), spider.getCurrentCell().getPosition());
-        
+
         spider.move();
         assertEquals(new Pos2d(3, 0), spider.getCurrentCell().getPosition());
     }
 
     @Test
-    public void testFriendlyMovementBasic() 
-    {
+    public void testFriendlyMovementBasic() {
         DungeonMap map = dungeon.getMap();
         startingCell = dungeon.getMap().getCell(new Pos2d(1, 0));
         MovementBehaviour friend = new FriendlyMovementBehaviour(1, map, startingCell);
@@ -302,10 +278,10 @@ public class TestMovement {
     }
 
     @Test
-    public void testCircleBoulderInteraction() throws IOException
-    {
+    public void testCircleBoulderInteraction() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD,
+                new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(2, 2));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -352,10 +328,10 @@ public class TestMovement {
     }
 
     @Test
-    public void testBoulderEdgeSeven() throws IOException
-    {
+    public void testBoulderEdgeSeven() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder2.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD,
+                new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(2, 1));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -411,10 +387,10 @@ public class TestMovement {
     }
 
     @Test
-    public void testBoulderEdgeZero() throws IOException
-    {
+    public void testBoulderEdgeZero() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_simple_with_boulder2.json");
-        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
+        Dungeon boulderDungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD,
+                new JSONObject(content));
         Cell spiderStart = boulderDungeon.getMap().getCell(new Pos2d(1, 1));
 
         DungeonMap map = boulderDungeon.getMap();
@@ -473,7 +449,7 @@ public class TestMovement {
     public void testBlockedCircleMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
-        
+
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new CircleMovementBehaviour(0, map, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
@@ -486,7 +462,7 @@ public class TestMovement {
     public void testBlockedFleeMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
-        
+
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FleeMovementBehaviour(0, map, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
@@ -499,7 +475,7 @@ public class TestMovement {
     public void testBlockedFriendlyMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
-        
+
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FriendlyMovementBehaviour(0, map, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
@@ -512,7 +488,7 @@ public class TestMovement {
     public void testBlockedRandomMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
-        
+
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new RandomMovementBehaviour(0, d, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
@@ -525,7 +501,7 @@ public class TestMovement {
     public void testBlockedFollowMovementBehaviour() {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon d = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
-        
+
         Cell cell = map.getCell(4, 4);
         MovementBehaviour movement = new FollowMovementBehaviour(0, map, cell);
         TestUtils.lockWithBoulders(d, cell.getPosition());
