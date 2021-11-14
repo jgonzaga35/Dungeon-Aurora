@@ -19,6 +19,19 @@ public class Shield extends BuildableEntity implements BattleItem {
     public static int INITIAL_DURABILITY = 20;
 
     private int durability;
+    
+    public static List<List<String>> RECIPES = List.of(
+        List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Key.STRING_TYPE
+        ),
+        List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Treasure.STRING_TYPE
+        )
+    );
 
     /**
      * Constructor for Shield
@@ -76,36 +89,6 @@ public class Shield extends BuildableEntity implements BattleItem {
         return Shield.STRING_TYPE;
     }
 
-    /**
-     * Removes the items needed to craft this item from the inventory, and adds
-     * itself to it.
-     * 
-     * If there aren't the required items present in the inventory, this does
-     * nothing
-     * 
-     * @param inventory the inventory
-     * @return true if the item was succesfully crafted
-     */
-    public static boolean craft(Inventory inventory) {
-        if (!inventory.useItems(List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Treasure.STRING_TYPE
-        )) && !inventory.useItems(List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Key.STRING_TYPE
-        ))) {
-            return false;
-        }
-        inventory.add(new Shield(null, null));
-        return true;
-    }
-
-    /**
-     * The defence coefficient of the fighter will be multiplied by this bonus
-     * @return float Coefficient of Defence Bonus
-     */
     @Override
     public float getDefenceCoefBonus() {
         return 3; // shield multiply defence coef by 3

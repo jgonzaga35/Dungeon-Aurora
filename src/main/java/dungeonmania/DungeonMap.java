@@ -106,6 +106,13 @@ public class DungeonMap {
     }
 
     /**
+     * Counts number of zombies remaining on the map
+     */
+    public Integer countZombieToasts() {
+        return (int) allEntities().stream().filter(e -> e instanceof ZombieToast).count();
+    }
+
+    /**
      * Sets all player distances to the maximum and sets the cell with the player to 0.
      */
     private void resetDistances() {
@@ -329,6 +336,7 @@ public class DungeonMap {
     public boolean removeEntity(Entity e) {
         return this.getCell(e.getPosition()).removeOccupant(e);
     }
+
 
     @Override
     public String toString() {

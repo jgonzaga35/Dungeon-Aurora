@@ -59,4 +59,11 @@ public interface Fighter {
     public boolean isBoss();
 
     public Entity getEntity();
+
+    /**
+     * Method that is called when an entity dies.
+     * 
+     * @return true if the entity should be resurrected else false
+     */
+    public boolean onDeath();
 }

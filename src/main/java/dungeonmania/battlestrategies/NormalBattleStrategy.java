@@ -71,7 +71,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             return v;
         };
 
-        Cell cell = map.getCell(dungeon.getPlayerPosition());
+        Cell cell = map.getCell(dungeon.getPlayer().getPosition());
 
         List<Fighter> allies = new ArrayList<>();
         List<Fighter> enemies = new ArrayList<>();
@@ -88,13 +88,10 @@ public class NormalBattleStrategy implements BattleStrategy {
 
         for (Fighter dead: deaths) {
             Entity e = dead.getEntity();
-            
-            if (e instanceof Player) {
-                Player p = (Player) e;
-                // don't remove the player from the map if he has been resurected
-                if (p.onDeath()) continue;
-            }
 
+            // don't remove the player from the map if he has been resurrected
+            if (dead.onDeath()) continue;
+            
             boolean result = map.getCell(e.getPosition()).removeOccupant(e);
             if (result == false) {
                 throw new Error("couldn't remove dead entity");
