@@ -141,7 +141,7 @@ public class FloorSwitch extends StaticEntity {
                                     connectedId.add(s.getId());
                                     addConnectedEntities(c, connectedId);
                                 } else {
-                                    if (!connectedEntities.contains(s)) {
+                                    if (!connectedEntities.contains(s) && !connectedIds.contains(s.getId())) {
                                             connectedEntities.add(s);
                                             connectedId.add(s.getId());
                                     }
