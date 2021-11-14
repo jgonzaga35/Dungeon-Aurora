@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.movings.Assassin;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -41,6 +42,14 @@ public class TestUtils {
         });
     }
 
+    public static Sceptre spawnScepter(Dungeon dungeon, int x, int y) {
+        Cell scepterCell = dungeon.getMap().getCell(x, y);
+        Sceptre Scepter = new Sceptre(dungeon, scepterCell.getPosition());
+        scepterCell.addOccupant(Scepter);
+
+        return Scepter;
+    }
+
     public static Wall spawnWall(Dungeon dungeon, int x, int y) {
         Cell wallCell = dungeon.getMap().getCell(x, y);
         Wall wall = new Wall(dungeon, wallCell.getPosition());
@@ -66,7 +75,7 @@ public class TestUtils {
     }
 
     public static ZombieToast spawnZombieToast(Dungeon dungeon, int x, int y) {
-        Cell zombieCell= dungeon.getMap().getCell(x, y);
+        Cell zombieCell = dungeon.getMap().getCell(x, y);
         ZombieToast zombieToast = new ZombieToast(dungeon, zombieCell.getPosition());
         zombieCell.addOccupant(zombieToast);
 
@@ -82,25 +91,23 @@ public class TestUtils {
     }
 
     public static Mercenary getMercenary(Dungeon dungeon) {
-        return (Mercenary) dungeon.getMap().allEntities().stream()
-        .filter(e -> e instanceof Mercenary)
-        .findFirst().orElse(null);
+        return (Mercenary) dungeon.getMap().allEntities().stream().filter(e -> e instanceof Mercenary).findFirst()
+                .orElse(null);
     }
 
     public static Player getPlayer(Dungeon dungeon) {
-        return (Player) dungeon.getMap().allEntities().stream()
-        .filter(e -> e instanceof Player)
-        .findFirst().orElse(null);
+        return (Player) dungeon.getMap().allEntities().stream().filter(e -> e instanceof Player).findFirst()
+                .orElse(null);
     }
 
     public static ZombieToast getZombieToast(Dungeon dungeon) {
-        return (ZombieToast) dungeon.getMap().allEntities().stream()
-        .filter(e -> e instanceof ZombieToast)
-        .findFirst().orElse(null);
+        return (ZombieToast) dungeon.getMap().allEntities().stream().filter(e -> e instanceof ZombieToast).findFirst()
+                .orElse(null);
     }
 
     /**
      * asserts that as and bs contain the same element
+     * 
      * @param <T>
      * @param as
      * @param bs
@@ -110,7 +117,6 @@ public class TestUtils {
         Collections.sort(bs);
         assertEquals(as, bs);
     }
-
 
     public static boolean isBlocking(EntityResponse resp) {
         return List.of(Wall.STRING_TYPE, ZombieToastSpawner.STRING_TYPE).contains(resp.getType());
@@ -123,10 +129,10 @@ public class TestUtils {
     public static long countInventoryOfType(DungeonResponse resp, String type) {
         return resp.getInventory().stream().filter(e -> Objects.equals(e.getType(), type)).count();
     }
-    
+
     /**
-     * puts boulders all around the position so that the damn thing can't move
-     * and it makes testing easier
+     * puts boulders all around the position so that the damn thing can't move and
+     * it makes testing easier
      * 
      * Can only be used in white box testing
      * 
@@ -137,7 +143,8 @@ public class TestUtils {
         DungeonMap map = dungeon.getMap();
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {
-                if (dx == 0 && dy == 0) continue;
+                if (dx == 0 && dy == 0)
+                    continue;
 
                 Pos2d curr = center.plus(new Pos2d(dx, dy));
 
