@@ -75,7 +75,8 @@ removes the possibility of regaining health
 - If the Sun Stone is used to build an item it is retained
 - The Sun Stone can be used in place of Treasure and if there is both Treasure and the Sun Stone in inventory
   to build a buildable entity, the Treasure will be ket.
-- The Sceptre can be crafted with only one Sun Stone where a recipe involving treasure is used. 
+- The only exception to the above is when crafting the Sceptre buildable entity, in which the Sun Stone cannot be used 
+  interchangably with Treasure when crafting with recipes that include both the Sun Stone and Treasure. 
 
 ## Battles
 
