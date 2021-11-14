@@ -12,6 +12,10 @@ import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.BuildableEntity;
 import dungeonmania.entities.collectables.Wood;
 
+/**
+ * Represents a Bow. 
+ * Bow allows player to attack twice in a single round.
+ */
 public class Bow extends BuildableEntity implements BattleItem {
 
     public static final String STRING_TYPE = "bow";
@@ -19,6 +23,7 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     private int durability;
 
+    // A list of recipes used to contract the buildable item.
     public static List<List<String>> RECIPES = List.of(
         List.of(
             Wood.STRING_TYPE,

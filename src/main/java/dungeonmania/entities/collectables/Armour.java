@@ -48,11 +48,12 @@ public class Armour extends CollectableEntity implements BattleItem {
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false; 
     }
 
     @Override
     public void tick() {
+        // Do nothing
     }
 
 }

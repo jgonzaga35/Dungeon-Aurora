@@ -14,20 +14,27 @@ import dungeonmania.movement.FleeMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
 /**
- * in hard mode, this potion doesn't do anything
+ * Represents an invincibility potion.
+ * Any battles that occur when the character has the effects of the potion end immediately, 
+ * with the character immediately winning. Because of this, all enemies will run away from 
+ * the character when they are invincible. 
+ * in hard mode, this potion doesn't do anything.
  */
 public class InvincibilityPotion extends Potion {
 
     public static String STRING_TYPE = "invincibility_potion";
     public static final int MAX_DURATION = 5;
 
+    // A map contatining entites that are affected by the player's invincibility
     private Map<MovingEntity, MovementBehaviour> affectedEntities = new HashMap<>();
 
     public InvincibilityPotion(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.maxDuration = InvincibilityPotion.MAX_DURATION;
-        if (this.dungeon.getGameMode() != GameMode.HARD)
+        if (this.dungeon.getGameMode() != GameMode.HARD) {
+            // Player with invincibility automatically wins all battles
             this.battleStrategy = new WinAllBattleStrategy(10);
+        }
     }
 
     @Override
@@ -35,10 +42,15 @@ public class InvincibilityPotion extends Potion {
         return STRING_TYPE;
     }
 
+    /**
+     * When the invincibility potion expires, all effects are removed
+     */
     @Override
     public void expire() {
-        if (this.dungeon.getGameMode() == GameMode.HARD) return;
+        // potion does not work in hard mode
+        if (this.dungeon.getGameMode() == GameMode.HARD) return; 
 
+        // reset the movement behaviour of all previously affected entities
         affectedEntities.keySet().stream().forEach(e -> {
             boolean removed = e.removeMovementBehaviour(affectedEntities.get(e));
             assert removed;
@@ -51,11 +63,16 @@ public class InvincibilityPotion extends Potion {
 
     @Override
     public void onDrink() {
+        // potion does not work in hard mode
         if (this.dungeon.getGameMode() == GameMode.HARD) return;
 
         this.dungeon.addBattleStrategy(battleStrategy);
     }
 
+    /**
+     * The invincibility potion changes the movement behaviours of enemies.
+     * Affected enemies flee from the player with FleeMovementBehaviour.
+     */
     @Override
     public void applyEffectsEveryTick() {
         if (this.dungeon.getGameMode() == GameMode.HARD) return;

@@ -191,6 +191,7 @@ public class Bomb extends CollectableEntity {
 
     /**
      * Checks whether the bomb is Cardinally Adjacent to any Floor Switch
+     * @return Boolean, true if bomb is adjacent to floor switch
      */
     private boolean bombCheckCardinalAdjacency() {
         int bombXCoord = this.position.getX();

@@ -8,9 +8,15 @@ import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.collectables.*;
 
+/**
+ * Represents a sceptre.
+ * Sceptre allows the player to bribe mercenaries/assassins for free.
+ */
 public class Sceptre extends BuildableEntity {
     public static final String STRING_TYPE = "sceptre";
 
+    // A list of recipes used to contract the buildable item.
+    // A Sceptre can be built 4 different ways.
     public static List<List<String>> RECIPES = List.of(
         List.of(
             SunStone.STRING_TYPE,
@@ -36,6 +42,11 @@ public class Sceptre extends BuildableEntity {
         )
     );
 
+    /**
+     * Constructor for Sceptre
+     * @param Dungeon dungeon
+     * @param Pos2d position where Sceptre is located
+     */
     public Sceptre(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
     }

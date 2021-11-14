@@ -22,7 +22,6 @@ public class Anduril extends CollectableEntity implements BattleItem {
         this.durability = INITIAL_DURABILITY;
     }
 
-
     @Override
     public int getDurability() {
         return this.durability;
@@ -42,11 +41,12 @@ public class Anduril extends CollectableEntity implements BattleItem {
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false; 
     }
 
     @Override
     public void tick() {
+        // Do nothing.
     }
 
 
@@ -55,7 +55,9 @@ public class Anduril extends CollectableEntity implements BattleItem {
         return 1; // doesn't affect defence coef bonus
     }
 
-
+    /**
+     * Anduril applies Extra effects when used against a boss enemy
+     */
     @Override
     public float getAttackDamageBonus(Fighter target) {
         if (target.isBoss()) {
@@ -65,6 +67,6 @@ public class Anduril extends CollectableEntity implements BattleItem {
             return Anduril.BASE_DAMAGE * 3;
         } 
 
-        return Anduril.BASE_DAMAGE; // attacking with a sword is a lot better than with your fists!
+        return Anduril.BASE_DAMAGE; 
     }
 }

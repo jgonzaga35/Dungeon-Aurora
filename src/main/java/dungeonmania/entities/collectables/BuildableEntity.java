@@ -19,6 +19,7 @@ public abstract class BuildableEntity extends CollectableEntity {
 
     @Override
     public void tick() {
+        // Do nothing by default
     }
     
 }

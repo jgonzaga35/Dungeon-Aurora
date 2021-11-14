@@ -13,6 +13,10 @@ import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
+/**
+ * Represents a shield.
+ * Player receives extra defence from shield.
+ */
 public class Shield extends BuildableEntity implements BattleItem {
 
     public static final String STRING_TYPE = "shield";
@@ -20,6 +24,7 @@ public class Shield extends BuildableEntity implements BattleItem {
 
     private int durability;
     
+    // A list of recipes used to contract the buildable item.
     public static List<List<String>> RECIPES = List.of(
         List.of(
             Wood.STRING_TYPE,
