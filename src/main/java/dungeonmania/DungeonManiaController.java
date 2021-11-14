@@ -203,7 +203,7 @@ public class DungeonManiaController {
             this.dungeon.getName(),
             this.dungeon.getEntitiesResponse(),
             this.dungeon.getInventoryAsItemResponse(),
-            new ArrayList<String>(),
+            this.dungeon.getBuildables(),
             this.dungeon.getGoalAsString(),
             new ArrayList<AnimationQueue>()
         );

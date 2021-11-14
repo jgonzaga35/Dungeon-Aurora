@@ -147,3 +147,4 @@ public class Mercenary extends MovingEntity implements Fighter {
         inventory.clear();
     }
 }
+

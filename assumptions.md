@@ -72,6 +72,15 @@ removes the possibility of regaining health
 - A bomb will only explode if it is placed next to a deactivated switch and then that switch is activated
   (will not explode if placed next to an already activated switch)
 
+## Sun Stone
+- Sun Stone automatically opens doors as with a key (does not call the tick method to use it)
+- Once the Sun Stone is collected under no circumstances can it be removed including through usage
+- If the Sun Stone is used to build an item it is retained
+- The Sun Stone can be used in place of Treasure and if there is both Treasure and the Sun Stone in inventory
+  to build a buildable entity, the Treasure will be ket.
+- The only exception to the above is when crafting the Sceptre buildable entity, in which the Sun Stone cannot be used 
+  interchangably with Treasure when crafting with recipes that include both the Sun Stone and Treasure. 
+
 ## Battles
 
 | Entity       | Health | Attack Damage | Spawns Every        |

@@ -6,6 +6,7 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.util.BlockingReason;
 
 public class Door extends StaticEntity {
@@ -28,9 +29,9 @@ public class Door extends StaticEntity {
     public boolean open() {
         Inventory inventory = this.dungeon.getPlayer().getInventory();
         for (CollectableEntity c : inventory.getCollectables()) {
-            if (c instanceof Key && ((Key)c).getKeyId() == doorId) {
+            if ((c instanceof Key && ((Key)c).getKeyId() == doorId) || (c instanceof SunStone)) {
                 // key matches, remove the key from inventory and unlock door
-                inventory.remove(c);
+                if (c instanceof Key) inventory.remove(c);
                 locked = false;
                 return true;
             }

@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import org.eclipse.jetty.util.Scanner.ScanCycleListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,12 +24,12 @@ import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.Bow;
-import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -50,8 +51,7 @@ import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
-import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.ItemResponse;
+import dungeonmania.response.models.*;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -164,6 +164,8 @@ public class Dungeon {
                 cell.addOccupant(new Swamp(dungeon, cell.getPosition(), entity.getInt("movement_factor")));
             } else if (Objects.equals(type, Spider.STRING_TYPE)) {
                 cell.addOccupant(new Spider(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, InvincibilityPotion.STRING_TYPE)) {
                 cell.addOccupant(new InvincibilityPotion(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, HealthPotion.STRING_TYPE)) {
@@ -176,6 +178,8 @@ public class Dungeon {
                 cell.addOccupant(new Assassin(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Hydra.STRING_TYPE)) {
                 cell.addOccupant(new Hydra(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, SunStone.STRING_TYPE)) {
+                cell.addOccupant(new SunStone(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
@@ -363,17 +367,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
-            if (!Shield.craft(this.player.getInventory())) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
-            if (!Bow.craft(this.player.getInventory())) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else {
-            throw new IllegalArgumentException("unknown buildable: " + buildable);
-        }
+        this.inventory.build(buildable);
     }
 
     public String getId() {
@@ -469,6 +463,10 @@ public class Dungeon {
         return this.player.getInventory().asItemResponses();
     }
 
+    public List<String> getBuildables() {
+        return this.inventory.getBuildables();
+    }
+
     
     /**
      * Attempts to bribe the map's mercenary raises an InvalidActionException
@@ -483,6 +481,11 @@ public class Dungeon {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
         if (!player.getInventory().pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
+        
+        if (inventory.hasSceptre()) {
+            merc.bribe(10);
+            return;
+        }
             
         merc.bribe();
     }
