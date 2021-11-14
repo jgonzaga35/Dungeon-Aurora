@@ -24,17 +24,14 @@ import dungeonmania.util.Position;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 
-
-
-
 public class TestCollectables {
-    /** 
-     * testLoadingTreasure()
-     * Test that Treasure is Collected and that it Triggers Goals  
-    */
+    /**
+     * testLoadingTreasure() Test that Treasure is Collected and that it Triggers
+     * Goals
+     */
     @Test
     public void testLoadingTreasure() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_treasureExample", GameMode.PEACEFUL.getValue());
         Boolean found = false;
@@ -44,7 +41,7 @@ public class TestCollectables {
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking that the Item has Been Added to Inventory
+        // Checking that the Item has Been Added to Inventory
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -56,7 +53,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -73,18 +70,17 @@ public class TestCollectables {
             }
         }
         assertEquals(true, itemRemoved);
-        
-        //Checking If Goal is Reached (No Treasure Left on Map)
-        //TODO
+
+        // Checking If Goal is Reached (No Treasure Left on Map)
+        // TODO
     }
-    
-    /** 
-     * testLoadingWood()
-     * Test that Wood is Collected  
-    */
+
+    /**
+     * testLoadingWood() Test that Wood is Collected
+     */
     @Test
     public void testLoadingWood() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_woodExample", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -93,8 +89,8 @@ public class TestCollectables {
         // Down 2 Units to the Wood at Coord (1, 3)
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
-        
-        //Checking If Wood was Collected
+
+        // Checking If Wood was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -106,7 +102,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -123,14 +119,13 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
     }
-    
-    /** 
-     * testLoadingArrow()
-     * Test that Arrow is Collected 
-    */
+
+    /**
+     * testLoadingArrow() Test that Arrow is Collected
+     */
     @Test
     public void testLoadingArrow() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_arrowExample", GameMode.STANDARD.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -139,8 +134,8 @@ public class TestCollectables {
         // Down 2 Units to the Arrow at Coord (1, 3)
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
-        
-        //Checking If Arrow was Collected
+
+        // Checking If Arrow was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -152,7 +147,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -170,14 +165,12 @@ public class TestCollectables {
         assertEquals(true, itemRemoved);
     }
 
-    
-    /** 
-     * testLoadingKey()
-     * Test that Key is Collected  
-    */
+    /**
+     * testLoadingKey() Test that Key is Collected
+     */
     @Test
     public void testLoadingKey() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_keyExample", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -186,8 +179,8 @@ public class TestCollectables {
         // Down 2 Units to the Key at Coord (3, 1)
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
-        
-        //Checking If Key was Collected
+
+        // Checking If Key was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -199,7 +192,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -215,21 +208,20 @@ public class TestCollectables {
             }
         }
         assertEquals(true, itemRemoved);
-        
-        //Then Entering the Linked Door
+
+        // Then Entering the Linked Door
         ctr.tick(null, Direction.RIGHT);
         ctr.tick(null, Direction.RIGHT);
 
-        //Checking that the Key has Then Been Removed by Opening Same Door Again
+        // Checking that the Key has Then Been Removed by Opening Same Door Again
     }
 
-    /** 
-     * testLoadingSword()
-     * Test that Sword is Collected and Impact on Battles 
-    */
+    /**
+     * testLoadingSword() Test that Sword is Collected and Impact on Battles
+     */
     @Test
     public void testLoadingSword() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_swordExample", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -239,7 +231,7 @@ public class TestCollectables {
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking If Sword was Collected
+        // Checking If Sword was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -251,7 +243,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         boolean itemRemoved = true;
         int currPositionX = 0;
         int currPositionY = 0;
@@ -268,17 +260,17 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        //Initiating Fight with Sword
-        //TODO
+        // Initiating Fight with Sword
+        // TODO
     }
 
-    /** 
-     * TEST: Ensure Armour is Collected  
+    /**
+     * TEST: Ensure Armour is Collected
      */
-    
+
     @Test
     public void testLoadingArmour() {
-        //New Game
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_armourExample", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -288,7 +280,7 @@ public class TestCollectables {
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking If Armour was Collected
+        // Checking If Armour was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -300,7 +292,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -317,24 +309,24 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        //Initiating Fight with Zombie
-        //TODO
+        // Initiating Fight with Zombie
+        // TODO
 
-        //Move 10 Times
-        //TODO
+        // Move 10 Times
+        // TODO
 
-        //Check that Player has Lost Battle
-        //TODO
+        // Check that Player has Lost Battle
+        // TODO
     }
 
-    /** 
-     * TEST: Ensure Bomb is Collected  
+    /**
+     * TEST: Ensure Bomb is Collected
      */
-    
+
     @Test
     public void testLoadingBomb() {
-        //Item Coords: Player(1,1), Bomb(1,3), Boulder (7,2), Switch(7,3)
-        //New Game
+        // Item Coords: Player(1,1), Bomb(1,3), Boulder (7,2), Switch(7,3)
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_bombExample", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
@@ -344,7 +336,7 @@ public class TestCollectables {
         ctr.tick(null, Direction.DOWN);
         resp = ctr.tick(null, Direction.DOWN);
 
-        //Checking If Bomb was Collected
+        // Checking If Bomb was Collected
         found = false;
         String curr_type = "";
         List<ItemResponse> curr_inventory = resp.getInventory();
@@ -356,7 +348,7 @@ public class TestCollectables {
         }
         assertEquals(true, found);
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -373,14 +365,14 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        //Place Bomb on Ground Cardinally Adjacent to Switch
+        // Place Bomb on Ground Cardinally Adjacent to Switch
         // Right 4 Units to the Coord (5, 3)
         ctr.tick(null, Direction.RIGHT);
         ctr.tick(null, Direction.RIGHT);
         ctr.tick(null, Direction.RIGHT);
         ctr.tick(null, Direction.RIGHT);
 
-        //Get ID for Bomb
+        // Get ID for Bomb
         curr_type = "";
         String bombId = "";
         curr_inventory = resp.getInventory();
@@ -390,18 +382,18 @@ public class TestCollectables {
                 bombId = item.getId();
             }
         }
-        //Place bomb onto (5,3)
+        // Place bomb onto (5,3)
         resp = ctr.tick(bombId, Direction.NONE);
 
-        //Go Up and Right to Move to (6,1)
+        // Go Up and Right to Move to (6,1)
         ctr.tick(null, Direction.UP);
-        ctr.tick(null,Direction.UP);
+        ctr.tick(null, Direction.UP);
         ctr.tick(null, Direction.RIGHT);
 
-        //Move Down to (6,2) to Push Boulder Onto Switch & Explode Bomb
+        // Move Down to (6,2) to Push Boulder Onto Switch & Explode Bomb
         ctr.tick(null, Direction.DOWN);
 
-        //Move to (6,3) where Switch Was & Ensure There are No Entities Here
+        // Move to (6,3) where Switch Was & Ensure There are No Entities Here
         resp = ctr.tick(null, Direction.DOWN);
 
         boolean entityFound = false;
@@ -413,22 +405,25 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Check Entities in Blast Radius Destroyed
-        //Blast Radius is 1, therefore if bomb exploads it destroys
-        //all entities in cells (6,3), (5,3), (5,4), (6,4), (7,4), (7,3), (7,2), (6,2), (5,2)
-        //other than player itself
+        // Check Entities in Blast Radius Destroyed
+        // Blast Radius is 1, therefore if bomb exploads it destroys
+        // all entities in cells (6,3), (5,3), (5,4), (6,4), (7,4), (7,3), (7,2), (6,2),
+        // (5,2)
+        // other than player itself
 
-        //Make Player walk through all cells in blast radius and check no entities other
-        //than player
+        // Make Player walk through all cells in blast radius and check no entities
+        // other
+        // than player
 
-        //Player is at Cell (5,3) check no entities here
+        // Player is at Cell (5,3) check no entities here
         entityFound = false;
         playerFound = false;
         curr_type = "";
@@ -438,15 +433,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-
-        //Move Player to Cell (5,3) check no entities here
+        // Move Player to Cell (5,3) check no entities here
         resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
@@ -458,14 +453,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (5,4) check no entities here
+        // Move Player to Cell (5,4) check no entities here
         resp = ctr.tick(null, Direction.DOWN);
 
         entityFound = false;
@@ -477,14 +473,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (6,4) check no entities here
+        // Move Player to Cell (6,4) check no entities here
         resp = ctr.tick(null, Direction.RIGHT);
 
         entityFound = false;
@@ -496,14 +493,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (7,4) check no entities here
+        // Move Player to Cell (7,4) check no entities here
         resp = ctr.tick(null, Direction.RIGHT);
 
         entityFound = false;
@@ -515,14 +513,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (7,3) check no entities here
+        // Move Player to Cell (7,3) check no entities here
         resp = ctr.tick(null, Direction.UP);
 
         entityFound = false;
@@ -534,14 +533,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (7,2) check no entities here
+        // Move Player to Cell (7,2) check no entities here
         resp = ctr.tick(null, Direction.UP);
 
         entityFound = false;
@@ -553,14 +553,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (6,2) check no entities here
+        // Move Player to Cell (6,2) check no entities here
         resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
@@ -572,14 +573,15 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
 
-        //Move Player to Cell (5,2) check no entities here
+        // Move Player to Cell (5,2) check no entities here
         resp = ctr.tick(null, Direction.LEFT);
 
         entityFound = false;
@@ -591,30 +593,28 @@ public class TestCollectables {
             if (curr_type.equals(Player.STRING_TYPE)) {
                 playerFound = true;
             }
-            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE)) || (curr_type.equals(Bomb.STRING_TYPE))) {
+            if ((curr_type.equals(Wall.STRING_TYPE)) || (curr_type.equals(FloorSwitch.STRING_TYPE))
+                    || (curr_type.equals(Bomb.STRING_TYPE))) {
                 entityFound = true;
             }
         }
         assertEquals(true, playerFound);
         assertEquals(false, entityFound);
-
-        
-        
 
     }
 
-     /** 
-     * TEST: Ensure Sun Stone is Collected & Opens Doors & Is Not Removed  
+    /**
+     * TEST: Ensure Sun Stone is Collected & Opens Doors & Is Not Removed
      */
-    
+
     @Test
     public void testSunStoneOpeningDoor() {
-        //Item Coords: Player(1,1), SunStone(1,3), Door 1 (2,4), Door 2 (3,3), Door 3 (6, 3)
-        //New Game
+        // Item Coords: Player(1,1), SunStone(1,3), Door 1 (2,4), Door 2 (3,3), Door 3
+        // (6, 3)
+        // New Game
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("_door_maze_sun_stone", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
-        Boolean found = false;
 
         // Down 2 Units to the SunStone at Coord (1, 3)
         ctr.tick(null, Direction.DOWN);
@@ -624,7 +624,7 @@ public class TestCollectables {
         // Checking that the Item has Been Added to Inventory
         assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals(SunStone.STRING_TYPE)));
 
-        //Check that the Item Was Removed from the Cell
+        // Check that the Item Was Removed from the Cell
         int currPositionX = 0;
         int currPositionY = 0;
         boolean itemRemoved = true;
@@ -642,7 +642,7 @@ public class TestCollectables {
         }
         assertEquals(true, itemRemoved);
 
-        // using Sun Stone to open Door 2 
+        // using Sun Stone to open Door 2
         resp = ctr.tick(null, Direction.RIGHT);
         Position p1 = TestUtils.getPlayerPosition(resp);
 
@@ -650,7 +650,7 @@ public class TestCollectables {
         Position p2 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p1, p2);
 
-        // using Sun Stone to open Door 1 
+        // using Sun Stone to open Door 1
         ctr.tick(null, Direction.UP);
         resp = ctr.tick(null, Direction.RIGHT);
         Position p3 = TestUtils.getPlayerPosition(resp);
@@ -661,7 +661,7 @@ public class TestCollectables {
 
         // using Sun Stone to open Door 3
         Position p4 = TestUtils.getPlayerPosition(resp);
-        
+
         resp = ctr.tick(null, Direction.RIGHT);
         Position p5 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p4, p5);
@@ -669,7 +669,7 @@ public class TestCollectables {
         // walking back through Door 1
         resp = ctr.tick(null, Direction.LEFT);
         Position p6 = TestUtils.getPlayerPosition(resp);
-        
+
         resp = ctr.tick(null, Direction.LEFT);
         Position p7 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p6, p7);
@@ -681,19 +681,20 @@ public class TestCollectables {
         Position p9 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p8, p9);
 
-        // using Sun Stone to open Door 3 
+        // using Sun Stone to open Door 3
         resp = ctr.tick(null, Direction.UP);
         resp = ctr.tick(null, Direction.RIGHT);
         resp = ctr.tick(null, Direction.RIGHT);
         resp = ctr.tick(null, Direction.RIGHT);
 
-        // using Sun Stone to open Door 3 
+        // using Sun Stone to open Door 3
         Position p10 = TestUtils.getPlayerPosition(resp);
         resp = ctr.tick(null, Direction.RIGHT);
         Position p11 = TestUtils.getPlayerPosition(resp);
         assertNotEquals(p10, p11);
 
-        // Check the Sun Stone is Still in Inventory (Should Not Be Discarded as Per Spec)
+        // Check the Sun Stone is Still in Inventory (Should Not Be Discarded as Per
+        // Spec)
         assertTrue(resp.getInventory().stream().anyMatch(item -> item.getType().equals("sun_stone")));
     }
 
@@ -705,18 +706,13 @@ public class TestCollectables {
         DungeonManiaController dc;
         Dungeon dungeon;
         DungeonResponse resp;
-        Player player;
         Mercenary merc;
 
         String content = FileLoader.loadResourceFile("/dungeons/_sun_stone_merc_test.json");
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
-        player = (Player) dungeon.getMap().allEntities().stream()
-            .filter(e -> e instanceof Player)
-            .findFirst().get();
-        merc = (Mercenary) dungeon.getMap().allEntities().stream()
-            .filter(e -> e instanceof Mercenary)
-            .findFirst().get();
+        merc = (Mercenary) dungeon.getMap().allEntities().stream().filter(e -> e instanceof Mercenary).findFirst()
+                .get();
 
         dungeon.getMap().flood();
         Integer dist = merc.getCell().getPlayerDistance();
@@ -725,16 +721,15 @@ public class TestCollectables {
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact("invalid");
         });
-        
-        
+
         // Try bribing with no money
         assertThrows(InvalidActionException.class, () -> {
             dc.interact(merc.getId());
         });
-        
+
         for (int i = 0; i < 2; i++) {
             dc.tick(null, Direction.RIGHT);
-            
+
             assertTrue(merc.getCell().getPlayerDistance() == dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -743,7 +738,7 @@ public class TestCollectables {
         assertThrows(InvalidActionException.class, () -> {
             dc.interact(merc.getId());
         });
-        
+
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
@@ -752,14 +747,13 @@ public class TestCollectables {
         // player pos (7, 0)
         // merc pos (5, 0)
         // two cardinal squares away, bribe possible
-        
-        assertDoesNotThrow(() -> dc.interact(merc.getId()));    
-        
+
+        assertDoesNotThrow(() -> dc.interact(merc.getId()));
+
         // Try bribing friendly
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact(merc.getId());
         });
-    
 
         resp = dc.tick(null, Direction.NONE);
 

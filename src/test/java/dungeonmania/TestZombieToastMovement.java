@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -18,10 +17,10 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 
 public class TestZombieToastMovement {
-    
+
     /**
-     * makes sure that if there is no unblocked cell around the spawner, no
-     * zombies are spawned
+     * makes sure that if there is no unblocked cell around the spawner, no zombies
+     * are spawned
      */
     @Test
     public void testZombiesDontTeleport() {
@@ -45,9 +44,9 @@ public class TestZombieToastMovement {
         for (int i = 1; i < 200; i++) {
             resp = ctr.tick(null, Direction.NONE);
             for (EntityResponse er : resp.getEntities()) {
-                if (er.getType() != ZombieToast.STRING_TYPE) 
+                if (er.getType() != ZombieToast.STRING_TYPE)
                     continue;
-                
+
                 // make sure it only moved on cell, horizontally or vertically
                 Pos2d prev = positions.get(er.getId());
                 Pos2d curr = Pos2d.from(er.getPosition());
