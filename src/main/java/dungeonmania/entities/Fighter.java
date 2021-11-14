@@ -24,6 +24,7 @@ public interface Fighter {
 
     /**
      * sets the health. If health <= 0, then the fighter is dead
+     * @param float health to be set
      */
     public void setHealth(float h);
 

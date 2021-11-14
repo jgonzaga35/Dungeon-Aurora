@@ -3,6 +3,10 @@ package dungeonmania.entities.collectables;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 
+/**
+ * Interface for items that are used in battle, eg. sword & shield.
+ * Each Battle Item has a specific durability that dictates the number of times it can be used before it deteriorates.
+ */
 public interface BattleItem {
     /**
      * decreases the durability by one, if the direction is correct
@@ -26,11 +30,14 @@ public interface BattleItem {
 
     /**
      * The defence coefficient of the fighter will be multiplied by this bonus
+     * @return float Coefficient of Defence Bonus
      */
     public float getDefenceCoefBonus();
 
     /**
      * This bonus will be added to the the attack damage of the fighter
+     * @param Fighter target
+     * @return float Attack Damage Bonus
      */
     public float getAttackDamageBonus(Fighter target);
 }

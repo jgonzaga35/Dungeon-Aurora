@@ -3,6 +3,10 @@ package dungeonmania.goal;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents an enemies goal.
+ * A dungeon game is won when there are no enemies left in the dungeon.
+ */
 public class EnemiesGoal extends Goal {
 
     public static String STRING_TYPE = "enemies";

@@ -3,6 +3,10 @@ package dungeonmania.goal;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents trasure goals.
+ * A dungeon is won when all treasure has been collected.
+ */
 public class TreasureGoal extends Goal {
     
     public static String STRING_TYPE = "treasure";

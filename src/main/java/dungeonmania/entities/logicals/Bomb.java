@@ -3,23 +3,28 @@ package dungeonmania.entities.logicals;
 
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
-import java.util.Hashtable;
-import java.lang.Math;
-
-import dungeonmania.Dungeon;
-import dungeonmania.DungeonMap;
-import dungeonmania.Pos2d;
-import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.entities.LogicalEntity;
-import dungeonmania.entities.movings.Player;
-import dungeonmania.util.Direction;
 
 import dungeonmania.Cell;
+import dungeonmania.Dungeon;
+import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.Pos2d;
+import dungeonmania.entities.LogicalEntity;
+import dungeonmania.entities.movings.Player;
+import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.util.Direction;
 
-
+/**
+ * Represents Bomb.
+ * Can be collected by the character.
+ * When a character places a bomb cardinally adjacent to a switch, 
+ * if a boulder is pushed onto the switch then the bomb explodes, 
+ * destroying all entities in the bomb's blast radius, except for the character.
+ */
 public class Bomb extends LogicalEntity {
 
     public static String STRING_TYPE = "bomb";
@@ -195,6 +200,7 @@ public class Bomb extends LogicalEntity {
 
     /**
      * Checks whether the bomb is Cardinally Adjacent to any Floor Switch
+     * @return Boolean, true if bomb is adjacent to floor switch
      */
     private boolean bombCheckCardinalAdjacency() {
 

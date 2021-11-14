@@ -3,6 +3,10 @@ package dungeonmania.goal;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents boulder goal.
+ * A game is won when all floor swithces have boulders on them.
+ */
 public class BoulderGoal extends Goal {
 
     public static String STRING_TYPE = "boulders";

@@ -6,6 +6,9 @@ import java.util.Set;
 
 import dungeonmania.entities.Fighter;
 
+/**
+ * A class containing helper methods.
+ */
 public class Utils {
     /**
      * Everything smaller than that is zero

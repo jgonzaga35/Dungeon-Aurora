@@ -60,6 +60,11 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
+/**
+ * Class represents an instance of the dungeon.
+ * The dungeon class communicates between the dungeon mania controller 
+ * and all the objects that implement the dungeon.
+ */
 public class Dungeon {
     private String id;
     private DungeonMap dungeonMap;
@@ -81,6 +86,14 @@ public class Dungeon {
      */
     private Random r;
 
+    /**
+     * Constructer that creates a dungeon
+     * @param r, randomness
+     * @param name, name of dungeon
+     * @param mode, game mode
+     * @param dungeonMap, the dungeon map
+     * @param goal, winning conditions
+     */
     public Dungeon(Random r, String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
@@ -130,8 +143,6 @@ public class Dungeon {
             int y = entity.getInt("y");
             String type = entity.getString("type");
 
-            // TODO: probably need a builder pattern here
-            // for now, i just handle walls and player
             Cell cell = map.getCell(x, y);
             if (Objects.equals(type, Wall.STRING_TYPE)) {
                 cell.addOccupant(new Wall(dungeon, cell.getPosition()));
@@ -234,7 +245,15 @@ public class Dungeon {
 
         return dungeon;
     }
-
+    
+    /**
+     * Generate a random dungeon of a given size
+     * @param r, randomness
+     * @param start, location of player spawn
+     * @param end, location of exit
+     * @param mode, gamemode
+     * @return the generated dungeon
+     */
     public static String getLogicString(JSONObject entity) {
         try {
             String logic = entity.getString("logic");
@@ -360,6 +379,13 @@ public class Dungeon {
         return this.player;
     }
 
+    /**
+     * "Ticks" all the components of the dungeon.
+     * @param itemUsed
+     * @param movementDirection
+     * @throws IllegalArgumentException
+     * @throws InvalidActionException
+     */
     public Integer getTickCount() {
         return this.tickCount;
     }
@@ -403,6 +429,11 @@ public class Dungeon {
         this.battleStrategies.peek().findAndPerformBattles(this);
     }
 
+    /**
+     * Attempts to build the specified item
+     * @param buildable, string name of the item being built 
+     * @throws InvalidActionException
+     */
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
         if (buildable.equals("midnight_armour") && this.dungeonMap.countZombieToasts() > 0) {
@@ -431,6 +462,9 @@ public class Dungeon {
         return this.goal;
     }
 
+    /**
+     * @return String representing the goal(s) of the dungeon game
+     */
     public String getGoalAsString() {
         // Return a success message (empty goal string) if dungeon cleared
         if (isCleared()) {
@@ -501,6 +535,9 @@ public class Dungeon {
         return this.player.getInventory().asItemResponses();
     }
 
+    /**
+     * @return a list of item names that are currently buildable
+     */
     public List<String> getBuildables() {
         List<String> buildables = this.player.getInventory().getBuildables();
         if (this.dungeonMap.countZombieToasts() > 0) {
@@ -533,6 +570,9 @@ public class Dungeon {
         merc.bribe();
     }
 
+    /**
+     * Attempts to destroy the targeted zombie toast spawner.
+     */
     public void destroyZombieToastSpawner(ZombieToastSpawner zts) {
         // check if we are close enough to the spawner
 

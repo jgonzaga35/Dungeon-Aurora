@@ -3,6 +3,10 @@ package dungeonmania.movement;
 import dungeonmania.Cell;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents the movement behaviour of a friendly entity.
+ * The movement aims to remaion at the player's side whenever it's possible.
+ */
 public class FriendlyMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
 

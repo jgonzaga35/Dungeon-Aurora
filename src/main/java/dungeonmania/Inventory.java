@@ -23,6 +23,9 @@ import dungeonmania.entities.logicals.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 
+/**
+ * Represents an inventory that contains collectable items.
+ */
 public class Inventory {
     private List<Entity> collectables = new ArrayList<>();
 
@@ -98,6 +101,11 @@ public class Inventory {
         return true;
     }
 
+    /**
+     * Attempts to build an item with the given string name
+     * @param buildable name of item being built
+     * @throws InvalidActionException
+     */
     public void build(String buildable) throws InvalidActionException {
         List<Entity> items;
         switch (buildable) {
@@ -134,6 +142,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * 
+     * @param recipes of the item
+     * @return true if item can be built
+     */
     public List<Entity> buildable(List<List<String>> recipes) {
         for (List<String> recipe : recipes) {
             List<Entity> items = findItems(recipe);
@@ -153,6 +166,10 @@ public class Inventory {
         return sceptre != null;
     }
 
+    /**
+     * 
+     * @return list of names of currently buildable items.
+     */
     public List<String> getBuildables() {
         List<String> buildables = new ArrayList<>();
         if (buildable(Bow.RECIPES) != null)
@@ -353,6 +370,10 @@ public class Inventory {
         });
     }
 
+    /**
+     * generates a list of item responses from the current inventory
+     * @return the item responses
+     */
     public List<ItemResponse> asItemResponses() {
         List<ItemResponse> outputListItemResponses = new ArrayList<ItemResponse>();
         for (Entity item : collectables) {
@@ -364,6 +385,10 @@ public class Inventory {
         return outputListItemResponses;
     }
 
+    /**
+     * 
+     * @return list of stored collectable entities
+     */
     public List<Entity> getCollectables() {
         return this.collectables;
     }

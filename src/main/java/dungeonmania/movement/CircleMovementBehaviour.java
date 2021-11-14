@@ -9,6 +9,9 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.util.Direction;
 
+/**
+ * Represents the circle movement behaviour used by a spider.
+ */
 public class CircleMovementBehaviour extends MovementBehaviour {
     private DungeonMap map;
 

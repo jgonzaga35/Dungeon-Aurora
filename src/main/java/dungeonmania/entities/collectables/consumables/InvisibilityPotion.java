@@ -14,11 +14,18 @@ import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.movement.RandomMovementBehaviour;
 
+/**
+ * Represents an invisibility potion.
+ * When a player picks up an invisibility potion, 
+ * they may consume it at any time and they immediately 
+ * become invisible and can move past all other entities undetected.
+ */
 public class InvisibilityPotion extends Potion {
 
     public static String STRING_TYPE = "invisibility_potion";
     public static final int MAX_DURATION = 10;
 
+    // A map contatining entites that are affected by the player's invincibility
     private Map<MovingEntity, MovementBehaviour> affectedEntities = new HashMap<>();;
 
     public InvisibilityPotion(Dungeon dungeon, Pos2d position) {
@@ -27,6 +34,9 @@ public class InvisibilityPotion extends Potion {
         battleStrategy = new NoBattleStrategy(5);
     }
 
+    /**
+     * Enemies will stop moving towards the player and instead move with RandomMovementBehaviour.
+     */
     @Override
     public void applyEffectsEveryTick() {
         dungeon.getMap().allEntities().stream()
@@ -48,6 +58,9 @@ public class InvisibilityPotion extends Potion {
             });
     }
 
+    /**
+     * Remove all effects from the game.
+     */
     @Override
     public void expire() {
         affectedEntities.keySet().stream().forEach(e -> {

@@ -4,8 +4,13 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.LogicalEntity;
 
+/**
+ * Represents a floor switch.
+ * Switches behave like empty squares, so other entities can appear on top of them. 
+ * When a boulder is pushed onto a floor switch, it is triggered.
+ *  Pushing a boulder off the floor switch untriggers it.
+ */
 public class FloorSwitch extends LogicalEntity {
-
     public static String STRING_TYPE = "switch";
     public static String ACTIVATED = "_activated";
     private boolean activated = false;

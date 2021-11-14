@@ -14,6 +14,12 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 
+/**
+ * Represents a hydra.
+ * When a hydra is attacked by the character or allies, 
+ * there is a 50% chance that its health will increase rather than decrease 
+ * by the attacking damage as two heads have grown back when one is cut off.
+ */
 public class Hydra extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "hydra";
@@ -70,6 +76,9 @@ public class Hydra extends MovingEntity implements Fighter {
         return cell;
     }
 
+    /**
+     * Cripples the hydra. Change the hydra's crippled status to true.
+     */
     public void cripple() {
         this.crippled = true;
     }

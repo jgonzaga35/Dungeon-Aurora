@@ -14,6 +14,10 @@ import dungeonmania.Pos2d;
 import dungeonmania.movement.MovementBehaviour;
 import dungeonmania.movement.WaitMovementBehaviour;
 
+/**
+ * Represents moving entities.
+ * Moving entities implement different movement behaviours.
+ */
 public abstract class MovingEntity extends Entity {
 
     /**
@@ -117,7 +121,7 @@ public abstract class MovingEntity extends Entity {
 
     @Override
     public boolean isInteractable() {
-        return false; // i think at least
+        return false; 
     }
 
     @Override

@@ -7,6 +7,9 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 
+/**
+ * Represents body armour which provides defence and halves enemy attack. 
+ */
 public class Armour extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "armour";
@@ -48,11 +51,12 @@ public class Armour extends CollectableEntity implements BattleItem {
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false; 
     }
 
     @Override
     public void tick() {
+        // Do nothing
     }
 
 }

@@ -21,6 +21,10 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
+/**
+ * Represents the dungeon mania controller.
+ * Communicates directly with the front end of the game.s
+ */
 public class DungeonManiaController {
     private Dungeon dungeon;
     private Map<String, Dungeon> savedGames = new HashMap<>();
@@ -137,28 +141,58 @@ public class DungeonManiaController {
         throw new IllegalArgumentException(String.format("Game mode %s is invalid", gameMode));
     }
 
+    /**
+     * Save the current game.
+     * @param name
+     * @return
+     * @throws IllegalArgumentException
+     */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
         if (savedGames.containsKey(name)) throw new IllegalArgumentException();
         savedGames.put(name, this.dungeon);
         return this.makeDungeonResponse();
     }
 
+    /**
+     * Load a previously saved game
+     * @param name
+     * @return dungeon response
+     * @throws IllegalArgumentException
+     */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
         if (!savedGames.containsKey(name)) throw new IllegalArgumentException();
         this.dungeon = savedGames.get(name);
         return this.makeDungeonResponse();
     }
 
+    /**
+     * @return list of saved game names.
+     */
     public List<String> allGames() {
         return savedGames.keySet().stream().collect(Collectors.toList());
     }
 
+    /**
+     * Moves the dungeon forward in time by one tick.
+     * @param itemUsed
+     * @param movementDirection
+     * @return
+     * @throws IllegalArgumentException
+     * @throws InvalidActionException
+     */
     public DungeonResponse tick(String itemUsed, Direction movementDirection)
             throws IllegalArgumentException, InvalidActionException {
         this.dungeon.tick(itemUsed, movementDirection);
         return this.makeDungeonResponse();
     }
 
+    /**
+     * Interact with an entity
+     * @param entityId
+     * @return
+     * @throws IllegalArgumentException
+     * @throws InvalidActionException
+     */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         Entity interactEntity = dungeon.getMap()
             .allEntities().stream().filter(e -> e.getId().equals(entityId))
@@ -176,11 +210,24 @@ public class DungeonManiaController {
         return this.makeDungeonResponse();
     }
 
+    /**
+     * builds an item
+     */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         this.dungeon.build(buildable);
         return this.makeDungeonResponse();
     }
 
+    /**
+     * Generates a random dungeon
+     * @param xStart
+     * @param yStart
+     * @param xEnd
+     * @param yEnd
+     * @param gameMode
+     * @return dungeon response
+     * @throws IllegalArgumentException
+     */
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
         GameMode mode = parseGameMode(gameMode);
         // xStart = 1;

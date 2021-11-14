@@ -7,6 +7,11 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 
+/**
+ * Represents a sword.
+ * Swords can be collected by the character and used in battles. 
+ * Each sword has a specific durability that dictates the number of times it can be used before it deteriorates.
+ */
 public class Sword extends CollectableEntity implements BattleItem {
 
     public static String STRING_TYPE = "sword";
@@ -40,7 +45,7 @@ public class Sword extends CollectableEntity implements BattleItem {
 
     @Override
     public boolean isInteractable() {
-        return false; // i don't think so at least
+        return false;
     }
 
     @Override
