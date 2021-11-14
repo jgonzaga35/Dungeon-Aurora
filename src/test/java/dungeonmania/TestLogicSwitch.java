@@ -126,4 +126,38 @@ public class TestLogicSwitch {
 
     }
 
+    @Test
+    public void testNotLogic() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("logic_switch_xor", GameMode.PEACEFUL.getValue());
+
+        // At the start the light bulb is turned on, bomb explodes, door is unlocked
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
+        assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
+
+    }
+
+    @Test
+    public void testCoAndLogic() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("logic_switch_co_and", GameMode.PEACEFUL.getValue());
+
+        // Place boulder on first adjacent switch
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.UP);
+
+        // At the start the light bulb is turned on, bomb explodes, door is unlocked
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
+        assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
+
+    }
+
+
 }
