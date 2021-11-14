@@ -53,41 +53,14 @@ public class Inventory {
      */
     public boolean pay(List<Class<? extends CollectableEntity>> cost) {
         List<CollectableEntity> price = new ArrayList<>();
-        if (cost.stream().anyMatch(o -> ((o.isInstance(SunStone.class)) && (o.isInstance(Wood.class)) && (o.isInstance(Key.class))))) {
-            //If Making a Sceptre (Only Buildable Item with Both Treasure and Sun Stone)
-            System.out.println("Ran Test 1");
-            cost.stream().forEach(t -> { 
-                CollectableEntity item = (CollectableEntity) collectables.stream()
-                    .filter(c -> c.getClass().equals(t))
-                    .findFirst().orElse(null);
-                price.add(item);
-            });
-        } else {
-            System.out.println("Ran Test 2");
-            cost.stream().forEach(t -> {
-                CollectableEntity item = (CollectableEntity) collectables.stream()
-                    .filter(c -> t.isInstance(c))
-                    .findFirst().orElse(null);
-                System.out.println("Cost Check");
-                System.out.println("Cost:");
-                System.out.println(t);
-                System.out.println("Item Added to Price:");
-                System.out.println(item);
-                price.add(item);
-            });
-        }
-        /*
+        
         cost.stream().forEach(t -> {
             CollectableEntity item = (CollectableEntity) collectables.stream()
                 .filter(c -> t.isInstance(c))
                 .findFirst().orElse(null);
-            System.out.println("Cost Check");
-            System.out.println("Cost:");
-            System.out.println(t);
-            System.out.println("Item Added to Price:");
-            System.out.println(item);
             price.add(item);
-        });*/
+        });
+        
         
         //.filter(c -> t.isInstance(c))
         //.filter(c -> c.getClass().equals(t))
@@ -95,20 +68,12 @@ public class Inventory {
         if (price.stream().anyMatch(i -> i == null)) return false;
         
         //SunStone Takes Priority Over Treasure
-        if (price.stream().filter(o -> ((o instanceof SunStone) && ((o instanceof Treasure) || (o instanceof Key)) &&
-         ((o instanceof Wood) || ((o instanceof Arrow) && (o instanceof Arrow))))).findFirst().isPresent()) {
-            //Sceptre is only item which includes both Treasure and OneRing in its Crafting 
-            //Consists of Wood, 2x Arrows, Key or Treasure, Sun Stone
-            System.out.println("Ran Sceptre");
-            price.stream().filter(e -> !(e instanceof SunStone)).forEach(i -> collectables.remove(i));
-        } else if (price.stream().filter(o -> o.getClass().equals(SunStone.class)).findFirst().isPresent()) {
+        if (price.stream().filter(o -> o.getClass().equals(SunStone.class)).findFirst().isPresent()) {
             //If Inventory Contains SunStone, No Need to Remove the Treasure or the SunStone
-            System.out.println("Ran Treasure/SunStone");
             price.stream().filter(e -> !((e instanceof SunStone) || (e instanceof Treasure))).forEach(i -> collectables.remove(i));
         } else {
             //Inventory Does Not Contain SunStone, Treasure is Used to Pay
             price.stream().forEach(i -> collectables.remove(i));
-            System.out.println("Neither of SunStone/Treasure");
         }
         return true;
     }
@@ -211,31 +176,26 @@ public class Inventory {
                 .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) || 
                 (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) )
                 .findFirst();
+            
+            // Do Not Treat the Sun Stone as a Type of Treasure If Sceptre is Crafted with Both SunStone and Treasure 
+            // (see Assumptions)
             if (itemsStringType.stream().anyMatch(o -> ((o.equals(SunStone.STRING_TYPE)) || (o.equals(Treasure.STRING_TYPE))))) {
-                System.out.println("Outer Loop");
                 if (Sceptre.RECIPES.stream().anyMatch(o -> ((itemsStringType.containsAll(o))))) {
-                    System.out.println("Inner Loop");
                     itemOpt = this.collectables.stream()
-                    // find an item of the right type that isn't already used, except
-                    // if Treasure is required in the recipe then the SunStone can be used even if it has been previously used
+                    // find an item of the right type that isn't already used
                     .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) )) )
                     .findFirst();
                 }
 
             }
             
-            /*System.out.println("Collectables Stream");
-            System.out.println(itemOpt);*/
             if (itemOpt.isEmpty()) return null;
             else found.add(itemOpt.get());
         }
-        System.out.println("Items to Be Found");
-        System.out.println(itemsStringType);
-        System.out.println("Found:");
-        System.out.println(found);
+        
         return found;
     }
-    //.filter(item -> item.getTypeAsString().equals(itemStringType) && !found.contains(item))
+   
     /**
      * decreases the items' durability
      * @param d
