@@ -1,0 +1,12 @@
+{
+    "width": 1,
+    "height": 3,
+    "entities": [
+        {"type": "zombie_toast_spawner", "x": 0, "y": 0},
+        {"type": "player", "x": 0, "y": 2},
+        {"type": "one_ring", "x": 0, "y": 2}
+    ],
+    "goal-condition": {
+      "goal": "exit"
+    }
+}

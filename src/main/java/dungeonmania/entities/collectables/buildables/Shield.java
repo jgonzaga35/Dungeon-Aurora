@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Dungeon;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
+import dungeonmania.entities.Fighter;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.BuildableEntity;
@@ -18,6 +19,19 @@ public class Shield extends BuildableEntity implements BattleItem {
     public static int INITIAL_DURABILITY = 20;
 
     private int durability;
+
+    public static List<List<String>> RECIPES = List.of(
+        List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Key.STRING_TYPE
+        ),
+        List.of(
+            Wood.STRING_TYPE,
+            Wood.STRING_TYPE,
+            Treasure.STRING_TYPE
+        )
+    );
 
     public Shield(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -46,62 +60,13 @@ public class Shield extends BuildableEntity implements BattleItem {
         return Shield.STRING_TYPE;
     }
 
-    /**
-     * Removes the items needed to craft this item from the inventory, and adds
-     * itself to it.
-     * 
-     * If there aren't the required items present in the inventory, this does
-     * nothing
-     * 
-     * @param inventory the inventory
-     * @return true if the item was succesfully crafted
-     */
-    public static boolean craft(Inventory inventory) {
-        List<String> materials = List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Treasure.STRING_TYPE
-        );
-
-        List<String> materialsAlt = List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Key.STRING_TYPE
-        );
-
-        if (!inventory.useItems(materials) && !inventory.useItems(materialsAlt)) {
-            return false;
-        }
-        
-        inventory.add(new Shield(null, null));
-        return true;
-    }
-
-    public static boolean craftable(Inventory inventory) {
-        List<String> materials = List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Treasure.STRING_TYPE
-        );
-
-        List<String> materialsAlt = List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Key.STRING_TYPE
-        );
-
-        if (inventory.findItems(materials) == null && inventory.findItems(materialsAlt) == null) return false;
-
-        return true;
-    }
-
     @Override
     public float getDefenceCoefBonus() {
         return 3; // shield multiply defence coef by 3
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 0;
     }
     

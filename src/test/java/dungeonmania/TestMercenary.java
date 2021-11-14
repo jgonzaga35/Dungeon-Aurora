@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class TestMercenary {
     public void setStartingPostition() throws IOException 
     {
         String content = FileLoader.loadResourceFile("/dungeons/_merc_test.json");
-        dungeon = Dungeon.fromJSONObject("name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = (Player) dungeon.getMap().allEntities().stream()
             .filter(e -> e instanceof Player)
@@ -66,9 +67,11 @@ public class TestMercenary {
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)
+        // merc pos (5, 0)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             resp = dc.tick(null, Direction.NONE);
+            System.out.println(merc.getCell().getPlayerDistance());
             assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
         }
@@ -102,7 +105,7 @@ public class TestMercenary {
         }
         // player pos (7, 0)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
@@ -173,14 +176,6 @@ public class TestMercenary {
         for (int i = 0; i < 5; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(merc.getCell().getPlayerDistance() <= dist);
-            dist = merc.getCell().getPlayerDistance();
-        }
-        // player pos (7, 0)
-        
-        for (int i = 0; i < 4; i++) {
-            dc.tick(null, Direction.NONE);
-            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
-            assertTrue(merc.getCell().getPlayerDistance() < dist);
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)

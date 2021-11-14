@@ -11,15 +11,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.DungeonManiaController.GameMode;
+import dungeonmania.GenerateMaze.BCell;
 import dungeonmania.battlestrategies.BattleStrategy;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.OneRing;
@@ -45,8 +48,8 @@ import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goal.ExitGoal;
 import dungeonmania.goal.Goal;
 import dungeonmania.response.models.*;
 import dungeonmania.util.Direction;
@@ -72,15 +75,17 @@ public class Dungeon {
     /**
      * make sure to seed before each test
      */
-    private Random r = new Random(1);
+    private Random r;
 
-    public Dungeon(String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
+    public Dungeon(Random r, String name, GameMode mode, DungeonMap dungeonMap, Goal goal) {
         this.name = name;
         this.mode = mode;
         this.dungeonMap = dungeonMap;
         this.goal = goal;
         this.id = "dungeon-" + Dungeon.nextDungeonId;
         this.player = null;
+
+        this.r = r;
 
         this.battleStrategies = new PriorityQueue<BattleStrategy>(5, (a, b) -> b.getPrecedence() - a.getPrecedence());
         if (mode == GameMode.PEACEFUL) {
@@ -104,13 +109,13 @@ public class Dungeon {
     /**
      * Creates a Dungeon instance from the JSON file's content
      */
-    public static Dungeon fromJSONObject(String name, GameMode mode, JSONObject obj) {
+    public static Dungeon fromJSONObject(Random r, String name, GameMode mode, JSONObject obj) {
         
         Goal goal = Goal.fromJSONObject(obj);
 
         DungeonMap map = new DungeonMap(obj);
 
-        Dungeon dungeon = new Dungeon(name, mode, map, goal);
+        Dungeon dungeon = new Dungeon(r, name, mode, map, goal);
 
         JSONArray entities = obj.getJSONArray("entities");
         Player player = null;
@@ -142,6 +147,8 @@ public class Dungeon {
                 cell.addOccupant(new Arrow(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Wood.STRING_TYPE)) {
                 cell.addOccupant(new Wood(dungeon, cell.getPosition()));
+            } else if (Objects.equals(type, Anduril.STRING_TYPE)) {
+                cell.addOccupant(new Anduril(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Sword.STRING_TYPE)) {
                 cell.addOccupant(new Sword(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Armour.STRING_TYPE)) {
@@ -149,9 +156,9 @@ public class Dungeon {
             } else if (Objects.equals(type, Bomb.STRING_TYPE)) {
                 cell.addOccupant(new Bomb(dungeon, cell.getPosition(), false));
             } else if (Objects.equals(type, Key.STRING_TYPE)) {
-                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Key(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Door.STRING_TYPE)) {
-                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("id")));
+                cell.addOccupant(new Door(dungeon, cell.getPosition(), entity.getInt("key")));
             } else if (Objects.equals(type, Boulder.STRING_TYPE)) {
                 cell.addOccupant(new Boulder(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Swamp.STRING_TYPE)) {
@@ -201,6 +208,30 @@ public class Dungeon {
 
         dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
             .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
+
+        return dungeon;
+    }
+    
+    public static Dungeon generateDungeon(Random r, Pos2d start, Pos2d end, GameMode mode) {
+
+        Pos2d dims = new Pos2d(50, 50);
+        List<List<BCell>> maze = GenerateMaze.make(r, dims, start, end);
+
+        DungeonMap map = new DungeonMap(dims.getX(), dims.getY());
+        Dungeon dungeon = new Dungeon(r, "generated", mode, map, new ExitGoal());
+
+        Player player = new Player(dungeon, start);
+        map.getCell(start).addOccupant(player);
+        map.getCell(end).addOccupant(new Exit(dungeon, end));
+        dungeon.setPlayer(player);
+
+        for (int y = 0; y < dims.getY(); y++) {
+            for (int x = 0; x < dims.getX(); x++) {
+                if (maze.get(y).get(x) == BCell.WALL) {
+                    map.getCell(x, y).addOccupant(new Wall(dungeon, new Pos2d(x, y)));
+                }
+            }
+        }
 
         return dungeon;
     }
@@ -321,6 +352,7 @@ public class Dungeon {
             .filter(e -> !(e instanceof Potion))
             .forEach(entity -> entity.tick());
         
+
         //Dealing With Picking Up or Placing Collectable Entities
         pickupCollectableEntities(itemUsed);
 
@@ -334,28 +366,7 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
-        if (Objects.equals(buildable, Shield.STRING_TYPE)) {
-            if (!Shield.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Bow.STRING_TYPE)) {
-            if (!Bow.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, Sceptre.STRING_TYPE)) {
-            if (!Sceptre.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else if (Objects.equals(buildable, MidnightArmour.STRING_TYPE)) {
-            if (this.dungeonMap.countZombieToasts() > 0) {
-                throw new InvalidActionException("cannot build midnight armour when there are zombies");
-            }
-            if (!MidnightArmour.craft(this.inventory)) {
-                throw new InvalidActionException("not enough resources to build " + buildable);
-            }
-        } else {
-            throw new IllegalArgumentException("unknown buildable: " + buildable);
-        }
+        this.inventory.build(buildable);
     }
 
     public String getId() {
@@ -536,11 +547,9 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon)
-            return;
-
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
-            return;
+        if (!this.hadEnemiesAtStartOfDungeon) return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;

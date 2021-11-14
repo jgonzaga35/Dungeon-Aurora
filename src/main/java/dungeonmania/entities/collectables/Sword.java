@@ -5,6 +5,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.Fighter;
 
 public class Sword extends CollectableEntity implements BattleItem {
 
@@ -54,7 +55,7 @@ public class Sword extends CollectableEntity implements BattleItem {
 
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 2; // attacking with a sword is a lot better than with your fists!
     }
 }

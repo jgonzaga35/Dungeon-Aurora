@@ -7,12 +7,20 @@ import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.collectables.*;
+import dungeonmania.entities.Fighter;
 
-public class MidnightArmour extends BuildableEntity implements BattleItem {
+public class MidnightArmour extends Shield {
     public static final String STRING_TYPE = "midnight_armour";
     public static int INITIAL_DURABILITY = 40;
 
     private int durability;
+
+    public static List<List<String>> RECIPES = List.of(
+        List.of(
+            SunStone.STRING_TYPE,
+            Armour.STRING_TYPE
+        )
+    );
 
     public MidnightArmour(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -25,57 +33,8 @@ public class MidnightArmour extends BuildableEntity implements BattleItem {
     }
 
     @Override
-    public void usedForBattleRound(BattleDirection d) {
-        if (d == BattleDirection.DEFENCE) {
-            this.durability--;
-        }
-    }
-
-    @Override
-    public boolean isInteractable() {
-        return false;
-    }
-
-    @Override
     public String getTypeAsString() {
         return STRING_TYPE;
-    }
-
-    /**
-     * Removes the items needed to craft this item from the inventory, and adds
-     * itself to it.
-     * 
-     * If there aren't the required items present in the inventory, this does
-     * nothing
-     * 
-     * @param inventory the inventory
-     * @return true if the item was succesfully crafted
-     */
-    public static boolean craft(Inventory inventory) {
-        List<String> materials = List.of(
-            SunStone.STRING_TYPE,
-            Armour.STRING_TYPE
-        );
-
-        if (!inventory.useItems(materials)) {
-            return false;
-        }
-        
-        inventory.add(new MidnightArmour(null, null));
-        return true;
-    }
-
-    public static boolean craftable(Inventory inventory) {
-        List<String> materials = List.of(
-            SunStone.STRING_TYPE,
-            Armour.STRING_TYPE
-        );
-
-        if (inventory.findItems(materials) == null) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override
@@ -84,7 +43,7 @@ public class MidnightArmour extends BuildableEntity implements BattleItem {
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 3;
     }
 }

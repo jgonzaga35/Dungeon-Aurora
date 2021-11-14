@@ -10,7 +10,7 @@ import dungeonmania.movement.RandomMovementBehaviour;
 
 public class ZombieToast extends MovingEntity implements Fighter {
 
-    public static final String STRING_TYPE = "zombie";
+    public static final String STRING_TYPE = "zombie_toast";
     private float health = 4;
 
     public ZombieToast(Dungeon dungeon, Pos2d position) {
@@ -39,7 +39,7 @@ public class ZombieToast extends MovingEntity implements Fighter {
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamage(Fighter target) {
         return 1;
     }
 
@@ -61,5 +61,10 @@ public class ZombieToast extends MovingEntity implements Fighter {
     @Override
     public Entity getEntity() {
         return this;
+    }
+
+    @Override
+    public boolean isBoss() {
+        return false;
     }
 }

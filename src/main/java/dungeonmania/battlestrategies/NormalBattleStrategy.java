@@ -15,7 +15,6 @@ import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
-import dungeonmania.entities.movings.Hydra;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 
@@ -56,7 +55,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             int v;
             v = Utils.compareFloat(a.getHealth() - b.getHealth());
             if (v != 0) return v;
-            v = Utils.compareFloat(a.getAttackDamage() - b.getAttackDamage());
+            v = Utils.compareFloat(a.getAttackDamage(null) - b.getAttackDamage(null));
             if (v != 0) return v;
             v = a.getEntity().getId().compareTo(b.getEntity().getId());
             assert v != 0 : "duplicate id break a lot of things, including battles";
@@ -69,7 +68,7 @@ public class NormalBattleStrategy implements BattleStrategy {
         List<Fighter> enemies = new ArrayList<>();
 
         this.prepareBattle(dungeon, cell, allies, enemies);
-        assert allies.size() >= 1;
+        assert allies.size() >= 1; // should always have the player
 
         Collections.sort(allies, sort);
         Collections.sort(enemies, sort);
@@ -79,9 +78,14 @@ public class NormalBattleStrategy implements BattleStrategy {
         Set<Fighter> deaths = this.performBattle(allies, enemies);
 
         for (Fighter dead: deaths) {
-            // TODO: check if dead is player. This should be weird
             Entity e = dead.getEntity();
             
+            if (e instanceof Player) {
+                Player p = (Player) e;
+                // don't remove the player from the map if he has been resurected
+                if (p.onDeath()) continue;
+            }
+
             boolean result = map.getCell(e.getPosition()).removeOccupant(e);
             if (result == false) {
                 throw new Error("couldn't remove dead entity");
@@ -221,13 +225,7 @@ public class NormalBattleStrategy implements BattleStrategy {
 
             // the ally attacks the enemy
             // the /5 comes from the spec
-            if (enemy instanceof Hydra) {
-                System.out.println("Heath is " + enemy.getHealth());
-            }
             enemy.setHealth(enemy.getHealth() - this.computeDamage(ally, enemy) / 5);
-            if (enemy instanceof Hydra) {
-                System.out.println("Now Heath is " + enemy.getHealth());
-            }
             ally.usedItemFor(BattleDirection.ATTACK);
             enemy.usedItemFor(BattleDirection.DEFENCE);
 
@@ -249,8 +247,8 @@ public class NormalBattleStrategy implements BattleStrategy {
      * @param defencer
      * @return damage to be done
      */
-    private float computeDamage(Fighter attacker, Fighter defencer) {
-        return attacker.getHealth() * attacker.getAttackDamage() / defencer.getDefenceCoef();
+    private float computeDamage(Fighter attacker, Fighter defender) {
+        return attacker.getHealth() * attacker.getAttackDamage(defender) / defender.getDefenceCoef();
     }
 
     @Override

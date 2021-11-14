@@ -29,6 +29,7 @@ public class TestZombieToastSpawner {
         DungeonResponse resp = ctr.newGame("_zombies_park", GameMode.PEACEFUL.getValue());
         
         for (int i = 1; i < 101; i++) {
+            System.out.println(i);
             resp = ctr.tick(null, Direction.NONE);
             // a zombie should spawn every 20 ticks, and there is already one
             // zombie on the map

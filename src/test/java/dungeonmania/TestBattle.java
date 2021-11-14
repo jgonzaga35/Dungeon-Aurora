@@ -302,7 +302,7 @@ public class TestBattle {
         });
 
         // more than the player can kill without a bow
-        int player_kills_n_zombies = 29;
+        int player_kills_n_zombies = 15;
         
         for (int j = 0; j < player_kills_n_zombies; j++) { 
             for (int i = 0; i < 19 - (j == 0 ? 3 : 0); i++) {
@@ -326,6 +326,80 @@ public class TestBattle {
             } else {
                 assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player is still alive after " + j + " zombies");
                 assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            }
+        }
+    }
+
+    @Test
+    public void testZombieBattleWithOneRing() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("_force_zombie_attack_with_one_ring", GameMode.STANDARD.getValue());
+        ctr.setSeed(1);
+
+        // there are no spiders because the map is too small
+
+        ctr.tick(null, Direction.NONE);
+
+
+        // doing the maths to compute that number is a pain because of the damage formula
+        int player_kills_n_zombies = 10; 
+        
+        for (int j = 0; j < player_kills_n_zombies; j++) { 
+            for (int i = 0; i < 19; i++) {
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                resp = ctr.tick(null, Direction.NONE);
+            }
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+            // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            resp = ctr.tick(null, Direction.NONE);
+
+            if (j == player_kills_n_zombies - 1) {
+                // the player has been killed
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player has been killed but then resurected because one ring");
+            } else {
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "j=" + j);
+            }
+        }
+
+        resp = ctr.tick(null, Direction.NONE);
+
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE)); // player still alive
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // but zombie has moved back down!
+
+        resp = ctr.tick(null, Direction.NONE);
+        assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // now the zombie gets killed
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE)); // player still alive
+
+        for (int i = 0; i < 17; i++) {
+            assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); 
+            resp = ctr.tick(null, Direction.NONE);
+        }
+        assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE)); // zombie just spawned
+        resp = ctr.tick(null, Direction.NONE); // kill it
+        player_kills_n_zombies -= 2; // because we just killed two extra!
+
+        for (int j = 0; j < player_kills_n_zombies; j++) { 
+            for (int i = 0; i < 19; i++) {
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "j=" + j + "i=" + i);
+                resp = ctr.tick(null, Direction.NONE);
+            }
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+            assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+
+            // the zombie no *has* to move on the player's cell, which causes a battle, and the zombie dies
+            resp = ctr.tick(null, Direction.NONE); // double tick because of the 18 above
+
+            if (j == player_kills_n_zombies - 1) {
+                // the player has been killed
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE));
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
+            } else {
+                assertEquals(1, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE), "player should still be alive after " + j + " zombies");
+                assertEquals(0, TestUtils.countEntitiesOfType(resp, ZombieToast.STRING_TYPE), "j=" + j);
             }
         }
     }
