@@ -68,7 +68,7 @@ public class NormalBattleStrategy implements BattleStrategy {
         List<Fighter> enemies = new ArrayList<>();
 
         this.prepareBattle(dungeon, cell, allies, enemies);
-        assert allies.size() >= 1;
+        assert allies.size() >= 1; // should always have the player
 
         Collections.sort(allies, sort);
         Collections.sort(enemies, sort);
@@ -78,9 +78,14 @@ public class NormalBattleStrategy implements BattleStrategy {
         Set<Fighter> deaths = this.performBattle(allies, enemies);
 
         for (Fighter dead: deaths) {
-            // TODO: check if dead is player. This should be weird
             Entity e = dead.getEntity();
             
+            if (e instanceof Player) {
+                Player p = (Player) e;
+                // don't remove the player from the map if he has been resurected
+                if (p.onDeath()) continue;
+            }
+
             boolean result = map.getCell(e.getPosition()).removeOccupant(e);
             if (result == false) {
                 throw new Error("couldn't remove dead entity");
