@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dungeonmania.DungeonManiaController.GameMode;
-import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.logicals.*;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Wall;
-import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.logicals.*;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
