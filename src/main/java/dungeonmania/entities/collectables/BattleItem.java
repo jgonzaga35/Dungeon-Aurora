@@ -26,11 +26,14 @@ public interface BattleItem {
 
     /**
      * The defence coefficient of the fighter will be multiplied by this bonus
+     * @return float Coefficient of Defence Bonus
      */
     public float getDefenceCoefBonus();
 
     /**
      * This bonus will be added to the the attack damage of the fighter
+     * @param Fighter target
+     * @return float Attack Damage Bonus
      */
     public float getAttackDamageBonus(Fighter target);
 }

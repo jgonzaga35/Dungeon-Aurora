@@ -14,6 +14,11 @@ public abstract class Entity {
     protected Dungeon dungeon;
     protected Pos2d position;
 
+    /**
+     * Constructor for Entities
+     * @param Dungeon dungeon
+     * @param Pos2d position where the Entity is located
+     */
     public Entity(Dungeon dungeon, Pos2d position) {
         this.id = "Entity-" + Entity.nextEntityId;
         this.dungeon = dungeon;
@@ -22,6 +27,10 @@ public abstract class Entity {
         Entity.nextEntityId++;
     }
 
+    /**
+     * Returning the ID of the Entity
+     * @return String ID of entity
+     */
     public String getId() {
         return this.id;
     }
@@ -33,19 +42,29 @@ public abstract class Entity {
         return dungeon.getMap().getCell(position);
     }
 
+    /**
+     * Returning the Position of the Entity
+     * @return Pos2d position of the entity
+     */
     public Pos2d getPosition() {
         return position;
     }
 
+    /**
+     * Sets the Position of the Entity
+     * @param int XCoord 
+     * @param int YCoord
+     */
     public void setPosition(int XCoord, int YCoord) {
         this.position.setX(XCoord);
         this.position.setY(YCoord);
     }
 
-    /*public void updatePosition(int XCoord, int YCoord) {
-        setPosition(XCoord, YCoord);
-        return;
-    }*/
+    /**
+     * Find the Cell in the Direction from the Current Cell
+     * @param Direction 
+     * @return Cell 
+     */
     public Cell inspectCell(Direction d) {
         return dungeon.getMap().getCellAround(dungeon.getMap().getCell(position), d);
     }
@@ -75,10 +94,18 @@ public abstract class Entity {
         return String.format("%s[pos=%s]", getTypeAsString(), getPosition());
     }
 
+    /**
+     * Find if there is a relationship between entities
+     * @return FighterRelation relationship between fighters
+     */
     public abstract boolean isInteractable();
 
     public abstract LayerLevel getLayerLevel();
 
+    /**
+     * Return the Type of the Entity as a String
+     * @return String type of entity
+     */
     public abstract String getTypeAsString();
 
     public abstract void tick();
