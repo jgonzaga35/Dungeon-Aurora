@@ -5,6 +5,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.StaticEntity;
+import dungeonmania.entities.logicals.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Direction;
 

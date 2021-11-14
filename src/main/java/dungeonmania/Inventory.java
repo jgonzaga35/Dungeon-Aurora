@@ -9,7 +9,6 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.BattleItem;
-import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.SunStone;
@@ -20,6 +19,7 @@ import dungeonmania.entities.collectables.buildables.MidnightArmour;
 import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.consumables.Potion;
+import dungeonmania.entities.logicals.Bomb;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 

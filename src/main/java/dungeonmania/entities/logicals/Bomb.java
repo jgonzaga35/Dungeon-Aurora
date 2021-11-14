@@ -1,5 +1,5 @@
 // java doesn't support static folders, since it's a folder, so we use the plural
-package dungeonmania.entities.collectables;
+package dungeonmania.entities.logicals;
 
 
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import dungeonmania.DungeonMap;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.LogicalEntity;
-import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.util.Direction;
 

@@ -1,4 +1,4 @@
-package dungeonmania.entities.statics;
+package dungeonmania.entities.logicals;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;

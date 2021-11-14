@@ -10,8 +10,8 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
-import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.Wire;
+import dungeonmania.entities.logicals.FloorSwitch;
+import dungeonmania.entities.logicals.Wire;
 import dungeonmania.util.BlockingReason;
 
 public abstract class LogicalEntity extends Entity {
@@ -104,21 +104,23 @@ public abstract class LogicalEntity extends Entity {
      * that were activated at the same tick count.
      */
     public Integer countCoActivatedSwitches() {
-        FloorSwitch s = (FloorSwitch) connectedEntities.stream()
-                         .filter(e -> e instanceof FloorSwitch && ((FloorSwitch) e).isActivated())
-                         .findFirst().orElse(null);
-        
-        if (s != null) {
-            int tickActivationCount = s.getTickCountActivated();
-            int count = (int) connectedEntities.stream()
-                                               .filter(e -> e instanceof FloorSwitch 
-                                                        && ((FloorSwitch) e).isActivated()
-                                                        && ((FloorSwitch) e).getTickCountActivated() == tickActivationCount)
-                                               .count();
-            return count;
-        } else {
-            return -1;
-        }
+        List<Integer> tickCounts = new ArrayList<Integer>();
+        List<Integer> incrementSize = new ArrayList<Integer>();
+        int coactivated_count = 1;
+
+        connectedEntities.stream()
+                        .filter(e -> e instanceof FloorSwitch && ((FloorSwitch) e).isActivated())
+                        .forEach(s -> {
+                            System.out.println(((FloorSwitch) s).getTickCountActivated());
+                            if (tickCounts.contains(((FloorSwitch) s).getTickCountActivated())) {
+                                incrementSize.add(1);
+                            } else {
+                                tickCounts.add(((FloorSwitch) s).getTickCountActivated());
+                            }
+                        });
+
+        coactivated_count += incrementSize.size();
+        return coactivated_count;
     }
 
     /**

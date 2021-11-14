@@ -1,4 +1,4 @@
-package dungeonmania.entities.statics;
+package dungeonmania.entities.logicals;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
@@ -32,9 +32,10 @@ public class FloorSwitch extends LogicalEntity {
      */
     @Override
     public void activate() {
-        this.activated = true;
-        this.tickCountActivated = dungeon.getTickCount();
-
+        if (!activated) {
+            this.activated = true;
+            this.tickCountActivated = dungeon.getTickCount();
+        }
     }
 
     /**
