@@ -5,13 +5,10 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.ClassOrderer.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
-import java.util.NoSuchElementException;
-
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.SunStone;
@@ -708,7 +705,6 @@ public class TestCollectables {
     public void testSunStoneMercenaryBribe() throws IOException {
         DungeonManiaController dc;
         Dungeon dungeon;
-        DungeonResponse resp;
         Mercenary merc;
 
         String content = FileLoader.loadResourceFile("/dungeons/_sun_stone_merc_test.json");
