@@ -6,7 +6,6 @@ import java.util.List;
 import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.logicals.FloorSwitch;
-import dungeonmania.entities.logicals.Wire;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
@@ -200,27 +199,6 @@ public class Cell {
     public boolean hasDeactivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
             if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isActivated()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasActivatedFloorSwitch() {
-        for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasActivatedEntity() {
-        for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
-                return true;
-            }
-            if (occupant instanceof Wire && ((Wire) occupant).isActivated()) {
                 return true;
             }
         }

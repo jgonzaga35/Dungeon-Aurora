@@ -215,33 +215,6 @@ public class Inventory {
     }
 
     /**
-     * if all the entities (items) are in the inventory, it uses them all (removes
-     * from the inventory). Otherwise it just returns false;
-     * 
-     * @param entities
-     * @return true if all the items were in the inventory, and they were
-     *         succesfully removed
-     */
-    public boolean useItems(List<String> itemsStringType) {
-
-        List<Entity> toRemove = new ArrayList<>();
-        for (String itemStringType : itemsStringType) {
-            Optional<Entity> itemOpt = this.collectables.stream()
-                    // find an item of the right type that isn't already used
-                    .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
-                    .findFirst();
-
-            if (itemOpt.isEmpty())
-                return false;
-            else
-                toRemove.add(itemOpt.get());
-        }
-        this.collectables.removeAll(toRemove);
-        return true;
-
-    }
-
-    /**
      * finds the items from the inventory
      * 
      * @param itemsStringType list of String
