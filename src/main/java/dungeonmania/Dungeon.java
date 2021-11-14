@@ -16,8 +16,8 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.MovingEntity;
+import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
@@ -536,11 +536,9 @@ public class Dungeon {
      * helper function that is called once per tick
      */
     private void spawnMercenaries() {
-        if (!this.hadEnemiesAtStartOfDungeon)
-            return;
-
-        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0)
-            return;
+        if (!this.hadEnemiesAtStartOfDungeon) return;
+        if (this.tickCount % Mercenary.SPAWN_EVERY_N_TICKS != 0) return;
+        if (this.dungeonMap.getCell(this.dungeonMap.getEntry()).isBlocking()) return;
 
         // spawn an assassin 25% of the time.
         Mercenary m;

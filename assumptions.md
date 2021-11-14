@@ -33,6 +33,7 @@
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
 - 30% of mercenaries spawn with armour.
+- When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
@@ -59,6 +60,12 @@ by the attack damage amount when attacked
 - Anduril has base damage of 7
 - Anduril causes Hydra to lose health when it is attacked and
 removes the possibility of regaining health
+
+## One Ring
+- the player spawns back on the entry of the map
+- if there is a boulder there, then the player doesn't spawn back (dies even he
+  has the ring). This creates a nice balance: put a boulder on the entry so that
+  mercenaries don't spawn, but be careful because it cancels the one ring
 
 ## Bombs
 - Blast radius is set to 2

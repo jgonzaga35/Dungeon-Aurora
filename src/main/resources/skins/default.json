@@ -43,6 +43,7 @@
         "portal_RED": "images/tileset/entities/portal_04.png",
         "portal_ORANGE": "images/tileset/entities/portal_08.png",
         "portal_GREY": "images/tileset/entities/portal_12.png",
-        "hydra": "images/tileset/entities/hydra.png"
+        "hydra": "images/tileset/entities/hydra.png",
+        "one_ring": "images/tileset/items/the_one_ring.png"
     }
 }
