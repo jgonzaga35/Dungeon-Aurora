@@ -3,7 +3,6 @@ package dungeonmania.entities.collectables.buildables;
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.Fighter;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
@@ -23,20 +22,9 @@ public class Shield extends BuildableEntity implements BattleItem {
     public static int INITIAL_DURABILITY = 20;
 
     private int durability;
-    
-    // A list of recipes used to contract the buildable item.
-    public static List<List<String>> RECIPES = List.of(
-        List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Key.STRING_TYPE
-        ),
-        List.of(
-            Wood.STRING_TYPE,
-            Wood.STRING_TYPE,
-            Treasure.STRING_TYPE
-        )
-    );
+
+    public static List<List<String>> RECIPES = List.of(List.of(Wood.STRING_TYPE, Wood.STRING_TYPE, Key.STRING_TYPE),
+            List.of(Wood.STRING_TYPE, Wood.STRING_TYPE, Treasure.STRING_TYPE));
 
     /**
      * Constructor for Shield
@@ -108,5 +96,5 @@ public class Shield extends BuildableEntity implements BattleItem {
     public float getAttackDamageBonus(Fighter target) {
         return 0;
     }
-    
+
 }

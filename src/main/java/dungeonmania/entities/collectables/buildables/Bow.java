@@ -3,7 +3,6 @@ package dungeonmania.entities.collectables.buildables;
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
@@ -23,15 +22,8 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     private int durability;
 
-    // A list of recipes used to contract the buildable item.
-    public static List<List<String>> RECIPES = List.of(
-        List.of(
-            Wood.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE
-        )
-    );
+    public static List<List<String>> RECIPES = List
+            .of(List.of(Wood.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE));
 
     /**
      * Constructor for Bow
@@ -103,5 +95,5 @@ public class Bow extends BuildableEntity implements BattleItem {
     public float getAttackDamageBonus(Fighter target) {
         return 1; // player normally does 1 attack damage. This doubles it.
     }
-    
+
 }

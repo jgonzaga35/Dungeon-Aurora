@@ -1,7 +1,5 @@
 package dungeonmania.entities.collectables;
 
-import java.util.*;
-
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.CollectableEntity;
@@ -21,5 +19,5 @@ public abstract class BuildableEntity extends CollectableEntity {
     public void tick() {
         // Do nothing by default
     }
-    
+
 }

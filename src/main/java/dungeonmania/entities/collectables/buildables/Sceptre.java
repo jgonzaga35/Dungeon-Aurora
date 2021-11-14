@@ -1,10 +1,8 @@
 package dungeonmania.entities.collectables.buildables;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.collectables.*;
 
@@ -18,29 +16,10 @@ public class Sceptre extends BuildableEntity {
     // A list of recipes used to contract the buildable item.
     // A Sceptre can be built 4 different ways.
     public static List<List<String>> RECIPES = List.of(
-        List.of(
-            SunStone.STRING_TYPE,
-            Treasure.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE
-        ),
-        List.of(
-            SunStone.STRING_TYPE,
-            Treasure.STRING_TYPE,
-            Wood.STRING_TYPE
-        ),
-        List.of(
-            SunStone.STRING_TYPE,
-            Key.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE
-        ),
-        List.of(
-            SunStone.STRING_TYPE,
-            Key.STRING_TYPE,
-            Wood.STRING_TYPE
-        )
-    );
+            List.of(SunStone.STRING_TYPE, Treasure.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE),
+            List.of(SunStone.STRING_TYPE, Treasure.STRING_TYPE, Wood.STRING_TYPE),
+            List.of(SunStone.STRING_TYPE, Key.STRING_TYPE, Arrow.STRING_TYPE, Arrow.STRING_TYPE),
+            List.of(SunStone.STRING_TYPE, Key.STRING_TYPE, Wood.STRING_TYPE));
 
     /**
      * Constructor for Sceptre
@@ -60,5 +39,5 @@ public class Sceptre extends BuildableEntity {
     public String getTypeAsString() {
         return STRING_TYPE;
     }
-    
+
 }
