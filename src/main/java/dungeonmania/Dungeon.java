@@ -17,6 +17,7 @@ import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.battlestrategies.NoBattleStrategy;
 import dungeonmania.battlestrategies.NormalBattleStrategy;
 import dungeonmania.entities.CollectableEntity;
+import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.Armour;
@@ -222,6 +223,11 @@ public class Dungeon {
 
         dungeon.hadEnemiesAtStartOfDungeon = map.allEntities().stream()
             .filter(e -> e instanceof MovingEntity && !(e instanceof Player)).count() > 0;
+
+        map.allEntities()
+           .stream()
+           .filter(e -> e instanceof LogicalEntity)
+           .forEach(o -> ((LogicalEntity) o).addConnectedEntities(o.getCell(), ((LogicalEntity) o).getConnectedEntityIds()));
 
         return dungeon;
     }

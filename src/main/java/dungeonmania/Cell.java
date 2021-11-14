@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
@@ -134,6 +135,11 @@ public class Cell {
                 !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
                     return ((StaticEntity)e).isBlocking();
                 }
+
+            if (e instanceof LogicalEntity && 
+            !((LogicalEntity) e).isBlocking().equals(BlockingReason.NOT)) {
+                return ((LogicalEntity)e).isBlocking();
+            }            
         }
         return BlockingReason.NOT;
     }

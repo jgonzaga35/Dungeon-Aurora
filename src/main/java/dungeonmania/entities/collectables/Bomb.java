@@ -282,6 +282,7 @@ public class Bomb extends CollectableEntity {
         } else if (Objects.equals(logic, Logic.OR)) {
             orActivation();
         } else if (Objects.equals(logic, Logic.XOR)) {
+            System.out.println(countActivatedSwitches() + " and " + countAdjacentSwitches());
             xorActivation();
         } else if (Objects.equals(logic, Logic.CO_AND)) {
             co_andActivation();
@@ -333,9 +334,6 @@ public class Bomb extends CollectableEntity {
         int count = (int) connectedEntities.stream()
                                            .filter(e -> e instanceof FloorSwitch)
                                            .count();
-        System.out.println("BEGIN");
-        connectedEntities.stream().forEach(e->System.out.println(e.getTypeAsString()));
-        System.out.println("END");
         return count;
 
     }
@@ -355,7 +353,6 @@ public class Bomb extends CollectableEntity {
             c.getOccupants().stream()
                             .filter(e -> e.canConnect())
                             .forEach(s -> {
-                                System.out.println(s.getTypeAsString());
                                 if (s instanceof Wire && !connectedIds.contains(s.getId())) {
                                     connectedId.add(s.getId());
                                     addConnectedEntities(c, connectedId);
@@ -376,7 +373,6 @@ public class Bomb extends CollectableEntity {
     }
 
     public void xorActivation() {
-        System.out.println("there are now " + countActivatedSwitches() + " and " + countAdjacentSwitches());
         if (countActivatedSwitches() == 1) {
             this.activate();
         }

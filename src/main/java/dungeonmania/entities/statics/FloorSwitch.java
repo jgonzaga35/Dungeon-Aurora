@@ -36,7 +36,9 @@ public class FloorSwitch extends LogicalEntity {
     public void activate() {
         this.activated = true;
         this.tickCountActivated = dungeon.getTickCount();
-        this.getConnectedEntities().stream().filter(e -> e instanceof FloorSwitch).forEach(f -> f.tick());
+        if (this.getPosition().getX() == 0) {
+            System.out.println("ACTIVATED");
+        }
 
     }
 
@@ -53,8 +55,9 @@ public class FloorSwitch extends LogicalEntity {
      */
     @Override
     public String getTypeAsString() {
-        if (activated) 
+        if (activated) {
             return FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED;
+        }
         return FloorSwitch.STRING_TYPE;
     }
 

@@ -11,6 +11,7 @@ import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.BlockingReason;
 
@@ -23,7 +24,8 @@ public abstract class LogicalEntity extends Entity {
     public LogicalEntity(Dungeon dungeon, Pos2d position, String logic) {
         super(dungeon, position);
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
+        connectedEntities.add(this);
+        connectedEntityIds.add(this.getId());
     }
 
     /**
@@ -64,20 +66,21 @@ public abstract class LogicalEntity extends Entity {
         
         // Add connected entities from adjacent cells 
         adjacentCells.forEach(c -> {
-                            c.getOccupants().stream()
-                            .filter(e -> e.canConnect())
-                            .forEach(s -> {
-                                System.out.println(s.getTypeAsString());
-                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
-                                    connectedEntityIds.add(s.getId());
-                                    addConnectedEntities(c, connectedEntityIds);
-                                } else {
-                                    if (!connectedEntities.contains(s)) {
-                                        connectedEntities.add(s);
-                                        connectedEntityIds.add(s.getId());
-                                    }
-                                }
-                            });
+            c.getOccupants()
+             .stream()
+             .filter(e -> e instanceof LogicalEntity)
+             .forEach(s -> {
+                 if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                     connectedEntities.add(s);
+                     connectedEntityIds.add(s.getId());
+                     addConnectedEntities(c, connectedEntityIds);
+                 } else {
+                     if (!connectedIds.contains(s.getId())) {
+                         connectedEntities.add(s);
+                         connectedEntityIds.add(s.getId());
+                     }
+                 }
+             });
         });
     }
 
@@ -88,7 +91,11 @@ public abstract class LogicalEntity extends Entity {
      */
     public Integer countActivatedSwitches() {
         int count = (int) connectedEntities.stream()
-                                           .filter(e -> e instanceof FloorSwitch && ((FloorSwitch) e).isActivated())
+                                           .filter(e -> 
+                                           e instanceof FloorSwitch && 
+                                           ((FloorSwitch) e).isActivated() &&
+                                           !e.getId().equals(this.getId())
+                                           )
                                            .count();
         return count;
     }
@@ -123,7 +130,6 @@ public abstract class LogicalEntity extends Entity {
         int count = (int) connectedEntities.stream()
                                            .filter(e -> e instanceof FloorSwitch)
                                            .count();
-        
         return count;
 
     }
@@ -174,8 +180,9 @@ public abstract class LogicalEntity extends Entity {
      */
     public void xorActivation() {
         if (countActivatedSwitches() == 1) {
-            this.activate();
-        } else {
+            activate();
+        } 
+        else {
             deactivate();
         }
     }

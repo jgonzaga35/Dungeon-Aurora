@@ -1,5 +1,6 @@
 package dungeonmania.entities.statics;
 
+
 import java.util.Objects;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
@@ -66,4 +67,5 @@ public class SwitchDoor extends LogicalEntity {
     public void deactivate() {
         locked = true;
     }
+
 }
