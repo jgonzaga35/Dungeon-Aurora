@@ -41,6 +41,14 @@ public class TestUtils {
         });
     }
 
+    public static Wall spawnWall(Dungeon dungeon, int x, int y) {
+        Cell wallCell = dungeon.getMap().getCell(x, y);
+        Wall wall = new Wall(dungeon, wallCell.getPosition());
+        wallCell.addOccupant(wall);
+
+        return wall;
+    }
+
     public static Mercenary spawnMercenary(Dungeon dungeon, int x, int y) {
         Cell mercCell = dungeon.getMap().getCell(x, y);
         Mercenary merc = new Mercenary(dungeon, mercCell.getPosition());

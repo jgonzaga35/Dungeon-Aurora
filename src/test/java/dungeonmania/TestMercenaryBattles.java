@@ -22,6 +22,9 @@ public class TestMercenaryBattles {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
+        TestUtils.spawnWall(dungeon, 7, 6);
+        TestUtils.spawnWall(dungeon, 8, 5);
+        TestUtils.spawnWall(dungeon, 7, 4);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
         Mercenary ally = new Mercenary(dungeon, new Pos2d(5, 7));
@@ -57,6 +60,9 @@ public class TestMercenaryBattles {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
+        TestUtils.spawnWall(dungeon, 7, 6);
+        TestUtils.spawnWall(dungeon, 8, 5);
+        TestUtils.spawnWall(dungeon, 7, 4);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
         Mercenary ally = new Mercenary(dungeon, new Pos2d(5, 9));
@@ -93,6 +99,9 @@ public class TestMercenaryBattles {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
+        TestUtils.spawnWall(dungeon, 7, 6);
+        TestUtils.spawnWall(dungeon, 8, 5);
+        TestUtils.spawnWall(dungeon, 7, 4);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
         Mercenary ally = new Mercenary(dungeon, new Pos2d(5, 7));
@@ -127,6 +136,9 @@ public class TestMercenaryBattles {
         DungeonMap map = new DungeonMap(10, 10);
         Dungeon dungeon = new Dungeon(new Random(1), "manual", GameMode.STANDARD, map, new ExitGoal());
         dungeon.getRandom().setSeed(1);
+        TestUtils.spawnWall(dungeon, 7, 6);
+        TestUtils.spawnWall(dungeon, 8, 5);
+        TestUtils.spawnWall(dungeon, 7, 4);
 
         Player player = new Player(dungeon, new Pos2d(5, 5));
         Mercenary ally1 = new Mercenary(dungeon, new Pos2d(6, 6));
