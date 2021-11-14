@@ -7,10 +7,18 @@ import java.util.stream.Stream;
 
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.CollectableEntity;
-import dungeonmania.entities.collectables.*;
-import dungeonmania.entities.collectables.buildables.*;
-import dungeonmania.entities.collectables.consumables.*;
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.collectables.Anduril;
+import dungeonmania.entities.collectables.BattleItem;
+import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.collectables.Sword;
+import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.buildables.Bow;
+import dungeonmania.entities.collectables.buildables.Sceptre;
+import dungeonmania.entities.collectables.buildables.Shield;
+import dungeonmania.entities.collectables.consumables.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.ItemResponse;
 
@@ -263,7 +271,8 @@ public class Inventory {
         // good enough)
         List<Class<? extends BattleItem>> weapons = List.of(
             Sword.class,
-            Bow.class
+            Bow.class,
+            Anduril.class
         );
         return (BattleItem) this.collectables.stream().filter(e -> weapons.contains(e.getClass())).findFirst().orElse(null);
     }
