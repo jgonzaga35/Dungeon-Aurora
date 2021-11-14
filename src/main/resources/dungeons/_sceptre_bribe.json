@@ -1,0 +1,14 @@
+{
+    "width": 5,
+    "height": 1,
+    "entities": [
+        {"type": "mercenary", "x": 4, "y": 0},
+        {"type": "sun_stone", "x": 0, "y": 0},
+        {"type": "player", "x": 3, "y": 0},
+        {"type": "key", "key": 2, "x": 2, "y": 0},
+        {"type": "wood", "x": 1, "y": 0}
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
