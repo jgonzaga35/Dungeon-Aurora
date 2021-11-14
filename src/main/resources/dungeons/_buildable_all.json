@@ -6,7 +6,7 @@
         {"type": "sun_stone", "x": 1, "y": 0},
         {"type": "armour", "x": 2, "y": 0},
         {"type": "wood", "x": 3, "y": 0},
-        {"type": "key", "id": 1, "x": 4, "y": 0},
+        {"type": "key", "key": 1, "x": 4, "y": 0},
         {"type": "sun_stone", "x": 5, "y": 0},
         {"type": "wood", "x": 6, "y": 0},
         {"type": "arrow", "x": 7, "y": 0},

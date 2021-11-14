@@ -29,7 +29,6 @@ import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -366,6 +365,9 @@ public class Dungeon {
 
     public void build(String buildable) throws InvalidActionException {
         // this could be done better, but with just two items it's fine.
+        if (buildable.equals("midnight_armour") && this.dungeonMap.countZombieToasts() > 0) {
+            throw new InvalidActionException("cannot build midnight armour when there are zombies!");
+        }
         this.inventory.build(buildable);
     }
 

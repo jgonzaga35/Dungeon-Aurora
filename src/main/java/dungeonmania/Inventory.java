@@ -103,6 +103,12 @@ public class Inventory {
                 collectables.removeAll(items);
                 collectables.add(new Bow(null, null));
                 return;
+            case "midnight_armour":
+                items = buildable(MidnightArmour.RECIPES);
+                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
+                collectables.removeAll(items);
+                collectables.add(new MidnightArmour(null, null));
+                return;
             default:
                 throw new IllegalArgumentException("unknown buildable: " + buildable);
         }
@@ -132,6 +138,7 @@ public class Inventory {
         if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
         if (buildable(Sceptre.RECIPES) != null) buildables.add(Sceptre.STRING_TYPE);
         if (buildable(Shield.RECIPES) != null) buildables.add(Shield.STRING_TYPE);
+        if (buildable(MidnightArmour.RECIPES) != null) buildables.add(MidnightArmour.STRING_TYPE);
 
         return buildables;
     }
