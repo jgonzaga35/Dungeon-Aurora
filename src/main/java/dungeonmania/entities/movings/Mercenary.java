@@ -127,3 +127,4 @@ public class Mercenary extends MovingEntity implements Fighter {
         return false;
     }
 }
+
