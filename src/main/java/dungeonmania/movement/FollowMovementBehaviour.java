@@ -35,6 +35,10 @@ public class FollowMovementBehaviour extends MovementBehaviour {
                 ).get();
         }
 
+        if (next.getPosition().squareDistance(this.getCurrentCell().getPosition()) > 1) {
+            return this.getCurrentCell();
+        }
+
         assert next != null;
 
         setCurrentCell(next);
