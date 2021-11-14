@@ -112,3 +112,10 @@ Assassin battle radius: 3
 | Shield | 0            | 3             | 20         |
 | Sword  | 2            | 1             | 20         |
 | Armour | 0            | 2             | 30         |
+
+## Logic Switches
+In each tick of the dungeon, we first run the ticks for each floor switch before running
+the ticks for other entities that use logic. 
+Example: if there is a regular switch, an XOR switch and an XOR lightbulb connected to
+the same wires/circuit, then if the regular switch is activated, the XOR switch will also activate,
+and finally the XOR lightbulb will not activate since it receives 2 activation signals.

@@ -3,6 +3,7 @@ package dungeonmania;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.movings.Player;
 import dungeonmania.entities.statics.Boulder;
@@ -12,6 +13,7 @@ import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Swamp;
+import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.Direction;
 
 public class Cell {
@@ -133,6 +135,11 @@ public class Cell {
                 !((StaticEntity) e).isBlocking().equals(BlockingReason.NOT)) {
                     return ((StaticEntity)e).isBlocking();
                 }
+
+            if (e instanceof LogicalEntity && 
+            !((LogicalEntity) e).isBlocking().equals(BlockingReason.NOT)) {
+                return ((LogicalEntity)e).isBlocking();
+            }            
         }
         return BlockingReason.NOT;
     }
@@ -148,9 +155,30 @@ public class Cell {
         }
     }
 
-    public boolean hasUntriggeredFloorSwitch() {
+    public boolean hasDeactivatedFloorSwitch() {
         for (Entity occupant: this.occupants) {
-            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isTriggered()) {
+            if (occupant instanceof FloorSwitch && !((FloorSwitch) occupant).isActivated()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasActivatedFloorSwitch() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasActivatedEntity() {
+        for (Entity occupant: this.occupants) {
+            if (occupant instanceof FloorSwitch && ((FloorSwitch) occupant).isActivated()) {
+                return true;
+            }
+            if (occupant instanceof Wire && ((Wire) occupant).isActivated()) {
                 return true;
             }
         }

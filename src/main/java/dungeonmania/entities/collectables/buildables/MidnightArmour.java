@@ -3,11 +3,10 @@ package dungeonmania.entities.collectables.buildables;
 import java.util.List;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
-import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.collectables.Armour;
+import dungeonmania.entities.collectables.SunStone;
 
 public class MidnightArmour extends Shield {
     public static final String STRING_TYPE = "midnight_armour";

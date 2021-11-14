@@ -3,6 +3,7 @@ package dungeonmania.entities.statics;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Pos2d;
+import dungeonmania.DungeonManiaController.LayerLevel;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 import dungeonmania.util.Direction;
@@ -30,7 +31,7 @@ public class Boulder extends StaticEntity {
             // Trigger floor switch if exists
             FloorSwitch sourceSwitch = from.getFloorSwitch();
             if (sourceSwitch != null) {
-                sourceSwitch.setTriggered(false);            
+                sourceSwitch.deactivate();;            
             }
     
             from.removeOccupant(this);
@@ -38,7 +39,7 @@ public class Boulder extends StaticEntity {
     
             FloorSwitch targetSwitch = target.getFloorSwitch();
             if (targetSwitch != null) {
-                targetSwitch.setTriggered(true);
+                targetSwitch.activate();;
             }
     
             this.position = target.getPosition();
@@ -46,6 +47,11 @@ public class Boulder extends StaticEntity {
         }
 
         return false;
+    }
+
+    @Override 
+    public LayerLevel getLayerLevel() {
+        return LayerLevel.BOULDER;
     }
 
     @Override

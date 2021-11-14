@@ -1,7 +1,5 @@
 package dungeonmania.entities.movings;
 
-import java.util.List;
-
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.GameMode;
