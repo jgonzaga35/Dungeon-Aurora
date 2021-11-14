@@ -3,6 +3,7 @@ package dungeonmania.entities.movings;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
+import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
@@ -15,6 +16,8 @@ public class Player extends MovingEntity implements Fighter {
     public static String STRING_TYPE = "player";
 
     private float health = 10;
+
+    private Inventory inventory = new Inventory();
     
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -60,6 +63,10 @@ public class Player extends MovingEntity implements Fighter {
 
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public String getTypeAsString() {
         return Player.STRING_TYPE;
@@ -82,17 +89,17 @@ public class Player extends MovingEntity implements Fighter {
 
     @Override
     public float getAttackDamage(Fighter target) {
-        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK, target);
+        return 1 + this.inventory.totalBonus(BattleDirection.ATTACK, target);
     }
 
     @Override
     public float getDefenceCoef() {
-        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE, null);
+        return 1 * this.inventory.totalBonus(BattleDirection.DEFENCE, null);
     }
 
     @Override
     public void usedItemFor(BattleDirection d) {
-        this.dungeon.getInventory().usedItemsForBattle(d);
+        this.inventory.usedItemsForBattle(d);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             return v;
         };
 
-        Cell cell = map.getCell(dungeon.getPlayerPosition());
+        Cell cell = map.getCell(dungeon.getPlayer().getPosition());
 
         List<Fighter> allies = new ArrayList<>();
         List<Fighter> enemies = new ArrayList<>();
