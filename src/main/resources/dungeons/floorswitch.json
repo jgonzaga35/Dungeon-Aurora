@@ -13,6 +13,6 @@
         { "x": 4, "y": 4, "type": "exit" }
     ],
     "goal-condition": {
-        "goal": "boulder"
+        "goal": "boulders"
     }
 }
