@@ -206,7 +206,17 @@ public class Inventory {
             
             // Do Not Treat the Sun Stone as a Type of Treasure If Sceptre is Crafted with Both SunStone and Treasure 
             // (see Assumptions)
-            if (itemsStringType.stream().anyMatch(o -> ((o.equals(SunStone.STRING_TYPE)) || (o.equals(Treasure.STRING_TYPE))))) {
+            
+            if (Sceptre.RECIPES.stream().anyMatch(o -> ((itemsStringType.containsAll(o))))) {
+                itemOpt = this.collectables.stream()
+                // find an item of the right type that isn't already used
+                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) )) )
+                .findFirst();
+            }
+
+            
+            /**
+             * if (itemsStringType.stream().anyMatch(o -> ((o.equals(SunStone.STRING_TYPE)) || (o.equals(Treasure.STRING_TYPE))))) {
                 if (Sceptre.RECIPES.stream().anyMatch(o -> ((itemsStringType.containsAll(o))))) {
                     itemOpt = this.collectables.stream()
                     // find an item of the right type that isn't already used
@@ -215,6 +225,7 @@ public class Inventory {
                 }
 
             }
+             */
             
             if (itemOpt.isEmpty()) return null;
             else found.add(itemOpt.get());
