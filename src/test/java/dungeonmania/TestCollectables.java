@@ -750,14 +750,6 @@ public class TestCollectables {
             dist = merc.getCell().getPlayerDistance();
         }
         // player pos (7, 0)
-        
-        for (int i = 0; i < 4; i++) {
-            dc.tick(null, Direction.NONE);
-            System.out.println(i + " old= " + dist + " new= " + merc.getCell().getPlayerDistance());
-            assertTrue(merc.getCell().getPlayerDistance() < dist);
-            dist = merc.getCell().getPlayerDistance();
-        }
-        // player pos (7, 0)
         // merc pos (5, 0)
         // two cardinal squares away, bribe possible
         
@@ -767,6 +759,7 @@ public class TestCollectables {
         assertThrows(IllegalArgumentException.class, () -> {
             dc.interact(merc.getId());
         });
+    
 
         resp = dc.tick(null, Direction.NONE);
 
