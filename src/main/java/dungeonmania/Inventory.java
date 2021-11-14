@@ -108,7 +108,7 @@ public class Inventory {
                 collectables.removeAll(items);
                 collectables.add(new Bow(null, null));
                 return;
-            case "midnight_armour":
+            case MidnightArmour.STRING_TYPE:
                 items = buildable(MidnightArmour.RECIPES);
                 if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
                 collectables.removeAll(items);
