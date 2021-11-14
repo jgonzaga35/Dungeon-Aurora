@@ -77,8 +77,8 @@ public class TestLoot {
 
         Integer armourCount = (int) TestUtils.countInventoryOfType(r, Armour.STRING_TYPE);
 
-        // Probability of failing on a valid solution = 0.00352 
-        assertTrue(armourCount > 35 && armourCount < 65);
+        // Probability of failing on a valid solution = 0.00149 
+        assertTrue(armourCount > 15 && armourCount < 45);
     }
     
 }

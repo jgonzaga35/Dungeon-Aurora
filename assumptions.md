@@ -37,7 +37,7 @@
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
 - There is a 25% chance for a assassin to spawn in the place of a mercenary.
-- 50% of assassins spawn with armour.
+- 30% of assassins spawn with armour.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
