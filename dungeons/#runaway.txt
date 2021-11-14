@@ -1,0 +1,12 @@
+wwwwwwwwwwwwwwwwwwwwwww
+w......AAAAAAA........w
+w......AmmmmmA........w
+w......Am.i.mA........w
+w......Am.c.mA........w
+w......Am.p.mA........w
+w......Am...mA........w
+w......AmmmmmA........w
+w......AAAAAAA.....e..w
+wwwwwwwwwwwwwwwwwwwwwww
+
+{"goal": "exit"}

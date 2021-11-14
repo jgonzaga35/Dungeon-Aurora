@@ -1,0 +1,24 @@
+{
+    "width": 10,
+    "height": 10,
+    "entities": [
+        {"type": "player", "x": 0, "y": 0},
+        {"type": "sun_stone", "x": 1, "y": 0},
+        {"type": "sun_stone", "x": 2, "y": 0},
+        {"type": "armour", "x": 3, "y": 0},
+        {"type": "wood", "x": 4, "y": 0},
+        {"type": "key", "x": 5, "y": 0, "key": 1},
+
+        {"type": "anduril", "x": 2, "y": 3},
+        {"type": "hydra", "x": 3, "y": 3},
+        {"type": "zombie_toast", "x": 4, "y": 3},
+        {"type": "swamp_tile", "x": 4, "y": 3, "movement_factor": 10},
+
+        {"type": "assassin", "x": 4, "y": 5},
+
+        {"type": "exit", "x": 9, "y": 9}
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
