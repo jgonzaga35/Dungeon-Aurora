@@ -6,7 +6,6 @@
 ## ZombieToast
 - when zombies move in a random direction, that direction cannot be
   Direction.NONE unless there all the cells around it are blocking.
-- 15% of zombieToasts spawn with armour.
 
 ## ZombieToastSpawners
 
@@ -32,13 +31,11 @@
   that circle.
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
-- 30% of mercenaries spawn with armour.
 - When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
 - There is a 25% chance for a assassin to spawn in the place of a mercenary.
-- 30% of assassins spawn with armour.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
@@ -59,14 +56,12 @@ by the attack damage amount when attacked
 - Anduril has an initial durability of 20
 - Anduril has base damage of 7
 - Anduril causes Hydra to lose health when it is attacked and removes the possibility of regaining health
-- Has a 20% chance of dropping after a mob kill.
 
 ## One Ring
 - the player spawns back on the entry of the map
 - if there is a boulder there, then the player doesn't spawn back (dies even he
   has the ring). This creates a nice balance: put a boulder on the entry so that
   mercenaries don't spawn, but be careful because it cancels the one ring
-- Has a 10% chance of dropping after a mob kill.
 
 ## Bombs
 - Blast radius is set to 2
@@ -113,3 +108,16 @@ Assassin battle radius: 3
 | Shield | 0            | 3             | 20         |
 | Sword  | 2            | 1             | 20         |
 | Armour | 0            | 2             | 30         |
+
+## Loot
+- Entities that drop loot when they die, have that loot in their inventory the whole time. 
+- These entities use any items in their inventories in battle (excluding the one ring).
+- Item drop probabilities:
+
+| *Spawn Probability Matrix* (%) | Armour         | OneRing        | Anduril        |
+| ------------                   | ------         | ------         | ------         |
+| Mercenary                      | 30             | 10             | 20             |
+| Assassin                       | 30             | 10             | 20             |
+| Hydra                          | 0              | 10             | 20             |
+| ZombieToast                    | 15             | 10             | 20             |
+| Spider                         | 0              | 10             | 20             |

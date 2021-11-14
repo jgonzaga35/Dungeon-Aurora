@@ -5,6 +5,9 @@ import java.util.PriorityQueue;
 import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.collectables.Anduril;
+import dungeonmania.entities.collectables.OneRing;
+import dungeonmania.entities.movings.Player;
 import dungeonmania.Entity;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
@@ -28,6 +31,16 @@ public abstract class MovingEntity extends Entity {
      */
     public MovingEntity(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
+
+        if (this.getTypeAsString() != Player.STRING_TYPE) {
+            Integer ringRoll = this.dungeon.getRandom().nextInt(100);
+            Integer andurilRoll = this.dungeon.getRandom().nextInt(100);
+
+            if (ringRoll < 10)
+                this.inventory.add(new OneRing(dungeon, position));
+            if (andurilRoll < 20)
+                this.inventory.add(new Anduril(dungeon, position));
+        }
 
         this.movementBehaviours = new PriorityQueue<>(3, (a, b) -> b.getPrecendence() - a.getPrecendence());
     }
@@ -126,5 +139,9 @@ public abstract class MovingEntity extends Entity {
         inventory.clear();
 
         return false;
+    }
+
+    public void clearInventory() {
+        inventory.clear();
     }
 }

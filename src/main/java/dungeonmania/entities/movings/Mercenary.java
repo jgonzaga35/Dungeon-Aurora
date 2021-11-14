@@ -123,8 +123,4 @@ public class Mercenary extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return false;
     }
-
-    public void removeArmour() {
-        inventory.clear();
-    }
 }

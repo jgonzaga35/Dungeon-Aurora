@@ -71,8 +71,4 @@ public class ZombieToast extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return false;
     }
-
-    public void removeArmour() {
-        inventory.clear();
-    }
 }

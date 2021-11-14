@@ -30,7 +30,7 @@ public class TestLoot {
     @BeforeEach
     public void setStartingPostition() throws IOException {
         String content = FileLoader.loadResourceFile("/dungeons/_tiny.json");
-        dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
+        dungeon = Dungeon.fromJSONObject(new Random(11), "name", GameMode.STANDARD, new JSONObject(content));
         dc = new DungeonManiaController(dungeon);
         player = TestUtils.getPlayer(dungeon);
 
@@ -97,37 +97,40 @@ public class TestLoot {
     @Test
     public void testOneRingDrops() {
         DungeonResponse r = null;
-        Integer armourCount = 0;
+        Integer itemCount = 0;
         Integer oldCount = 0;
         for (int i = 0; i < 100; i++) {
             TestUtils.spawnZombieToast(dungeon, 0, 0);
             player.setHealth(40);
             r = dc.tick(null, Direction.NONE);
-            if (TestUtils.countInventoryOfType(r, Armour.STRING_TYPE) > oldCount)
-                armourCount++;
+            if (TestUtils.countInventoryOfType(r, OneRing.STRING_TYPE) > oldCount)
+                itemCount++;
             oldCount = (int) TestUtils.countInventoryOfType(r, OneRing.STRING_TYPE);
         }
 
+        System.out.println(itemCount);
+
         // Probability of failing on a valid solution = 0.01238
-        assertTrue(armourCount > 3 && armourCount < 19);
+        assertTrue(itemCount > 3 && itemCount < 19);
     }
 
     @Test
     public void testAndurilDrops() {
         DungeonResponse r = null;
-        Integer armourCount = 0;
+        Integer itemCount = 0;
         Integer oldCount = 0;
         for (int i = 0; i < 100; i++) {
             TestUtils.spawnZombieToast(dungeon, 0, 0);
             player.setHealth(40);
             r = dc.tick(null, Direction.NONE);
-            if (TestUtils.countInventoryOfType(r, Armour.STRING_TYPE) > oldCount)
-                armourCount++;
+            if (TestUtils.countInventoryOfType(r, Anduril.STRING_TYPE) > oldCount)
+                itemCount++;
             oldCount = (int) TestUtils.countInventoryOfType(r, Anduril.STRING_TYPE);
         }
+        System.out.println(itemCount);
 
         // Probability of failing on a valid solution = 0.01176
-        assertTrue(armourCount > 10 && armourCount < 31);
+        assertTrue(itemCount > 10 && itemCount < 31);
     }
 
 }

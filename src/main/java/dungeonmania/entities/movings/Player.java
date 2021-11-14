@@ -21,8 +21,6 @@ public class Player extends MovingEntity implements Fighter {
 
     private float health;
 
-    private Inventory inventory = new Inventory();
-
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.health = this.getStartingHealth();

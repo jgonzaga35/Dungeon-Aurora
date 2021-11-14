@@ -12,6 +12,7 @@ import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
@@ -385,5 +386,14 @@ public class Inventory {
      */
     public void clear() {
         collectables.clear();
+    }
+
+    public void purgeOneRing() {
+        List<CollectableEntity> copy = new ArrayList<>(collectables);
+        copy.stream().forEach(e -> {
+            if (e instanceof OneRing) {
+                collectables.remove(e);
+            }
+        });
     }
 }
