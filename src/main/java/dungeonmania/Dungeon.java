@@ -28,6 +28,7 @@ import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
+import dungeonmania.entities.collectables.buildables.Sceptre;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
 import dungeonmania.entities.collectables.consumables.InvisibilityPotion;
@@ -182,6 +183,8 @@ public class Dungeon {
             } else if (Objects.equals(type, Player.STRING_TYPE)) {
                 player = new Player(dungeon, cell.getPosition());
                 cell.addOccupant(player);
+            } else if (Objects.equals(type, Sceptre.STRING_TYPE)) {
+                cell.addOccupant(new Sceptre(dungeon, cell.getPosition()));
             } else if (Objects.equals(type, Portal.STRING_TYPE)) {
                 String colour = entity.getString("colour");
 
