@@ -15,7 +15,6 @@ import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.entities.LogicalEntity;
 import dungeonmania.entities.movings.Player;
-import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.util.Direction;
 
 /**
