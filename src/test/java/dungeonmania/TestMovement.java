@@ -153,11 +153,14 @@ public class TestMovement {
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
+        assassin.removeArmour();
 
         List<Pos2d> followedPath = new ArrayList<>();
         
         // let the assassin find it's path
         while (!assassin.getPosition().equals(new Pos2d(0, 0))) {
+            // make sure the player does not die
+            TestUtils.getPlayer(dungeon).setHealth(40);
             dc.tick(null, Direction.NONE);
             if (!followedPath.stream().anyMatch(p -> p.equals(assassin.getPosition())))
             followedPath.add(assassin.getPosition());

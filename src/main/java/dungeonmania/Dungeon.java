@@ -29,9 +29,6 @@ import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.collectables.SunStone;
-//import dungeonmania.entities.collectables.buildables.Bow;
-//import dungeonmania.entities.collectables.buildables.Shield;
 import dungeonmania.entities.collectables.buildables.*;
 import dungeonmania.entities.collectables.consumables.HealthPotion;
 import dungeonmania.entities.collectables.consumables.InvincibilityPotion;
@@ -65,7 +62,6 @@ public class Dungeon {
     private Goal goal;
     private Player player;
     private String name;
-    private Inventory inventory = new Inventory();
     private List<Potion> activePotions = new ArrayList<>();
     private PriorityQueue<BattleStrategy> battleStrategies;
 
@@ -295,7 +291,7 @@ public class Dungeon {
             if (occupant instanceof CollectableEntity) {
                 //Assign the Current Collectable Occupant in Cell to be Removed
                 CollectableEntity collectableOccupant = (CollectableEntity)occupant;
-                if (this.inventory.add(collectableOccupant)) {
+                if (this.player.getInventory().add(collectableOccupant)) {
                     ifOccupantRemoved = true;
                     removedOccupant = collectableOccupant;
                 }
@@ -324,8 +320,8 @@ public class Dungeon {
 
     }
     
-    public Pos2d getPlayerPosition() {
-        return this.player.getPosition();
+    public Player getPlayer() {
+        return this.player;
     }
 
     public void tick(String itemUsed, Direction movementDirection)
@@ -343,7 +339,7 @@ public class Dungeon {
         dungeonMap.flood();
 
         CollectableEntity item = null;
-        if (itemUsed != null) item = inventory.useItem(itemUsed);
+        if (itemUsed != null) item = player.getInventory().useItem(itemUsed);
         if (item instanceof Potion) activePotions.add((Potion)item);
         if (item instanceof Bomb) placeBomb(itemUsed, item);
         
@@ -459,16 +455,12 @@ public class Dungeon {
         return dungeonMap;
     }
 
-    public Inventory getInventory() {
-        return this.inventory;
-    }
-
     /**
      * Returns the Inventory in the form of a list of
      * ItemResponse instances. 
      */
     public List<ItemResponse> getInventoryAsItemResponse() {
-        return this.inventory.asItemResponses();
+        return this.player.getInventory().asItemResponses();
     }
 
     public List<String> getBuildables() {
@@ -488,13 +480,12 @@ public class Dungeon {
     public void bribeMercenary(Mercenary merc) throws InvalidActionException {
             
         if (merc.getCell().getPlayerDistance() > 2) throw new InvalidActionException("Too far, the mercenary can't hear you");
+        if (!player.getInventory().pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
         
         if (inventory.hasSceptre()) {
             merc.bribe(10);
             return;
         }
-        
-        if (!inventory.pay(merc.getPrice())) throw new InvalidActionException("The player can't pay the price");
             
         merc.bribe();
     }
@@ -508,7 +499,7 @@ public class Dungeon {
         
 
         // check if we have a weapon to destroy the spawner with
-        BattleItem weapon = this.inventory.getOneWeapon();
+        BattleItem weapon = this.player.getInventory().getOneWeapon();
         if (weapon == null) {
             throw new InvalidActionException("no weapons to destroy the spawner");
         }
@@ -518,7 +509,7 @@ public class Dungeon {
         boolean removed = this.dungeonMap.removeEntity(zts);
         assert removed;
 
-        this.inventory.usedItemForBattle(weapon, BattleDirection.ATTACK);
+        this.player.getInventory().usedItemForBattle(weapon, BattleDirection.ATTACK);
     }
 
     /**

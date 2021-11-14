@@ -27,7 +27,7 @@ public class Door extends StaticEntity {
      * @return true if door is successfully opened
      */
     public boolean open() {
-        Inventory inventory = this.dungeon.getInventory();
+        Inventory inventory = this.dungeon.getPlayer().getInventory();
         for (CollectableEntity c : inventory.getCollectables()) {
             if ((c instanceof Key && ((Key)c).getKeyId() == doorId) || (c instanceof SunStone)) {
                 // key matches, remove the key from inventory and unlock door

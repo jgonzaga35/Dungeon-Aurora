@@ -7,6 +7,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController.GameMode;
 import dungeonmania.DungeonMap;
 import dungeonmania.Entity;
+import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
@@ -21,6 +22,8 @@ public class Player extends MovingEntity implements Fighter {
     public static String STRING_TYPE = "player";
 
     private float health;
+
+    private Inventory inventory = new Inventory();
     
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -67,6 +70,10 @@ public class Player extends MovingEntity implements Fighter {
 
     }
 
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
     @Override
     public String getTypeAsString() {
         return Player.STRING_TYPE;
@@ -76,17 +83,15 @@ public class Player extends MovingEntity implements Fighter {
     public void tick() {
     }
 
-    /**
-     * @return true if the player has been resurected
-     */
+    @Override
     public boolean onDeath() {
         DungeonMap map = this.dungeon.getMap();
         if (
             Utils.isDead(this) // we dead
-            && this.dungeon.getInventory().itemsOfType(OneRing.class).count() > 0 // we have a ring!
+            && this.inventory.itemsOfType(OneRing.class).count() > 0 // we have a ring!
             && !map.getEntryCell().isBlocking() // we didn't block the entry
         ) {
-            this.dungeon.getInventory().useItems(List.of(OneRing.STRING_TYPE));
+            this.inventory.useItems(List.of(OneRing.STRING_TYPE));
             this.health = this.getStartingHealth();
             this.moveTo(map.getEntryCell());
             return true;
@@ -107,17 +112,17 @@ public class Player extends MovingEntity implements Fighter {
 
     @Override
     public float getAttackDamage(Fighter target) {
-        return 1 + this.dungeon.getInventory().totalBonus(BattleDirection.ATTACK, target);
+        return 1 + this.inventory.totalBonus(BattleDirection.ATTACK, target);
     }
 
     @Override
     public float getDefenceCoef() {
-        return 1 * this.dungeon.getInventory().totalBonus(BattleDirection.DEFENCE, null);
+        return 1 * this.inventory.totalBonus(BattleDirection.DEFENCE, null);
     }
 
     @Override
     public void usedItemFor(BattleDirection d) {
-        this.dungeon.getInventory().usedItemsForBattle(d);
+        this.inventory.usedItemsForBattle(d);
     }
 
     @Override

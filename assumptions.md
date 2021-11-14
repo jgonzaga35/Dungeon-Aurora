@@ -6,6 +6,7 @@
 ## ZombieToast
 - when zombies move in a random direction, that direction cannot be
   Direction.NONE unless there all the cells around it are blocking.
+- 15% of zombieToasts spawn with armour.
 
 ## ZombieToastSpawners
 
@@ -31,11 +32,13 @@
   that circle.
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
+- 30% of mercenaries spawn with armour.
 - When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).
 - There is a 25% chance for a assassin to spawn in the place of a mercenary.
+- 30% of assassins spawn with armour.
 
 ## Battles
 - when a player and an enemy swap cell in one tick, there is no battle.
