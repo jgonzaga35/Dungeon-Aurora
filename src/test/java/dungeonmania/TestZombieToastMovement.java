@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,8 @@ public class TestZombieToastMovement {
     @Test
     public void testZombiesDontTeleport() {
         DungeonManiaController ctr = new DungeonManiaController();
-        DungeonResponse resp = ctr.newGame("_zombies_maze", GameMode.STANDARD.getValue());
+        DungeonResponse resp = ctr.newGame("_zombies_maze", GameMode.PEACEFUL.getValue());
+        ctr.setSeed(1);
 
         // zombie id -> position
         Map<String, Pos2d> positions = new HashMap<>();
@@ -49,8 +51,10 @@ public class TestZombieToastMovement {
                 // make sure it only moved on cell, horizontally or vertically
                 Pos2d prev = positions.get(er.getId());
                 Pos2d curr = Pos2d.from(er.getPosition());
-                if (prev != null)
+                if (prev != null) {
+                    System.out.println(i + ", " + prev.squareDistance(curr));
                     assertTrue(prev.squareDistance(curr) <= 1);
+                }
                 positions.put(er.getId(), curr);
 
                 // make sure it's not on a blocking cell

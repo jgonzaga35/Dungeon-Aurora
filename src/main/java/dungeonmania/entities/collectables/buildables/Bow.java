@@ -19,10 +19,21 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     private int durability;
 
+    public static List<List<String>> RECIPES = List.of(
+        List.of(
+            Wood.STRING_TYPE,
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE,
+            Arrow.STRING_TYPE
+        )
+    );
+
     public Bow(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.durability = INITIAL_DURABILITY;
     }
+
+    
 
     @Override
     public int getDurability() {
@@ -46,32 +57,9 @@ public class Bow extends BuildableEntity implements BattleItem {
         return STRING_TYPE;
     }
 
-    /**
-     * Removes the items needed to craft this item from the inventory, and adds
-     * itself to it.
-     * 
-     * If there aren't the required items present in the inventory, this does
-     * nothing
-     * 
-     * @param inventory the inventory
-     * @return true if the item was succesfully crafted
-     */
-    public static boolean craft(Inventory inventory) {
-        if (!inventory.useItems(List.of(
-            Wood.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE,
-            Arrow.STRING_TYPE
-        ))) {
-            return false;
-        }
-        inventory.add(new Bow(null, null));
-        return true;
-    }
-
     @Override
     public float getDefenceCoefBonus() {
-        return 3; // shield multiply defence coef by 3
+        return 1;
     }
 
     @Override

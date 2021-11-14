@@ -134,4 +134,9 @@ public class Hydra extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return true;
     }
+
+    @Override
+    public boolean onDeath() {
+        return false;
+    }
 }

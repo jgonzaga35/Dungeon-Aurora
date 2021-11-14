@@ -42,7 +42,6 @@ public class Boulder extends StaticEntity {
             }
     
             this.position = target.getPosition();
-            this.getCell().onWalked(from.getPosition(), this.position);
             return true;
         }
 
