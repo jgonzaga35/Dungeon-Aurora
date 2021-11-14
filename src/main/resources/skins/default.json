@@ -29,6 +29,7 @@
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
+        "health_potion": "images/tileset/items/potion_6.png",
         "anduril": "images/tileset/items/anduril.png",
         "invisibility_potion": "images/tileset/items/potion_2.png",
         "armour": "images/tileset/items/armour.png",
