@@ -118,26 +118,12 @@ public class TestLogicSwitch {
         ctr.tick(null, Direction.LEFT);
         resp = ctr.tick(null, Direction.UP);
 
-        // Now light bulb should be turned on, door unlocked and switch activated
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
+        // Now light bulb should be turned off, door locked, switch activate, bomb not exploded
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED)));
-        
-        // Bomb should have exploded
-        assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
 
-        // Activate the second adjacent switch
-        ctr.tick(null, Direction.DOWN);
-        ctr.tick(null, Direction.DOWN);
-        resp = ctr.tick(null, Direction.RIGHT);
-        
-        // Everything should still be activated
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
-        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED)));
-        
-        // Bomb should have exploded
-        assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
     }
 
 }
