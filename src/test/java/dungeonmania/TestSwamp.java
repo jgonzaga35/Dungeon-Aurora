@@ -36,18 +36,47 @@ public class TestSwamp {
     }
 
     @Test
+    public void testAllies() {
+        Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 1, 2);
+        merc1.bribe();
+        
+        for (int i = 0; i < 5; i++) {
+            dc.tick(null, Direction.RIGHT);
+            assertEquals(1, merc1.getCell().getPlayerDistance());
+        }
+        // merc stuck for 9 ticks
+        
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.RIGHT);
+        assertEquals(4, merc1.getCell().getPlayerDistance());
+        // 6 more ticks left
+        
+        for (int i = 0; i < 6; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(4, merc1.getCell().getPlayerDistance());
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            dc.tick(null, Direction.NONE);
+            assertEquals(3 - i, merc1.getCell().getPlayerDistance());
+        }
+        
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.LEFT);
+        assertEquals(1, merc1.getCell().getPlayerDistance());
+    }
+
+    @Test
     public void testMultipleEnemies() {
         // spawn mercenaries staggered horizontal to the swamp.
         Mercenary merc1 = TestUtils.spawnMercenary(dungeon, 6, 2);
         Mercenary merc2 = TestUtils.spawnMercenary(dungeon, 8, 2);
         
-        for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc1 gets stuck 10 ticks left
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc1 gets stuck 9 ticks left
 
-        for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc2 gets stuck merc1 8 ticks left
+        for (int i = 0; i < 2; i++) dc.tick(null, Direction.NONE); // merc2 gets stuck merc1 7 ticks left
         assertEquals(new Pos2d(4, 2), merc1.getPosition());
         assertEquals(new Pos2d(4, 2), merc2.getPosition());
         
-        for (int i = 0; i < 8; i++) dc.tick(null, Direction.NONE); // merc1 can move on the next tick merc2 2 ticks left
+        for (int i = 0; i < 7; i++) dc.tick(null, Direction.NONE); // merc1 can move on the next tick merc2 2 ticks left
         assertEquals(new Pos2d(4, 2), merc1.getPosition());
         assertEquals(new Pos2d(4, 2), merc2.getPosition());
         
@@ -64,10 +93,10 @@ public class TestSwamp {
     public void testSpiderPreservesCircle() {
         Spider spider = TestUtils.spawnSpider(dungeon, 3, 2);
         
-        for (int i = 0; i < 3; i++) dc.tick(null, Direction.NONE); // steps in swamp after this 10 ticks to go
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.NONE); // steps in swamp after this 9 ticks to go
         assertEquals(new Pos2d(4, 2), spider.getPosition());
         
-        for (int i = 0; i < 10; i++) dc.tick(null, Direction.NONE); // can move on next tick
+        for (int i = 0; i < 9; i++) dc.tick(null, Direction.NONE); // can move on next tick
         assertEquals(new Pos2d(4, 2), spider.getPosition());
         
         // Make sure spider still follows the circle
@@ -113,11 +142,11 @@ public class TestSwamp {
 
         ZombieToast zom = TestUtils.getZombieToast(dungeon);
 
-        for (int i = 0; i < 6; i++) {
-            assertEquals(new Pos2d(2, 2), zom.getPosition()); // stay in the same spot for 5 ticks
+        for (int i = 0; i < 5; i++) {
+            assertEquals(new Pos2d(2, 2), zom.getPosition()); // stay in the same spot for 4 ticks
             dc.tick(null, Direction.NONE);
         }
-        assertNotEquals(new Pos2d(2, 2), zom.getPosition()); // move after the 6th tick
+        assertNotEquals(new Pos2d(2, 2), zom.getPosition()); // move after the 5th tick
     }
     
     @Test
@@ -132,16 +161,16 @@ public class TestSwamp {
         dc.tick(null, Direction.RIGHT); // get coin 2 0
         dc.tick(null, Direction.DOWN); // get coin 2 1
         
-        assertEquals(new Pos2d(2, 2), merc.getPosition()); // need to stay here for 7 more ticks
+        assertEquals(new Pos2d(2, 2), merc.getPosition()); // need to stay here for 6 more ticks
         dc.interact(merc.getId());
         
         dc.tick(null, Direction.UP); // get coin 2 0
         dc.tick(null, Direction.LEFT); // get coin 1 0
         dc.tick(null, Direction.LEFT); // get coin 0 0
         
-        assertEquals(new Pos2d(2, 2), merc.getPosition()); // need to stay here for 4 more ticks
+        assertEquals(new Pos2d(2, 2), merc.getPosition()); // need to stay here for 3 more ticks
         
-        for (int i = 0; i < 4; i++) dc.tick(null, Direction.NONE);
+        for (int i = 0; i < 3; i++) dc.tick(null, Direction.NONE);
         
         assertEquals(new Pos2d(2, 2), merc.getPosition()); // can move on the next tick
         

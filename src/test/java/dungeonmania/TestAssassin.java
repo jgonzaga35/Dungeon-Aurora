@@ -60,29 +60,29 @@ public class TestAssassin {
         }
         // player pos (7, 5)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) { // make sure to not pick up the ring
             resp = dc.tick(null, Direction.UP);
             assertTrue(assassin.getCell().getPlayerDistance() <= dist);
             dist = assassin.getCell().getPlayerDistance();
         }
-        // player pos (7, 0)
+        // player pos (7, 1)
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             resp = dc.tick(null, Direction.NONE);
             assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
         }
-        // player pos (7, 0)
-        // assassin pos (6, 0)
+        assertEquals(new Pos2d(6, 1), assassin.getPosition());
+        assertEquals(new Pos2d(7, 1), player.getPosition());
         
-        resp = dc.tick(null, Direction.UP);
-        // player pos (7, 0)
-        // assassin pos (7, 0)
+        resp = dc.tick(null, Direction.NONE);
+        // player pos (7, 1)
+        // assassin pos (7, 1)
         // battle should happen
         // Assassin should kill the player
         assertEquals(1, TestUtils.countEntitiesOfType(resp, Assassin.STRING_TYPE));
         assertEquals(0, TestUtils.countEntitiesOfType(resp, Player.STRING_TYPE));
-        assertEquals(new Pos2d(7, 0), assassin.getPosition());
+        assertEquals(new Pos2d(7, 1), assassin.getPosition());
     }
 
     /**
@@ -109,7 +109,7 @@ public class TestAssassin {
         }
         // player pos (7, 0) pick up ring
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             dc.tick(null, Direction.NONE);
             assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
@@ -188,13 +188,6 @@ public class TestAssassin {
         for (int i = 0; i < 4; i++) {
             dc.tick(null, Direction.UP);
             assertTrue(assassin.getCell().getPlayerDistance() <= dist);
-            dist = assassin.getCell().getPlayerDistance();
-        }
-        // player pos (7, 1)
-        
-        for (int i = 0; i < 4; i++) {
-            dc.tick(null, Direction.NONE);
-            assertTrue(assassin.getCell().getPlayerDistance() < dist);
             dist = assassin.getCell().getPlayerDistance();
         }
         // player pos (7, 1)

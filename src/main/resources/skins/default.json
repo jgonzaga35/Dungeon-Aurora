@@ -29,6 +29,7 @@
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
+        "anduril": "images/tileset/items/anduril.png",
         "invisibility_potion": "images/tileset/items/potion_2.png",
         "armour": "images/tileset/items/armour.png",
         "sword": "images/tileset/items/sword_silver.png",
@@ -42,10 +43,12 @@
         "sun_stone": "images/tileset/items/sun_Stone.png",
         "sceptre": "images/tileset/items/sceptre.png",
         "midnight_armour": "images/tileset/items/midnight_armour.png",
+        "zombie_toast": "images/tileset/entities/zombie_00.png",
         "portal_BLUE": "images/tileset/entities/portal_00.png",
         "portal_RED": "images/tileset/entities/portal_04.png",
         "portal_ORANGE": "images/tileset/entities/portal_08.png",
         "portal_GREY": "images/tileset/entities/portal_12.png",
-        "hydra": "images/tileset/entities/hydra.png"
+        "hydra": "images/tileset/entities/hydra.png",
+        "one_ring": "images/tileset/items/the_one_ring.png"
     }
 }

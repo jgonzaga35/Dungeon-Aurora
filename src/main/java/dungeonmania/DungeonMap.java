@@ -2,7 +2,10 @@ package dungeonmania;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,9 +13,9 @@ import java.util.stream.Stream;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Fighter;
+import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.StaticEntity;
-import dungeonmania.entities.Fighter.FighterRelation;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
@@ -21,6 +24,8 @@ import dungeonmania.entities.movings.ZombieToast;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Graph;
+import dungeonmania.util.Vertex;
 
 public class DungeonMap {
 
@@ -187,6 +192,56 @@ public class DungeonMap {
     }
 
     /**
+     * Uses Dijkstra's algorithm to find the shortest path between @param from
+     * and @param to. Takes into account cell travel costs due to swamp blocks.
+     * 
+     * @param from the positions to start from
+     * @param to the target position
+     * @return a list of Cells in the order that they should be visited. Return 
+     *  null if no path can be found.
+     */
+    public List<Cell> findPath(Cell from, Cell to) {
+        // order with lowest cost first
+        PriorityQueue<Vertex<Cell>> q = new PriorityQueue<Vertex<Cell>>(11, (a, b) -> a.getDistance()- b.getDistance());
+        Map<Cell, Integer> visited = new HashMap<>();
+        Graph<Cell> tree = new Graph<>();
+
+        q.add(new Vertex<Cell>(from, 0));
+        visited.put(from, 0);
+        tree.addVertex(new Vertex<Cell>(from, 0));
+
+        while (!q.isEmpty()) {
+            Cell current = q.poll().getData();
+            if (current.equals(to)) {
+                // Target found, return path
+                return tree.tracebackFrom(new Vertex<Cell>(current))
+                    .stream().map(v -> v.getData()).collect(Collectors.toList());
+            }
+
+            getNeighbors(current).stream().filter(n -> !n.isBlocking()).forEach(n -> {
+                Integer newCost = visited.get(current) + n.getTravelCost();
+                if (visited.keySet().contains(n)) {
+                    // resolve duplicate
+                    if (newCost < visited.get(n)) {
+                        visited.put(n, newCost);
+                        // Remove old link and add the new faster one
+                        tree.removeVertex(new Vertex<Cell>(n));
+                        tree.addEdge(new Vertex<Cell>(current), new Vertex<Cell>(n));
+                    }
+
+                } else {
+                    // visit
+                    visited.put(n, newCost);
+                    q.add(new Vertex<Cell>(n, newCost));
+                    tree.addEdge(new Vertex<Cell>(current), new Vertex<Cell>(n));
+                }
+            });
+        }
+
+        return null;
+    }
+
+    /**
      * Direction.NONE returns the given cell
      * 
      * @param cell
@@ -323,5 +378,9 @@ public class DungeonMap {
      */
     public Pos2d getEntry() {
         return this.entry;
+    }
+
+    public Cell getEntryCell() {
+        return this.getCell(this.getEntry());
     }
 }

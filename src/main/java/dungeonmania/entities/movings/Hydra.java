@@ -9,16 +9,17 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.Utils;
+import dungeonmania.movement.RandomMovementBehaviour;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
-import dungeonmania.movement.RandomMovementBehaviour;
 
-public class Hydra extends MovingEntity implements Fighter{
+public class Hydra extends MovingEntity implements Fighter {
     
     public static final String STRING_TYPE = "hydra";
     public static final int SPAWN_EVERY_N_TICKS = 50;
-    private float health = 4;  
+    private float health = 20;  
+    private boolean crippled = false;
 
     public Hydra(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
@@ -69,6 +70,10 @@ public class Hydra extends MovingEntity implements Fighter{
         return cell;
     }
 
+    public void cripple() {
+        this.crippled = true;
+    }
+
     @Override 
     public String getTypeAsString() {
         return Hydra.STRING_TYPE;
@@ -91,15 +96,16 @@ public class Hydra extends MovingEntity implements Fighter{
         Random random = this.dungeon.getRandom();
         int x = random.nextInt(2);
     
-        if (x == 1) {
-            this.health = h;
-        } else if (x == 0) {
+        // if not crippled by Anduril, hydra has 50% chance of gaining health
+        if (x == 0 && !this.crippled) {
             this.health = this.health + damageReceived;
+        } else {
+            this.health = h;
         }
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamage(Fighter target) {
         return 1;
     }
 
@@ -123,4 +129,9 @@ public class Hydra extends MovingEntity implements Fighter{
         return this;
     }
 
+
+    @Override
+    public boolean isBoss() {
+        return true;
+    }
 }

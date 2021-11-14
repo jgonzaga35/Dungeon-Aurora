@@ -6,6 +6,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
+import dungeonmania.entities.Fighter;
 import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.BuildableEntity;
@@ -58,11 +59,11 @@ public class Bow extends BuildableEntity implements BattleItem {
 
     @Override
     public float getDefenceCoefBonus() {
-        return 3; // shield multiply defence coef by 3
+        return 1;
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus(Fighter target) {
         return 1; // player normally does 1 attack damage. This doubles it.
     }
     
