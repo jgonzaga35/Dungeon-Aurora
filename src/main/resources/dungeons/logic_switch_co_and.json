@@ -25,16 +25,16 @@
         {"x": 3,"y": 7,"type": "wire"},
         {"x": 3,"y": 8,"type": "wire"},
         {"x": 3,"y": 9,"type": "wire"},
-        {"x": 3,"y": 10,"type": "bomb","logic": "and"},
-        {"x": 4,"y": 2,"type": "switch","logic":"and"},
+        {"x": 3,"y": 10,"type": "bomb","logic":"xor"},
+        {"x": 4,"y": 2,"type": "switch","logic":"xor"},
         {
             "x": 4,
             "y": 3,
             "type": "switch_door",
             "id": 1,
-            "logic": "and"
+            "logic": "xor"
         },
-        {"x": 4,"y": 0,"type": "light_bulb_off","logic": "and"}
+        {"x": 4,"y": 0,"type": "light_bulb_off","logic": "co_and"}
     ],
     "goal-condition": {
         "goal": "exit"

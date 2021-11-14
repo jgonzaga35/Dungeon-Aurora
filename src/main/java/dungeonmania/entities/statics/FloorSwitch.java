@@ -36,9 +36,6 @@ public class FloorSwitch extends LogicalEntity {
     public void activate() {
         this.activated = true;
         this.tickCountActivated = dungeon.getTickCount();
-        if (this.getPosition().getX() == 0) {
-            System.out.println("ACTIVATED");
-        }
 
     }
 

@@ -10,8 +10,8 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
 import dungeonmania.DungeonManiaController.LayerLevel;
+import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.LightBulb;
 import dungeonmania.entities.statics.Wire;
 import dungeonmania.util.BlockingReason;
 
@@ -237,7 +237,7 @@ public abstract class LogicalEntity extends Entity {
      * @return
      * @throws IllegalArgumentException
      */
-    private Logic parseLogic(String logic) throws IllegalArgumentException {
+    public Logic parseLogic(String logic) throws IllegalArgumentException {
         if (Objects.isNull(logic)) 
             return null;
         if (Objects.equals(logic, "and"))

@@ -28,7 +28,7 @@
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
-        "switch_activated": "images/tileset/entities/assassin.png",
+        "switch_activated": "images/tileset/entities/switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
         "health_potion": "images/tileset/items/potion_6.png",
         "anduril": "images/tileset/items/anduril.png",

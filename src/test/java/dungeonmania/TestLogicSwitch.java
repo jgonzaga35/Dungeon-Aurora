@@ -99,65 +99,64 @@ public class TestLogicSwitch {
         assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
     }
 
-    // @Test
-    // public void testXorLogic() {
-    //     DungeonManiaController ctr = new DungeonManiaController();
-    //     DungeonResponse resp = ctr.newGame("logic_switch_xor", GameMode.PEACEFUL.getValue());
+    @Test
+    public void testXorLogic() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("logic_switch_xor", GameMode.PEACEFUL.getValue());
 
-    //     // At the start the light bulb is turned off, bomb exists, door is locked
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
+        // At the start the light bulb is turned off, bomb exists, door is locked
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
 
-    //     // Place boulder on first adjacent switch
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.RIGHT);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.LEFT);
-    //     resp = ctr.tick(null, Direction.UP);
+        // Place boulder on first adjacent switch
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.UP);
 
-    //     // Now light bulb should be turned off, door locked, switch activate, bomb not exploded
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        // Now light bulb should be turned off, door locked, switch activate, bomb not exploded
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.OFF)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
 
-    // }
+    }
 
-    // @Test
-    // public void testNotLogic() {
-    //     DungeonManiaController ctr = new DungeonManiaController();
-    //     DungeonResponse resp = ctr.newGame("logic_switch_xor", GameMode.PEACEFUL.getValue());
+    @Test
+    public void testNotLogic() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("logic_switch_not", GameMode.PEACEFUL.getValue());
+        resp = ctr.tick(null, Direction.NONE);
+        // At the start the light bulb is turned on, bomb explodes, door is unlocked
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
 
-    //     // At the start the light bulb is turned on, bomb explodes, door is unlocked
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
-    //     assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
+    }
 
-    // }
+    @Test
+    public void testCoAndLogic() {
+        DungeonManiaController ctr = new DungeonManiaController();
+        DungeonResponse resp = ctr.newGame("logic_switch_co_and", GameMode.PEACEFUL.getValue());
 
-    // @Test
-    // public void testCoAndLogic() {
-    //     DungeonManiaController ctr = new DungeonManiaController();
-    //     DungeonResponse resp = ctr.newGame("logic_switch_co_and", GameMode.PEACEFUL.getValue());
+        // Place boulder on first adjacent switch
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.RIGHT);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.DOWN);
+        ctr.tick(null, Direction.LEFT);
+        resp = ctr.tick(null, Direction.UP);
 
-    //     // Place boulder on first adjacent switch
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.RIGHT);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.DOWN);
-    //     ctr.tick(null, Direction.LEFT);
-    //     resp = ctr.tick(null, Direction.UP);
+        // Now the light bulb should turn on because it is co_and.
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
+        assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE)));
 
-    //     // At the start the light bulb is turned on, bomb explodes, door is unlocked
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
-    //     assertEquals(false, resp.getEntities().stream().anyMatch(e -> e.getType().equals(Bomb.STRING_TYPE)));
-    //     assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
-
-    // }
+    }
 
 
 }

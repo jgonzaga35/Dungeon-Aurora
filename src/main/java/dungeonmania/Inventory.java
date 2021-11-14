@@ -23,7 +23,7 @@ public class Inventory {
      * @param c collectable to add
      * @return true if the player was able to pick the collectable up
      */
-    public boolean add(CollectableEntity c) {
+    public boolean add(Entity c) {
         if (c instanceof Key && this.contains(Key.class)) {
             // Player cannot pickup a second key
             return false;
@@ -35,7 +35,7 @@ public class Inventory {
                 return false;
             }
         } 
-        return this.collectables.add(c);
+        return this.collectables.add((CollectableEntity) c);
     }
 
     /**
@@ -141,10 +141,10 @@ public class Inventory {
      * @return the entity used.
      * 
      */
-    public CollectableEntity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
+    public Entity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
 
         // find item
-        CollectableEntity itemUsed = collectables.stream()
+        Entity itemUsed = collectables.stream()
             .filter(c -> c.getId().equals(entityId))
             .findFirst().orElse(null);
 

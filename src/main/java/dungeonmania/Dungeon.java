@@ -269,7 +269,7 @@ public class Dungeon {
      * Places a Bomb that is Currently in Player Inventory onto Map &
      * Ensures that Player is Unable to Pick it Up Again
      */
-    private void placeBomb(String itemUsed, CollectableEntity currCollectable) {
+    private void placeBomb(String itemUsed, Entity currCollectable) {
         //Get Player Positions & Collectables
         Cell playerCell = dungeonMap.getPlayerCell();
         Pos2d playerPosition = playerCell.getPosition();
@@ -279,8 +279,7 @@ public class Dungeon {
         //Check the Collectable Passed to this Function is a Bomb and that the ID matches
         if ((currCollectable.getTypeAsString().equals(Bomb.STRING_TYPE)) && (itemUsed.equals(currCollectable.getId()))) {
             //Retreive Bomb Removed from Collectables that is To Be Placed
-            CollectableEntity collectableRemoved = currCollectable;
-            Bomb removedBomb = (Bomb) collectableRemoved;
+            Bomb removedBomb = (Bomb) currCollectable;
 
             //Update Position and Set the Bombs is_placed status to be True so Bomb cannot be re-picked up
             removedBomb.setIsPlaced();
@@ -370,7 +369,7 @@ public class Dungeon {
 
         dungeonMap.flood();
 
-        CollectableEntity item = null;
+        Entity item = null;
         if (itemUsed != null) item = player.getInventory().useItem(itemUsed);
         if (item instanceof Potion) activePotions.add((Potion)item);
         if (item instanceof Bomb) placeBomb(itemUsed, item);
