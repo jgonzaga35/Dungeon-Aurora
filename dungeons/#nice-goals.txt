@@ -1,0 +1,14 @@
+wwwwwwwwwwwwwwwww
+w....t......p...w
+w..www...b....s.w
+w..wewf.........w
+w..www.....b....w
+w...............w
+w...ww.wwww..t..w
+w...w.s.........w
+w............i..w
+w.....b....f....w
+w.B.............w
+wwwwwwwwwwwwwwwww
+
+{"goal": "AND", "subgoals": [{"goal":"treasure"},{"goal":"exit"}]}
