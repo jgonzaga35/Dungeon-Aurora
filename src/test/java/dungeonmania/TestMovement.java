@@ -137,7 +137,7 @@ public class TestMovement {
         dungeon = Dungeon.fromJSONObject(new Random(1), "name", GameMode.STANDARD, new JSONObject(content));
         DungeonManiaController dc = new DungeonManiaController(dungeon);
         Mercenary assassin = TestUtils.getMercenary(dungeon);
-        assassin.removeArmour();
+        assassin.clearInventory();
 
         List<Pos2d> followedPath = new ArrayList<>();
 

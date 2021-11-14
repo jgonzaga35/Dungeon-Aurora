@@ -6,6 +6,10 @@ import dungeonmania.Pos2d;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.util.BlockingReason;
 
+/**
+ * Represents a wall.
+ * Blocks the movement of the character, enemies and boulders.
+ */
 public class Wall extends StaticEntity {
 
     public static String STRING_TYPE = "wall";

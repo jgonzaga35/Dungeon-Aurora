@@ -13,6 +13,12 @@ import dungeonmania.entities.MovingEntity;
 import dungeonmania.movement.CircleMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
+/**
+ * When the spider spawns, they immediately move the 1 square upwards (towards the top of the screen) 
+ * and then begin 'circling' their spawn spot (see a visual example here). 
+ * Spiders are able to traverse through walls, doors, switches, portals, 
+ * exits (which have no effect), but not boulders, in which case it will reverse direction. 
+ */
 public class Spider extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "spider";
@@ -20,18 +26,16 @@ public class Spider extends MovingEntity implements Fighter {
     public static final int SPAWN_EVERY_N_TICKS = 50;
 
     private float health = 1;
-    
-    private MovementBehaviour circleMovementBehaviour = new CircleMovementBehaviour(
-        -4,
-        dungeon.getMap(),
-        dungeon.getMap().getCell(position)
-    );
+
+    private MovementBehaviour circleMovementBehaviour = new CircleMovementBehaviour(-4, dungeon.getMap(),
+            dungeon.getMap().getCell(position));
 
     /**
      * Generates a random location for the Spider to spawn.
+     * 
      * @param dungeon
-     * @return the cell on which the spawn the spider. {@code null} if there are
-     * no cell on which a spider can spawn
+     * @return the cell on which the spawn the spider. {@code null} if there are no
+     *         cell on which a spider can spawn
      */
     public static Cell getRandomPosition(Dungeon dungeon) {
         DungeonMap dungeonMap = dungeon.getMap();
@@ -111,11 +115,6 @@ public class Spider extends MovingEntity implements Fighter {
 
     @Override
     public boolean isBoss() {
-        return false;
-    }
-
-    @Override
-    public boolean onDeath() {
         return false;
     }
 }

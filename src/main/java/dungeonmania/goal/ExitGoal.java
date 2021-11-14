@@ -4,6 +4,10 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonMap;
 
+/**
+ * Represents an exit goal.
+ * A dungeon game is won when the player reaches the exit.
+ */
 public class ExitGoal extends Goal {
    
     public static String STRING_TYPE = "exit";

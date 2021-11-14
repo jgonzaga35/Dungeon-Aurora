@@ -15,31 +15,38 @@ import dungeonmania.Pos2d;
 import dungeonmania.Utils;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.Fighter.FighterRelation;
+import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.movings.Mercenary;
 import dungeonmania.entities.movings.Player;
 
 /**
- * Overview:
- *  A battle is a series of "rounds".
- *  A "round" is a series a duels.
+ * Overview: A battle is a series of "rounds". A "round" is a series a duels.
  * 
- *  Battles last until one side has died. (ie. perform rounds)
- *  Battles and round oppose a list of enemies to a list of allies
- *  Duels oppose one enemy to one ally
+ * Battles last until one side has died. (ie. perform rounds) Battles and round
+ * oppose a list of enemies to a list of allies Duels oppose one enemy to one
+ * ally
  * 
  * @author Mathieu Paturel
  */
 public class NormalBattleStrategy implements BattleStrategy {
 
     private int precendence = -1;
+
+    /**
+     * Constructor for the Normal Battle Strategy
+     * @param int precendence
+     */
     public NormalBattleStrategy(int precendence) {
         this.precendence = precendence;
     }
 
+    /**
+     * Finds all the battles on the map, and performs them
+     * @param dungeon
+     */
     @Override
     public void findAndPerformBattles(Dungeon dungeon) {
         DungeonMap map = dungeon.getMap();
-
 
         // this is important to form duels in a reproducible way (see
         // performRound for more details). Sort by health, attack damage and
@@ -54,9 +61,11 @@ public class NormalBattleStrategy implements BattleStrategy {
             }
             int v;
             v = Utils.compareFloat(a.getHealth() - b.getHealth());
-            if (v != 0) return v;
+            if (v != 0)
+                return v;
             v = Utils.compareFloat(a.getAttackDamage(null) - b.getAttackDamage(null));
-            if (v != 0) return v;
+            if (v != 0)
+                return v;
             v = a.getEntity().getId().compareTo(b.getEntity().getId());
             assert v != 0 : "duplicate id break a lot of things, including battles";
             return v;
@@ -73,16 +82,18 @@ public class NormalBattleStrategy implements BattleStrategy {
         Collections.sort(allies, sort);
         Collections.sort(enemies, sort);
 
-        if (enemies.size() == 0) return; // there is no one to fight
+        if (enemies.size() == 0)
+            return; // there is no one to fight
 
         Set<Fighter> deaths = this.performBattle(allies, enemies);
 
-        for (Fighter dead: deaths) {
+        for (Fighter dead : deaths) {
             Entity e = dead.getEntity();
 
             // don't remove the player from the map if he has been resurrected
-            if (dead.onDeath()) continue;
-            
+            if (((MovingEntity) dead).onDeath())
+                continue;
+
             boolean result = map.getCell(e.getPosition()).removeOccupant(e);
             if (result == false) {
                 throw new Error("couldn't remove dead entity");
@@ -91,11 +102,11 @@ public class NormalBattleStrategy implements BattleStrategy {
     }
 
     /**
-     * Populates the allies and enemies list with the appropriate fighters
-     * (based on FighterRelation)
+     * Populates the allies and enemies list with the appropriate fighters (based on
+     * FighterRelation)
      * 
      * @param cell
-     * @param allies (written)
+     * @param allies  (written)
      * @param enemies (written)
      */
     private void prepareBattle(Dungeon dungeon, Cell cell, List<Fighter> allies, List<Fighter> enemies) {
@@ -118,16 +129,16 @@ public class NormalBattleStrategy implements BattleStrategy {
         // check all the cells around for mercenaries
         for (int y = -Mercenary.BATTLE_RADIUS; y <= Mercenary.BATTLE_RADIUS; y++) {
             for (int x = -Mercenary.BATTLE_RADIUS; x <= Mercenary.BATTLE_RADIUS; x++) {
-                // battle radius is a circle, if you're not completely in the circle, you're skiped
-                if (x * x + y * y > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS) continue;
+                // battle radius is a circle, if you're not completely in the circle, you're
+                // skiped
+                if (x * x + y * y > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS)
+                    continue;
                 Cell c = map.getCell(x + pos.getX(), y + pos.getY());
-                if (c == null) continue; // coordinate is outside the map
+                if (c == null)
+                    continue; // coordinate is outside the map
 
-                c.getOccupants().stream()
-                    .filter(e -> e instanceof Mercenary)
-                    .map(e -> (Mercenary) e)
-                    .filter(m -> m.getFighterRelation() == FighterRelation.ALLY)
-                    .forEach(allies::add);
+                c.getOccupants().stream().filter(e -> e instanceof Mercenary).map(e -> (Mercenary) e)
+                        .filter(m -> m.getFighterRelation() == FighterRelation.ALLY).forEach(allies::add);
             }
         }
     }
@@ -135,8 +146,8 @@ public class NormalBattleStrategy implements BattleStrategy {
     /**
      * Perform the battle (allies against enemies) and populates the deaths list
      * 
-     * A battle is a series of rounds. We do rounds until all the allies or all
-     * the enemies have died.
+     * A battle is a series of rounds. We do rounds until all the allies or all the
+     * enemies have died.
      * 
      * @pre deaths.size() == 0
      * @param allies
@@ -160,20 +171,17 @@ public class NormalBattleStrategy implements BattleStrategy {
     /**
      * Perform one round of the battle, and contributes to popupating the death list
      * 
-     * 1. form duels
-     *    each fighter is assigned to one or more duels. (if it's a 3v5, some
-     *    fighter will fight 2+ fighters).
+     * 1. form duels each fighter is assigned to one or more duels. (if it's a 3v5,
+     * some fighter will fight 2+ fighters).
      * 
-     *    How are duels formed?
-     *    This is a bit hard to explain with text. Code is a bit clearer if you
-     *    get idea. If you're having trouble understanding it, call me (Mathieu
-     *    Paturel) i'll show you a picture (i'm too lazy to draw ascii art)
+     * How are duels formed? This is a bit hard to explain with text. Code is a bit
+     * clearer if you get idea. If you're having trouble understanding it, call me
+     * (Mathieu Paturel) i'll show you a picture (i'm too lazy to draw ascii art)
      * 
-     *    Basic idea: strong people against strong people (we pick a rule to
-     *    have reproducible battles)
+     * Basic idea: strong people against strong people (we pick a rule to have
+     * reproducible battles)
      * 
-     * 2. perform duels
-     *    no ambiguity here, just do what the spec says
+     * 2. perform duels no ambiguity here, just do what the spec says
      * 
      * @param allies
      * @param enemies
@@ -213,7 +221,7 @@ public class NormalBattleStrategy implements BattleStrategy {
             ally.setHealth(ally.getHealth() - this.computeDamage(enemy, ally) / 10);
             enemy.usedItemFor(BattleDirection.ATTACK);
             ally.usedItemFor(BattleDirection.DEFENCE);
-            
+
             if (Utils.isDead(ally)) {
                 deaths.add(ally);
                 allies.remove(ally);
@@ -235,10 +243,11 @@ public class NormalBattleStrategy implements BattleStrategy {
     }
 
     /**
-     * The spec's formula for damage: attack.health * attack.attack_damage / defencer.defence_coef
+     * The spec's formula for damage: attack.health * attack.attack_damage /
+     * defencer.defence_coef
      * 
-     * (for example, defence_coef == 2 when you have an armor for example)
-     * Damage is used like this: defence.health -= damage
+     * (for example, defence_coef == 2 when you have an armor for example) Damage is
+     * used like this: defence.health -= damage
      * 
      * @param attacker
      * @param defencer
@@ -248,9 +257,13 @@ public class NormalBattleStrategy implements BattleStrategy {
         return attacker.getHealth() * attacker.getAttackDamage(defender) / defender.getDefenceCoef();
     }
 
+    /**
+     * Returns the precedence of the Battle Strategy
+     * @return int Precedence of the Battle Strategy
+     */
     @Override
     public int getPrecedence() {
         return this.precendence;
     }
-    
+
 }

@@ -1,20 +1,28 @@
 package dungeonmania.entities.statics;
 
 import dungeonmania.Dungeon;
+import dungeonmania.Entity;
 import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
-import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.StaticEntity;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.util.BlockingReason;
 
+/**
+ * Represents a door.
+ * Exists in conjunction with a single key that can open it. 
+ * If the character holds the key, they can open the door by moving through it. 
+ * Once open, it remains open.
+ */
 public class Door extends StaticEntity {
 
     public static String STRING_TYPE = "door";
 
+    // locked = true if shut, locked = false if open
     private boolean locked = true;
 
+    // doorId is the same as the matching key's keyID
     public int doorId;
 
     public Door(Dungeon dungeon, Pos2d position, int doorId) {
@@ -28,7 +36,7 @@ public class Door extends StaticEntity {
      */
     public boolean open() {
         Inventory inventory = this.dungeon.getPlayer().getInventory();
-        for (CollectableEntity c : inventory.getCollectables()) {
+        for (Entity c : inventory.getCollectables()) {
             if ((c instanceof Key && ((Key)c).getKeyId() == doorId) || (c instanceof SunStone)) {
                 // key matches, remove the key from inventory and unlock door
                 if (c instanceof Key) inventory.remove(c);

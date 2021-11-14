@@ -29,6 +29,7 @@
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/entities/floor_switch.png",
+        "switch_activated": "images/tileset/entities/switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
         "health_potion": "images/tileset/items/potion_6.png",
         "anduril": "images/tileset/items/anduril.png",
@@ -51,6 +52,11 @@
         "portal_ORANGE": "images/tileset/entities/portal_08.png",
         "portal_GREY": "images/tileset/entities/portal_12.png",
         "hydra": "images/tileset/entities/hydra.png",
+        "wire": "images/tileset/entities/wire.png",
+        "light_bulb_on": "images/tileset/entities/lightbulb.png",
+        "light_bulb_off": "images/tileset/entities/light_bulb_off.png",
+        "switch_door": "images/tileset/walls/wooden/door_locked_silver.png",
+        "switch_door_unlocked": "images/tileset/walls/wooden/door_unlocked.png",
         "one_ring": "images/tileset/items/the_one_ring.png"
     }
 }

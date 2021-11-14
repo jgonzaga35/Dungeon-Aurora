@@ -17,6 +17,10 @@ public interface BattleStrategy {
      */
     public void findAndPerformBattles(Dungeon dungeon);
 
+    /**
+     * Returns the precedence of the Battle Strategy
+     * @return int Precedence of the Battle Strategy
+     */
     public int getPrecedence();
 
 }

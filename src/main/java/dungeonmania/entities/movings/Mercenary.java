@@ -5,10 +5,8 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
-import dungeonmania.entities.CollectableEntity;
 import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 import dungeonmania.entities.collectables.Armour;
@@ -17,18 +15,24 @@ import dungeonmania.movement.FollowMovementBehaviour;
 import dungeonmania.movement.FriendlyMovementBehaviour;
 import dungeonmania.movement.MovementBehaviour;
 
+/**\
+ * Represents a mercenary.
+ * On maps with atleast one enemy, mercenaries spawn at the entry location periodically. 
+ * They constantly move towards the character, stopping if they cannot move any closer. 
+ * Mercenaries are limited by the same movement constraints as the character. 
+ * All mercenaries are considered hostile, unless the character can bribe them with a certain amount of gold; 
+ * in which case they become allies. As an ally, once it reaches the player it simply follows the player around.
+ */
 public class Mercenary extends MovingEntity implements Fighter {
 
     public static final String STRING_TYPE = "mercenary";
     public static final int SPAWN_EVERY_N_TICKS = 20;
     public static final int BATTLE_RADIUS = 3;
 
-    protected List<Class<? extends CollectableEntity>> price = new ArrayList<>();
-
+    protected List<Class<? extends Entity>> price = new ArrayList<>();
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
     private Integer bribeDuration = -1;
-    private Inventory inventory = new Inventory();
     private MovementBehaviour followMovementBehaviour;
     private MovementBehaviour friendlyMovementBehaviour;
 
@@ -42,7 +46,7 @@ public class Mercenary extends MovingEntity implements Fighter {
 
         Integer roll = dungeon.getRandom().nextInt(100);
         if (roll < 30)
-            inventory.add(new Armour(dungeon, position));
+            this.inventory.add(new Armour(dungeon, position));
     }
 
     public void bribe() {
@@ -64,7 +68,7 @@ public class Mercenary extends MovingEntity implements Fighter {
         this.removeMovementBehaviour(this.friendlyMovementBehaviour);
     }
 
-    public List<Class<? extends CollectableEntity>> getPrice() {
+    public List<Class<? extends Entity>> getPrice() {
         return this.price;
     }
 
@@ -124,20 +128,5 @@ public class Mercenary extends MovingEntity implements Fighter {
     @Override
     public boolean isBoss() {
         return false;
-    }
-
-    @Override
-    public boolean onDeath() {
-        inventory.getCollectables().stream().forEach(c -> {
-            c.setPosition(getCell().getPosition().getX(), getCell().getPosition().getY());
-            getCell().addOccupant(c);
-        });
-        inventory.clear();
-
-        return false;
-    }
-
-    public void removeArmour() {
-        inventory.clear();
     }
 }
