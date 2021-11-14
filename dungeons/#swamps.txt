@@ -1,0 +1,16 @@
+wwwwwwwwwwwwwwwwwwwww
+w...................w
+w.........S.........w
+w...a...............w
+w...am..........e...w
+w...a.......aaaa.a..w
+w..pa...aaaaa....A..w
+w...a..........aaa..w
+w...aaaa.....aaa....w
+w............a......w
+w...................w
+w...................w
+w...................w
+wwwwwwwwwwwwwwwwwwwww
+
+{"goal":"AND","subgoals":[{"goal":"enemies"},{"goal":"exit"}]}
