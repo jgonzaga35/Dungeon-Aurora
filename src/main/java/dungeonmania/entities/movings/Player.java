@@ -21,8 +21,6 @@ public class Player extends MovingEntity implements Fighter {
 
     private float health;
 
-    private Inventory inventory = new Inventory();
-    
     public Player(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
         this.health = this.getStartingHealth();
@@ -30,16 +28,17 @@ public class Player extends MovingEntity implements Fighter {
 
     /**
      * Move the player in the direction, if the cell there isn't blocking
+     * 
      * @param d direction
      */
     public void handleMoveOrder(Direction d) {
-        if (d == Direction.NONE) 
-            //do nothing if no direction
+        if (d == Direction.NONE)
+            // do nothing if no direction
             return;
 
         Cell target = this.inspectCell(d);
-        if (target == null) 
-            //do nothing if target cell is null
+        if (target == null)
+            // do nothing if target cell is null
             return;
 
         Portal portal = target.hasPortal();
@@ -50,20 +49,22 @@ public class Player extends MovingEntity implements Fighter {
         }
 
         switch (target.getBlocking()) {
-            case NOT:
-                //move if target is unblocked
+        case NOT:
+            // move if target is unblocked
+            this.moveTo(target);
+            return;
+        case BOULDER:
+            // try to push boulder
+            if (target.pushBoulder(d))
                 this.moveTo(target);
-                return;
-            case BOULDER:
-                //try to push boulder
-                if (target.pushBoulder(d)) this.moveTo(target);
-                return;
-            case DOOR:
-                //try to unlocked door
-                if (target.unlockDoor()) this.moveTo(target);
-                return;
-            default:
-                return;
+            return;
+        case DOOR:
+            // try to unlocked door
+            if (target.unlockDoor())
+                this.moveTo(target);
+            return;
+        default:
+            return;
         }
 
     }
@@ -84,10 +85,9 @@ public class Player extends MovingEntity implements Fighter {
     @Override
     public boolean onDeath() {
         DungeonMap map = this.dungeon.getMap();
-        if (
-            Utils.isDead(this) // we dead
-            && this.inventory.itemsOfType(OneRing.class).count() > 0 // we have a ring!
-            && !map.getEntryCell().isBlocking() // we didn't block the entry
+        if (Utils.isDead(this) // we dead
+                && this.inventory.itemsOfType(OneRing.class).count() > 0 // we have a ring!
+                && !map.getEntryCell().isBlocking() // we didn't block the entry
         ) {
             this.inventory.remove(OneRing.STRING_TYPE);
             this.health = this.getStartingHealth();
@@ -105,7 +105,7 @@ public class Player extends MovingEntity implements Fighter {
     @Override
     public void setHealth(float h) {
         this.health = h;
-        
+
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
-import dungeonmania.Inventory;
 import dungeonmania.Pos2d;
 import dungeonmania.battlestrategies.BattleStrategy.BattleDirection;
 import dungeonmania.entities.Fighter;
@@ -23,32 +22,23 @@ public class Mercenary extends MovingEntity implements Fighter {
     public static final int BATTLE_RADIUS = 3;
 
     protected List<Class<? extends Entity>> price = new ArrayList<>();
-    
     private float health = 6;
     private FighterRelation relationship = FighterRelation.ENEMY;
     private Integer bribeDuration = -1;
-    private Inventory inventory = new Inventory();
     private MovementBehaviour followMovementBehaviour;
     private MovementBehaviour friendlyMovementBehaviour;
 
-
     public Mercenary(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        this.followMovementBehaviour = new FollowMovementBehaviour(
-            0, 
-            dungeon.getMap(), 
-            dungeon.getMap().getCell(position)
-        );
-        this.friendlyMovementBehaviour = new FriendlyMovementBehaviour(
-            0, 
-            dungeon.getMap(), 
-            getCell()
-        );
+        this.followMovementBehaviour = new FollowMovementBehaviour(0, dungeon.getMap(),
+                dungeon.getMap().getCell(position));
+        this.friendlyMovementBehaviour = new FriendlyMovementBehaviour(0, dungeon.getMap(), getCell());
         this.addMovementBehaviour(this.followMovementBehaviour);
         this.price.add(Treasure.class);
 
         Integer roll = dungeon.getRandom().nextInt(100);
-        if (roll < 30) inventory.add(new Armour(dungeon, position));
+        if (roll < 30)
+            this.inventory.add(new Armour(dungeon, position));
     }
 
     public void bribe() {
@@ -83,7 +73,8 @@ public class Mercenary extends MovingEntity implements Fighter {
     public void tick() {
         this.move();
         this.bribeDuration--;
-        if (bribeDuration == 0) this.betray();
+        if (bribeDuration == 0)
+            this.betray();
     }
 
     @Override
@@ -130,20 +121,4 @@ public class Mercenary extends MovingEntity implements Fighter {
     public boolean isBoss() {
         return false;
     }
-
-    @Override
-    public boolean onDeath() {
-        inventory.getCollectables().stream().forEach(c -> {
-            c.setPosition(getCell().getPosition().getX(), getCell().getPosition().getY());
-            getCell().addOccupant(c);
-        });
-        inventory.clear();
-
-        return false;
-    }
-
-    public void removeArmour() {
-        inventory.clear();
-    }
 }
-

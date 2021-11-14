@@ -37,12 +37,13 @@ public class TestMercenaryBattles {
         Pos2d battlePosition = new Pos2d(6, 5);
 
         // the ally has to fight
-        assertTrue(ally.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
+        assertTrue(
+                ally.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
 
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
-        TestUtils.purgeEnemyArmour(dungeon);
+        TestUtils.clearEnemyInventories(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));
@@ -75,12 +76,13 @@ public class TestMercenaryBattles {
         Pos2d battlePosition = new Pos2d(6, 5);
 
         // the ally has to fight
-        assertTrue(ally.getPosition().squareDistance(battlePosition) > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
+        assertTrue(
+                ally.getPosition().squareDistance(battlePosition) > Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
 
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
-        TestUtils.purgeEnemyArmour(dungeon);
+        TestUtils.clearEnemyInventories(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));
@@ -113,12 +115,13 @@ public class TestMercenaryBattles {
         Pos2d battlePosition = new Pos2d(6, 5);
 
         // the ally has to fight
-        assertTrue(ally.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
+        assertTrue(
+                ally.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
 
         float prevAllyHealth = ally.getHealth();
         float prevPlayerHealth = player.getHealth();
 
-        TestUtils.purgeEnemyArmour(dungeon);
+        TestUtils.clearEnemyInventories(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));
@@ -153,13 +156,14 @@ public class TestMercenaryBattles {
         Pos2d battlePosition = new Pos2d(6, 5);
 
         // the ally has to fight
-        assertTrue(ally2.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS * Mercenary.BATTLE_RADIUS);
+        assertTrue(ally2.getPosition().squareDistance(battlePosition) <= Mercenary.BATTLE_RADIUS
+                * Mercenary.BATTLE_RADIUS);
 
         float prevAlly1Health = ally1.getHealth();
         float prevAlly2Health = ally2.getHealth();
         float prevPlayerHealth = player.getHealth();
 
-        TestUtils.purgeEnemyArmour(dungeon);
+        TestUtils.clearEnemyInventories(dungeon);
         dungeon.tick(null, Direction.RIGHT);
 
         assertTrue(Utils.isDead(zombie));

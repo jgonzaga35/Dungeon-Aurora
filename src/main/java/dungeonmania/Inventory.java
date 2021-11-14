@@ -11,6 +11,7 @@ import dungeonmania.entities.collectables.Anduril;
 import dungeonmania.entities.collectables.BattleItem;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.OneRing;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Treasure;
@@ -35,14 +36,14 @@ public class Inventory {
         if (c instanceof Key && this.contains(Key.class)) {
             // Player cannot pickup a second key
             return false;
-        } 
+        }
         if (c instanceof Bomb) {
             // Player cannot pickup bomb already placed
             Bomb bomb = (Bomb) c;
             if (bomb.getIsPlaced() == true) {
                 return false;
             }
-        } 
+        }
         return this.collectables.add(c);
     }
 
@@ -70,26 +71,28 @@ public class Inventory {
      */
     public boolean pay(List<Class<? extends Entity>> list) {
         List<Entity> price = new ArrayList<>();
-        
+
         list.stream().forEach(t -> {
-            Entity item =  collectables.stream()
-                .filter(c -> t.isInstance(c))
-                .findFirst().orElse(null);
-            
-            //Only Pay with the Item if There are Not Enough of the Specified Type Already Paid in the Cost
-            if (list.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count() ) {
+            Entity item = collectables.stream().filter(c -> t.isInstance(c)).findFirst().orElse(null);
+
+            // Only Pay with the Item if There are Not Enough of the Specified Type Already
+            // Paid in the Cost
+            if (list.stream().filter(d -> d.equals(t)).count() != price.stream().filter(e -> e.equals(t)).count()) {
                 price.add(item);
             }
         });
 
-        if (price.stream().anyMatch(i -> i == null)) return false;
-        
-        //SunStone Takes Priority Over Treasure
+        if (price.stream().anyMatch(i -> i == null))
+            return false;
+
+        // SunStone Takes Priority Over Treasure
         if (price.stream().filter(o -> o.getClass().equals(SunStone.class)).findFirst().isPresent()) {
-            //If Inventory Contains SunStone, No Need to Remove the Treasure or the SunStone
-            price.stream().filter(e -> !((e instanceof SunStone) || (e instanceof Treasure))).forEach(i -> collectables.remove(i));
+            // If Inventory Contains SunStone, No Need to Remove the Treasure or the
+            // SunStone
+            price.stream().filter(e -> !((e instanceof SunStone) || (e instanceof Treasure)))
+                    .forEach(i -> collectables.remove(i));
         } else {
-            //Inventory Does Not Contain SunStone, Treasure is Used to Pay
+            // Inventory Does Not Contain SunStone, Treasure is Used to Pay
             price.stream().forEach(i -> collectables.remove(i));
         }
         return true;
@@ -98,39 +101,44 @@ public class Inventory {
     public void build(String buildable) throws InvalidActionException {
         List<Entity> items;
         switch (buildable) {
-            case Shield.STRING_TYPE:
-                items = buildable(Shield.RECIPES);
-                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
-                collectables.removeAll(items);
-                collectables.add(new Shield(null, null));
-                return;
-            case Sceptre.STRING_TYPE:
-                items = buildable(Sceptre.RECIPES);
-                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
-                collectables.removeAll(items);
-                collectables.add(new Sceptre(null, null));
-                return;
-            case Bow.STRING_TYPE:
-                items = buildable(Bow.RECIPES);
-                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
-                collectables.removeAll(items);
-                collectables.add(new Bow(null, null));
-                return;
-            case MidnightArmour.STRING_TYPE:
-                items = buildable(MidnightArmour.RECIPES);
-                if (items == null) throw new InvalidActionException("not enough resources to build " + buildable);
-                collectables.removeAll(items);
-                collectables.add(new MidnightArmour(null, null));
-                return;
-            default:
-                throw new IllegalArgumentException("unknown buildable: " + buildable);
+        case Shield.STRING_TYPE:
+            items = buildable(Shield.RECIPES);
+            if (items == null)
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            collectables.removeAll(items);
+            collectables.add(new Shield(null, null));
+            return;
+        case Sceptre.STRING_TYPE:
+            items = buildable(Sceptre.RECIPES);
+            if (items == null)
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            collectables.removeAll(items);
+            collectables.add(new Sceptre(null, null));
+            return;
+        case Bow.STRING_TYPE:
+            items = buildable(Bow.RECIPES);
+            if (items == null)
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            collectables.removeAll(items);
+            collectables.add(new Bow(null, null));
+            return;
+        case MidnightArmour.STRING_TYPE:
+            items = buildable(MidnightArmour.RECIPES);
+            if (items == null)
+                throw new InvalidActionException("not enough resources to build " + buildable);
+            collectables.removeAll(items);
+            collectables.add(new MidnightArmour(null, null));
+            return;
+        default:
+            throw new IllegalArgumentException("unknown buildable: " + buildable);
         }
     }
 
     public List<Entity> buildable(List<List<String>> recipes) {
         for (List<String> recipe : recipes) {
             List<Entity> items = findItems(recipe);
-            if (items != null) return items;
+            if (items != null)
+                return items;
         }
         return null;
     }
@@ -140,26 +148,29 @@ public class Inventory {
      * @return true if the inventory contains a sceptre
      */
     public boolean hasSceptre() {
-        Sceptre sceptre = (Sceptre) collectables.stream().filter(c -> c instanceof Sceptre)
-            .findFirst().orElse(null);
+        Sceptre sceptre = (Sceptre) collectables.stream().filter(c -> c instanceof Sceptre).findFirst().orElse(null);
 
         return sceptre != null;
     }
 
     public List<String> getBuildables() {
         List<String> buildables = new ArrayList<>();
-        if (buildable(Bow.RECIPES) != null) buildables.add(Bow.STRING_TYPE);
-        if (buildable(Sceptre.RECIPES) != null) buildables.add(Sceptre.STRING_TYPE);
-        if (buildable(Shield.RECIPES) != null) buildables.add(Shield.STRING_TYPE);
-        if (buildable(MidnightArmour.RECIPES) != null) buildables.add(MidnightArmour.STRING_TYPE);
+        if (buildable(Bow.RECIPES) != null)
+            buildables.add(Bow.STRING_TYPE);
+        if (buildable(Sceptre.RECIPES) != null)
+            buildables.add(Sceptre.STRING_TYPE);
+        if (buildable(Shield.RECIPES) != null)
+            buildables.add(Shield.STRING_TYPE);
+        if (buildable(MidnightArmour.RECIPES) != null)
+            buildables.add(MidnightArmour.STRING_TYPE);
 
         return buildables;
     }
 
     /**
-     * Use the item specified by the id.
-     * Raise an InvalidArgumentException if the item can't be used.
-     * Raise an InvalidActionException if the item is not in the inventory.
+     * Use the item specified by the id. Raise an InvalidArgumentException if the
+     * item can't be used. Raise an InvalidActionException if the item is not in the
+     * inventory.
      * 
      * @param entityId to be used
      * @return the entity used.
@@ -168,43 +179,44 @@ public class Inventory {
     public Entity useItem(String entityId) throws IllegalArgumentException, InvalidActionException {
 
         // find item
-        Entity itemUsed = collectables.stream()
-            .filter(c -> c.getId().equals(entityId))
-            .findFirst().orElse(null);
+        Entity itemUsed = collectables.stream().filter(c -> c.getId().equals(entityId)).findFirst().orElse(null);
 
-        if (itemUsed == null) throw new InvalidActionException("Item not in inventory");
+        if (itemUsed == null)
+            throw new InvalidActionException("Item not in inventory");
 
-        if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb)) throw new IllegalArgumentException("Item not useable");
-        
+        if (!(itemUsed instanceof Potion) && !(itemUsed instanceof Bomb))
+            throw new IllegalArgumentException("Item not useable");
+
         if (itemUsed instanceof Potion) {
             Potion potionDrunk = (Potion) itemUsed;
             potionDrunk.drink();
         }
 
         collectables.remove(itemUsed);
-        
+
         return itemUsed;
     }
 
     /**
-     * if all the entities (items) are in the inventory, it uses them all
-     * (removes from the inventory). Otherwise it just returns false;
+     * if all the entities (items) are in the inventory, it uses them all (removes
+     * from the inventory). Otherwise it just returns false;
+     * 
      * @param entities
      * @return true if all the items were in the inventory, and they were
-     * succesfully removed
+     *         succesfully removed
      */
     public boolean useItems(List<String> itemsStringType) {
 
         List<Entity> toRemove = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
             Optional<Entity> itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used
-                .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
-                .findFirst();
+                    // find an item of the right type that isn't already used
+                    .filter(item -> item.getTypeAsString().equals(itemStringType) && !toRemove.contains(item))
+                    .findFirst();
 
             if (itemOpt.isEmpty())
                 return false;
-            else 
+            else
                 toRemove.add(itemOpt.get());
         }
         this.collectables.removeAll(toRemove);
@@ -212,41 +224,48 @@ public class Inventory {
 
     }
 
-
     /**
      * finds the items from the inventory
+     * 
      * @param itemsStringType list of String
-     * @return null if inventory does not contain all the items, else return the list of items
+     * @return null if inventory does not contain all the items, else return the
+     *         list of items
      */
     public List<Entity> findItems(List<String> itemsStringType) {
         List<Entity> found = new ArrayList<>();
         for (String itemStringType : itemsStringType) {
             Optional<Entity> itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used, except
-                // if Treasure is required in the recipe then the SunStone can be used even if it has been previously used
-                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) || 
-                (item.getTypeAsString().equals(SunStone.STRING_TYPE) && itemStringType == Treasure.STRING_TYPE))) )
-                .findFirst();
-            
-            // Do Not Treat the Sun Stone as a Type of Treasure If Sceptre is Crafted with Both SunStone and Treasure 
+                    // find an item of the right type that isn't already used, except
+                    // if Treasure is required in the recipe then the SunStone can be used even if
+                    // it has been previously used
+                    .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item))
+                            || (item.getTypeAsString().equals(SunStone.STRING_TYPE)
+                                    && itemStringType == Treasure.STRING_TYPE))))
+                    .findFirst();
+
+            // Do Not Treat the Sun Stone as a Type of Treasure If Sceptre is Crafted with
+            // Both SunStone and Treasure
             // (see Assumptions)
-            
+
             if (Sceptre.RECIPES.stream().anyMatch(o -> ((itemsStringType.containsAll(o))))) {
                 itemOpt = this.collectables.stream()
-                // find an item of the right type that isn't already used
-                .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)) )) )
-                .findFirst();
+                        // find an item of the right type that isn't already used
+                        .filter(item -> (((item.getTypeAsString().equals(itemStringType) && !found.contains(item)))))
+                        .findFirst();
             }
-            
-            if (itemOpt.isEmpty()) return null;
-            else found.add(itemOpt.get());
+
+            if (itemOpt.isEmpty())
+                return null;
+            else
+                found.add(itemOpt.get());
         }
-        
+
         return found;
     }
-   
+
     /**
      * decreases the items' durability
+     * 
      * @param d
      */
     public void usedItemsForBattle(BattleDirection d) {
@@ -265,7 +284,7 @@ public class Inventory {
 
     /**
      * @param bitem battle item
-     * @param d direction
+     * @param d     direction
      * @return true if the battle item is dead
      */
     public boolean usedItemForBattle(BattleItem bitem, BattleDirection d) {
@@ -280,21 +299,19 @@ public class Inventory {
 
     /**
      * See the list below for what is classified as a weapon
+     * 
      * @return a weapon, or null
      */
     public BattleItem getOneWeapon() {
         // we could add another layer (make a super class Weapon, but this is
         // good enough)
-        List<Class<? extends BattleItem>> weapons = List.of(
-            Sword.class,
-            Bow.class,
-            Anduril.class
-        );
-        return (BattleItem) this.collectables.stream().filter(e -> weapons.contains(e.getClass())).findFirst().orElse(null);
+        List<Class<? extends BattleItem>> weapons = List.of(Sword.class, Bow.class, Anduril.class);
+        return (BattleItem) this.collectables.stream().filter(e -> weapons.contains(e.getClass())).findFirst()
+                .orElse(null);
     }
 
     /**
-     * Total bonus added by the inventory in the specified direction 
+     * Total bonus added by the inventory in the specified direction
      *
      * Notice that attack damage adds, but defence coefficients multiply.
      * 
@@ -322,14 +339,16 @@ public class Inventory {
     }
 
     /**
-     * @usage for example, {@code inventory.itemsOfType(Shield).forEach(shield -> foobar)}
-     * @param <T> type
+     * @usage for example,
+     *        {@code inventory.itemsOfType(Shield).forEach(shield -> foobar)}
+     * @param <T>  type
      * @param type type
      * @return Stream of Entities
      */
     public <T extends Entity> Stream<T> itemsOfType(Class<T> type) {
         return this.collectables.stream().filter(e -> type.isInstance(e)).map(e -> {
-            @SuppressWarnings("unchecked") T t = (T)e; // bruh
+            @SuppressWarnings("unchecked")
+            T t = (T) e; // bruh
             return t;
         });
     }
@@ -364,5 +383,14 @@ public class Inventory {
      */
     public void clear() {
         collectables.clear();
+    }
+
+    public void purgeOneRing() {
+        List<Entity> copy = new ArrayList<>(collectables);
+        copy.stream().forEach(e -> {
+            if (e instanceof OneRing) {
+                collectables.remove(e);
+            }
+        });
     }
 }

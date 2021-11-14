@@ -15,10 +15,10 @@ import dungeonmania.entities.Fighter;
 import dungeonmania.entities.MovingEntity;
 
 public class Hydra extends MovingEntity implements Fighter {
-    
+
     public static final String STRING_TYPE = "hydra";
     public static final int SPAWN_EVERY_N_TICKS = 50;
-    private float health = 20;  
+    private float health = 20;
     private boolean crippled = false;
 
     public Hydra(Dungeon dungeon, Pos2d position) {
@@ -29,8 +29,8 @@ public class Hydra extends MovingEntity implements Fighter {
     }
 
     /**
-     * A Factory method that makes a new instance of Hydra 
-     * at a random coordinate.
+     * A Factory method that makes a new instance of Hydra at a random coordinate.
+     * 
      * @param dungeon
      * @return
      */
@@ -46,6 +46,7 @@ public class Hydra extends MovingEntity implements Fighter {
 
     /**
      * Generates a random location for the Hydra to spawn.
+     * 
      * @param dungeon
      * @return
      */
@@ -54,8 +55,7 @@ public class Hydra extends MovingEntity implements Fighter {
         List<Cell> availableCells = new ArrayList<Cell>();
         for (int y = 0; y < dungeon.getMap().getHeight(); y++) {
             for (int x = 0; x < dungeon.getMap().getWidth(); x++) {
-                if (!dungeon.getMap().getCell(x,y).isBlocking() 
-                && !dungeon.getMap().getCell(x,y).hasPlayer()) {
+                if (!dungeon.getMap().getCell(x, y).isBlocking() && !dungeon.getMap().getCell(x, y).hasPlayer()) {
                     availableCells.add(dungeon.getMap().getCell(x, y));
                 }
             }
@@ -74,17 +74,17 @@ public class Hydra extends MovingEntity implements Fighter {
         this.crippled = true;
     }
 
-    @Override 
+    @Override
     public String getTypeAsString() {
         return Hydra.STRING_TYPE;
     }
 
-    @Override 
+    @Override
     public void tick() {
         this.move();
     }
 
-    @Override 
+    @Override
     public float getHealth() {
         return this.health;
     }
@@ -92,10 +92,10 @@ public class Hydra extends MovingEntity implements Fighter {
     @Override
     public void setHealth(float h) {
 
-        float damageReceived = this.health - h; 
+        float damageReceived = this.health - h;
         Random random = this.dungeon.getRandom();
         int x = random.nextInt(2);
-    
+
         // if not crippled by Anduril, hydra has 50% chance of gaining health
         if (x == 0 && !this.crippled) {
             this.health = this.health + damageReceived;
@@ -129,14 +129,8 @@ public class Hydra extends MovingEntity implements Fighter {
         return this;
     }
 
-
     @Override
     public boolean isBoss() {
         return true;
-    }
-
-    @Override
-    public boolean onDeath() {
-        return false;
     }
 }
