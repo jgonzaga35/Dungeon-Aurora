@@ -9,18 +9,21 @@ import dungeonmania.Cell;
 import dungeonmania.Dungeon;
 import dungeonmania.Entity;
 import dungeonmania.Pos2d;
+import dungeonmania.util.BlockingReason;
 
 public class SwitchDoor extends Door {
     
     public static String STRING_TYPE = "switch_door";
+    public static String UNLOCKED = "_unlocked";
     private List<Entity> connectedEntities = new ArrayList<Entity>();
     public Logic logic;
     private boolean locked = true;
+    private List<String> connectedId = new ArrayList<String>();
 
     public SwitchDoor(Dungeon dungeon, Pos2d position, int doorId, String logic) {
         super(dungeon, position, doorId);
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position));
+        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
     }
 
     @Override
@@ -86,7 +89,7 @@ public class SwitchDoor extends Door {
      * Every Wire should have a list of entities that are connected
      * to the circuit and not just the individual wire.
      */
-    public void addConnectedEntities(Cell cell) {
+    public void addConnectedEntities(Cell cell, List<String> connectedIds) {
         
         // Get cardinally adjacent cells
         Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
@@ -97,11 +100,13 @@ public class SwitchDoor extends Door {
                             .filter(e -> e.canConnect())
                             .forEach(s -> {
                                 System.out.println(s.getTypeAsString());
-                                if (s instanceof Wire) {
-                                    addConnectedEntities(c);
+                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                                    connectedId.add(s.getId());
+                                    addConnectedEntities(c, connectedId);
                                 } else {
                                     if (!connectedEntities.contains(s)) {
                                             connectedEntities.add(s);
+                                            connectedId.add(s.getId());
                                     }
                                 }
                             });
@@ -118,11 +123,13 @@ public class SwitchDoor extends Door {
      */
     @Override
     public String getTypeAsString() {
-        return SwitchDoor.STRING_TYPE;
+        if (locked) return SwitchDoor.STRING_TYPE;
+        else return SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED;
     }
 
     @Override
     public void tick() {
+        connectedEntities.stream().filter(e -> e instanceof FloorSwitch).forEach(f -> f.tick());
         if (Objects.isNull(logic)) {
             this.open();
         } else if (Objects.equals(logic, Logic.AND)) {
@@ -137,18 +144,26 @@ public class SwitchDoor extends Door {
             co_andActivation();
         }
     }
-
-    public void activate() {
-        locked = false;
+    
+    @Override
+    public BlockingReason isBlocking() {
+        if (locked) return BlockingReason.DOOR;
+        else return BlockingReason.NOT;
     }
 
-    public void deactivate() {
+    public boolean activate() {
+        locked = false;
+        return true;
+    }
+
+    public boolean deactivate() {
         locked = true;
+        return false;
     }
 
     public void co_andActivation() {
         if (countActivatedSwitches() == countCoActivatedSwitches()) {
-            this.activate();
+            activate();
         } else {
             deactivate();
         }
@@ -156,7 +171,7 @@ public class SwitchDoor extends Door {
 
     public void notActivation() {
         if (countActivatedSwitches() == 0) {
-            this.activate();
+            activate();
         } else {
             deactivate();
         }
@@ -172,7 +187,7 @@ public class SwitchDoor extends Door {
 
     public void orActivation() {
         if (countActivatedSwitches() >= 1) {
-            this.activate();
+            activate();
         } else {
             deactivate();
         }
@@ -185,10 +200,10 @@ public class SwitchDoor extends Door {
         int adjacentSwitchCount = countAdjacentSwitches();
 
         if (activatedSwitchCount > 2 && (activatedSwitchCount == adjacentSwitchCount)) {
-            this.activate();
+            activate();
             
         } else if (activatedSwitchCount >= 2) { 
-            this.activate();
+            activate();
         } else {
             deactivate();
         }
@@ -216,6 +231,8 @@ public class SwitchDoor extends Door {
      * @throws IllegalArgumentException
      */
     private Logic parseLogic(String logic) throws IllegalArgumentException {
+        if (Objects.isNull(logic)) 
+            return null;
         if (Objects.equals(logic, "and"))
             return Logic.AND;
         if (Objects.equals(logic, "or"))

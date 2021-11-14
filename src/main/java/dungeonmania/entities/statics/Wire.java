@@ -13,10 +13,11 @@ import dungeonmania.entities.StaticEntity;
 public class Wire extends StaticEntity {
     public static String STRING_TYPE = "wire";
     private List<Entity> connectedEntities = new ArrayList<Entity>();
-
+    private List<String> connectedId = new ArrayList<String>();
+    
     public Wire(Dungeon dungeon, Pos2d position) {
         super(dungeon, position);
-        addConnectedEntities(dungeon.getMap().getCell(position));        
+        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
     }
 
     public List<Entity> getConnectedEntities() {
@@ -38,21 +39,24 @@ public class Wire extends StaticEntity {
      * Every Wire should have a list of entities that are connected
      * to the circuit and not just the individual wire.
      */
-    public void addConnectedEntities(Cell cell) {
+    public void addConnectedEntities(Cell cell, List<String> connectedIds) {
         
         // Get cardinally adjacent cells
         Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
         
         // Add connected entities from adjacent cells 
         adjacentCells.forEach(c -> {
-            c.getOccupants().stream()
+                            c.getOccupants().stream()
                             .filter(e -> e.canConnect())
                             .forEach(s -> {
-                                if (s instanceof Wire) {
-                                    addConnectedEntities(c);
+                                System.out.println(s.getTypeAsString());
+                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                                    connectedId.add(s.getId());
+                                    addConnectedEntities(c, connectedId);
                                 } else {
                                     if (!connectedEntities.contains(s)) {
-                                            connectedEntities.add(s);
+                                        connectedEntities.add(s);
+                                        connectedId.add(s.getId());
                                     }
                                 }
                             });

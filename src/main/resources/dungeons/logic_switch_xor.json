@@ -1,0 +1,42 @@
+{
+    "width": 20,
+    "height": 20,
+    "entities": [
+        {"x": 0,"y": 0,"type": "player"},
+        {"x": 0,"y": 3,"type": "boulder"},
+        {"x": 1,"y": 5,"type": "boulder"},
+        {"x": 1,"y": 0,"type": "wire"},
+        {"x": 1,"y": 1,"type": "wire"},
+        {"x": 1,"y": 2,"type": "wire"},
+        {"x": 1,"y": 3,"type": "wire"},
+        {"x": 1,"y": 4,"type": "wire"},
+        {"x": 2,"y": 0,"type": "wire"},
+        {"x": 3,"y": 1,"type": "wire"},
+        {"x": 3,"y": 2,"type": "wire"},
+        {"x": 3,"y": 3,"type": "wire"},
+        {"x": 2,"y": 4,"type": "wire"},
+        {"x": 3,"y": 4,"type": "wire"},
+        {"x": 0,"y": 2,"type": "switch"},
+        {"x": 3,"y": 1,"type": "wire"},
+        {"x": 3,"y": 0,"type": "wire"},
+        {"x": 2,"y": 5,"type": "switch"},
+        {"x": 3,"y": 5,"type": "wire"},
+        {"x": 3,"y": 6,"type": "wire"},
+        {"x": 3,"y": 7,"type": "wire"},
+        {"x": 3,"y": 8,"type": "wire"},
+        {"x": 3,"y": 9,"type": "wire"},
+        {"x": 3,"y": 10,"type": "bomb","logic":"xor"},
+        {"x": 4,"y": 2,"type": "switch","logic":"xor"},
+        {
+            "x": 4,
+            "y": 3,
+            "type": "switch_door",
+            "id": 1,
+            "logic": "xor"
+        },
+        {"x": 4,"y": 0,"type": "light_bulb_off","logic": "xor"}
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}

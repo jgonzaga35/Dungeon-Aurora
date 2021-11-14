@@ -14,15 +14,17 @@ import dungeonmania.util.BlockingReason;
 
 public class FloorSwitch extends StaticEntity {
     public static String STRING_TYPE = "switch";
+    public static String ACTIVATED = "_activated";
     private boolean activated = false;
     private int tickCountActivated;
     private List<Entity> connectedEntities = new ArrayList<Entity>();
+    private List<String> connectedId = new ArrayList<String>();
     public Logic logic;
 
     public FloorSwitch(Dungeon dungeon, Pos2d position, String logic) {
         super(dungeon, position);
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position));
+        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
     }
 
     /**
@@ -39,7 +41,7 @@ public class FloorSwitch extends StaticEntity {
     }
 
     public boolean isActivated() {
-        return this.activated;
+        return activated;
     }
 
     public Integer getTickCountActivated() {
@@ -56,6 +58,7 @@ public class FloorSwitch extends StaticEntity {
      */
     public void activate() {
         this.activated = true;
+        connectedEntities.stream().filter(e -> e instanceof FloorSwitch).forEach(f -> f.tick());
     }
 
     /**
@@ -123,7 +126,7 @@ public class FloorSwitch extends StaticEntity {
      * Every Wire should have a list of entities that are connected
      * to the circuit and not just the individual wire.
      */
-    public void addConnectedEntities(Cell cell) {
+    public void addConnectedEntities(Cell cell, List<String> connectedIds) {
         
         // Get cardinally adjacent cells
         Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
@@ -134,11 +137,13 @@ public class FloorSwitch extends StaticEntity {
                             .filter(e -> e.canConnect())
                             .forEach(s -> {
                                 System.out.println(s.getTypeAsString());
-                                if (s instanceof Wire) {
-                                    addConnectedEntities(c);
+                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                                    connectedId.add(s.getId());
+                                    addConnectedEntities(c, connectedId);
                                 } else {
                                     if (!connectedEntities.contains(s)) {
                                             connectedEntities.add(s);
+                                            connectedId.add(s.getId());
                                     }
                                 }
                             });
@@ -147,7 +152,7 @@ public class FloorSwitch extends StaticEntity {
 
     @Override
     public boolean isInteractable() {
-        return true;
+        return false;
     }
 
     /**
@@ -155,10 +160,9 @@ public class FloorSwitch extends StaticEntity {
      */
     @Override
     public String getTypeAsString() {
-        if (activated) {
-            return LightBulb.STRING_TYPE + LightBulb.ON;
-        }
-        return LightBulb.STRING_TYPE + LightBulb.OFF;
+        if (activated) 
+            return FloorSwitch.STRING_TYPE + FloorSwitch.ACTIVATED;
+        return FloorSwitch.STRING_TYPE;
     }
 
     @Override
@@ -195,7 +199,9 @@ public class FloorSwitch extends StaticEntity {
     }
 
     public void xorActivation() {
+        System.out.println("THERE ARE" + countActivatedSwitches());
         if (countActivatedSwitches() == 1) {
+            System.out.println("ACTIVATING");
             this.activate();
         } else {
             this.deactivate();
@@ -248,6 +254,8 @@ public class FloorSwitch extends StaticEntity {
      * @throws IllegalArgumentException
      */
     private Logic parseLogic(String logic) throws IllegalArgumentException {
+        if (Objects.isNull(logic)) 
+            return null;
         if (Objects.equals(logic, "and"))
             return Logic.AND;
         if (Objects.equals(logic, "or"))

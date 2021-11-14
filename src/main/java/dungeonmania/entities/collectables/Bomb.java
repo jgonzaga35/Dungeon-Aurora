@@ -33,6 +33,7 @@ public class Bomb extends CollectableEntity {
     public Logic logic;
     
     private List<Entity> connectedEntities = new ArrayList<Entity>();
+    private List<String> connectedId = new ArrayList<String>();
 
     private Hashtable<String, Boolean> adjacentSwitchStatus = new Hashtable<String, Boolean>();
 
@@ -40,7 +41,7 @@ public class Bomb extends CollectableEntity {
         super(dungeon, position);
         this.isPlaced = isPlaced;
         this.logic = parseLogic(logic);
-        addConnectedEntities(dungeon.getMap().getCell(position));
+        addConnectedEntities(dungeon.getMap().getCell(position), new ArrayList<String>());
     }
 
     /**
@@ -270,6 +271,8 @@ public class Bomb extends CollectableEntity {
      */
     @Override
     public void tick() {
+        connectedEntities.stream().filter(e -> e instanceof FloorSwitch).forEach(f -> f.tick());
+
         if (Objects.isNull(logic)) {
             if (bombCheckCardinalAdjacency()) {
                 activate();
@@ -280,8 +283,6 @@ public class Bomb extends CollectableEntity {
             orActivation();
         } else if (Objects.equals(logic, Logic.XOR)) {
             xorActivation();
-        } else if (Objects.equals(logic, Logic.NOT)) {
-            notActivation();
         } else if (Objects.equals(logic, Logic.CO_AND)) {
             co_andActivation();
         }
@@ -332,7 +333,9 @@ public class Bomb extends CollectableEntity {
         int count = (int) connectedEntities.stream()
                                            .filter(e -> e instanceof FloorSwitch)
                                            .count();
-        
+        System.out.println("BEGIN");
+        connectedEntities.stream().forEach(e->System.out.println(e.getTypeAsString()));
+        System.out.println("END");
         return count;
 
     }
@@ -342,7 +345,7 @@ public class Bomb extends CollectableEntity {
      * Every Wire should have a list of entities that are connected
      * to the circuit and not just the individual wire.
      */
-    public void addConnectedEntities(Cell cell) {
+    public void addConnectedEntities(Cell cell, List<String> connectedIds) {
         
         // Get cardinally adjacent cells
         Stream<Cell> adjacentCells = this.dungeon.getMap().getCellsAround(cell);
@@ -353,11 +356,13 @@ public class Bomb extends CollectableEntity {
                             .filter(e -> e.canConnect())
                             .forEach(s -> {
                                 System.out.println(s.getTypeAsString());
-                                if (s instanceof Wire) {
-                                    addConnectedEntities(c);
+                                if (s instanceof Wire && !connectedIds.contains(s.getId())) {
+                                    connectedId.add(s.getId());
+                                    addConnectedEntities(c, connectedId);
                                 } else {
                                     if (!connectedEntities.contains(s)) {
                                             connectedEntities.add(s);
+                                            connectedId.add(s.getId());
                                     }
                                 }
                             });
@@ -370,13 +375,8 @@ public class Bomb extends CollectableEntity {
         }
     }
 
-    public void notActivation() {
-        if (countActivatedSwitches() == 0) {
-            this.activate();
-        }
-    }
-
     public void xorActivation() {
+        System.out.println("there are now " + countActivatedSwitches() + " and " + countAdjacentSwitches());
         if (countActivatedSwitches() == 1) {
             this.activate();
         }
@@ -429,8 +429,6 @@ public class Bomb extends CollectableEntity {
             return Logic.OR;
         if (Objects.equals(logic, "xor"))
             return Logic.XOR;
-        if (Objects.equals(logic, "not"))
-            return Logic.NOT;
         if (Objects.equals(logic, "co_and"))
             return Logic.CO_AND;
 
