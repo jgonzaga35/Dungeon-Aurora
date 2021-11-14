@@ -1,6 +1,6 @@
 {
     "main_menu": {
-        "background_image": "images/backgrounds/main_menu.png",
+        "background_image": "images/backgrounds/main.png",
         "text_color": "white"
     },
     "game": {

@@ -131,9 +131,10 @@ public class TestLogicSwitch {
         DungeonManiaController ctr = new DungeonManiaController();
         DungeonResponse resp = ctr.newGame("logic_switch_not", GameMode.PEACEFUL.getValue());
         resp = ctr.tick(null, Direction.NONE);
-        // At the start the light bulb is turned on, bomb explodes, door is unlocked
+        // At the start the light bulb is turned on, door is unlocked, bomb does not interact with not logic
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(LightBulb.STRING_TYPE + LightBulb.ON)));
         assertEquals(true, resp.getEntities().stream().anyMatch(e -> e.getType().equals(SwitchDoor.STRING_TYPE + SwitchDoor.UNLOCKED)));
+        
 
     }
 
