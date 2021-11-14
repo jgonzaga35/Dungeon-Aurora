@@ -86,12 +86,12 @@ removes the possibility of regaining health
 - Triggered through interact.
 - Recipe precedence:
 
-| Order of use | Recipe |
-| --- | --- |
-| 1 | `sun_stone` + `treasure` + `2 * arrow` |
-| 2 | `sun_stone` + `treasure` + `wood` |
-| 3 | `sun_stone` + `key` + `2 * arrow` |
-| 4 | `sun_stone` + `key` + `wood` |
+| Order of use | Recipe                                  |
+| ------------ | --------------------------------------- |
+| 1            | `sun_stone` + `treasure` + `2 * arrow`  |
+| 2            | `sun_stone` + `treasure` + `wood`       |
+| 3            | `sun_stone` + `key` + `2 * arrow`       |
+| 4            | `sun_stone` + `key` + `wood`            |
 
 ## Battles
 
