@@ -18,7 +18,7 @@ public class SunStone extends Treasure {
 
     @Override
     public String getTypeAsString() {
-        return Treasure.STRING_TYPE;
+        return SunStone.STRING_TYPE;
     }
 
     @Override
