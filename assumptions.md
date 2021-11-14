@@ -32,6 +32,8 @@
 - Battle radius of mercenaries is 3 cells
 - When there is no path to the player for the mercenary, the mercenary will more to the cell with the lowest `movement_factor`.
 - When a boulder has been pushed onto the player starting position mercenaries and assassins are prevented from spawning.
+- A mercenary that is already bribed cannot be bribed again. If bribed with sceptre, player 
+needs wait until bribe period is over before bribing the mercenary again.
 
 ## Assassins
 - Assassins just deal more damage by simply having more health than assassins (3x more).

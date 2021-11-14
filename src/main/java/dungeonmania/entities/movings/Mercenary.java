@@ -48,6 +48,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     public void bribe() {
+        if (bribeDuration != 0) return; //already bribed!
         this.bribeDuration = -1;
         relationship = FighterRelation.ALLY;
         // order matters! add first, then remove
@@ -56,6 +57,7 @@ public class Mercenary extends MovingEntity implements Fighter {
     }
 
     public void bribe(Integer bribeDuration) {
+        if (bribeDuration != 0) return; //already bribed!
         this.bribe();
         this.bribeDuration = bribeDuration;
     }
